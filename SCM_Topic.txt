@@ -1,20 +1,19 @@
 ĐỀ TÀI 3: HỆ THỐNG QUẢN LÝ CHUỖI CUNG ỨNG
-Phát triển một hệ thống quản lý chuỗi cung ứng, từ việc quản lý nhà cung cấp, theo dõi đơn
-hàng, đến quản lý kho hàng.
+Phát triển một hệ thống quản lý chuỗi cung ứng, từ việc quản lý nhà cung cấp, theo dõi đơn hàng, đến quản lý kho hàng.
 
-Quản lý Nhà Cung Cấp
+1. Quản lý Nhà Cung Cấp
 	- Thêm/Sửa/Xóa nhà cung cấp.
 	- Quản lý thông tin nhà cung cấp: Lưu trữ và quản lý thông tin chi tiết về nhà cung cấp như tên, địa chỉ, số điện thoại, thông tin liên hệ, và điều kiện thanh toán.
 	- Đánh giá và xếp hạng: Theo dõi hiệu suất của các nhà cung cấp và cung cấp hệ thống đánh giá và xếp hạng dựa trên các tiêu chí như chất lượng, giao hàng đúng hạn và giá cả.
 
-Quản lý Đơn Hàng
+2. Quản lý Đơn Hàng
 	- Tạo và theo dõi đơn hàng: Cho phép người dùng tạo đơn hàng mới, theo dõi trạng thái của các đơn hàng từ khi đặt đến khi giao hàng.
 	- Quản lý đơn hàng nhập và xuất: Quản lý đơn hàng nhập kho từ nhà cung cấp và đơn hàng xuất kho đến khách hàng hoặc các bộ phận khác.
 	- Xác nhận và hủy đơn hàng: Cung cấp tính năng xác nhận hoặc hủy đơn hàng khi cần thiết.
 
-Theo dõi tồn kho: Theo dõi số lượng hàng tồn kho trong các kho hàng, bao gồm cả việc cập nhật số lượng khi có hàng hóa nhập hoặc xuất.
+3. Theo dõi tồn kho: Theo dõi số lượng hàng tồn kho trong các kho hàng, bao gồm cả việc cập nhật số lượng khi có hàng hóa nhập hoặc xuất.
 
-Quản lý Vận Chuyển và Giao Hàng
+4. Quản lý Vận Chuyển và Giao Hàng
 	- Lên lịch giao hàng: Lên lịch và tổ chức việc giao hàng từ kho đến các địa điểm yêu cầu.
 	- Theo dõi vận chuyển: Cung cấp khả năng theo dõi tình trạng và vị trí của hàng hóa trong quá trình vận chuyển.
 	- Quản lý đối tác vận chuyển: Quản lý thông tin về các đối tác vận chuyển, bao gồm việc đánh giá hiệu suất và điều kiện hợp tác.

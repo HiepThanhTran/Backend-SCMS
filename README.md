@@ -1,2 +1,2 @@
-# Website-Supplier-Chain
- Supplier Chain Management Website
+# BE-Supply-Chain-Management
+Backend for Supply Chain Management Website
