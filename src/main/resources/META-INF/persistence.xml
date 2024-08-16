@@ -4,7 +4,35 @@
              xmlns="http://xmlns.jcp.org/xml/ns/persistence"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="###" transaction-type="RESOURCE_LOCAL">
-
+    <persistence-unit name="com.fh.scm" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>com.fh.scm.pojo.Category</class>
+        <class>com.fh.scm.pojo.Customer</class>
+        <class>com.fh.scm.pojo.DeliverySchedule</class>
+        <class>com.fh.scm.pojo.Inventory</class>
+        <class>com.fh.scm.pojo.InventoryDetails</class>
+        <class>com.fh.scm.pojo.Invoice</class>
+        <class>com.fh.scm.pojo.Order</class>
+        <class>com.fh.scm.pojo.OrderDetails</class>
+        <class>com.fh.scm.pojo.PaymentTerms</class>
+        <class>com.fh.scm.pojo.Product</class>
+        <class>com.fh.scm.pojo.Rating</class>
+        <class>com.fh.scm.pojo.Shipment</class>
+        <class>com.fh.scm.pojo.Shipper</class>
+        <class>com.fh.scm.pojo.Supplier</class>
+        <class>com.fh.scm.pojo.SupplierCosting</class>
+        <class>com.fh.scm.pojo.Tag</class>
+        <class>com.fh.scm.pojo.Tax</class>
+        <class>com.fh.scm.pojo.Unit</class>
+        <class>com.fh.scm.pojo.User</class>
+        <class>com.fh.scm.pojo.Warehouse</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:mysql://localhost:3306/scmdb?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="Admin@123"/>
+        </properties>
     </persistence-unit>
 </persistence>

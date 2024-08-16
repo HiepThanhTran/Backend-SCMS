@@ -1,0 +1,33 @@
+package com.fh.scm.pojo;
+
+import com.fh.scm.enums.DeliveryMethodType;
+import lombok.*;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Set;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Table(name = "delivery_schedule")
+public class DeliverySchedule extends BaseEntity implements Serializable {
+
+    @Column(nullable = false)
+    private LocalDateTime scheduledDate;
+
+    @Builder.Default
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DeliveryMethodType deliveryMethod = DeliveryMethodType.EXPRESS;
+
+    @OneToMany(mappedBy = "deliverySchedule")
+    private Set<Order> orderSet;
+
+    @OneToMany(mappedBy = "deliverySchedule", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Shipment> shipmentSet;
+}
