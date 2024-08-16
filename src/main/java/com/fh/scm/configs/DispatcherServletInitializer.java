@@ -8,14 +8,17 @@ public class DispatcherServletInitializer extends AbstractAnnotationConfigDispat
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{
                 HibernateConfigs.class,
+                JWTSecurityConfigs.class,
                 TilesConfigs.class,
+                WebInitializerConfigs.class,
+                WebSecurityConfigs.class,
         };
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{
-            WebApplicationContextConfigs.class
+                WebApplicationContextConfigs.class
         };
     }
 
