@@ -32,7 +32,7 @@ public class PaymentTerms extends BaseEntity implements Serializable {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "term_type", nullable = false)
-    private PaymentTermType termType = PaymentTermType.COD;
+    private PaymentTermType type = PaymentTermType.COD;
 
     @JsonIgnore
     @OneToMany(mappedBy = "paymentTerms", cascade = {CascadeType.PERSIST})

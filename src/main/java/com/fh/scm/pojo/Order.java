@@ -25,12 +25,12 @@ public class Order extends BaseEntity implements Serializable {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "order_type", nullable = false)
-    private OrderType orderType = OrderType.OUTBOUND;
+    private OrderType type = OrderType.OUTBOUND;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false)
-    private OrderStatus orderStatus = OrderStatus.PENDING;
+    private OrderStatus status = OrderStatus.PENDING;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -46,10 +46,6 @@ public class Order extends BaseEntity implements Serializable {
     @JoinColumn(name = "delivery_schedule_id", referencedColumnName = "id", nullable = false)
     private DeliverySchedule deliverySchedule;
 
-    @OneToMany(mappedBy = "order", cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REMOVE
-    })
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetails> orderDetailsSet;
 }

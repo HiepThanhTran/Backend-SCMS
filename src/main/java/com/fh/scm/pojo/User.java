@@ -60,10 +60,6 @@ public class User extends BaseEntity implements Serializable {
     private Shipper shipper;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REMOVE
-    })
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Order> orderSet;
 }

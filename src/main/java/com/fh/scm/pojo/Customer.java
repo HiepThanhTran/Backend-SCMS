@@ -27,7 +27,7 @@ public class Customer extends BaseEntity implements Serializable {
     @Column(nullable = false)
     private String firstName;
 
-    private Boolean gender;
+    private Boolean gender; // true (1): Nữ - false (0): Nam
 
     private Date dateOfBirth;
 

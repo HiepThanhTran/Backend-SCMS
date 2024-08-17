@@ -23,7 +23,7 @@ public class DeliverySchedule extends BaseEntity implements Serializable {
     @Builder.Default
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private DeliveryMethodType deliveryMethod = DeliveryMethodType.EXPRESS;
+    private DeliveryMethodType method = DeliveryMethodType.EXPRESS;
 
     @OneToMany(mappedBy = "deliverySchedule")
     private Set<Order> orderSet;
