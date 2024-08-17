@@ -5,10 +5,10 @@ import com.fh.scm.pojo.DeliverySchedule;
 import com.fh.scm.repository.DeliveryScheduleRepository;
 import com.fh.scm.util.Pagination;
 import com.fh.scm.util.Utils;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +18,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Repository
 @Transactional
-@RequiredArgsConstructor
 public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepository {
 
-    private final LocalSessionFactoryBean factory;
+    @Autowired
+    private LocalSessionFactoryBean factory;
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();

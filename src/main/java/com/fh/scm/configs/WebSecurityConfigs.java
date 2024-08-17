@@ -2,10 +2,12 @@ package com.fh.scm.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import lombok.RequiredArgsConstructor;
+import com.fh.scm.enums.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,10 +16,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@Order(2)
 @Configuration
 @EnableWebSecurity
 @EnableTransactionManagement
-@RequiredArgsConstructor
 @ComponentScan(basePackages = {
         "com.fh.scm.components",
         "com.fh.scm.controllers",
@@ -26,7 +28,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 })
 public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -35,23 +38,23 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(this.passwordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        http.formLogin().loginPage("/login");
+        http.formLogin().usernameParameter("username").passwordParameter("password");
+        http.formLogin().defaultSuccessUrl("/").failureUrl("/login?error");
+
+        http.logout().logoutSuccessUrl("/login");
+
+        http.exceptionHandling().accessDeniedPage("/login?accessDenied");
+
         http.authorizeRequests()
+                .antMatchers("/admin/**").access(String.format("hasRole('ROLE_%s')", Role.ADMIN))
                 .antMatchers("/api/**").permitAll()
-                .anyRequest().permitAll()
-                .and()
-                .formLogin()
-                .defaultSuccessUrl("/admin")
-                .failureUrl("/login?error=true")
-                .permitAll()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/login")
-                .permitAll();
+                .anyRequest().permitAll();
 
         http.csrf().disable();
     }

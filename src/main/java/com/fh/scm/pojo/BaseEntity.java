@@ -1,7 +1,6 @@
 package com.fh.scm.pojo;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.eclipse.persistence.annotations.UuidGenerator;

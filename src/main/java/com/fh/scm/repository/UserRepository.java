@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface UserRepository {
 
-    boolean authUser(String username, String password);
+    boolean auth(String username, String password);
 
     User get(UUID id);
 

@@ -1,28 +1,38 @@
 package com.fh.scm.services.implement;
 
+import com.fh.scm.dto.user.UserRegisterRequest;
+import com.fh.scm.dto.user.UserResponse;
+import com.fh.scm.enums.Role;
 import com.fh.scm.pojo.User;
 import com.fh.scm.repository.UserRepository;
+import com.fh.scm.services.CloudinaryService;
 import com.fh.scm.services.UserService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
 @Service("userDetailsService")
 @Transactional
-@RequiredArgsConstructor
 public class UserServiceImplement implements UserService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.getByUsername(username);
+        User user = this.userRepository.getByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("Invalid User!");
@@ -35,8 +45,82 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public boolean authUser(String username, String password) {
-        return this.userRepository.authUser(username, password);
+    public void createAdmin() {
+        User existingAdmin = userRepository.getByUsername("admin");
+        if (existingAdmin != null) {
+            System.out.println("Admin user already exists.");
+            return;
+        }
+
+        User admin = User.builder()
+                .email("admin@scm.com")
+                .username("admin")
+                .password(passwordEncoder.encode("admin@123"))
+                .role(Role.ADMIN)
+                .isConfirm(true)
+                .build();
+
+        this.userRepository.insert(admin);
+        System.out.println("Admin user created successfully.");
+    }
+
+    @Override
+    public boolean auth(String username, String password) {
+        return this.userRepository.auth(username, password);
+    }
+
+    @Override
+    public UserResponse register(UserRegisterRequest userRegisterRequest) {
+        MultipartFile avatar = userRegisterRequest.getAvatar();
+        String avatarUrl = null;
+        if (avatar != null && !avatar.isEmpty()) {
+            avatarUrl = this.cloudinaryService.uploadImage(avatar);
+        }
+
+        String hashedPassword = passwordEncoder.encode(userRegisterRequest.getPassword());
+
+        User user = User.builder()
+                .email(userRegisterRequest.getEmail())
+                .username(userRegisterRequest.getUsername())
+                .password(hashedPassword)
+                .role(userRegisterRequest.getRole())
+                .avatar(avatarUrl)
+                .build();
+
+        if (user.getRole() == Role.ADMIN) {
+            user.setIsConfirm(true);
+        }
+
+        this.userRepository.insert(user);
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .avatar(user.getAvatar())
+                .role(user.getRole())
+                .isConfirm(user.getIsConfirm())
+                .lastLogin(user.getLastLogin())
+                .build();
+    }
+
+    @Override
+    public UserResponse profile(String username) {
+        User user = this.userRepository.getByUsername(username);
+
+        if (user == null) {
+            return null;
+        }
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .avatar(user.getAvatar())
+                .role(user.getRole())
+                .isConfirm(user.getIsConfirm())
+                .lastLogin(user.getLastLogin())
+                .build();
     }
 
     @Override

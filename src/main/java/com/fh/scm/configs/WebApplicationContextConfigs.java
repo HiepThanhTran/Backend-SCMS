@@ -12,10 +12,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 
 @Order(1)
 @Configuration
@@ -33,16 +30,6 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
-    }
-
-    @Bean
-    public InternalResourceViewResolver internalResourceViewResolver() {
-        InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
-        internalResourceViewResolver.setPrefix("/WEB-INF/pages/");
-        internalResourceViewResolver.setSuffix(".jsp");
-        internalResourceViewResolver.setViewClass(JstlView.class);
-
-        return internalResourceViewResolver;
     }
 
     @Bean
@@ -74,14 +61,24 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
         return this.validator();
     }
 
+//    @Bean
+//    public InternalResourceViewResolver internalResourceViewResolver() {
+//        InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
+//        internalResourceViewResolver.setPrefix("/WEB-INF/pages/");
+//        internalResourceViewResolver.setSuffix(".jsp");
+//        internalResourceViewResolver.setViewClass(JstlView.class);
+//
+//        return internalResourceViewResolver;
+//    }
+
 //    @Override
 //    public void addFormatters(FormatterRegistry registry) {
 //        registry.addFormatter(new CategoryFormatter());
 //    }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
-        registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");
-    }
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
+//        registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");
+//    }
 }

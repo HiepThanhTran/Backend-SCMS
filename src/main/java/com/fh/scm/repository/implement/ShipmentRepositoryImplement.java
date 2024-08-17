@@ -4,10 +4,10 @@ import com.fh.scm.enums.ShipmentStatus;
 import com.fh.scm.pojo.Shipment;
 import com.fh.scm.repository.ShipmentRepository;
 import com.fh.scm.util.Pagination;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +20,10 @@ import java.util.*;
 
 @Repository
 @Transactional
-@RequiredArgsConstructor
 public class ShipmentRepositoryImplement implements ShipmentRepository {
 
-    private final LocalSessionFactoryBean factory;
+    @Autowired
+    private LocalSessionFactoryBean factory;
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
@@ -111,7 +111,7 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
                 try {
                     ShipmentStatus status = ShipmentStatus.valueOf(statusStr.toUpperCase(Locale.getDefault()));
                     predicates.add(builder.equal(root.get("status"), status));
-                } catch(IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     LoggerFactory.getLogger(ShipmentRepositoryImplement.class).error("An error parse CriteriaType Enum", e);
                 }
             }

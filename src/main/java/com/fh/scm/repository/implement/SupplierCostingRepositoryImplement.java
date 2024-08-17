@@ -3,9 +3,9 @@ package com.fh.scm.repository.implement;
 import com.fh.scm.pojo.SupplierCosting;
 import com.fh.scm.repository.SupplierCostingRepository;
 import com.fh.scm.util.Pagination;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +19,10 @@ import java.util.*;
 
 @Repository
 @Transactional
-@RequiredArgsConstructor
 public class SupplierCostingRepositoryImplement implements SupplierCostingRepository {
 
-    private final LocalSessionFactoryBean factory;
+    @Autowired
+    private LocalSessionFactoryBean factory;
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();

@@ -1,6 +1,5 @@
 package com.fh.scm.repository;
 
-import com.fh.scm.pojo.Category;
 import com.fh.scm.pojo.Rating;
 
 import java.util.List;

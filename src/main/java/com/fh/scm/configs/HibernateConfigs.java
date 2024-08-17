@@ -1,12 +1,10 @@
 package com.fh.scm.configs;
 
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
@@ -19,14 +17,11 @@ import java.util.Properties;
 import static org.hibernate.cfg.AvailableSettings.*;
 
 @Configuration
-@RequiredArgsConstructor
-@PropertySources({
-        @PropertySource("classpath:databases.properties"),
-        @PropertySource("classpath:applications.properties")
-})
+@PropertySource("classpath:databases.properties")
 public class HibernateConfigs {
 
-    private final Environment environment;
+    @Autowired
+    private Environment environment;
 
     @Bean
     public LocalSessionFactoryBean getSessionFactory() {

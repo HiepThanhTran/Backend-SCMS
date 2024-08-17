@@ -1,6 +1,5 @@
 package com.fh.scm.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;

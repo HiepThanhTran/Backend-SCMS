@@ -36,16 +36,16 @@ public class User extends BaseEntity implements Serializable {
     private String avatar;
 
     @Builder.Default
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.CUSTOMER;
+
+    @Builder.Default
     @Column(name = "is_confirm", nullable = false, columnDefinition = "boolean default false")
     private Boolean isConfirm = false;
 
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
-
-    @Builder.Default
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.CUSTOMER;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)

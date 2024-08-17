@@ -5,15 +5,16 @@ import com.fh.scm.pojo.User;
 import com.fh.scm.repository.UserRepository;
 import com.fh.scm.util.Pagination;
 import com.fh.scm.util.Utils;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -22,25 +23,22 @@ import java.util.*;
 
 @Repository
 @Transactional
-@RequiredArgsConstructor
 public class UserRepositoryImplement implements UserRepository {
 
-    private final LocalSessionFactoryBean factory;
-    private final BCryptPasswordEncoder passEncoder;
+    @Autowired
+    private LocalSessionFactoryBean factory;
+    @Autowired
+    private PasswordEncoder passEncoder;
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
     }
 
     @Override
-    public boolean authUser(String username, String password) {
-        User u = this.getByUsername(username);
+    public boolean auth(String username, String password) {
+        User user = this.getByUsername(username);
 
-        if (u == null) {
-            return false;
-        }
-
-        return this.passEncoder.matches(password, u.getPassword());
+        return user != null && this.passEncoder.matches(password, user.getPassword());
     }
 
     @Override
@@ -52,15 +50,19 @@ public class UserRepositoryImplement implements UserRepository {
 
     @Override
     public User getByUsername(String username) {
-        Session session = this.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = builder.createQuery(User.class);
-        Root<User> root = criteria.from(User.class);
+        try {
+            Session session = this.getCurrentSession();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = builder.createQuery(User.class);
+            Root<User> root = criteria.from(User.class);
 
-        criteria.where(builder.equal(root.get("username"), username));
-        Query<User> query = session.createQuery(criteria);
+            criteria.where(builder.equal(root.get("username"), username));
+            Query<User> query = session.createQuery(criteria);
 
-        return query.getSingleResult();
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

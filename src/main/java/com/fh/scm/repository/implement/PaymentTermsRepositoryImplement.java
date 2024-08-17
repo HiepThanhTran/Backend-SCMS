@@ -1,14 +1,13 @@
 package com.fh.scm.repository.implement;
 
 import com.fh.scm.enums.PaymentTermType;
-import com.fh.scm.enums.Role;
 import com.fh.scm.pojo.PaymentTerms;
 import com.fh.scm.repository.PaymentTermsRepository;
 import com.fh.scm.util.Pagination;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +20,10 @@ import java.util.*;
 
 @Repository
 @Transactional
-@RequiredArgsConstructor
 public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
 
-    private final LocalSessionFactoryBean factory;
+    @Autowired
+    private LocalSessionFactoryBean factory;
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(factory.getObject()).getCurrentSession();
