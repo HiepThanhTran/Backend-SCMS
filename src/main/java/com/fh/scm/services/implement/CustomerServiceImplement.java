@@ -5,22 +5,24 @@ import com.fh.scm.repository.CustomerRepository;
 import com.fh.scm.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class CustomerServiceImplement implements CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
 
     @Override
-    public Customer get(UUID id) {
+    public Customer get(Long id) {
         return this.customerRepository.get(id);
+    }
+
+    @Override
+    public Customer getByPhone(String phone) {
+        return this.customerRepository.getByPhone(phone);
     }
 
     @Override
@@ -34,12 +36,12 @@ public class CustomerServiceImplement implements CustomerService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.customerRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.customerRepository.softDelete(id);
     }
 
@@ -54,7 +56,7 @@ public class CustomerServiceImplement implements CustomerService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.customerRepository.exists(id);
     }
 

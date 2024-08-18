@@ -4,25 +4,24 @@ import com.fh.scm.pojo.Unit;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface UnitService {
 
-    Unit get(UUID id);
+    Unit get(Long id);
 
     void insert(Unit unit);
 
     void update(Unit unit);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    void softDelete(UUID id);
+    void softDelete(Long id);
 
     void insertOrUpdate(Unit unit);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<Unit> getAll(Map<String, String> params);
 }

@@ -12,7 +12,7 @@ import java.util.Map;
 @ControllerAdvice
 public class HomeController {
 
-    @RequestMapping("/")
+    @RequestMapping(path = "/")
     public String index(Model model, @RequestParam Map<String, String> params) {
         return "index";
     }

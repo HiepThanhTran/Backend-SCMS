@@ -14,7 +14,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Repository
 @Transactional
@@ -28,7 +31,7 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
     }
 
     @Override
-    public InventoryDetails get(UUID id) {
+    public InventoryDetails get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(InventoryDetails.class, id);
@@ -47,14 +50,14 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         InventoryDetails inventoryDetails = session.get(InventoryDetails.class, id);
         session.delete(inventoryDetails);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         InventoryDetails inventoryDetails = session.get(InventoryDetails.class, id);
         inventoryDetails.setActive(false);
@@ -81,7 +84,7 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         InventoryDetails inventoryDetails = session.get(InventoryDetails.class, id);
 
@@ -98,15 +101,15 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             String productId = params.get("productId");
             if (productId != null && !productId.isEmpty()) {
-                predicates.add(builder.equal(root.get("product").get("id"), UUID.fromString(productId)));
+                predicates.add(builder.equal(root.get("product").get("id"), Long.parseLong(productId)));
             }
 
             String inventoryId = params.get("inventoryId");
             if (inventoryId != null && !inventoryId.isEmpty()) {
-                predicates.add(builder.equal(root.get("inventory").get("id"), UUID.fromString(inventoryId)));
+                predicates.add(builder.equal(root.get("inventory").get("id"), Long.parseLong(inventoryId)));
             }
         }
 

@@ -1,20 +1,26 @@
 package com.fh.scm.repository.implement;
 
 import com.fh.scm.pojo.Supplier;
+import com.fh.scm.pojo.User;
 import com.fh.scm.repository.SupplierRepository;
 import com.fh.scm.util.Pagination;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Repository
 @Transactional
@@ -28,10 +34,28 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
-    public Supplier get(UUID id) {
+    public Supplier get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Supplier.class, id);
+    }
+
+    @Override
+    public Supplier getByPhone(String phone) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Supplier> criteria = builder.createQuery(Supplier.class);
+        Root<Supplier> root = criteria.from(Supplier.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("phone"), phone));
+            Query<Supplier> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting user by phone", e);
+            return null;
+        }
     }
 
     @Override
@@ -47,14 +71,14 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         Supplier supplier = session.get(Supplier.class, id);
         session.delete(supplier);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         Supplier supplier = session.get(Supplier.class, id);
         supplier.setActive(false);
@@ -81,7 +105,7 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         Supplier supplier = session.get(Supplier.class, id);
 
@@ -98,7 +122,7 @@ public class SupplierRepositoryImplement implements SupplierRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             String name = params.get("name");
             if (name != null && !name.isEmpty()) {
                 predicates.add(builder.like(root.get("name"), String.format("%%%s%%", name)));

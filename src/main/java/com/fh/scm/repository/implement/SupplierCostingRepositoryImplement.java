@@ -29,7 +29,7 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
     }
 
     @Override
-    public SupplierCosting get(UUID id) {
+    public SupplierCosting get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(SupplierCosting.class, id);
@@ -48,14 +48,14 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         SupplierCosting supplierCosting = session.get(SupplierCosting.class, id);
         session.delete(supplierCosting);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         SupplierCosting supplierCosting = session.get(SupplierCosting.class, id);
         supplierCosting.setActive(false);
@@ -82,7 +82,7 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         SupplierCosting supplierCosting = session.get(SupplierCosting.class, id);
 
@@ -99,7 +99,7 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             Arrays.asList("fromPrice", "toPrice", "productId", "supplierId").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
@@ -112,10 +112,10 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
                             predicates.add(builder.lessThanOrEqualTo(root.get("unitPrice"), new BigDecimal(toPrice)));
                             break;
                         case "productId":
-                            predicates.add(builder.equal(root.get("product").get("id"), UUID.fromString(params.get(key))));
+                            predicates.add(builder.equal(root.get("product").get("id"), Long.parseLong(params.get(key))));
                             break;
                         case "supplierId":
-                            predicates.add(builder.equal(root.get("supplier").get("id"), UUID.fromString(params.get(key))));
+                            predicates.add(builder.equal(root.get("supplier").get("id"), Long.parseLong(params.get(key))));
                             break;
                     }
                 }

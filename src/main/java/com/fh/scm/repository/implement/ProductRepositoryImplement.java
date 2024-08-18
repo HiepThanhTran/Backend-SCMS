@@ -29,7 +29,7 @@ public class ProductRepositoryImplement implements ProductRepository {
     }
 
     @Override
-    public Product get(UUID id) {
+    public Product get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Product.class, id);
@@ -48,14 +48,14 @@ public class ProductRepositoryImplement implements ProductRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         Product Product = session.get(Product.class, id);
         session.delete(Product);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         Product Product = session.get(Product.class, id);
         Product.setActive(false);
@@ -82,7 +82,7 @@ public class ProductRepositoryImplement implements ProductRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         Product product = session.get(Product.class, id);
 
@@ -99,7 +99,7 @@ public class ProductRepositoryImplement implements ProductRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             Arrays.asList("name", "fromPrice", "toPrice", "categoryId").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
@@ -116,7 +116,7 @@ public class ProductRepositoryImplement implements ProductRepository {
                             predicates.add(p3);
                             break;
                         case "categoryId":
-                            Predicate p4 = builder.equal(root.get("category").get("id"), UUID.fromString(params.get(key)));
+                            Predicate p4 = builder.equal(root.get("category").get("id"), Long.parseLong(params.get(key)));
                             predicates.add(p4);
                             break;
                     }

@@ -29,7 +29,7 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
     }
 
     @Override
-    public OrderDetails get(UUID id) {
+    public OrderDetails get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(OrderDetails.class, id);
@@ -48,14 +48,14 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         OrderDetails orderDetails = session.get(OrderDetails.class, id);
         session.delete(orderDetails);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         OrderDetails orderDetails = session.get(OrderDetails.class, id);
         orderDetails.setActive(false);
@@ -82,7 +82,7 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         OrderDetails orderDetails = session.get(OrderDetails.class, id);
 
@@ -99,7 +99,7 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             Arrays.asList("fromPrice", "toPrice", "orderId", "productId").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
@@ -112,10 +112,10 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
                             predicates.add(builder.lessThanOrEqualTo(root.get("unitPrice"), new BigDecimal(toPrice)));
                             break;
                         case "orderId":
-                            predicates.add(builder.equal(root.get("order").get("id"), UUID.fromString(params.get(key))));
+                            predicates.add(builder.equal(root.get("order").get("id"), Long.parseLong(params.get(key))));
                             break;
                         case "productId":
-                            predicates.add(builder.equal(root.get("product").get("id"), UUID.fromString(params.get(key))));
+                            predicates.add(builder.equal(root.get("product").get("id"), Long.parseLong(params.get(key))));
                             break;
                     }
                 }

@@ -1,5 +1,6 @@
 package com.fh.scm.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fh.scm.enums.Role;
 import lombok.*;
@@ -24,12 +25,12 @@ public class User extends BaseEntity implements Serializable {
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "...")
     private String email;
 
-    @Size(min = 1, max = 50, message = "...")
     @Column(nullable = false, unique = true, length = 50)
+    @Size(min = 6, max = 50, message = "{user.username.size}")
     private String username;
 
     @Column(nullable = false, length = 300)
-    @Size(min = 1, max = 300, message = "...")
+    @Size(min = 8, max = 300, message = "{user.password.size}")
     private String password;
 
     @Column(length = 300)
@@ -45,19 +46,20 @@ public class User extends BaseEntity implements Serializable {
     private Boolean isConfirm = false;
 
     @Column(name = "last_login")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLogin;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Supplier supplier;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
-    private Customer customer;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Shipper shipper;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
-    private Shipper shipper;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Customer customer;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

@@ -1,13 +1,11 @@
 package com.fh.scm.util;
 
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Utils {
 
@@ -41,67 +39,33 @@ public final class Utils {
         }
     }
 
-    public static @NotNull Map<String, String> generateMappingPojoClass(@NotNull Set<Class<?>> classes) {
-        Map<String, String> mapping = new HashMap<>();
+    public static List<String> generateMappingPojoClass() {
+        List<String> mapping = new ArrayList<>();
 
-        for (Class<?> clazz : classes) {
-            String vietnameseName = generateVietnameseName(clazz.getSimpleName());
-            mapping.put(clazz.getSimpleName(), vietnameseName);
-        }
+        mapping.add("Danh mục");
+        mapping.add("Khách hàng");
+        mapping.add("Lịch giao hàng");
+        mapping.add("Tồn kho");
+        mapping.add("Chi tiết tồn kho");
+        mapping.add("Hóa đơn");
+        mapping.add("Đơn hàng");
+        mapping.add("Chi tiết đơn hàng");
+        mapping.add("Phương thức thanh toán");
+        mapping.add("Sản phẩm");
+        mapping.add("Tag sản phẩm");
+        mapping.add("Đơn vị sản phẩm");
+        mapping.add("Đánh giá");
+        mapping.add("Vận chuyển");
+        mapping.add("Người giao hàng");
+        mapping.add("Nhà cung cấp");
+        mapping.add("Chi phí nhà cung cấp");
+        mapping.add("Phương thức thanh toán của nhà cung cấp");
+        mapping.add("Tag");
+        mapping.add("Thuế");
+        mapping.add("Đơn vị");
+        mapping.add("Người dùng");
+        mapping.add("Kho");
 
         return mapping;
-    }
-
-    private static String generateVietnameseName(@NotNull String className) {
-        switch (className) {
-            case "Category":
-                return "Danh mục";
-            case "Customer":
-                return "Khách hàng";
-            case "DeliverySchedule":
-                return "Lịch giao hàng";
-            case "Inventory":
-                return "Tồn kho";
-            case "InventoryDetails":
-                return "Chi tiết tồn kho";
-            case "Invoice":
-                return "Hóa đơn";
-            case "Order":
-                return "Đơn hàng";
-            case "OrderDetails":
-                return "Chi tiết đơn hàng";
-            case "PaymentTerms":
-                return "Phương thức thanh toán";
-            case "Product":
-                return "Sản phẩm";
-            case "ProductTag":
-                return "Tag sản phẩm";
-            case "ProductUnit":
-                return "Đơn vị sản phẩm";
-            case "Rating":
-                return "Đánh giá";
-            case "Shipment":
-                return "Vận chuyển";
-            case "Shipper":
-                return "Người giao hàng";
-            case "Supplier":
-                return "Nhà cung cấp";
-            case "SupplierCosting":
-                return "Chi phí nhà cung cấp";
-            case "SupplierPaymentTerms":
-                return "Phương thức thanh toán của nhà cung cấp";
-            case "Tag":
-                return "Tag";
-            case "Tax":
-                return "Thuế";
-            case "Unit":
-                return "Đơn vị";
-            case "User":
-                return "Người dùng";
-            case "Warehouse":
-                return "Kho";
-            default:
-                return className;
-        }
     }
 }

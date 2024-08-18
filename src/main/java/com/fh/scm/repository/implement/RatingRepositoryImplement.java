@@ -30,7 +30,7 @@ public class RatingRepositoryImplement implements RatingRepository {
     }
 
     @Override
-    public Rating get(UUID id) {
+    public Rating get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Rating.class, id);
@@ -49,13 +49,13 @@ public class RatingRepositoryImplement implements RatingRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         Rating rating = session.get(Rating.class, id);
         session.delete(rating);
     }
 
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         Rating rating = session.get(Rating.class, id);
         rating.setActive(false);
@@ -82,7 +82,7 @@ public class RatingRepositoryImplement implements RatingRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         Rating rating = session.get(Rating.class, id);
 
@@ -99,7 +99,7 @@ public class RatingRepositoryImplement implements RatingRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             Arrays.asList("fromRating", "toRating", "criteria", "supplierId").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
@@ -120,7 +120,7 @@ public class RatingRepositoryImplement implements RatingRepository {
                             }
                             break;
                         case "supplierId":
-                            Predicate p3 = builder.equal(root.get("supplier").get("id"), UUID.fromString(params.get(key)));
+                            Predicate p3 = builder.equal(root.get("supplier").get("id"), Long.parseLong(params.get(key)));
                             predicates.add(p3);
                             break;
                     }

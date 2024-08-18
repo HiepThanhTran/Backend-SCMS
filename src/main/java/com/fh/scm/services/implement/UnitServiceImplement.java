@@ -4,21 +4,18 @@ import com.fh.scm.pojo.Unit;
 import com.fh.scm.services.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class UnitServiceImplement implements UnitService {
 
     @Autowired
     private UnitService unitService;
 
     @Override
-    public Unit get(UUID id) {
+    public Unit get(Long id) {
         return this.unitService.get(id);
     }
 
@@ -33,12 +30,12 @@ public class UnitServiceImplement implements UnitService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.unitService.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.unitService.softDelete(id);
     }
 
@@ -53,7 +50,7 @@ public class UnitServiceImplement implements UnitService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.unitService.exists(id);
     }
 

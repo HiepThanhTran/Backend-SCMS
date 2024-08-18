@@ -4,25 +4,24 @@ import com.fh.scm.pojo.Tax;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface TaxRepository {
 
-    Tax get(UUID id);
+    Tax get(Long id);
 
     void insert(Tax tax);
 
     void update(Tax tax);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    void softDelete(UUID id);
+    void softDelete(Long id);
 
     void insertOrUpdate(Tax tax);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<Tax> getAll(Map<String, String> params);
 }

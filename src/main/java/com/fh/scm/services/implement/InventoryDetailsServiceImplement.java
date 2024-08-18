@@ -5,21 +5,18 @@ import com.fh.scm.repository.InventoryDetailsRepository;
 import com.fh.scm.services.InventoryDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class InventoryDetailsServiceImplement implements InventoryDetailsService {
 
     @Autowired
     private InventoryDetailsRepository inventoryDetailsRepository;
 
     @Override
-    public InventoryDetails get(UUID id) {
+    public InventoryDetails get(Long id) {
         return this.inventoryDetailsRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class InventoryDetailsServiceImplement implements InventoryDetailsService
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.inventoryDetailsRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.inventoryDetailsRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class InventoryDetailsServiceImplement implements InventoryDetailsService
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.inventoryDetailsRepository.exists(id);
     }
 

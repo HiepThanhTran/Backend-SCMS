@@ -5,21 +5,18 @@ import com.fh.scm.repository.ShipperRepository;
 import com.fh.scm.services.ShipperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class ShipperServiceImplement implements ShipperService {
 
     @Autowired
     private ShipperRepository shipperRepository;
 
     @Override
-    public Shipper get(UUID id) {
+    public Shipper get(Long id) {
         return this.shipperRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class ShipperServiceImplement implements ShipperService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.shipperRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.shipperRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class ShipperServiceImplement implements ShipperService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.shipperRepository.exists(id);
     }
 

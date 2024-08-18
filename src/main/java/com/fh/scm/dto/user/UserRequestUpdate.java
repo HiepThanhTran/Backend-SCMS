@@ -1,13 +1,11 @@
 package com.fh.scm.dto.user;
 
-import com.fh.scm.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -15,22 +13,16 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegisterRequest {
+public class UserRequestUpdate {
 
-    @NotNull
-    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "...")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "{user.email.pattern}")
     private String email;
 
-    @NotNull
-    @Size(min = 1, max = 50, message = "...")
+    @Size(min = 6, max = 50, message = "{user.username.size}")
     private String username;
 
-    @NotNull
-    @Size(min = 1, max = 300, message = "...")
+    @Size(min = 8, max = 300, message = "{user.password.size}")
     private String password;
 
     private MultipartFile avatar;
-
-    @NotNull
-    private Role role;
 }

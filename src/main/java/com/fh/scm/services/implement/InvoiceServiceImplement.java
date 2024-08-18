@@ -5,21 +5,18 @@ import com.fh.scm.repository.InvoiceRepository;
 import com.fh.scm.services.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class InvoiceServiceImplement implements InvoiceService {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
 
     @Override
-    public Invoice get(UUID id) {
+    public Invoice get(Long id) {
         return this.invoiceRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class InvoiceServiceImplement implements InvoiceService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.invoiceRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.invoiceRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class InvoiceServiceImplement implements InvoiceService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.invoiceRepository.exists(id);
     }
 

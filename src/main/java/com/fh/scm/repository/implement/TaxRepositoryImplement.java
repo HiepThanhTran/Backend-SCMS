@@ -14,7 +14,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Repository
 @Transactional
@@ -28,7 +31,7 @@ public class TaxRepositoryImplement implements TaxRepository {
     }
 
     @Override
-    public Tax get(UUID id) {
+    public Tax get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Tax.class, id);
@@ -47,14 +50,14 @@ public class TaxRepositoryImplement implements TaxRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         Tax tax = session.get(Tax.class, id);
         session.delete(tax);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         Tax tax = session.get(Tax.class, id);
         session.delete(tax);
@@ -80,7 +83,7 @@ public class TaxRepositoryImplement implements TaxRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         Tax tax = session.get(Tax.class, id);
 
@@ -97,7 +100,7 @@ public class TaxRepositoryImplement implements TaxRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             String region = params.get("region");
             if (region != null && !region.isEmpty()) {
                 predicates.add(builder.equal(root.get("region"), region));

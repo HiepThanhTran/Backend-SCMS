@@ -5,21 +5,18 @@ import com.fh.scm.repository.PaymentTermsRepository;
 import com.fh.scm.services.PaymentTermsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class PaymentTermsServiceImplement implements PaymentTermsService {
 
     @Autowired
     private PaymentTermsRepository paymentTermsRepository;
 
     @Override
-    public PaymentTerms get(UUID id) {
+    public PaymentTerms get(Long id) {
         return this.paymentTermsRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class PaymentTermsServiceImplement implements PaymentTermsService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.paymentTermsRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.paymentTermsRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class PaymentTermsServiceImplement implements PaymentTermsService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.paymentTermsRepository.exists(id);
     }
 

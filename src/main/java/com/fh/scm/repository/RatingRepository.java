@@ -4,25 +4,24 @@ import com.fh.scm.pojo.Rating;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface RatingRepository {
 
-    Rating get(UUID id);
+    Rating get(Long id);
 
     void insert(Rating rating);
 
     void update(Rating rating);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    void softDelete(UUID id);
+    void softDelete(Long id);
 
     void insertOrUpdate(Rating rating);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<Rating> getAll(Map<String, String> params);
 }

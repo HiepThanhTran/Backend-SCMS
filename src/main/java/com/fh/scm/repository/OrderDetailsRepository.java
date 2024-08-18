@@ -4,25 +4,24 @@ import com.fh.scm.pojo.OrderDetails;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface OrderDetailsRepository {
 
-    OrderDetails get(UUID id);
+    OrderDetails get(Long id);
 
     void insert(OrderDetails orderDetails);
 
     void update(OrderDetails orderDetails);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    void softDelete(UUID id);
+    void softDelete(Long id);
 
     void insertOrUpdate(OrderDetails orderDetails);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<OrderDetails> getAll(Map<String, String> params);
 }

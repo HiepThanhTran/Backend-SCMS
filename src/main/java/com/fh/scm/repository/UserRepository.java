@@ -4,29 +4,28 @@ import com.fh.scm.pojo.User;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface UserRepository {
 
-    boolean auth(String username, String password);
-
-    User get(UUID id);
+    User get(Long id);
 
     User getByUsername(String username);
+
+    User getByEmail(String email);
 
     void insert(User user);
 
     void update(User user);
 
-    void delete(UUID id);
-
-    void softDelete(UUID id);
-
     void insertOrUpdate(User user);
+
+    void delete(Long id);
+
+    void softDelete(Long id);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<User> getAll(Map<String, String> params);
 }

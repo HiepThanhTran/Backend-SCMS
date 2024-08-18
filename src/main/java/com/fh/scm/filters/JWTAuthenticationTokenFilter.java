@@ -23,7 +23,7 @@ import java.util.Set;
 
 public class JWTAuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final static String TOKEN_HEADER = "authorization";
+    private final static String TOKEN_HEADER = "Authorization";
     @Autowired
     private JWTService jwtService;
     @Autowired

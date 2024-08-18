@@ -24,15 +24,14 @@ public class Supplier extends BaseEntity implements Serializable {
     private String address;
 
     @Column(nullable = false, unique = true, length = 15)
-    @Pattern(regexp = "^[0-9]{15}$", message = "...")
+    @Pattern(regexp = "^[0-9]{10,15}$", message = "{user.phone.pattern}")
     private String phone;
 
     @Column(name = "contact_info", nullable = false)
     private String contactInfo;
 
-    @MapsId
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
-    @JoinColumn(name = "id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @OneToMany(mappedBy = "supplier", cascade = {CascadeType.REMOVE})

@@ -13,7 +13,7 @@ import java.util.Date;
 @Component
 public class JWTService {
 
-    public static final String SECRET_KEY = "77777777777777777777777777777777";
+    public static final String SECRET_KEY = "11111111111111111111111111111111";
     public static final byte[] SHARED_SECRET_KEY = SECRET_KEY.getBytes();
     public static final int EXPIRE_TIME = 86400000;
 
@@ -56,6 +56,10 @@ public class JWTService {
     private Date getExpirationDateFromToken(String token) {
         JWTClaimsSet claims = getClaimsFromToken(token);
 
+        if (claims == null) {
+            return null;
+        }
+
         return claims.getExpirationTime();
     }
 
@@ -63,7 +67,9 @@ public class JWTService {
         String username = null;
         try {
             JWTClaimsSet claims = getClaimsFromToken(token);
-            username = claims.getStringClaim("username");
+            if (claims != null) {
+                username = claims.getStringClaim("username");
+            }
         } catch (ParseException e) {
             System.err.println(e.getMessage());
         }
@@ -73,6 +79,10 @@ public class JWTService {
 
     private Boolean isTokenExpired(String token) {
         Date expiration = getExpirationDateFromToken(token);
+
+        if (expiration == null) {
+            return null;
+        }
 
         return expiration.before(new Date());
     }
@@ -84,6 +94,6 @@ public class JWTService {
 
         String username = getUsernameFromToken(token);
 
-        return !(username == null || username.isEmpty() || isTokenExpired(token));
+        return username != null && !username.isEmpty() && Boolean.FALSE.equals(isTokenExpired(token));
     }
 }

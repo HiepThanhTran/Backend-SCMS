@@ -8,11 +8,11 @@ import lombok.Getter;
 public enum Role {
 
     ADMIN("Quản trị viên"),
-    SUPPLIER("Nhà cung cấp"),
-    SHIPPER("Nhà vận chuyển"),
     CUSTOMER("Khách hàng"),
-    DISTRIBUTOR("Đại lý"),
-    MANUFACTURER("Nhà sản xuất");
+    SUPPLIER("Nhà cung cấp"),
+    DISTRIBUTOR("Nhà phân phối"),
+    MANUFACTURER("Nhà sản xuất"),
+    SHIPPER("Nhà vận chuyển");
 
     private final String displayName;
 }

@@ -12,13 +12,13 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLoginRequest {
+public class UserRequestLogin {
 
-    @NotNull
-    @Size(min = 1, max = 50, message = "...")
+    @NotNull(message = "{user.username.notnull}")
+    @Size(min = 6, max = 50, message = "{user.username.size}")
     private String username;
 
-    @NotNull
-    @Size(min = 1, max = 300, message = "...")
+    @NotNull(message = "{user.password.notnull}")
+    @Size(min = 8, max = 300, message = "{user.password.size}")
     private String password;
 }

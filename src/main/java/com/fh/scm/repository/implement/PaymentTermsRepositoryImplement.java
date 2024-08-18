@@ -30,7 +30,7 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
     }
 
     @Override
-    public PaymentTerms get(UUID id) {
+    public PaymentTerms get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(PaymentTerms.class, id);
@@ -49,14 +49,14 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         PaymentTerms paymentTerms = session.get(PaymentTerms.class, id);
         session.delete(paymentTerms);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         PaymentTerms paymentTerms = session.get(PaymentTerms.class, id);
         paymentTerms.setActive(false);
@@ -83,7 +83,7 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         PaymentTerms paymentTerms = session.get(PaymentTerms.class, id);
 
@@ -100,7 +100,7 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             String typeStr = params.get("type");
             if (typeStr != null && !typeStr.isEmpty()) {
                 try {

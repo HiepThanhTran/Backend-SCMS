@@ -30,7 +30,7 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
     }
 
     @Override
-    public Shipment get(UUID id) {
+    public Shipment get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Shipment.class, id);
@@ -49,14 +49,14 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         Shipment shipment = session.get(Shipment.class, id);
         session.delete(shipment);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         Shipment shipment = session.get(Shipment.class, id);
         shipment.setActive(false);
@@ -83,7 +83,7 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         Shipment shipment = session.get(Shipment.class, id);
 
@@ -100,10 +100,10 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             String trackingNumber = params.get("trackingNumber");
             if (trackingNumber != null && !trackingNumber.isEmpty()) {
-                predicates.add(builder.like(root.get("trackingNumber"), UUID.fromString(trackingNumber).toString()));
+                predicates.add(builder.like(root.get("trackingNumber"), trackingNumber));
             }
 
             String statusStr = params.get("status");

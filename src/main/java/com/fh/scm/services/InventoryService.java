@@ -4,25 +4,24 @@ import com.fh.scm.pojo.Inventory;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface InventoryService {
 
-    Inventory get(UUID id);
+    Inventory get(Long id);
 
     void insert(Inventory inventory);
 
     void update(Inventory inventory);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    void softDelete(UUID id);
+    void softDelete(Long id);
 
     void insertOrUpdate(Inventory inventory);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<Inventory> getAll(Map<String, String> params);
 }

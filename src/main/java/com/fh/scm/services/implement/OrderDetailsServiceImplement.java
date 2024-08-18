@@ -5,21 +5,18 @@ import com.fh.scm.repository.OrderDetailsRepository;
 import com.fh.scm.services.OrderDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class OrderDetailsServiceImplement implements OrderDetailsService {
 
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
 
     @Override
-    public OrderDetails get(UUID id) {
+    public OrderDetails get(Long id) {
         return this.orderDetailsRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class OrderDetailsServiceImplement implements OrderDetailsService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.orderDetailsRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.orderDetailsRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class OrderDetailsServiceImplement implements OrderDetailsService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.orderDetailsRepository.exists(id);
     }
 

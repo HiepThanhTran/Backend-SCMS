@@ -5,22 +5,24 @@ import com.fh.scm.repository.SupplierRepository;
 import com.fh.scm.services.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class SupplierServiceImplement implements SupplierService {
 
     @Autowired
     private SupplierRepository supplierRepository;
 
     @Override
-    public Supplier get(UUID id) {
+    public Supplier get(Long id) {
         return this.supplierRepository.get(id);
+    }
+
+    @Override
+    public Supplier getByPhone(String phone) {
+        return this.supplierRepository.getByPhone(phone);
     }
 
     @Override
@@ -34,12 +36,12 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.supplierRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.supplierRepository.softDelete(id);
     }
 
@@ -54,7 +56,7 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.supplierRepository.exists(id);
     }
 

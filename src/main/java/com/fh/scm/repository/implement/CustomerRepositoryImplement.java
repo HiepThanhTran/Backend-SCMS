@@ -1,15 +1,18 @@
 package com.fh.scm.repository.implement;
 
 import com.fh.scm.pojo.Customer;
+import com.fh.scm.pojo.User;
 import com.fh.scm.repository.CustomerRepository;
 import com.fh.scm.util.Pagination;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -28,10 +31,28 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     }
 
     @Override
-    public Customer get(UUID id) {
+    public Customer get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Customer.class, id);
+    }
+
+    @Override
+    public Customer getByPhone(String phone) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Customer> criteria = builder.createQuery(Customer.class);
+        Root<Customer> root = criteria.from(Customer.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("phone"), phone));
+            Query<Customer> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting user by phone", e);
+            return null;
+        }
     }
 
     @Override
@@ -47,14 +68,14 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         Customer customer = session.get(Customer.class, id);
         session.delete(customer);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         Customer customer = session.get(Customer.class, id);
         customer.setActive(false);
@@ -81,7 +102,7 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         Customer customer = session.get(Customer.class, id);
 
@@ -98,7 +119,7 @@ public class CustomerRepositoryImplement implements CustomerRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             String name = params.get("name");
             if (name != null && !name.isEmpty()) {
                 List<Predicate> namePredicates = new ArrayList<>();

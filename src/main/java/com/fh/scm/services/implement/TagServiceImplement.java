@@ -5,21 +5,18 @@ import com.fh.scm.repository.TagRepository;
 import com.fh.scm.services.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class TagServiceImplement implements TagService {
 
     @Autowired
     private TagRepository tagRepository;
 
     @Override
-    public Tag get(UUID id) {
+    public Tag get(Long id) {
         return this.tagRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class TagServiceImplement implements TagService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.tagRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.tagRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class TagServiceImplement implements TagService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.tagRepository.exists(id);
     }
 

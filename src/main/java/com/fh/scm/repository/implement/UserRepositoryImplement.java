@@ -1,5 +1,6 @@
 package com.fh.scm.repository.implement;
 
+import com.fh.scm.dto.user.UserResponse;
 import com.fh.scm.enums.Role;
 import com.fh.scm.pojo.User;
 import com.fh.scm.repository.UserRepository;
@@ -35,32 +36,54 @@ public class UserRepositoryImplement implements UserRepository {
     }
 
     @Override
-    public boolean auth(String username, String password) {
-        User user = this.getByUsername(username);
-
-        return user != null && this.passEncoder.matches(password, user.getPassword());
-    }
-
-    @Override
-    public User get(UUID id) {
+    public User get(Long id) {
         Session session = this.getCurrentSession();
-
-        return session.get(User.class, id);
-    }
-
-    @Override
-    public User getByUsername(String username) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
         try {
-            Session session = this.getCurrentSession();
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<User> criteria = builder.createQuery(User.class);
-            Root<User> root = criteria.from(User.class);
-
-            criteria.where(builder.equal(root.get("username"), username));
+            criteria.select(root).where(builder.equal(root.get("id"), id));
             Query<User> query = session.createQuery(criteria);
 
             return query.getSingleResult();
         } catch (NoResultException e) {
+            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting user by username", e);
+            return null;
+        }
+    }
+
+    @Override
+    public User getByUsername(String username) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("username"), username));
+            Query<User> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting user by username", e);
+            return null;
+        }
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("email"), email));
+            Query<User> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting user by email", e);
             return null;
         }
     }
@@ -78,24 +101,24 @@ public class UserRepositoryImplement implements UserRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void insertOrUpdate(User user) {
+        Session session = this.getCurrentSession();
+        session.saveOrUpdate(user);
+    }
+
+    @Override
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         User user = session.get(User.class, id);
         session.delete(user);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         User user = session.get(User.class, id);
         user.setActive(false);
         session.update(user);
-    }
-
-    @Override
-    public void insertOrUpdate(User user) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(user);
     }
 
     @Override
@@ -112,7 +135,7 @@ public class UserRepositoryImplement implements UserRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         User user = session.get(User.class, id);
 
@@ -129,7 +152,7 @@ public class UserRepositoryImplement implements UserRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             Boolean isConfirm = Utils.parseBoolean(params.get("isConfirm"));
             if (isConfirm != null) {
                 predicates.add(builder.equal(root.get("isConfirm"), isConfirm));

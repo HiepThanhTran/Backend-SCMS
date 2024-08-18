@@ -4,25 +4,24 @@ import com.fh.scm.pojo.PaymentTerms;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface PaymentTermsService {
 
-    PaymentTerms get(UUID id);
+    PaymentTerms get(Long id);
 
     void insert(PaymentTerms paymentTerms);
 
     void update(PaymentTerms paymentTerms);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    void softDelete(UUID id);
+    void softDelete(Long id);
 
     void insertOrUpdate(PaymentTerms paymentTerms);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<PaymentTerms> getAll(Map<String, String> params);
 }

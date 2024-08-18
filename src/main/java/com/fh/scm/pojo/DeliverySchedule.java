@@ -1,5 +1,6 @@
 package com.fh.scm.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.scm.enums.DeliveryMethodType;
 import lombok.*;
 
@@ -18,6 +19,7 @@ import java.util.Set;
 public class DeliverySchedule extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime scheduledDate;
 
     @Builder.Default

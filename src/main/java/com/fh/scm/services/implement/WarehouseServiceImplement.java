@@ -5,21 +5,18 @@ import com.fh.scm.repository.WarehouseRepository;
 import com.fh.scm.services.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class WarehouseServiceImplement implements WarehouseService {
 
     @Autowired
     private WarehouseRepository warehouseRepository;
 
     @Override
-    public Warehouse get(UUID id) {
+    public Warehouse get(Long id) {
         return this.warehouseRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class WarehouseServiceImplement implements WarehouseService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.warehouseRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.warehouseRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class WarehouseServiceImplement implements WarehouseService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.warehouseRepository.exists(id);
     }
 

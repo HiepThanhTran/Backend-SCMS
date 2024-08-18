@@ -5,21 +5,18 @@ import com.fh.scm.repository.RatingRepository;
 import com.fh.scm.services.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class RatingServiceImplement implements RatingService {
 
     @Autowired
     private RatingRepository ratingRepository;
 
     @Override
-    public Rating get(UUID id) {
+    public Rating get(Long id) {
         return this.ratingRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class RatingServiceImplement implements RatingService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.ratingRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.ratingRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class RatingServiceImplement implements RatingService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.ratingRepository.exists(id);
     }
 

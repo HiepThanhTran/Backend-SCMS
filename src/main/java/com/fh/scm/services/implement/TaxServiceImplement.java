@@ -5,21 +5,18 @@ import com.fh.scm.repository.TaxRepository;
 import com.fh.scm.services.TaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class TaxServiceImplement implements TaxService {
 
     @Autowired
     private TaxRepository taxRepository;
 
     @Override
-    public Tax get(UUID id) {
+    public Tax get(Long id) {
         return this.taxRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class TaxServiceImplement implements TaxService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.taxRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.taxRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class TaxServiceImplement implements TaxService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.taxRepository.exists(id);
     }
 

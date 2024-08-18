@@ -1,6 +1,5 @@
 package com.fh.scm.configs;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,7 +54,7 @@ public class HibernateConfigs {
         return transactionManager;
     }
 
-    private @NotNull Properties hibernateProperties() {
+    private Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.put(DIALECT, environment.getProperty("hibernate.dialect"));
         properties.put(SHOW_SQL, environment.getProperty("hibernate.showSql"));

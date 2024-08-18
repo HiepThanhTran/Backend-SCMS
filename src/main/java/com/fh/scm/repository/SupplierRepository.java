@@ -4,25 +4,26 @@ import com.fh.scm.pojo.Supplier;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface SupplierRepository {
 
-    Supplier get(UUID id);
+    Supplier get(Long id);
+
+    Supplier getByPhone(String phone);
 
     void insert(Supplier supplier);
 
     void update(Supplier supplier);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    void softDelete(UUID id);
+    void softDelete(Long id);
 
     void insertOrUpdate(Supplier supplier);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<Supplier> getAll(Map<String, String> params);
 }

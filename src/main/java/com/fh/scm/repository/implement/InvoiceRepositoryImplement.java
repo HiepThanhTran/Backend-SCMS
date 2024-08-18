@@ -30,7 +30,7 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
     }
 
     @Override
-    public Invoice get(UUID id) {
+    public Invoice get(Long id) {
         Session session = getCurrentSession();
 
         return session.get(Invoice.class, id);
@@ -49,14 +49,14 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = getCurrentSession();
         Invoice invoice = session.get(Invoice.class, id);
         session.delete(invoice);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = getCurrentSession();
         Invoice invoice = session.get(Invoice.class, id);
         invoice.setActive(false);
@@ -83,7 +83,7 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         Invoice invoice = session.get(Invoice.class, id);
 
@@ -100,7 +100,7 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             Arrays.asList("isPaid", "taxId", "paymentTermsId", "fromCreatedAt", "toCreatedAt").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
@@ -111,10 +111,10 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
                             }
                             break;
                         case "taxId":
-                            predicates.add(builder.equal(root.get("tax").get("id"), UUID.fromString(params.get(key))));
+                            predicates.add(builder.equal(root.get("tax").get("id"), Long.parseLong(params.get(key))));
                             break;
                         case "paymentTermsId":
-                            predicates.add(builder.equal(root.get("paymentTerms").get("id"), UUID.fromString(params.get(key))));
+                            predicates.add(builder.equal(root.get("paymentTerms").get("id"), Long.parseLong(params.get(key))));
                             break;
                         case "fromCreatedAt":
                             LocalDateTime fromCreatedAt = Utils.parseDate(params.get(key));

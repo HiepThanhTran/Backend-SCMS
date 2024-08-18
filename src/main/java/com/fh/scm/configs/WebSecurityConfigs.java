@@ -2,7 +2,7 @@ package com.fh.scm.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.fh.scm.enums.Role;
+import com.fh.scm.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -52,7 +52,7 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().accessDeniedPage("/login?accessDenied");
 
         http.authorizeRequests()
-                .antMatchers("/admin/**").access(String.format("hasRole('ROLE_%s')", Role.ADMIN))
+                .antMatchers("/admin/**").access(Constants.HAS_ROLE_ADMIN)
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().permitAll();
 

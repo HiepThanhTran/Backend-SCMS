@@ -4,25 +4,24 @@ import com.fh.scm.pojo.Shipper;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface ShipperRepository {
 
-    Shipper get(UUID id);
+    Shipper get(Long id);
 
     void insert(Shipper shipper);
 
     void update(Shipper shipper);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    void softDelete(UUID id);
+    void softDelete(Long id);
 
     void insertOrUpdate(Shipper shipper);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<Shipper> getAll(Map<String, String> params);
 }

@@ -4,25 +4,24 @@ import com.fh.scm.pojo.Shipment;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface ShipmentService {
 
-    Shipment get(UUID id);
+    Shipment get(Long id);
 
     void insert(Shipment shipment);
 
     void update(Shipment shipment);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    void softDelete(UUID id);
+    void softDelete(Long id);
 
     void insertOrUpdate(Shipment shipment);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<Shipment> getAll(Map<String, String> params);
 }

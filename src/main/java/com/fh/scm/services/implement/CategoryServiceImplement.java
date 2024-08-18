@@ -4,21 +4,18 @@ import com.fh.scm.pojo.Category;
 import com.fh.scm.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class CategoryServiceImplement implements CategoryService {
 
     @Autowired
     private CategoryService categoryService;
 
     @Override
-    public Category get(UUID id) {
+    public Category get(Long id) {
         return this.categoryService.get(id);
     }
 
@@ -33,12 +30,12 @@ public class CategoryServiceImplement implements CategoryService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.categoryService.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.categoryService.softDelete(id);
     }
 
@@ -53,7 +50,7 @@ public class CategoryServiceImplement implements CategoryService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.categoryService.exists(id);
     }
 

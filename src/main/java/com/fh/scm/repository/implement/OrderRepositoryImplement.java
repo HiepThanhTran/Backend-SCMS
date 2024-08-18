@@ -31,7 +31,7 @@ public class OrderRepositoryImplement implements OrderRepository {
     }
 
     @Override
-    public Order get(UUID id) {
+    public Order get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Order.class, id);
@@ -50,14 +50,14 @@ public class OrderRepositoryImplement implements OrderRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         Order order = session.get(Order.class, id);
         session.delete(order);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         Order order = session.get(Order.class, id);
         order.setActive(false);
@@ -84,7 +84,7 @@ public class OrderRepositoryImplement implements OrderRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         Order order = session.get(Order.class, id);
 
@@ -101,7 +101,7 @@ public class OrderRepositoryImplement implements OrderRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             Arrays.asList("type", "status", "userId", "invoiceId").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
@@ -122,10 +122,10 @@ public class OrderRepositoryImplement implements OrderRepository {
                             }
                             break;
                         case "userId":
-                            predicates.add(builder.equal(root.get("user").get("id"), UUID.fromString(params.get(key))));
+                            predicates.add(builder.equal(root.get("user").get("id"), Long.parseLong(params.get(key))));
                             break;
                         case "invoiceId":
-                            predicates.add(builder.equal(root.get("invoice").get("id"), UUID.fromString(params.get(key))));
+                            predicates.add(builder.equal(root.get("invoice").get("id"), Long.parseLong(params.get(key))));
                             break;
                     }
                 }

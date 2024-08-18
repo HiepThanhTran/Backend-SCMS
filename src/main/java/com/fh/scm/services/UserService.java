@@ -1,41 +1,49 @@
 package com.fh.scm.services;
 
-import com.fh.scm.dto.user.UserRegisterRequest;
+import com.fh.scm.dto.user.UserRequestRegister;
+import com.fh.scm.dto.user.UserRequestUpdate;
 import com.fh.scm.dto.user.UserResponse;
 import com.fh.scm.pojo.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface UserService extends UserDetailsService {
 
+    void createAdmin();
+
     boolean auth(String username, String password);
 
-    UserResponse register(UserRegisterRequest userRegisterRequest);
+    void updateLastLogin(String username);
+
+    UserResponse register(UserRequestRegister userRequestRegister);
+
+    void confirm(String username);
 
     UserResponse profile(String username);
 
-    User get(UUID id);
+    UserResponse update(String username, UserRequestUpdate userRequestUpdate);
+
+    UserResponse get(Long id);
 
     User getByUsername(String username);
+
+    User getByEmail(String email);
 
     void insert(User user);
 
     void update(User user);
 
-    void delete(UUID id);
-
-    void softDelete(UUID id);
-
     void insertOrUpdate(User user);
+
+    void delete(Long id);
+
+    void softDelete(Long id);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
-    List<User> getAll(Map<String, String> params);
-
-    void createAdmin();
+    List<UserResponse> getAll(Map<String, String> params);
 }

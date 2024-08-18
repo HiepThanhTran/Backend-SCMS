@@ -5,21 +5,18 @@ import com.fh.scm.repository.ProductRepository;
 import com.fh.scm.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class ProductServiceImplement implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
 
     @Override
-    public Product get(UUID id) {
+    public Product get(Long id) {
         return this.productRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.productRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.productRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.productRepository.exists(id);
     }
 

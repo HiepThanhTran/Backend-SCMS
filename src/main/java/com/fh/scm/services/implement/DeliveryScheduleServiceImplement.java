@@ -5,21 +5,18 @@ import com.fh.scm.repository.DeliveryScheduleRepository;
 import com.fh.scm.services.DeliveryScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-@Transactional
 public class DeliveryScheduleServiceImplement implements DeliveryScheduleService {
 
     @Autowired
     private DeliveryScheduleRepository deliveryScheduleRepository;
 
     @Override
-    public DeliverySchedule get(UUID id) {
+    public DeliverySchedule get(Long id) {
         return this.deliveryScheduleRepository.get(id);
     }
 
@@ -34,12 +31,12 @@ public class DeliveryScheduleServiceImplement implements DeliveryScheduleService
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         this.deliveryScheduleRepository.delete(id);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         this.deliveryScheduleRepository.softDelete(id);
     }
 
@@ -54,7 +51,7 @@ public class DeliveryScheduleServiceImplement implements DeliveryScheduleService
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         return this.deliveryScheduleRepository.exists(id);
     }
 

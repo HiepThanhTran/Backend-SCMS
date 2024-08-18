@@ -4,25 +4,24 @@ import com.fh.scm.pojo.Tag;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface TagRepository {
 
-    Tag get(UUID id);
+    Tag get(Long id);
 
     void insert(Tag tag);
 
     void update(Tag tag);
 
-    void delete(UUID id);
+    void delete(Long id);
 
-    void softDelete(UUID id);
+    void softDelete(Long id);
 
     void insertOrUpdate(Tag tag);
 
     Long count();
 
-    Boolean exists(UUID id);
+    Boolean exists(Long id);
 
     List<Tag> getAll(Map<String, String> params);
 }

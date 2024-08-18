@@ -3,7 +3,6 @@ package com.fh.scm.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fh.scm.enums.ShipmentStatus;
 import lombok.*;
-import org.eclipse.persistence.annotations.UuidGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,8 +26,6 @@ public class Shipment extends BaseEntity implements Serializable {
     @Column(name = "current_location", nullable = false)
     private String currentLocation;
 
-    @UuidGenerator(name = "uuid")
-    @GeneratedValue(generator = "uuid")
     @Column(name = "tracking_number", nullable = false, unique = true)
     private String trackingNumber;
 

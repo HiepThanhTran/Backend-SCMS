@@ -14,7 +14,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Repository
 @Transactional
@@ -28,7 +31,7 @@ public class ShipperRepositoryImplement implements ShipperRepository {
     }
 
     @Override
-    public Shipper get(UUID id) {
+    public Shipper get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Shipper.class, id);
@@ -47,14 +50,14 @@ public class ShipperRepositoryImplement implements ShipperRepository {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         Shipper shipper = session.get(Shipper.class, id);
         session.delete(shipper);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         Shipper shipper = session.get(Shipper.class, id);
         shipper.setActive(false);
@@ -81,7 +84,7 @@ public class ShipperRepositoryImplement implements ShipperRepository {
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         Shipper shipper = session.get(Shipper.class, id);
 
@@ -98,7 +101,7 @@ public class ShipperRepositoryImplement implements ShipperRepository {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             String name = params.get("name");
             if (name != null && !name.isEmpty()) {
                 predicates.add(builder.like(root.get("name"), String.format("%%%s%%", name)));

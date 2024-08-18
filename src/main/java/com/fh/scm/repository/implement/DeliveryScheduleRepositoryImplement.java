@@ -32,7 +32,7 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
     }
 
     @Override
-    public DeliverySchedule get(UUID id) {
+    public DeliverySchedule get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(DeliverySchedule.class, id);
@@ -51,14 +51,14 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Session session = this.getCurrentSession();
         DeliverySchedule deliverySchedule = session.get(DeliverySchedule.class, id);
         session.delete(deliverySchedule);
     }
 
     @Override
-    public void softDelete(UUID id) {
+    public void softDelete(Long id) {
         Session session = this.getCurrentSession();
         DeliverySchedule deliverySchedule = session.get(DeliverySchedule.class, id);
         deliverySchedule.setActive(false);
@@ -85,7 +85,7 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
     }
 
     @Override
-    public Boolean exists(UUID id) {
+    public Boolean exists(Long id) {
         Session session = this.getCurrentSession();
         DeliverySchedule deliverySchedule = session.get(DeliverySchedule.class, id);
 
@@ -102,7 +102,7 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("isActive"), true));
 
-        if (params != null) {
+        if (params != null && !params.isEmpty()) {
             Arrays.asList("fromDate", "toDate", "method").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
