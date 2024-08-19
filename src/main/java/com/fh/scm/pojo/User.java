@@ -44,7 +44,7 @@ public class User extends BaseEntity implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{user.role.notNull}")
-    private UserRole userRole = UserRole.CUSTOMER;
+    private UserRole userRole = UserRole.ROLE_CUSTOMER;
 
     @Builder.Default
     @NotNull

@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Sidebar */
+.sidebar {
+    padding: 2px 0;
+    margin: 50px 0 0 0;
+    width: 85%;
+    background-color: #0e223e;
+}
+
+.sidebar-logo {
+    margin: 20px 0 20px 0;
+    font-size: 2rem;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+}
+
+.sidebar-nav {
+    padding-left: 0;
+    max-height: calc(10.5 * 3rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* Hiển thị mục được chọn */
+.sidebar-item.active .sidebar-link {
+    background-color: rgba(255, 255, 255, 0.075);
+    border-left: 3px solid #3b7ddd;
+}
+
+a.sidebar-link {
+    padding: 10px 26px;
+    color: #fff;
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    border-left: 3px solid transparent;
+}
+
+a.sidebar-link:hover {
+    background-color: rgba(255, 255, 255, 0.075);
+    border-left: 3px solid #3b7ddd;
+}

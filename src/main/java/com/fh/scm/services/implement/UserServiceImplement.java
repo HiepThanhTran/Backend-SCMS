@@ -62,7 +62,7 @@ public class UserServiceImplement implements UserService {
 
     @Override
     public void createAdmin() {
-        Map<String, String> params = Map.of("role", UserRole.ADMIN.name());
+        Map<String, String> params = Map.of("role", UserRole.ROLE_ADMIN.name());
         List<User> users = this.userRepository.getAll(params);
         if (!users.isEmpty()) {
             System.out.println("Admin user already exists.");
@@ -73,7 +73,7 @@ public class UserServiceImplement implements UserService {
                 .email("admin@scm.com")
                 .username("adminscm")
                 .password(passwordEncoder.encode("admin@123"))
-                .userRole(UserRole.ADMIN)
+                .userRole(UserRole.ROLE_ADMIN)
                 .isConfirm(true)
                 .build();
 
@@ -123,10 +123,10 @@ public class UserServiceImplement implements UserService {
                 .build();
 
         switch (user.getUserRole()) {
-            case ADMIN:
+            case ROLE_ADMIN:
                 user.setIsConfirm(true);
                 break;
-            case SUPPLIER:
+            case ROLE_SUPPLIER:
                 Supplier supplier;
                 supplier = this.supplierRepository.getByPhone(userRequestRegister.getPhone());
                 if (supplier != null) {
@@ -143,7 +143,7 @@ public class UserServiceImplement implements UserService {
                         .build();
                 user.setSupplier(supplier);
                 break;
-            case SHIPPER:
+            case ROLE_SHIPPER:
                 Shipper shipper = Shipper.builder()
                         .name(userRequestRegister.getName())
                         .contactInfo(userRequestRegister.getContactInfo())
@@ -151,7 +151,7 @@ public class UserServiceImplement implements UserService {
                         .build();
                 user.setShipper(shipper);
                 break;
-            case CUSTOMER:
+            case ROLE_CUSTOMER:
                 Customer customer;
                 customer = this.customerRepository.getByPhone(userRequestRegister.getPhone());
                 if (customer != null) {
@@ -168,9 +168,9 @@ public class UserServiceImplement implements UserService {
                         .build();
                 user.setCustomer(customer);
                 break;
-            case DISTRIBUTOR:
+            case ROLE_DISTRIBUTOR:
                 break;
-            case MANUFACTURER:
+            case ROLE_MANUFACTURER:
                 break;
             default:
                 break;

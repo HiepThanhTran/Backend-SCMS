@@ -51,14 +51,11 @@ public final class Utils {
         mapping.add("Chi tiết đơn hàng");
         mapping.add("Phương thức thanh toán");
         mapping.add("Sản phẩm");
-        mapping.add("Tag sản phẩm");
-        mapping.add("Đơn vị sản phẩm");
         mapping.add("Đánh giá");
         mapping.add("Vận chuyển");
         mapping.add("Người giao hàng");
         mapping.add("Nhà cung cấp");
         mapping.add("Chi phí nhà cung cấp");
-        mapping.add("Phương thức thanh toán của nhà cung cấp");
         mapping.add("Tag");
         mapping.add("Thuế");
         mapping.add("Đơn vị");

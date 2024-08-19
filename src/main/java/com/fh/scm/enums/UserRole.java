@@ -7,12 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UserRole {
 
-    ADMIN("Quản trị viên"),
-    CUSTOMER("Khách hàng"),
-    SUPPLIER("Nhà cung cấp"),
-    DISTRIBUTOR("Nhà phân phối"),
-    MANUFACTURER("Nhà sản xuất"),
-    SHIPPER("Nhà vận chuyển");
+    ROLE_ADMIN("Quản trị viên"),
+    ROLE_CUSTOMER("Khách hàng"),
+    ROLE_SUPPLIER("Nhà cung cấp"),
+    ROLE_DISTRIBUTOR("Nhà phân phối"),
+    ROLE_MANUFACTURER("Nhà sản xuất"),
+    ROLE_SHIPPER("Nhà vận chuyển");
 
     private final String displayName;
 }

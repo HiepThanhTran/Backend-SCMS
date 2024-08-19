@@ -45,14 +45,14 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 //        http.formLogin().loginPage("/login");
         http.formLogin().usernameParameter("username").passwordParameter("password");
-        http.formLogin().defaultSuccessUrl("/").failureUrl("/login?error");
+        http.formLogin().defaultSuccessUrl("/admin").failureUrl("/login?error");
 
         http.logout().logoutSuccessUrl("/login");
 
         http.exceptionHandling().accessDeniedPage("/login?accessDenied");
 
         http.authorizeRequests()
-                .antMatchers("/admin/**").access(Constants.HAS_ROLE_ADMIN)
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().permitAll();
 
