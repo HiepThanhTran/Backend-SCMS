@@ -1,13 +1,14 @@
 package com.fh.scm.controllers;
 
 import com.fh.scm.components.JWTService;
+import com.fh.scm.dto.api.user.UserRequestLogin;
+import com.fh.scm.dto.api.user.UserRequestRegister;
+import com.fh.scm.dto.api.user.UserRequestUpdate;
+import com.fh.scm.dto.api.user.UserResponse;
 import com.fh.scm.dto.error.ErrorResponse;
-import com.fh.scm.dto.user.UserRequestLogin;
-import com.fh.scm.dto.user.UserRequestRegister;
-import com.fh.scm.dto.user.UserRequestUpdate;
-import com.fh.scm.dto.user.UserResponse;
+import com.fh.scm.exceptions.UserException;
 import com.fh.scm.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,17 +19,15 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/api/user", produces = "application/json; charset=UTF-8")
 public class APIUserController {
 
-    @Autowired
-    private JWTService jwtService;
-    @Autowired
-    private UserService userService;
+    private final JWTService jwtService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<?> list(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
@@ -44,7 +43,7 @@ public class APIUserController {
         }
 
         if (request.getMethod().equals("GET")) {
-            UserResponse userResponse = this.userService.get(id);
+            UserResponse userResponse = this.userService.getUserResponse(id);
 
             return ResponseEntity.ok(userResponse);
         }
@@ -59,7 +58,7 @@ public class APIUserController {
 
     @PostMapping(path = "/token")
     public ResponseEntity<?> authenticateUser(@RequestBody @Valid UserRequestLogin userRequestLogin) {
-        if (this.userService.auth(userRequestLogin.getUsername(), userRequestLogin.getPassword())) {
+        if (this.userService.authenticateUser(userRequestLogin.getUsername(), userRequestLogin.getPassword())) {
             String token = this.jwtService.generateTokenLogin(userRequestLogin.getUsername());
             this.userService.updateLastLogin(userRequestLogin.getUsername());
 
@@ -72,11 +71,7 @@ public class APIUserController {
     @PostMapping(path = "/register")
     public ResponseEntity<?> register(@RequestBody @Valid UserRequestRegister userRequestRegister, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<ErrorResponse> errorMessages = bindingResult
-                    .getAllErrors()
-                    .stream()
-                    .map(e -> new ErrorResponse(e.getDefaultMessage()))
-                    .collect(Collectors.toList());
+            List<ErrorResponse> errorMessages = ErrorResponse.fromBindingResult(bindingResult);
 
             return ResponseEntity.badRequest().body(errorMessages);
         }
@@ -84,7 +79,7 @@ public class APIUserController {
         UserResponse userResponse;
         try {
             userResponse = this.userService.register(userRequestRegister);
-        } catch (RuntimeException e) {
+        } catch (UserException e) {
             ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
             return ResponseEntity.badRequest().body(errorResponse);
         }
@@ -98,9 +93,11 @@ public class APIUserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bạn cần đăng nhập để xác nhận tài khoản");
         }
 
-        this.userService.confirm(principal.getName());
+        if (this.userService.confirm(principal.getName())) {
+            return ResponseEntity.ok().body("Xác nhận tài khoản thành công");
+        }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.badRequest().body("Xác nhận tài khoản không thành công");
     }
 
     @GetMapping(path = "/profile")
@@ -121,16 +118,18 @@ public class APIUserController {
         }
 
         if (bindingResult.hasErrors()) {
-            List<ErrorResponse> errorMessages = bindingResult
-                    .getAllErrors()
-                    .stream()
-                    .map(e -> new ErrorResponse(e.getDefaultMessage()))
-                    .collect(Collectors.toList());
+            List<ErrorResponse> errorMessages = ErrorResponse.fromBindingResult(bindingResult);
 
             return ResponseEntity.badRequest().body(errorMessages);
         }
 
-        UserResponse userResponse = this.userService.update(principal.getName(), userRequestUpdate);
+        UserResponse userResponse;
+        try {
+            userResponse = this.userService.updateProfile(principal.getName(), userRequestUpdate);
+        } catch (UserException e) {
+            ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
 
         return ResponseEntity.ok(userResponse);
     }

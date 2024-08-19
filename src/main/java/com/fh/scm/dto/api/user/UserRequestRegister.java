@@ -1,6 +1,6 @@
-package com.fh.scm.dto.user;
+package com.fh.scm.dto.api.user;
 
-import com.fh.scm.enums.Role;
+import com.fh.scm.enums.UserRole;
 import com.fh.scm.pojo.SupplierPaymentTerms;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,20 +19,20 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserRequestRegister {
 
-    @NotNull(message = "{user.email.notnull}")
+    @NotNull(message = "{user.email.notNull}")
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "{user.email.pattern}")
     private String email;
 
-    @NotNull(message = "{user.username.notnull}")
+    @NotNull(message = "{user.username.notNull}")
     @Size(min = 6, max = 50, message = "{user.username.size}")
     private String username;
 
-    @NotNull(message = "{user.password.notnull}")
+    @NotNull(message = "{user.password.notNull}")
     @Size(min = 8, max = 300, message = "{user.password.size}")
     private String password;
 
-    @NotNull(message = "{user.role.notnull}")
-    private Role role;
+    @NotNull(message = "{user.role.notNull}")
+    private UserRole userRole;
 
     @Pattern(regexp = "^[0-9]{10,15}$", message = "{user.phone.pattern}")
     private String phone;

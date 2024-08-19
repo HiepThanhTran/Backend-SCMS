@@ -1,4 +1,4 @@
-package com.fh.scm.dto.user;
+package com.fh.scm.dto.api.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

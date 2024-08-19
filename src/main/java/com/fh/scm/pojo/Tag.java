@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import java.util.Set;
 @Table(name = "tag")
 public class Tag extends BaseEntity implements Serializable {
 
+    @NotNull(message = "{tag.name.notNull}")
     @Column(nullable = false, unique = true)
     private Integer name;
 

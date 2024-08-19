@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -20,17 +21,20 @@ import java.util.Set;
 public class PaymentTerms extends BaseEntity implements Serializable {
 
     @Builder.Default
+    @NotNull(message = "{paymentTerms.discountDays.notNull}")
     @Column(name = "discount_days", nullable = false, columnDefinition = "int default 0.0")
-    private Integer discountDays = 0;
+    private Integer discountDays = 0; // Số ngày hưởng chiết khấu
 
     @Builder.Default
-    @DecimalMin(value = "0.01", inclusive = true, message = "...")
-    @DecimalMax(value = "1.00", inclusive = true, message = "...")
-    @Column(name = "discount_percentage", nullable = false, precision = 5, scale = 2, columnDefinition = "float default 0.0")
-    private Float discountPercentage = 0.0f;
+    @NotNull(message = "{paymentTerms.discountPercentage.notNull}")
+    @DecimalMin(value = "0.01", message = "{paymentTerms.discountPercentage.min}")
+    @DecimalMax(value = "1.00", message = "{paymentTerms.discountPercentage.max}")
+    @Column(name = "discount_percentage", precision = 5, scale = 2, columnDefinition = "float default 0.0")
+    private Float discountPercentage = 0.0f; // Phần trăm chiết khấu (nếu có)
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "{paymentTerms.termType.notNull}")
     @Column(name = "term_type", nullable = false)
     private PaymentTermType type = PaymentTermType.COD;
 

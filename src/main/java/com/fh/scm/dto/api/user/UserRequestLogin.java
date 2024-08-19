@@ -1,4 +1,4 @@
-package com.fh.scm.dto.user;
+package com.fh.scm.dto.api.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +14,11 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class UserRequestLogin {
 
-    @NotNull(message = "{user.username.notnull}")
+    @NotNull(message = "{user.username.notNull}")
     @Size(min = 6, max = 50, message = "{user.username.size}")
     private String username;
 
-    @NotNull(message = "{user.password.notnull}")
+    @NotNull(message = "{user.password.notNull}")
     @Size(min = 8, max = 300, message = "{user.password.size}")
     private String password;
 }

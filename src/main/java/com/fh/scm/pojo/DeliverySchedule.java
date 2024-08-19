@@ -5,6 +5,7 @@ import com.fh.scm.enums.DeliveryMethodType;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -19,12 +20,14 @@ import java.util.Set;
 public class DeliverySchedule extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
+    @NotNull(message = "{deliverySchedule.scheduledDate.notNull}")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime scheduledDate;
 
     @Builder.Default
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "{deliverySchedule.method.notNull}")
     private DeliveryMethodType method = DeliveryMethodType.EXPRESS;
 
     @OneToMany(mappedBy = "deliverySchedule")

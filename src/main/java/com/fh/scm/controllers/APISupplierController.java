@@ -1,9 +1,8 @@
 package com.fh.scm.controllers;
 
-import com.fh.scm.dto.user.UserResponse;
 import com.fh.scm.pojo.Supplier;
 import com.fh.scm.services.SupplierService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +13,11 @@ import java.util.Map;
 
 @CrossOrigin
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/api/supplier", produces = "application/json; charset=UTF-8")
 public class APISupplierController {
 
-    @Autowired
-    private SupplierService supplierService;
+    private final SupplierService supplierService;
 
     public ResponseEntity<?> list(@RequestParam(required = false) Map<String, String> params) {
         List<Supplier> suppliers = this.supplierService.getAll(params);

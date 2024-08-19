@@ -16,10 +16,9 @@ public class Pagination {
                     .filter(page -> !page.isEmpty())
                     .orElse("1");
 
-            int PAGE_SIZE = 20;
             String limitStr = Optional.ofNullable(params.get("limit"))
                     .filter(limit -> !limit.isEmpty())
-                    .orElse(String.valueOf(PAGE_SIZE));
+                    .orElse(String.valueOf(Constants.DEFAULT_PAGE_SIZE));
 
             int page, limit;
             try {
@@ -33,13 +32,13 @@ public class Pagination {
             try {
                 limit = Integer.parseInt(limitStr);
                 if (limit < 1) {
-                    limit = PAGE_SIZE;
+                    limit = Constants.DEFAULT_PAGE_SIZE;
                 }
             } catch (NumberFormatException e) {
-                limit = PAGE_SIZE;
+                limit = Constants.DEFAULT_PAGE_SIZE;
             }
 
-            int start = (page - 1) * PAGE_SIZE;
+            int start = (page - 1) * limit;
             query.setFirstResult(start);
             query.setMaxResults(limit);
         }

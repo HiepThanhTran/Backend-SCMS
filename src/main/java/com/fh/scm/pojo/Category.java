@@ -2,8 +2,10 @@ package com.fh.scm.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -17,6 +19,7 @@ import java.util.Set;
 public class Category extends BaseEntity implements Serializable {
 
     @Column(nullable = false, unique = true)
+    @NotNull(message = "{category.name.notNull}")
     private String name;
 
     private String description;

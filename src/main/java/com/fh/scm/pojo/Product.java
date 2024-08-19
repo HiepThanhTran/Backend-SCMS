@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,10 +19,12 @@ import java.util.Set;
 @Table(name = "product")
 public class Product extends BaseEntity implements Serializable {
 
+    @NotNull(message = "{product.name.notNull}")
     @Column(nullable = false, unique = true)
     private String name;
 
     @Builder.Default
+    @NotNull(message = "{product.price.notNull}")
     @Column(nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
     private BigDecimal price = BigDecimal.ZERO;
 
@@ -30,7 +33,8 @@ public class Product extends BaseEntity implements Serializable {
 
     private String description;
 
-    @Column(name = "expiry_date")
+    @NotNull(message = "{product.expiryDate.notNull}")
+    @Column(name = "expiry_date", nullable = false)
     private Date expiryDate;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)

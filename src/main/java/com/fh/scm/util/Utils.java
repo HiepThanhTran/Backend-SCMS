@@ -1,5 +1,6 @@
 package com.fh.scm.util;
 
+import com.cloudinary.Cloudinary;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
@@ -9,17 +10,15 @@ import java.util.List;
 
 public final class Utils {
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
     public static Boolean parseBoolean(String value) {
         if (value == null || value.isEmpty()) {
             return null;
         }
 
         value = value.trim().toLowerCase();
-        if ("true".equals(value)) {
+        if ("true".equalsIgnoreCase(value)) {
             return true;
-        } else if ("false".equals(value)) {
+        } else if ("false".equalsIgnoreCase(value)) {
             return false;
         }
 
@@ -32,7 +31,7 @@ public final class Utils {
         }
 
         try {
-            return LocalDateTime.parse(value, DATE_FORMATTER);
+            return LocalDateTime.parse(value, Constants.DATE_FORMATTER);
         } catch (Exception e) {
             LoggerFactory.getLogger(Utils.class).error("An error parse LocalDateTime", e);
             return null;

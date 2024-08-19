@@ -43,7 +43,7 @@ public class JWTAuthenticationTokenFilter extends UsernamePasswordAuthentication
                 boolean accountNonLocked = true;
 
                 Set<GrantedAuthority> authorities = new HashSet<>();
-                authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
+                authorities.add(new SimpleGrantedAuthority(user.getUserRole().name()));
 
                 UserDetails userDetail = new org.springframework.security.core.userdetails.User(username, user.getPassword(), enabled, accountNonExpired,
                         credentialsNonExpired, accountNonLocked, authorities);

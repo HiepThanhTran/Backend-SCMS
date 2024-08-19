@@ -1,6 +1,7 @@
 package com.fh.scm.services.implement;
 
 import com.fh.scm.pojo.Category;
+import com.fh.scm.repository.CategoryRepository;
 import com.fh.scm.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,50 +13,50 @@ import java.util.Map;
 public class CategoryServiceImplement implements CategoryService {
 
     @Autowired
-    private CategoryService categoryService;
+    private CategoryRepository categoryRepository;
 
     @Override
     public Category get(Long id) {
-        return this.categoryService.get(id);
+        return this.categoryRepository.get(id);
     }
 
     @Override
     public void insert(Category category) {
-        this.categoryService.insert(category);
+        this.categoryRepository.insert(category);
     }
 
     @Override
     public void update(Category category) {
-        this.categoryService.update(category);
+        this.categoryRepository.update(category);
     }
 
     @Override
     public void delete(Long id) {
-        this.categoryService.delete(id);
+        this.categoryRepository.delete(id);
     }
 
     @Override
     public void softDelete(Long id) {
-        this.categoryService.softDelete(id);
+        this.categoryRepository.softDelete(id);
     }
 
     @Override
     public void insertOrUpdate(Category category) {
-        this.categoryService.insertOrUpdate(category);
+        this.categoryRepository.insertOrUpdate(category);
     }
 
     @Override
     public Long count() {
-        return this.categoryService.count();
+        return this.categoryRepository.count();
     }
 
     @Override
     public Boolean exists(Long id) {
-        return this.categoryService.exists(id);
+        return this.categoryRepository.exists(id);
     }
 
     @Override
     public List<Category> getAll(Map<String, String> params) {
-        return this.categoryService.getAll(params);
+        return this.categoryRepository.getAll(params);
     }
 }

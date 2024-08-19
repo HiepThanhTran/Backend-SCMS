@@ -1,7 +1,6 @@
 package com.fh.scm.repository.implement;
 
-import com.fh.scm.dto.user.UserResponse;
-import com.fh.scm.enums.Role;
+import com.fh.scm.enums.UserRole;
 import com.fh.scm.pojo.User;
 import com.fh.scm.repository.UserRepository;
 import com.fh.scm.util.Pagination;
@@ -38,18 +37,8 @@ public class UserRepositoryImplement implements UserRepository {
     @Override
     public User get(Long id) {
         Session session = this.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = builder.createQuery(User.class);
-        Root<User> root = criteria.from(User.class);
-        try {
-            criteria.select(root).where(builder.equal(root.get("id"), id));
-            Query<User> query = session.createQuery(criteria);
 
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting user by username", e);
-            return null;
-        }
+        return session.get(User.class, id);
     }
 
     @Override
@@ -161,8 +150,8 @@ public class UserRepositoryImplement implements UserRepository {
             String roleStr = params.get("role");
             if (roleStr != null && !roleStr.isEmpty()) {
                 try {
-                    Role role = Role.valueOf(roleStr.toUpperCase(Locale.getDefault()));
-                    predicates.add(builder.equal(root.get("role"), role));
+                    UserRole userRole = UserRole.valueOf(roleStr.toUpperCase(Locale.getDefault()));
+                    predicates.add(builder.equal(root.get("role"), userRole));
                 } catch (IllegalArgumentException e) {
                     LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error parse Role Enum", e);
                 }

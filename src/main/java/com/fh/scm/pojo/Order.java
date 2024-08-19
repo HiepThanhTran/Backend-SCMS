@@ -6,6 +6,7 @@ import com.fh.scm.enums.OrderType;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -24,6 +25,7 @@ public class Order extends BaseEntity implements Serializable {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "{order.type.notNull}")
     @Column(name = "order_type", nullable = false)
     private OrderType type = OrderType.OUTBOUND;
 

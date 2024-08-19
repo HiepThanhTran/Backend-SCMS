@@ -1,9 +1,10 @@
 package com.fh.scm.services.implement;
 
-import com.fh.scm.dto.user.UserRequestRegister;
-import com.fh.scm.dto.user.UserRequestUpdate;
-import com.fh.scm.dto.user.UserResponse;
-import com.fh.scm.enums.Role;
+import com.fh.scm.dto.api.user.UserRequestRegister;
+import com.fh.scm.dto.api.user.UserRequestUpdate;
+import com.fh.scm.dto.api.user.UserResponse;
+import com.fh.scm.enums.UserRole;
+import com.fh.scm.exceptions.UserException;
 import com.fh.scm.pojo.Customer;
 import com.fh.scm.pojo.Shipper;
 import com.fh.scm.pojo.Supplier;
@@ -54,14 +55,14 @@ public class UserServiceImplement implements UserService {
         }
 
         Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
+        authorities.add(new SimpleGrantedAuthority(user.getUserRole().name()));
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
 
     @Override
     public void createAdmin() {
-        Map<String, String> params = Map.of("role", Role.ADMIN.name());
+        Map<String, String> params = Map.of("role", UserRole.ADMIN.name());
         List<User> users = this.userRepository.getAll(params);
         if (!users.isEmpty()) {
             System.out.println("Admin user already exists.");
@@ -72,7 +73,7 @@ public class UserServiceImplement implements UserService {
                 .email("admin@scm.com")
                 .username("adminscm")
                 .password(passwordEncoder.encode("admin@123"))
-                .role(Role.ADMIN)
+                .userRole(UserRole.ADMIN)
                 .isConfirm(true)
                 .build();
 
@@ -81,7 +82,7 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public boolean auth(String username, String password) {
+    public boolean authenticateUser(String username, String password) {
         User user = this.userRepository.getByUsername(username);
 
         return user != null && this.passwordEncoder.matches(password, user.getPassword());
@@ -96,16 +97,16 @@ public class UserServiceImplement implements UserService {
 
     @Override
     public UserResponse register(UserRequestRegister userRequestRegister) {
-        User user = null;
+        User user;
 
         user = this.userRepository.getByUsername(userRequestRegister.getUsername());
         if (user != null) {
-            throw new RuntimeException("Tên đăng nhập đã tồn tại");
+            throw new UserException("Tên đăng nhập đã tồn tại");
         }
 
         user = this.userRepository.getByUsername(userRequestRegister.getEmail());
         if (user != null) {
-            throw new RuntimeException("Email đã được liên kết đến tài khoản khác");
+            throw new UserException("Email đã được liên kết đến tài khoản khác");
         }
 
         String avatarUrl = null;
@@ -117,11 +118,11 @@ public class UserServiceImplement implements UserService {
                 .email(userRequestRegister.getEmail())
                 .username(userRequestRegister.getUsername())
                 .password(passwordEncoder.encode(userRequestRegister.getPassword()))
-                .role(userRequestRegister.getRole())
+                .userRole(userRequestRegister.getUserRole())
                 .avatar(avatarUrl)
                 .build();
 
-        switch (user.getRole()) {
+        switch (user.getUserRole()) {
             case ADMIN:
                 user.setIsConfirm(true);
                 break;
@@ -129,7 +130,7 @@ public class UserServiceImplement implements UserService {
                 Supplier supplier;
                 supplier = this.supplierRepository.getByPhone(userRequestRegister.getPhone());
                 if (supplier != null) {
-                    throw new RuntimeException("Số điện thoại đã được liên kết đến tài khoản khác");
+                    throw new UserException("Số điện thoại đã được liên kết đến tài khoản khác");
                 }
 
                 supplier = Supplier.builder()
@@ -154,7 +155,7 @@ public class UserServiceImplement implements UserService {
                 Customer customer;
                 customer = this.customerRepository.getByPhone(userRequestRegister.getPhone());
                 if (customer != null) {
-                    throw new RuntimeException("Số điện thoại đã được liên kết đến tài khoản khác");
+                    throw new UserException("Số điện thoại đã được liên kết đến tài khoản khác");
                 }
 
                 customer = Customer.builder()
@@ -181,19 +182,23 @@ public class UserServiceImplement implements UserService {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .avatar(user.getAvatar())
-                .role(user.getRole().getDisplayName())
+                .role(user.getUserRole().getDisplayName())
                 .isConfirm(user.getIsConfirm())
                 .lastLogin(user.getLastLogin())
                 .build();
     }
 
     @Override
-    public void confirm(String username) {
+    public Boolean confirm(String username) {
         User user = this.userRepository.getByUsername(username);
-        if (user != null) {
+        if (user != null && !user.getIsConfirm()) {
             user.setIsConfirm(true);
             this.userRepository.update(user);
+
+            return true;
         }
+
+        return false;
     }
 
     @Override
@@ -204,15 +209,20 @@ public class UserServiceImplement implements UserService {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .avatar(user.getAvatar())
-                .role(user.getRole().getDisplayName())
+                .role(user.getUserRole().getDisplayName())
                 .isConfirm(user.getIsConfirm())
                 .lastLogin(user.getLastLogin())
                 .build();
     }
 
     @Override
-    public UserResponse update(String username, UserRequestUpdate userRequestUpdate) {
+    public UserResponse updateProfile(String username, UserRequestUpdate userRequestUpdate) {
         User user = this.userRepository.getByUsername(username);
+
+        if (!user.getIsConfirm()) {
+            throw new UserException("Tài khoản chưa được xác nhận");
+        }
+
         if (userRequestUpdate.getAvatar() != null && !userRequestUpdate.getAvatar().isEmpty()) {
             String avatarUrl = this.cloudinaryService.uploadImage(userRequestUpdate.getAvatar());
             user.setAvatar(avatarUrl);
@@ -236,28 +246,29 @@ public class UserServiceImplement implements UserService {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .avatar(user.getAvatar())
-                .role(user.getRole().getDisplayName())
+                .role(user.getUserRole().getDisplayName())
                 .isConfirm(user.getIsConfirm())
                 .lastLogin(user.getLastLogin())
                 .build();
     }
 
     @Override
-    public UserResponse get(Long id) {
+    public UserResponse getUserResponse(Long id) {
         User user = this.userRepository.get(id);
-
-        if (user == null) {
-            return null;
-        }
 
         return UserResponse.builder()
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .avatar(user.getAvatar())
-                .role(user.getRole().getDisplayName())
+                .role(user.getUserRole().getDisplayName())
                 .isConfirm(user.getIsConfirm())
                 .lastLogin(user.getLastLogin())
                 .build();
+    }
+
+    @Override
+    public User get(Long id) {
+        return this.userRepository.get(id);
     }
 
     @Override
@@ -276,7 +287,7 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public void update(User user) {
+    public void updateProfile(User user) {
         this.userRepository.update(user);
     }
 
@@ -313,7 +324,7 @@ public class UserServiceImplement implements UserService {
                         .email(user.getEmail())
                         .username(user.getUsername())
                         .avatar(user.getAvatar())
-                        .role(user.getRole().getDisplayName())
+                        .role(user.getUserRole().getDisplayName())
                         .isConfirm(user.getIsConfirm())
                         .lastLogin(user.getLastLogin())
                         .build())

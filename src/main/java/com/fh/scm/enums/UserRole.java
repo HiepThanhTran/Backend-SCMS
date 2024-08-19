@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Role {
+public enum UserRole {
 
     ADMIN("Quản trị viên"),
     CUSTOMER("Khách hàng"),
