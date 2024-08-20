@@ -57,8 +57,6 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/api/**");
 
         http.authorizeRequests()
-                .antMatchers(HttpMethod.DELETE, "/api/user/**/delete").hasRole(UserRole.ROLE_ADMIN.alias())
-                .antMatchers(HttpMethod.DELETE, "/api/supplier/**/details").hasRole(UserRole.ROLE_ADMIN.alias())
                 .antMatchers(HttpMethod.POST, "/api/user/confirm").authenticated()
                 .antMatchers("/api/user/profile/**").authenticated()
                 .antMatchers("/api/user/**").permitAll()

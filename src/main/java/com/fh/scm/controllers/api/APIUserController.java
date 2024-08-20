@@ -30,19 +30,6 @@ public class APIUserController {
     private final JWTService jwtService;
     private final UserService userService;
 
-    @DeleteMapping(path = "/{userId}/delete")
-    public ResponseEntity<?> delete(@PathVariable(value = "userId") Long id) {
-        User user = this.userService.get(id);
-
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        this.userService.delete(id);
-
-        return ResponseEntity.noContent().build();
-    }
-
     @PostMapping(path = "/token")
     public ResponseEntity<?> authenticateUser(@ModelAttribute @Valid UserRequestLogin userRequestLogin, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -115,5 +102,18 @@ public class APIUserController {
         } catch (UserException e) {
             return ResponseEntity.badRequest().body(new ResponseMessage(e.getMessage()));
         }
+    }
+
+    @DeleteMapping(path = "/profile/delete")
+    public ResponseEntity<?> delete(Principal principal) {
+        User user = this.userService.getByUsername(principal.getName());
+
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        this.userService.delete(user.getId());
+
+        return ResponseEntity.noContent().build();
     }
 }

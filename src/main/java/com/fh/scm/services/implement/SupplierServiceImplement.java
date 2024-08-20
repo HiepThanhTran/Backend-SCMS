@@ -108,11 +108,6 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
-    public List<Rating> getAllRatingsOfSupplier(Map<String, String> params) {
-        return this.ratingService.getAll(params);
-    }
-
-    @Override
     public void addRatingForSupplier(String username, Long supplierId, RatingRequest ratingRequest) {
         User user = this.userRepository.getByUsername(username);
         Supplier supplier = this.supplierRepository.get(supplierId);

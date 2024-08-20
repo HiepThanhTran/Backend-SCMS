@@ -10,6 +10,7 @@ import com.fh.scm.pojo.PaymentTerms;
 import com.fh.scm.pojo.Rating;
 import com.fh.scm.pojo.Supplier;
 import com.fh.scm.pojo.User;
+import com.fh.scm.services.RatingService;
 import com.fh.scm.services.SupplierService;
 import com.fh.scm.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class APISupplierController {
 
     private final SupplierService supplierService;
     private final UserService userService;
+    private final RatingService ratingService;
 
     @GetMapping("/list")
     public ResponseEntity<?> list(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
@@ -41,7 +43,7 @@ public class APISupplierController {
         return ResponseEntity.ok(suppliers);
     }
 
-    @RequestMapping(path = "/{supplierId}/details", method = {RequestMethod.GET, RequestMethod.DELETE})
+    @GetMapping(path = "/{supplierId}/details")
     public ResponseEntity<?> details(HttpServletRequest request, @PathVariable(value = "supplierId") Long id) {
         Supplier supplier = this.supplierService.get(id);
 
@@ -49,19 +51,9 @@ public class APISupplierController {
             return ResponseEntity.notFound().build();
         }
 
-        if (request.getMethod().equals("GET")) {
-            SupplierDTO supplierDTO = this.supplierService.getSupplierResponse(supplier);
+        SupplierDTO supplierDTO = this.supplierService.getSupplierResponse(supplier);
 
-            return ResponseEntity.ok(supplierDTO);
-        }
-
-        if (request.getMethod().equals("DELETE")) {
-            this.supplierService.delete(id);
-
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
+        return ResponseEntity.ok(supplierDTO);
     }
 
     @GetMapping(path = "/profile")
@@ -111,9 +103,9 @@ public class APISupplierController {
     }
 
     @GetMapping(path = "/{supplierId}/rating")
-    public ResponseEntity<?> getAllRatings(@PathVariable(value = "supplierId") Long supplierId) {
-        Map<String, String> params = Map.of("supplierId", supplierId.toString());
-        List<Rating> allRatingsOfSupplier = this.supplierService.getAllRatingsOfSupplier(params);
+    public ResponseEntity<?> getAllRatings(@PathVariable(value = "supplierId") Long supplierId, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
+        params.put("supplierId", supplierId.toString());
+        List<Rating> allRatingsOfSupplier = this.ratingService.getAll(params);
 
         return ResponseEntity.ok(allRatingsOfSupplier);
     }

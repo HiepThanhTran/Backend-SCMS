@@ -24,8 +24,6 @@ public interface SupplierService {
 
     void addPaymentTermsForSupplier(Long supplierId, PaymentTermsRequest paymentTermsIdList);
 
-    List<Rating> getAllRatingsOfSupplier(Map<String, String> params);
-
     void addRatingForSupplier(String username, Long supplierId, RatingRequest ratingRequest);
 
     Supplier get(Long id);
