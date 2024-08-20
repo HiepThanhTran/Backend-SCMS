@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @ControllerAdvice
@@ -20,7 +21,7 @@ public class AdminController {
 
     @ModelAttribute
     public void commonAttributes(Model model) {
-        List<String> entities = Utils.generateMappingPojoClass();
+        Map<String, String> entities = Utils.generateMappingPojoClass();
 
         model.addAttribute("entities", entities);
     }

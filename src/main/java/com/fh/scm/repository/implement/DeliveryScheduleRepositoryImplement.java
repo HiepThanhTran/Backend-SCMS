@@ -86,7 +86,7 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
         Root<DeliverySchedule> root = criteria.from(DeliverySchedule.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             Arrays.asList("fromDate", "toDate", "method").forEach(key -> {

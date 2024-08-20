@@ -77,7 +77,7 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
         Root<InventoryDetails> root = criteria.from(InventoryDetails.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             String productId = params.get("productId");

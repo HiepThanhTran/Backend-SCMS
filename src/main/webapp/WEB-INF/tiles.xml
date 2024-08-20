@@ -3,15 +3,49 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-    <definition name="baseLayout" template="/WEB-INF/layout/base.jsp">
+    <definition name="baseNonSidebar" template="/WEB-INF/layout/base_non_sidebar.jsp">
         <put-attribute name="title" value=""/>
         <put-attribute name="content" value=""/>
         <put-attribute name="header" value="/WEB-INF/layout/header.jsp"/>
         <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>
     </definition>
-    <definition name="index" extends="baseLayout">
+
+    <definition name="baseWithSidebar" template="/WEB-INF/layout/base_with_sidebar.jsp">
+        <put-attribute name="title" value=""/>
+        <put-attribute name="content" value=""/>
+        <put-attribute name="header" value="/WEB-INF/layout/header.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>
+        <put-attribute name="sidebar" value="/WEB-INF/layout/sidebar.jsp"/>
+    </definition>
+
+    <definition name="index" extends="baseNonSidebar">
         <put-attribute name="title" value="Trang chủ"/>
         <put-attribute name="content" value="/WEB-INF/pages/index.jsp"/>
+    </definition>
+
+    <definition name="dashboard" extends="baseNonSidebar">
+        <put-attribute name="title" value="Dashboard"/>
+        <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
+    </definition>
+
+    <definition name="categories" extends="baseWithSidebar">
+        <put-attribute name="title" value="Danh mục"/>
+        <put-attribute name="content" value="/WEB-INF/pages/category/categories.jsp"/>
+    </definition>
+
+    <definition name="add_category" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm danh mục"/>
+        <put-attribute name="content" value="/WEB-INF/pages/category/add_category.jsp"/>
+    </definition>
+
+    <definition name="edit_category" extends="baseWithSidebar">
+        <put-attribute name="title" value="Sửa danh mục"/>
+        <put-attribute name="content" value="/WEB-INF/pages/category/edit_category.jsp"/>
+    </definition>
+
+    <definition name="customers" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm danh mục"/>
+        <put-attribute name="content" value="/WEB-INF/pages/customer/customers.jsp"/>
     </definition>
     <!--    <definition name="account" extends="baseLayout">-->
     <!--        <put-attribute name="title" value="Danh sách người dùng" />-->

@@ -83,7 +83,7 @@ public class ProductRepositoryImplement implements ProductRepository {
         Root<Product> root = criteria.from(Product.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             Arrays.asList("name", "fromPrice", "toPrice", "categoryId").forEach(key -> {

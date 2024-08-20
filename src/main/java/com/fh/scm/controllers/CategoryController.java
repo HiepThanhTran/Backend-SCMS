@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/categories")
+@CrossOrigin
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -28,16 +30,9 @@ public class CategoryController {
         return "categories";
     }
 
-    @GetMapping(path = "/{categoryId}")
-    public String retrieveCategory(@PathVariable(value = "categoryId") Long id, Model model) {
-        model.addAttribute("category", categoryService.get(id));
-
-        return "category";
-    }
-
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addCategory(HttpServletRequest request, Model model, @ModelAttribute(value = "category") @Valid Category category,
-                              BindingResult bindingResult) {
+            BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
@@ -54,10 +49,10 @@ public class CategoryController {
         return "add_category";
     }
 
-    @RequestMapping(path = "/edit/{categoryId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{categoryId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editCategory(HttpServletRequest request, Model model, @PathVariable(value = "categoryId") Long id,
-                               @ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+            @ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
@@ -76,10 +71,8 @@ public class CategoryController {
     }
 
     @DeleteMapping(path = "/delete/{categoryId}")
-    public String deleteCategory(@PathVariable(value = "categoryId") Long id) {
+    public void deleteCategory(@PathVariable(value = "categoryId") Long id) {
         categoryService.delete(id);
-
-        return "redirect:/admin/categories";
     }
 
     @DeleteMapping(path = "/hide/{categoryId}")

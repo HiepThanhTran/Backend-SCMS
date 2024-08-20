@@ -1,10 +1,14 @@
 package com.fh.scm.util;
 
+import com.cloudinary.Cloudinary;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class Utils {
 
@@ -36,28 +40,29 @@ public final class Utils {
         }
     }
 
-    public static List<String> generateMappingPojoClass() {
-        List<String> mapping = new ArrayList<>();
-        mapping.add("Danh mục");
-        mapping.add("Khách hàng");
-        mapping.add("Lịch giao hàng");
-        mapping.add("Tồn kho");
-        mapping.add("Chi tiết tồn kho");
-        mapping.add("Hóa đơn");
-        mapping.add("Đơn hàng");
-        mapping.add("Chi tiết đơn hàng");
-        mapping.add("Phương thức thanh toán");
-        mapping.add("Sản phẩm");
-        mapping.add("Đánh giá");
-        mapping.add("Vận chuyển");
-        mapping.add("Người giao hàng");
-        mapping.add("Nhà cung cấp");
-        mapping.add("Chi phí nhà cung cấp");
-        mapping.add("Tag");
-        mapping.add("Thuế");
-        mapping.add("Đơn vị");
-        mapping.add("Người dùng");
-        mapping.add("Nhà kho");
+    public static Map<String, String> generateMappingPojoClass() {
+        Map<String, String> mapping = new HashMap<>();
+
+        mapping.put("categories", "Danh mục");
+        mapping.put("customers", "Khách hàng");
+//        mapping.add("Lịch giao hàng");
+//        mapping.add("Tồn kho");
+//        mapping.add("Chi tiết tồn kho");
+//        mapping.add("Hóa đơn");
+//        mapping.add("Đơn hàng");
+//        mapping.add("Chi tiết đơn hàng");
+//        mapping.add("Phương thức thanh toán");
+//        mapping.add("Sản phẩm");
+//        mapping.add("Đánh giá");
+//        mapping.add("Vận chuyển");
+//        mapping.add("Người giao hàng");
+//        mapping.add("Nhà cung cấp");
+//        mapping.add("Chi phí nhà cung cấp");
+//        mapping.add("Tag");
+//        mapping.add("Thuế");
+//        mapping.add("Đơn vị");
+//        mapping.add("Người dùng");
+//        mapping.add("Kho");
 
         return mapping;
     }

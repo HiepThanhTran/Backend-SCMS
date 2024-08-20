@@ -84,7 +84,7 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
         Root<Invoice> root = criteria.from(Invoice.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             Arrays.asList("isPaid", "taxId", "paymentTermsId", "fromCreatedAt", "toCreatedAt").forEach(key -> {

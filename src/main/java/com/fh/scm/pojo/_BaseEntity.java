@@ -1,7 +1,9 @@
 package com.fh.scm.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,7 +23,7 @@ public class _BaseEntity implements Serializable {
     protected Long id;
 
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
-    protected boolean isActive = true;
+    protected boolean active = true;
 
     @CreationTimestamp
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

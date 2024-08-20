@@ -103,7 +103,7 @@ public class RatingRepositoryImplement implements RatingRepository {
         Root<Rating> root = criteria.from(Rating.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             Arrays.asList("fromRating", "toRating", "criteria", "supplierId").forEach(key -> {

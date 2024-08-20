@@ -68,7 +68,7 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
                         userService.updateLastLogin(authentication.getName());
-                        httpServletResponse.sendRedirect(httpServletRequest.getContextPath());
+                        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/admin");
                     }
                 }).failureUrl("/login?error").permitAll()
                 .and()
