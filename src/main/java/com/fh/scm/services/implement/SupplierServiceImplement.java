@@ -1,6 +1,6 @@
 package com.fh.scm.services.implement;
 
-import com.fh.scm.dto.api.rating.RatingRequest;
+import com.fh.scm.dto.api.rating.RatingRequestCreate;
 import com.fh.scm.dto.api.supplier.PaymentTermsRequest;
 import com.fh.scm.dto.api.supplier.SupplierDTO;
 import com.fh.scm.exceptions.RatingSupplierException;
@@ -108,7 +108,7 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
-    public void addRatingForSupplier(String username, Long supplierId, RatingRequest ratingRequest) {
+    public Rating addRatingForSupplier(String username, Long supplierId, RatingRequestCreate ratingRequestCreate) {
         User user = this.userRepository.getByUsername(username);
         Supplier supplier = this.supplierRepository.get(supplierId);
 
@@ -116,7 +116,7 @@ public class SupplierServiceImplement implements SupplierService {
             throw new RatingSupplierException("Nhà cung cấp không tồn tại", HttpStatus.NOT_FOUND.value());
         }
 
-        if (Objects.equals(user.getSupplier().getId(), supplierId)) {
+        if (user.getSupplier() != null && Objects.equals(user.getSupplier().getId(), supplierId)) {
             throw new RatingSupplierException("Không thể đánh giá chính mình");
         }
 
@@ -126,17 +126,19 @@ public class SupplierServiceImplement implements SupplierService {
             rating = Rating.builder()
                     .user(user)
                     .supplier(supplier)
-                    .rating(ratingRequest.getRating())
-                    .content(ratingRequest.getContent())
-                    .criteria(ratingRequest.getCriteria())
+                    .rating(ratingRequestCreate.getRating())
+                    .content(ratingRequestCreate.getContent())
+                    .criteria(ratingRequestCreate.getCriteria())
                     .build();
             this.ratingService.insert(rating);
         } else {
-            rating.setRating(ratingRequest.getRating());
-            rating.setContent(ratingRequest.getContent());
-            rating.setCriteria(ratingRequest.getCriteria());
+            rating.setRating(ratingRequestCreate.getRating());
+            rating.setContent(ratingRequestCreate.getContent());
+            rating.setCriteria(ratingRequestCreate.getCriteria());
             this.ratingService.update(rating);
         }
+
+        return rating;
     }
 
     @Override
@@ -172,11 +174,6 @@ public class SupplierServiceImplement implements SupplierService {
     @Override
     public void softDelete(Long id) {
         this.supplierRepository.softDelete(id);
-    }
-
-    @Override
-    public void insertOrUpdate(Supplier supplier) {
-        this.supplierRepository.insertOrUpdate(supplier);
     }
 
     @Override

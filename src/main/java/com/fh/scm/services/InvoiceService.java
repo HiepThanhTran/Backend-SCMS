@@ -17,8 +17,6 @@ public interface InvoiceService {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Invoice invoice);
-
     Long count();
 
     List<Invoice> getAll(Map<String, String> params);

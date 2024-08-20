@@ -65,12 +65,6 @@ public class CategoryRepositoryImplement implements CategoryRepository {
     }
 
     @Override
-    public void insertOrUpdate(Category category) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(category);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

@@ -15,8 +15,6 @@ public interface OrderDetailsRepository {
 
     void delete(Long id);
 
-    void insertOrUpdate(OrderDetails orderDetails);
-
     Long count();
 
     List<OrderDetails> getAll(Map<String, String> params);

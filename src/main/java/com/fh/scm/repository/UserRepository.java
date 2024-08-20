@@ -17,8 +17,6 @@ public interface UserRepository {
 
     void update(User user);
 
-    void insertOrUpdate(User user);
-
     void delete(Long id);
 
     void softDelete(Long id);

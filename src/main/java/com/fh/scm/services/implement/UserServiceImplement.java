@@ -12,8 +12,8 @@ import com.fh.scm.repository.CustomerRepository;
 import com.fh.scm.repository.ShipperRepository;
 import com.fh.scm.repository.SupplierRepository;
 import com.fh.scm.repository.UserRepository;
-import com.fh.scm.services._CloudinaryService;
 import com.fh.scm.services.UserService;
+import com.fh.scm.services._CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @Service("userDetailsService")
 public class UserServiceImplement implements UserService {
@@ -74,13 +73,6 @@ public class UserServiceImplement implements UserService {
                 .isConfirm(user.getIsConfirm())
                 .lastLogin(user.getLastLogin())
                 .build();
-    }
-
-    @Override
-    public List<UserResponse> getAllUserResponse(Map<String, String> params) {
-        List<User> users = this.userRepository.getAll(params);
-
-        return users.stream().map(this::getUserResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -250,23 +242,13 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public User getByEmail(String email) {
-        return this.userRepository.getByEmail(email);
-    }
-
-    @Override
     public void insert(User user) {
         this.userRepository.insert(user);
     }
 
     @Override
-    public void updateProfileUser(User user) {
+    public void update(User user) {
         this.userRepository.update(user);
-    }
-
-    @Override
-    public void insertOrUpdate(User user) {
-        this.userRepository.insertOrUpdate(user);
     }
 
     @Override

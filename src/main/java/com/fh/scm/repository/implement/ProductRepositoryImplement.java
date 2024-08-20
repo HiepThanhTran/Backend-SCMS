@@ -63,12 +63,6 @@ public class ProductRepositoryImplement implements ProductRepository {
     }
 
     @Override
-    public void insertOrUpdate(Product Product) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(Product);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

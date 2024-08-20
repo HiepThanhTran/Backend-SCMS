@@ -66,12 +66,6 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
     }
 
     @Override
-    public void insertOrUpdate(DeliverySchedule deliverySchedule) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(deliverySchedule);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

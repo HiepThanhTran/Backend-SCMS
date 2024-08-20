@@ -64,12 +64,6 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
     }
 
     @Override
-    public void insertOrUpdate(PaymentTerms paymentTerms) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(paymentTerms);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

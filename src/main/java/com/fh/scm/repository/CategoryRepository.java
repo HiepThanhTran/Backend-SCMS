@@ -17,8 +17,6 @@ public interface CategoryRepository {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Category category);
-
     Long count();
 
     List<Category> getAll(Map<String, String> params);

@@ -83,12 +83,6 @@ public class RatingRepositoryImplement implements RatingRepository {
     }
 
     @Override
-    public void insertOrUpdate(Rating rating) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(rating);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

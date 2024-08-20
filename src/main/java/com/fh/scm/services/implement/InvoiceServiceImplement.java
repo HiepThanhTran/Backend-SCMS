@@ -41,11 +41,6 @@ public class InvoiceServiceImplement implements InvoiceService {
     }
 
     @Override
-    public void insertOrUpdate(Invoice invoice) {
-        this.invoiceRepository.insertOrUpdate(invoice);
-    }
-
-    @Override
     public Long count() {
         return this.invoiceRepository.count();
     }

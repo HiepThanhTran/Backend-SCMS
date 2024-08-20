@@ -13,8 +13,6 @@ public interface UserService extends UserDetailsService {
 
     UserResponse getUserResponse(User user);
 
-    List<UserResponse> getAllUserResponse(Map<String, String> params);
-
     boolean authenticateUser(String username, String password);
 
     void updateLastLogin(String username);
@@ -31,13 +29,9 @@ public interface UserService extends UserDetailsService {
 
     User getByUsername(String username);
 
-    User getByEmail(String email);
-
     void insert(User user);
 
-    void updateProfileUser(User user);
-
-    void insertOrUpdate(User user);
+    void update(User user);
 
     void delete(Long id);
 

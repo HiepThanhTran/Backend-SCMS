@@ -15,11 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -30,7 +28,7 @@ public class APIUserController {
     private final JWTService jwtService;
     private final UserService userService;
 
-    @PostMapping(path = "/token")
+    @PostMapping(path = "/login")
     public ResponseEntity<?> authenticateUser(@ModelAttribute @Valid UserRequestLogin userRequestLogin, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<ResponseMessage> errorMessages = ResponseMessage.fromBindingResult(bindingResult);

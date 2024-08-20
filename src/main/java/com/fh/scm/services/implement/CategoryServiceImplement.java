@@ -41,11 +41,6 @@ public class CategoryServiceImplement implements CategoryService {
     }
 
     @Override
-    public void insertOrUpdate(Category category) {
-        this.categoryRepository.insertOrUpdate(category);
-    }
-
-    @Override
     public Long count() {
         return this.categoryRepository.count();
     }

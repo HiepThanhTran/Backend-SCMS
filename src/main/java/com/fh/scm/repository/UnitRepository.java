@@ -17,8 +17,6 @@ public interface UnitRepository {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Unit unit);
-
     Long count();
 
     List<Unit> getAll(Map<String, String> params);

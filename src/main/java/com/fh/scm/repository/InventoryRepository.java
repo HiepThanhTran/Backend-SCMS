@@ -17,8 +17,6 @@ public interface InventoryRepository {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Inventory inventory);
-
     Long count();
 
     List<Inventory> getAll(Map<String, String> params);

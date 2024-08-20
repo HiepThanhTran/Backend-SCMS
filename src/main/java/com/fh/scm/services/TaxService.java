@@ -17,8 +17,6 @@ public interface TaxService {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Tax tax);
-
     Long count();
 
     List<Tax> getAll(Map<String, String> params);

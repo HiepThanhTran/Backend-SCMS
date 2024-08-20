@@ -41,11 +41,6 @@ public class WarehouseServiceImplement implements WarehouseService {
     }
 
     @Override
-    public void insertOrUpdate(Warehouse warehouse) {
-        this.warehouseRepository.insertOrUpdate(warehouse);
-    }
-
-    @Override
     public Long count() {
         return this.warehouseRepository.count();
     }

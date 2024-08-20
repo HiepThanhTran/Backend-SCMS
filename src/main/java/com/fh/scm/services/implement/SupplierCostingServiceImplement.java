@@ -36,11 +36,6 @@ public class SupplierCostingServiceImplement implements SupplierCostingService {
     }
 
     @Override
-    public void insertOrUpdate(SupplierCosting supplierCosting) {
-        this.supplierCostingRepository.insertOrUpdate(supplierCosting);
-    }
-
-    @Override
     public Long count() {
         return this.supplierCostingRepository.count();
     }

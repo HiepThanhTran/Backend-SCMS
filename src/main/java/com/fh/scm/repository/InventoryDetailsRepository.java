@@ -15,8 +15,6 @@ public interface InventoryDetailsRepository {
 
     void delete(Long id);
 
-    void insertOrUpdate(InventoryDetails inventoryDetails);
-
     Long count();
 
     List<InventoryDetails> getAll(Map<String, String> params);

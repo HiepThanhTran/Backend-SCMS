@@ -1,11 +1,14 @@
 package com.fh.scm.services;
 
+import com.fh.scm.dto.api.rating.RatingRequestUpdate;
 import com.fh.scm.pojo.Rating;
 
 import java.util.List;
 import java.util.Map;
 
 public interface RatingService {
+
+    Rating update(Rating rating, RatingRequestUpdate ratingRequestUpdate);
 
     Rating get(Long id);
 
@@ -18,8 +21,6 @@ public interface RatingService {
     void delete(Long id);
 
     void softDelete(Long id);
-
-    void insertOrUpdate(Rating rating);
 
     Long count();
 

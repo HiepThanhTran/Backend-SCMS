@@ -41,11 +41,6 @@ public class PaymentTermsServiceImplement implements PaymentTermsService {
     }
 
     @Override
-    public void insertOrUpdate(PaymentTerms paymentTerms) {
-        this.paymentTermsRepository.insertOrUpdate(paymentTerms);
-    }
-
-    @Override
     public Long count() {
         return this.paymentTermsRepository.count();
     }

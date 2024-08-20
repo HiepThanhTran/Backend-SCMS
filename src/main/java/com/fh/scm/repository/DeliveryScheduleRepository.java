@@ -17,8 +17,6 @@ public interface DeliveryScheduleRepository {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(DeliverySchedule deliverySchedule);
-
     Long count();
 
     List<DeliverySchedule> getAll(Map<String, String> params);

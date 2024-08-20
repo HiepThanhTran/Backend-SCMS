@@ -41,11 +41,6 @@ public class DeliveryScheduleServiceImplement implements DeliveryScheduleService
     }
 
     @Override
-    public void insertOrUpdate(DeliverySchedule deliverySchedule) {
-        this.deliveryScheduleRepository.insertOrUpdate(deliverySchedule);
-    }
-
-    @Override
     public Long count() {
         return this.deliveryScheduleRepository.count();
     }

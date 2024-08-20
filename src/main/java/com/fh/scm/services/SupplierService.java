@@ -1,6 +1,6 @@
 package com.fh.scm.services;
 
-import com.fh.scm.dto.api.rating.RatingRequest;
+import com.fh.scm.dto.api.rating.RatingRequestCreate;
 import com.fh.scm.dto.api.supplier.PaymentTermsRequest;
 import com.fh.scm.dto.api.supplier.SupplierDTO;
 import com.fh.scm.pojo.PaymentTerms;
@@ -10,7 +10,6 @@ import com.fh.scm.pojo.User;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public interface SupplierService {
 
@@ -24,7 +23,7 @@ public interface SupplierService {
 
     void addPaymentTermsForSupplier(Long supplierId, PaymentTermsRequest paymentTermsIdList);
 
-    void addRatingForSupplier(String username, Long supplierId, RatingRequest ratingRequest);
+    Rating addRatingForSupplier(String username, Long supplierId, RatingRequestCreate ratingRequestCreate);
 
     Supplier get(Long id);
 
@@ -39,8 +38,6 @@ public interface SupplierService {
     void delete(Long id);
 
     void softDelete(Long id);
-
-    void insertOrUpdate(Supplier supplier);
 
     Long count();
 

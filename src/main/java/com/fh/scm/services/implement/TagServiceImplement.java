@@ -41,11 +41,6 @@ public class TagServiceImplement implements TagService {
     }
 
     @Override
-    public void insertOrUpdate(Tag tag) {
-        this.tagRepository.insertOrUpdate(tag);
-    }
-
-    @Override
     public Long count() {
         return this.tagRepository.count();
     }

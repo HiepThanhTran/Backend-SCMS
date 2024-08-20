@@ -41,11 +41,6 @@ public class UnitServiceImplement implements UnitService {
     }
 
     @Override
-    public void insertOrUpdate(Unit unit) {
-        this.unitRepository.insertOrUpdate(unit);
-    }
-
-    @Override
     public Long count() {
         return this.unitRepository.count();
     }

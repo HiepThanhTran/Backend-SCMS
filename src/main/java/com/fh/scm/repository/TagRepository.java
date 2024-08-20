@@ -17,8 +17,6 @@ public interface TagRepository {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Tag tag);
-
     Long count();
 
     List<Tag> getAll(Map<String, String> params);

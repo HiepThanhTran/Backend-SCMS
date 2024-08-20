@@ -41,11 +41,6 @@ public class InventoryServiceImplement implements InventoryService {
     }
 
     @Override
-    public void insertOrUpdate(Inventory inventory) {
-        this.inventoryRepository.insertOrUpdate(inventory);
-    }
-
-    @Override
     public Long count() {
         return this.inventoryRepository.count();
     }

@@ -17,8 +17,6 @@ public interface ShipmentService {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Shipment shipment);
-
     Long count();
 
     List<Shipment> getAll(Map<String, String> params);

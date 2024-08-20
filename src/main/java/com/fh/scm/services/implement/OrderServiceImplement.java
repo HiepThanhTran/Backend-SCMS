@@ -41,11 +41,6 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
-    public void insertOrUpdate(Order order) {
-        this.orderRepository.insertOrUpdate(order);
-    }
-
-    @Override
     public Long count() {
         return this.orderRepository.count();
     }

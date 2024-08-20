@@ -65,12 +65,6 @@ public class InventoryRepositoryImplement implements InventoryRepository {
     }
 
     @Override
-    public void insertOrUpdate(Inventory inventory) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(inventory);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

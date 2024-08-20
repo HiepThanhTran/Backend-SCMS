@@ -1,7 +1,7 @@
 package com.fh.scm.controllers.api;
 
 import com.fh.scm.dto.ResponseMessage;
-import com.fh.scm.dto.api.rating.RatingRequest;
+import com.fh.scm.dto.api.rating.RatingRequestCreate;
 import com.fh.scm.dto.api.supplier.PaymentTermsRequest;
 import com.fh.scm.dto.api.supplier.SupplierDTO;
 import com.fh.scm.exceptions.RatingSupplierException;
@@ -24,7 +24,6 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -43,7 +42,7 @@ public class APISupplierController {
         return ResponseEntity.ok(suppliers);
     }
 
-    @GetMapping(path = "/{supplierId}/details")
+    @GetMapping(path = "/{supplierId}/retrieve")
     public ResponseEntity<?> details(HttpServletRequest request, @PathVariable(value = "supplierId") Long id) {
         Supplier supplier = this.supplierService.get(id);
 
@@ -111,17 +110,18 @@ public class APISupplierController {
     }
 
     @PostMapping(path = "/{supplierId}/rating/add")
-    public ResponseEntity<?> addRatingSupplier(Principal principal, HttpServletRequest request, @PathVariable(value = "supplierId") Long supplierId,
-                                            @ModelAttribute @Valid RatingRequest rating, BindingResult bindingResult) {
+    public ResponseEntity<?> addRatingSupplier(Principal principal, @PathVariable(value = "supplierId") Long supplierId,
+                                               @ModelAttribute @Valid RatingRequestCreate ratingRequestCreate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<ResponseMessage> errorMessages = ResponseMessage.fromBindingResult(bindingResult);
 
             return ResponseEntity.badRequest().body(errorMessages);
         }
-        try {
-            this.supplierService.addRatingForSupplier(principal.getName(), supplierId, rating);
 
-            return ResponseEntity.ok().build();
+        try {
+            Rating rating = this.supplierService.addRatingForSupplier(principal.getName(), supplierId, ratingRequestCreate);
+
+            return ResponseEntity.ok(rating);
         } catch (RatingSupplierException e) {
             if (e.getCode() == HttpStatus.NOT_FOUND.value()) {
                 return ResponseEntity.notFound().build();

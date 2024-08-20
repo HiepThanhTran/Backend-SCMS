@@ -41,11 +41,6 @@ public class ShipperServiceImplement implements ShipperService {
     }
 
     @Override
-    public void insertOrUpdate(Shipper shipper) {
-        this.shipperRepository.insertOrUpdate(shipper);
-    }
-
-    @Override
     public Long count() {
         return this.shipperRepository.count();
     }

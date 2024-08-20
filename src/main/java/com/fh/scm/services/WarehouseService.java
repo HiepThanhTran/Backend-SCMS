@@ -17,8 +17,6 @@ public interface WarehouseService {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Warehouse warehouse);
-
     Long count();
 
     List<Warehouse> getAll(Map<String, String> params);

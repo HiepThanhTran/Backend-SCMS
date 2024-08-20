@@ -17,8 +17,6 @@ public interface ShipperRepository {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Shipper shipper);
-
     Long count();
 
     List<Shipper> getAll(Map<String, String> params);

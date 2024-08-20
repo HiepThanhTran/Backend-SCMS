@@ -82,12 +82,6 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     }
 
     @Override
-    public void insertOrUpdate(Customer customer) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(customer);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

@@ -17,8 +17,6 @@ public interface TagService {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Tag tag);
-
     Long count();
 
     List<Tag> getAll(Map<String, String> params);

@@ -17,8 +17,6 @@ public interface ProductRepository {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Product Product);
-
     Long count();
 
     List<Product> getAll(Map<String, String> params);

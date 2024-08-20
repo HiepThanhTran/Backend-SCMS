@@ -65,12 +65,6 @@ public class OrderRepositoryImplement implements OrderRepository {
     }
 
     @Override
-    public void insertOrUpdate(Order order) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(order);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

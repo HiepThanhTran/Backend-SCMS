@@ -88,12 +88,6 @@ public class UserRepositoryImplement implements UserRepository {
     }
 
     @Override
-    public void insertOrUpdate(User user) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(user);
-    }
-
-    @Override
     public void delete(Long id) {
         Session session = this.getCurrentSession();
         User user = session.get(User.class, id);

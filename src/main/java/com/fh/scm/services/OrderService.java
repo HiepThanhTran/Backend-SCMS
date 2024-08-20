@@ -17,8 +17,6 @@ public interface OrderService {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Order order);
-
     Long count();
 
     List<Order> getAll(Map<String, String> params);

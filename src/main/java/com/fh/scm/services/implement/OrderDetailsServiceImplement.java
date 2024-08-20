@@ -36,11 +36,6 @@ public class OrderDetailsServiceImplement implements OrderDetailsService {
     }
 
     @Override
-    public void insertOrUpdate(OrderDetails orderDetails) {
-        this.orderDetailsRepository.insertOrUpdate(orderDetails);
-    }
-
-    @Override
     public Long count() {
         return this.orderDetailsRepository.count();
     }

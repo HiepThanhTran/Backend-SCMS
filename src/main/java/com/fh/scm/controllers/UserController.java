@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping
     public String listUser(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("users", userService.getAllUserResponse(params));
+        model.addAttribute("users", userService.getAll(params));
 
         return "users";
     }
@@ -65,7 +65,7 @@ public class UserController {
                 return "edit_user";
             }
 
-            userService.updateProfileUser(user);
+            userService.update(user);
 
             return "redirect:/admin/users";
         }

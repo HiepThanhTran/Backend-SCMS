@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RatingRequest {
+public class RatingRequestCreate {
 
     @NotNull(message = "{rating.notNull}")
     @DecimalMin(value = "1.00", message = "{rating.min}")

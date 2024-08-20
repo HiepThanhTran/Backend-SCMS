@@ -18,8 +18,6 @@ public interface OrderRepository {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Order order);
-
     Long count();
 
     List<Order> getAll(Map<String, String> params);

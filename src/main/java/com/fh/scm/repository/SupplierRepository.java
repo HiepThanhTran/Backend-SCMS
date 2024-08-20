@@ -28,8 +28,6 @@ public interface SupplierRepository {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Supplier supplier);
-
     Long count();
 
     List<Supplier> getAll(Map<String, String> params);

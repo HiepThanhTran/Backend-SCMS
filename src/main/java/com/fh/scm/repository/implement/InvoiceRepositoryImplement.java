@@ -64,12 +64,6 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
     }
 
     @Override
-    public void insertOrUpdate(Invoice invoice) {
-        Session session = getCurrentSession();
-        session.saveOrUpdate(invoice);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

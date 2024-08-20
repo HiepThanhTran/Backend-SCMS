@@ -117,12 +117,6 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
-    public void insertOrUpdate(Supplier supplier) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(supplier);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

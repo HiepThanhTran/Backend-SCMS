@@ -46,11 +46,6 @@ public class CustomerServiceImplement implements CustomerService {
     }
 
     @Override
-    public void insertOrUpdate(Customer customer) {
-        this.customerRepository.insertOrUpdate(customer);
-    }
-
-    @Override
     public Long count() {
         return this.customerRepository.count();
     }

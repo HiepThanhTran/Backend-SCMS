@@ -65,12 +65,6 @@ public class ShipperRepositoryImplement implements ShipperRepository {
     }
 
     @Override
-    public void insertOrUpdate(Shipper shipper) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(shipper);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

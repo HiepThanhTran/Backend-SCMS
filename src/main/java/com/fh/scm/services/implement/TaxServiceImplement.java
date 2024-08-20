@@ -41,11 +41,6 @@ public class TaxServiceImplement implements TaxService {
     }
 
     @Override
-    public void insertOrUpdate(Tax tax) {
-        this.taxRepository.insertOrUpdate(tax);
-    }
-
-    @Override
     public Long count() {
         return this.taxRepository.count();
     }

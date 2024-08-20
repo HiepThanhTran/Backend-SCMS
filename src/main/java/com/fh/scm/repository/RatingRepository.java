@@ -19,8 +19,6 @@ public interface RatingRepository {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Rating rating);
-
     Long count();
 
     List<Rating> getAll(Map<String, String> params);

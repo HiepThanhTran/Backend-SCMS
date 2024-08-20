@@ -65,12 +65,6 @@ public class TagRepositoryImplement implements TagRepository {
     }
 
     @Override
-    public void insertOrUpdate(Tag tag) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(tag);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

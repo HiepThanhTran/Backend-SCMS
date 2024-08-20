@@ -15,8 +15,6 @@ public interface SupplierCostingRepository {
 
     void delete(Long id);
 
-    void insertOrUpdate(SupplierCosting supplierCosting);
-
     Long count();
 
     List<SupplierCosting> getAll(Map<String, String> params);

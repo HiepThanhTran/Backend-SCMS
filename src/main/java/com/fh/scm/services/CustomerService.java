@@ -19,8 +19,6 @@ public interface CustomerService {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(Customer customer);
-
     Long count();
 
     List<Customer> getAll(Map<String, String> params);

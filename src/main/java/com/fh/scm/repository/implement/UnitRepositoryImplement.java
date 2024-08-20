@@ -65,12 +65,6 @@ public class UnitRepositoryImplement implements UnitRepository {
     }
 
     @Override
-    public void insertOrUpdate(Unit unit) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(unit);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

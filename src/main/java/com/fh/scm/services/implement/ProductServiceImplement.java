@@ -41,11 +41,6 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public void insertOrUpdate(Product Product) {
-        this.productRepository.insertOrUpdate(Product);
-    }
-
-    @Override
     public Long count() {
         return this.productRepository.count();
     }

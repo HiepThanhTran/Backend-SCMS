@@ -55,12 +55,6 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
     }
 
     @Override
-    public void insertOrUpdate(OrderDetails orderDetails) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(orderDetails);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

@@ -66,12 +66,6 @@ public class WarehouseRepositoryImplement implements WarehouseRepository {
     }
 
     @Override
-    public void insertOrUpdate(Warehouse warehouse) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(warehouse);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

@@ -17,8 +17,6 @@ public interface PaymentTermsService {
 
     void softDelete(Long id);
 
-    void insertOrUpdate(PaymentTerms paymentTerms);
-
     Long count();
 
     List<PaymentTerms> getAll(Map<String, String> params);

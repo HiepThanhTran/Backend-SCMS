@@ -65,12 +65,6 @@ public class TaxRepositoryImplement implements TaxRepository {
     }
 
     @Override
-    public void insertOrUpdate(Tax tax) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(tax);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

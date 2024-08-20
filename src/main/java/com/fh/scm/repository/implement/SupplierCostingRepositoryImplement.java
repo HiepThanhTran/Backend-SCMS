@@ -55,12 +55,6 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
     }
 
     @Override
-    public void insertOrUpdate(SupplierCosting supplierCosting) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(supplierCosting);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
