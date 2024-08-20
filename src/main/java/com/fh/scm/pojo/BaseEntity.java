@@ -20,19 +20,19 @@ public class BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
+    protected Long id;
 
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
-    private boolean isActive = true;
+    protected boolean active = true;
 
     @CreationTimestamp
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
 
     @UpdateTimestamp
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "updated_at", insertable = false)
-    private LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 }
 

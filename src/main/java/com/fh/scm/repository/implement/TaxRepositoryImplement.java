@@ -98,7 +98,7 @@ public class TaxRepositoryImplement implements TaxRepository {
         Root<Tax> root = criteria.from(Tax.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             String region = params.get("region");

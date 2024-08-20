@@ -98,7 +98,7 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
         Root<Shipment> root = criteria.from(Shipment.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             String trackingNumber = params.get("trackingNumber");

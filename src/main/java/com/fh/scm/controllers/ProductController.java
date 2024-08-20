@@ -3,6 +3,7 @@ package com.fh.scm.controllers;
 import com.fh.scm.dto.error.ErrorResponse;
 import com.fh.scm.pojo.Category;
 import com.fh.scm.pojo.Product;
+import com.fh.scm.services.CategoryService;
 import com.fh.scm.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
-
+    private final CategoryService categoryService;
     @GetMapping
     public String listProducts(Model model, @RequestParam(required = false, defaultValue = "")Map<String, String> params) {
         model.addAttribute("products", productService.getAll(params));
@@ -52,6 +53,8 @@ public class ProductController {
             return "redirect:/admin/products";
         }
 
+        model.addAttribute("categories", categoryService.getAll(null));
+        //Lay Categories duyet
         return "add_product";
     }
 

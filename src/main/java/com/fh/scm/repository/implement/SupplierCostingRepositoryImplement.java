@@ -97,7 +97,7 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
         Root<SupplierCosting> root = criteria.from(SupplierCosting.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             Arrays.asList("fromPrice", "toPrice", "productId", "supplierId").forEach(key -> {

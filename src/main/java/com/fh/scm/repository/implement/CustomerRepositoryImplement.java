@@ -117,7 +117,7 @@ public class CustomerRepositoryImplement implements CustomerRepository {
         Root<Customer> root = criteria.from(Customer.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             String name = params.get("name");

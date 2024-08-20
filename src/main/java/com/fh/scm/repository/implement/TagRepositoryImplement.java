@@ -99,7 +99,7 @@ public class TagRepositoryImplement implements TagRepository {
         Root<Tag> root = criteria.from(Tag.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             String name = params.get("name");

@@ -139,7 +139,7 @@ public class UserRepositoryImplement implements UserRepository {
         Root<User> root = criteria.from(User.class);
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("isActive"), true));
+        predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
             Boolean isConfirm = Utils.parseBoolean(params.get("isConfirm"));

@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @Builder
@@ -20,6 +22,7 @@ public class Category extends BaseEntity implements Serializable {
 
     @Column(nullable = false, unique = true)
     @NotNull(message = "{category.name.notNull}")
+    @NotBlank(message = "Tên danh mục không được rỗng")
     private String name;
 
     private String description;
