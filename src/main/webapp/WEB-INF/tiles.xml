@@ -17,6 +17,11 @@
         <put-attribute name="sidebar" value="/WEB-INF/layout/sidebar.jsp"/>
     </definition>
     
+    <definition name="categories" extends="baseLayout">
+        <put-attribute name="title" value="Danh mục"/>
+        <put-attribute name="content" value="/WEB-INF/pages/category/categories.jsp"/>
+    </definition>
+    
     <definition name="index" extends="baseLayout">
         <put-attribute name="title" value="Trang chủ"/>
         <put-attribute name="content" value="/WEB-INF/pages/index.jsp"/>
@@ -27,10 +32,7 @@
         <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
     </definition>
     
-    <definition name="categories" extends="baseLayout">
-        <put-attribute name="title" value="Danh mục"/>
-        <put-attribute name="content" value="/WEB-INF/pages/category/categories.jsp"/>
-    </definition>
+
     
     <definition name="add_category" extends="baseLayout">
         <put-attribute name="title" value="Thêm danh mục"/>

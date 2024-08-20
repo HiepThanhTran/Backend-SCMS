@@ -10,6 +10,14 @@
     </div>
 </div>
 
+<c:if test="${errors != null}">
+    <c:forEach  var="error" items="${errors}">
+        <div class="alert alert-danger">
+            ${error.message}
+        </div>
+    </c:forEach>
+</c:if>
+
 <form:form id="editCategoryForm" method="post" modelAttribute="category" action="${editCategory}">
     <form:hidden path="id"/>
 

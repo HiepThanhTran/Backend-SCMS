@@ -39,11 +39,11 @@
                             <i class='bx bxs-edit'></i>
                         </a>
 
-                        <a class="btn btn-danger btn-sm" href="#">
+                        <a class="btn btn-danger btn-sm" href="#" 
+                           onclick="deleteItem('<c:url value="/admin/categories/delete/${category.id}"/>', ${category.id})">
                             <i class='bx bx-x'></i>
                         </a>
                     </td>
-
                 </tr>
             </c:forEach>
         </tbody>
