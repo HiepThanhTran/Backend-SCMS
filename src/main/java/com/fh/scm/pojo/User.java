@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fh.scm.enums.UserRole;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -20,7 +22,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "\"user\"")
-public class User extends BaseEntity implements Serializable {
+public class User extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{user.email.notNull}")
     @Column(nullable = false, unique = true)
@@ -32,6 +34,7 @@ public class User extends BaseEntity implements Serializable {
     @Size(min = 6, max = 50, message = "{user.username.size}")
     private String username;
 
+    @JsonIgnore
     @Column(nullable = false, length = 300)
     @NotNull(message = "{user.password.notNull}")
     @Size(min = 8, max = 300, message = "{user.password.size}")
@@ -44,7 +47,7 @@ public class User extends BaseEntity implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{user.role.notNull}")
-    private UserRole userRole = UserRole.CUSTOMER;
+    private UserRole userRole = UserRole.ROLE_CUSTOMER;
 
     @Builder.Default
     @NotNull
@@ -70,4 +73,13 @@ public class User extends BaseEntity implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Order> orderSet;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Rating> ratingSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.User[ id=" + this.id + " ]";
+    }
 }

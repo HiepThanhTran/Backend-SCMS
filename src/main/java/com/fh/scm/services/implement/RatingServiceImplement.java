@@ -19,6 +19,11 @@ public class RatingServiceImplement implements RatingService {
     public Rating get(Long id) {
         return this.ratingRepository.get(id);
     }
+    
+    @Override
+    public Rating getByUserAndSupplier(Long userId, Long supplierId) {
+        return this.ratingRepository.getByUserAndSupplier(userId, supplierId);
+    }
 
     @Override
     public void insert(Rating rating) {
@@ -48,11 +53,6 @@ public class RatingServiceImplement implements RatingService {
     @Override
     public Long count() {
         return this.ratingRepository.count();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        return this.ratingRepository.exists(id);
     }
 
     @Override

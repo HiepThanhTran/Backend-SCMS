@@ -1,7 +1,6 @@
 package com.fh.scm.dto.api.user;
 
 import com.fh.scm.enums.UserRole;
-import com.fh.scm.pojo.SupplierPaymentTerms;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Data
 @Builder
@@ -31,13 +29,13 @@ public class UserRequestRegister {
     @Size(min = 8, max = 300, message = "{user.password.size}")
     private String password;
 
+    private MultipartFile avatar;
+
     @NotNull(message = "{user.role.notNull}")
     private UserRole userRole;
 
     @Pattern(regexp = "^[0-9]{10,15}$", message = "{user.phone.pattern}")
     private String phone;
-
-    private MultipartFile avatar;
 
     private String name;
 
@@ -50,6 +48,4 @@ public class UserRequestRegister {
     private String middleName;
 
     private String firstName;
-
-    private Set<SupplierPaymentTerms> supplierPaymentTermsSet;
 }

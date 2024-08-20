@@ -1,7 +1,6 @@
 package com.fh.scm.repository.implement;
 
 import com.fh.scm.pojo.Customer;
-import com.fh.scm.pojo.User;
 import com.fh.scm.repository.CustomerRepository;
 import com.fh.scm.util.Pagination;
 import org.hibernate.Session;
@@ -58,13 +57,13 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     @Override
     public void insert(Customer customer) {
         Session session = this.getCurrentSession();
-        session.save(customer);
+        session.persist(customer);
     }
 
     @Override
     public void update(Customer customer) {
         Session session = this.getCurrentSession();
-        session.update(customer);
+        session.merge(customer);
     }
 
     @Override
@@ -79,7 +78,7 @@ public class CustomerRepositoryImplement implements CustomerRepository {
         Session session = this.getCurrentSession();
         Customer customer = session.get(Customer.class, id);
         customer.setActive(false);
-        session.update(customer);
+        session.merge(customer);
     }
 
     @Override
@@ -99,14 +98,6 @@ public class CustomerRepositoryImplement implements CustomerRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Customer customer = session.get(Customer.class, id);
-
-        return customer != null;
     }
 
     @Override

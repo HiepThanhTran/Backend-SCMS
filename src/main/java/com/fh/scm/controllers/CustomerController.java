@@ -1,6 +1,6 @@
 package com.fh.scm.controllers;
 
-import com.fh.scm.dto.error.ErrorResponse;
+import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.Customer;
 import com.fh.scm.services.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +37,10 @@ public class CustomerController {
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addCustomer(HttpServletRequest request, Model model, @ModelAttribute(value = "customer") @Valid Customer customer,
-                      BindingResult bindingResult) {
+                              BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_customer";
@@ -56,10 +56,10 @@ public class CustomerController {
 
     @RequestMapping(path = "/edit/{customerId}", method = {RequestMethod.GET, RequestMethod.PATCH})
     public String editCustomer(HttpServletRequest request, Model model, @PathVariable(value = "customerId") Long id,
-                       @ModelAttribute(value = "customer") @Valid Customer customer, BindingResult bindingResult) {
+                               @ModelAttribute(value = "customer") @Valid Customer customer, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_customer";

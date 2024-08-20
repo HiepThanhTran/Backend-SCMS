@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "shipment")
-public class Shipment extends BaseEntity implements Serializable {
+public class Shipment extends _BaseEntity implements Serializable {
 
     private String note;
 
@@ -36,15 +36,20 @@ public class Shipment extends BaseEntity implements Serializable {
 
     @JsonIgnore
     @ManyToOne(optional = false)
-    @JoinColumn(name = "shipper_id", referencedColumnName = "id")
+    @JoinColumn(name = "shipper_id", referencedColumnName = "id", nullable = false)
     private Shipper shipper;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", nullable = false)
     private Warehouse warehouse;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "delivery_schedule_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "delivery_schedule_id", referencedColumnName = "id", nullable = false)
     private DeliverySchedule deliverySchedule;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Shipment[ id=" + this.id + " ]";
+    }
 }

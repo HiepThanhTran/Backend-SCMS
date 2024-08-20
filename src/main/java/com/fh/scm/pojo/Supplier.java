@@ -16,7 +16,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "supplier")
-public class Supplier extends BaseEntity implements Serializable {
+public class Supplier extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{supplier.name.notNull}")
     @Column(nullable = false)
@@ -35,17 +35,27 @@ public class Supplier extends BaseEntity implements Serializable {
     @Column(name = "contact_info", nullable = false)
     private String contactInfo;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "supplier", cascade = {CascadeType.REMOVE})
+    @JsonIgnore
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
     private Set<Rating> ratingSet;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "supplier", cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
     private Set<SupplierCosting> supplierCostingSet;
 
-    @OneToMany(mappedBy = "supplier", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Set<SupplierPaymentTerms> supplierPaymentTermsSet;
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "supplier_payment_terms",
+            joinColumns = @JoinColumn(name = "supplier_id"),
+            inverseJoinColumns = @JoinColumn(name = "payment_terms_id"))
+    private Set<PaymentTerms> paymentTermsSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Supplier[ id=" + this.id + " ]";
+    }
 }

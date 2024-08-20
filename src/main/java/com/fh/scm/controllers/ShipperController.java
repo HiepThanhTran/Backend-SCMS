@@ -1,6 +1,6 @@
 package com.fh.scm.controllers;
 
-import com.fh.scm.dto.error.ErrorResponse;
+import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.Shipper;
 import com.fh.scm.services.ShipperService;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +37,10 @@ public class ShipperController {
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addShipper(HttpServletRequest request, Model model, @ModelAttribute(value = "shipper") @Valid Shipper shipper,
-                              BindingResult bindingResult) {
+                             BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_shipper";
@@ -56,10 +56,10 @@ public class ShipperController {
 
     @RequestMapping(path = "/edit/{shipperId}", method = {RequestMethod.GET, RequestMethod.PATCH})
     public String editShipper(HttpServletRequest request, Model model, @PathVariable(value = "shipperId") Long id,
-                               @ModelAttribute(value = "shipper") @Valid Shipper shipper, BindingResult bindingResult) {
+                              @ModelAttribute(value = "shipper") @Valid Shipper shipper, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_shipper";

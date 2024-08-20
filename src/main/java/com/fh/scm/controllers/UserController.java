@@ -1,6 +1,6 @@
 package com.fh.scm.controllers;
 
-import com.fh.scm.dto.error.ErrorResponse;
+import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.User;
 import com.fh.scm.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping
     public String listUser(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("users", userService.getAll(params));
+        model.addAttribute("users", userService.getAllUserResponse(params));
 
         return "users";
     }
@@ -37,10 +37,10 @@ public class UserController {
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addUser(HttpServletRequest request, Model model, @ModelAttribute(value = "user") @Valid User user,
-                         BindingResult bindingResult) {
+                          BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_user";
@@ -56,16 +56,16 @@ public class UserController {
 
     @RequestMapping(path = "/edit/{userId}", method = {RequestMethod.GET, RequestMethod.PATCH})
     public String editUser(HttpServletRequest request, Model model, @PathVariable(value = "userId") Long id,
-                          @ModelAttribute(value = "user") @Valid User user, BindingResult bindingResult) {
+                           @ModelAttribute(value = "user") @Valid User user, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_user";
             }
 
-            userService.updateProfile(user);
+            userService.updateProfileUser(user);
 
             return "redirect:/admin/users";
         }

@@ -21,7 +21,5 @@ public interface ProductRepository {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Product> getAll(Map<String, String> params);
 }

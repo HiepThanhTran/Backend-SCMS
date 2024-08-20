@@ -39,13 +39,13 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
     @Override
     public void insert(PaymentTerms paymentTerms) {
         Session session = this.getCurrentSession();
-        session.save(paymentTerms);
+        session.persist(paymentTerms);
     }
 
     @Override
     public void update(PaymentTerms paymentTerms) {
         Session session = this.getCurrentSession();
-        session.update(paymentTerms);
+        session.merge(paymentTerms);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
         Session session = this.getCurrentSession();
         PaymentTerms paymentTerms = session.get(PaymentTerms.class, id);
         paymentTerms.setActive(false);
-        session.update(paymentTerms);
+        session.merge(paymentTerms);
     }
 
     @Override
@@ -80,14 +80,6 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        PaymentTerms paymentTerms = session.get(PaymentTerms.class, id);
-
-        return paymentTerms != null;
     }
 
     @Override

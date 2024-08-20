@@ -21,7 +21,5 @@ public interface TagRepository {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Tag> getAll(Map<String, String> params);
 }

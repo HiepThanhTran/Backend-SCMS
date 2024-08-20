@@ -40,13 +40,13 @@ public class TaxRepositoryImplement implements TaxRepository {
     @Override
     public void insert(Tax tax) {
         Session session = this.getCurrentSession();
-        session.save(tax);
+        session.persist(tax);
     }
 
     @Override
     public void update(Tax tax) {
         Session session = this.getCurrentSession();
-        session.update(tax);
+        session.merge(tax);
     }
 
     @Override
@@ -61,6 +61,7 @@ public class TaxRepositoryImplement implements TaxRepository {
         Session session = this.getCurrentSession();
         Tax tax = session.get(Tax.class, id);
         session.delete(tax);
+        session.merge(tax);
     }
 
     @Override
@@ -80,14 +81,6 @@ public class TaxRepositoryImplement implements TaxRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Tax tax = session.get(Tax.class, id);
-
-        return tax != null;
     }
 
     @Override

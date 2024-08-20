@@ -38,13 +38,13 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
     @Override
     public void insert(OrderDetails orderDetails) {
         Session session = this.getCurrentSession();
-        session.save(orderDetails);
+        session.persist(orderDetails);
     }
 
     @Override
     public void update(OrderDetails orderDetails) {
         Session session = this.getCurrentSession();
-        session.update(orderDetails);
+        session.merge(orderDetails);
     }
 
     @Override
@@ -52,14 +52,6 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
         Session session = this.getCurrentSession();
         OrderDetails orderDetails = session.get(OrderDetails.class, id);
         session.delete(orderDetails);
-    }
-
-    @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        OrderDetails orderDetails = session.get(OrderDetails.class, id);
-        orderDetails.setActive(false);
-        session.update(orderDetails);
     }
 
     @Override
@@ -79,14 +71,6 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        OrderDetails orderDetails = session.get(OrderDetails.class, id);
-
-        return orderDetails != null;
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "shipper")
-public class Shipper extends BaseEntity implements Serializable {
+public class Shipper extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{shipper.name.notnull}")
     @Column(nullable = false)
@@ -32,10 +32,15 @@ public class Shipper extends BaseEntity implements Serializable {
     @Column(name = "contact_info", nullable = false)
     private String contactInfo;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "shipper")
     private Set<Shipment> shipmentSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Shipper[ id=" + this.id + " ]";
+    }
 }

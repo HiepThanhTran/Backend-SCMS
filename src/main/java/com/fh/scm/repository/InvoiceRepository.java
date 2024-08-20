@@ -21,7 +21,5 @@ public interface InvoiceRepository {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Invoice> getAll(Map<String, String> params);
 }

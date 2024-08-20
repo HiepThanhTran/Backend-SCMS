@@ -1,6 +1,6 @@
 package com.fh.scm.controllers;
 
-import com.fh.scm.dto.error.ErrorResponse;
+import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.Unit;
 import com.fh.scm.services.UnitService;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +37,10 @@ public class UnitController {
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addUnit(HttpServletRequest request, Model model, @ModelAttribute(value = "unit") @Valid Unit unit,
-                         BindingResult bindingResult) {
+                          BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_unit";
@@ -56,10 +56,10 @@ public class UnitController {
 
     @RequestMapping(path = "/edit/{unitId}", method = {RequestMethod.GET, RequestMethod.PATCH})
     public String editUnit(HttpServletRequest request, Model model, @PathVariable(value = "unitId") Long id,
-                          @ModelAttribute(value = "unit") @Valid Unit unit, BindingResult bindingResult) {
+                           @ModelAttribute(value = "unit") @Valid Unit unit, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_unit";

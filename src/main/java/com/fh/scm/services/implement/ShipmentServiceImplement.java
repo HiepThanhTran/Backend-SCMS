@@ -52,11 +52,6 @@ public class ShipmentServiceImplement implements ShipmentService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.shipmentRepository.exists(id);
-    }
-
-    @Override
     public List<Shipment> getAll(Map<String, String> params) {
         return this.shipmentRepository.getAll(params);
     }

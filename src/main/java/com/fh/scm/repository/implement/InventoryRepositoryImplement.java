@@ -40,13 +40,13 @@ public class InventoryRepositoryImplement implements InventoryRepository {
     @Override
     public void insert(Inventory inventory) {
         Session session = this.getCurrentSession();
-        session.save(inventory);
+        session.persist(inventory);
     }
 
     @Override
     public void update(Inventory inventory) {
         Session session = this.getCurrentSession();
-        session.update(inventory);
+        session.merge(inventory);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class InventoryRepositoryImplement implements InventoryRepository {
         Session session = this.getCurrentSession();
         Inventory inventory = session.get(Inventory.class, id);
         inventory.setActive(false);
-        session.update(inventory);
+        session.merge(inventory);
     }
 
     @Override
@@ -81,14 +81,6 @@ public class InventoryRepositoryImplement implements InventoryRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Inventory inventory = session.get(Inventory.class, id);
-
-        return inventory != null;
     }
 
     @Override

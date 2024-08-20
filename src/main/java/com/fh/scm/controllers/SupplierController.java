@@ -1,6 +1,6 @@
 package com.fh.scm.controllers;
 
-import com.fh.scm.dto.error.ErrorResponse;
+import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.Supplier;
 import com.fh.scm.services.SupplierService;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +37,10 @@ public class SupplierController {
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addSupplier(HttpServletRequest request, Model model, @ModelAttribute(value = "supplier") @Valid Supplier supplier,
-                             BindingResult bindingResult) {
+                              BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_supplier";
@@ -56,10 +56,10 @@ public class SupplierController {
 
     @RequestMapping(path = "/edit/{supplierId}", method = {RequestMethod.GET, RequestMethod.PATCH})
     public String editSupplier(HttpServletRequest request, Model model, @PathVariable(value = "supplierId") Long id,
-                              @ModelAttribute(value = "supplier") @Valid Supplier supplier, BindingResult bindingResult) {
+                               @ModelAttribute(value = "supplier") @Valid Supplier supplier, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_supplier";

@@ -15,13 +15,18 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "unit")
-public class Unit extends BaseEntity implements Serializable {
+public class Unit extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{unit.name.notNull}")
     @Column(nullable = false, unique = true)
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "unit", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Set<ProductUnit> productSet;
+    @ManyToMany(mappedBy = "unitSet")
+    private Set<Product> productSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Unit[ id=" + this.id + " ]";
+    }
 }

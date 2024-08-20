@@ -11,10 +11,9 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "order_details")
-public class OrderDetails extends BaseEntity implements Serializable {
+public class OrderDetails extends _BaseEntity implements Serializable {
 
     @Builder.Default
     @Column(nullable = false, columnDefinition = "float default 0")
@@ -25,11 +24,11 @@ public class OrderDetails extends BaseEntity implements Serializable {
     private BigDecimal unitPrice = BigDecimal.ZERO;
 
     @JsonIgnore
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
     private Order order;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
 }

@@ -40,13 +40,13 @@ public class TagRepositoryImplement implements TagRepository {
     @Override
     public void insert(Tag tag) {
         Session session = this.getCurrentSession();
-        session.save(tag);
+        session.persist(tag);
     }
 
     @Override
     public void update(Tag tag) {
         Session session = this.getCurrentSession();
-        session.update(tag);
+        session.merge(tag);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class TagRepositoryImplement implements TagRepository {
         Session session = this.getCurrentSession();
         Tag tag = session.get(Tag.class, id);
         tag.setActive(false);
-        session.update(tag);
+        session.merge(tag);
     }
 
     @Override
@@ -81,14 +81,6 @@ public class TagRepositoryImplement implements TagRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Tag tag = session.get(Tag.class, id);
-
-        return tag != null;
     }
 
     @Override

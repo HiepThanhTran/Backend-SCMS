@@ -51,11 +51,6 @@ public class InvoiceServiceImplement implements InvoiceService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.invoiceRepository.exists(id);
-    }
-
-    @Override
     public List<Invoice> getAll(Map<String, String> params) {
         return this.invoiceRepository.getAll(params);
     }

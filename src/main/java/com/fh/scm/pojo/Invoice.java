@@ -14,7 +14,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "invoice")
-public class Invoice extends BaseEntity implements Serializable {
+public class Invoice extends _BaseEntity implements Serializable {
 
     @Builder.Default
     @Column(name = "is_paid", nullable = false, columnDefinition = "boolean default false")
@@ -24,14 +24,19 @@ public class Invoice extends BaseEntity implements Serializable {
     @Column(name = "total_amount", nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
     private BigDecimal totalAmount = BigDecimal.ZERO;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST}, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "tax_id", referencedColumnName = "id")
     private Tax tax;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST}, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "payment_terms_id", referencedColumnName = "id")
     private PaymentTerms paymentTerms;
 
-    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "invoice")
     private Set<Order> orderSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Invoice[ id=" + this.id + " ]";
+    }
 }

@@ -40,13 +40,13 @@ public class ShipperRepositoryImplement implements ShipperRepository {
     @Override
     public void insert(Shipper shipper) {
         Session session = this.getCurrentSession();
-        session.save(shipper);
+        session.persist(shipper);
     }
 
     @Override
     public void update(Shipper shipper) {
         Session session = this.getCurrentSession();
-        session.update(shipper);
+        session.merge(shipper);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ShipperRepositoryImplement implements ShipperRepository {
         Session session = this.getCurrentSession();
         Shipper shipper = session.get(Shipper.class, id);
         shipper.setActive(false);
-        session.update(shipper);
+        session.merge(shipper);
     }
 
     @Override
@@ -81,14 +81,6 @@ public class ShipperRepositoryImplement implements ShipperRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Shipper shipper = session.get(Shipper.class, id);
-
-        return shipper != null;
     }
 
     @Override

@@ -15,13 +15,9 @@ public interface InventoryDetailsService {
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     void insertOrUpdate(InventoryDetails inventoryDetails);
 
     Long count();
-
-    Boolean exists(Long id);
 
     List<InventoryDetails> getAll(Map<String, String> params);
 }

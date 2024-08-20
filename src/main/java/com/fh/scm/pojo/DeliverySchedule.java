@@ -17,7 +17,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "delivery_schedule")
-public class DeliverySchedule extends BaseEntity implements Serializable {
+public class DeliverySchedule extends _BaseEntity implements Serializable {
 
     @Column(nullable = false)
     @NotNull(message = "{deliverySchedule.scheduledDate.notNull}")
@@ -35,4 +35,9 @@ public class DeliverySchedule extends BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "deliverySchedule", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Shipment> shipmentSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.DeliverySchedule[ id=" + this.id + " ]";
+    }
 }

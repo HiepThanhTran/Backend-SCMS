@@ -40,13 +40,13 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
     @Override
     public void insert(InventoryDetails inventoryDetails) {
         Session session = this.getCurrentSession();
-        session.save(inventoryDetails);
+        session.persist(inventoryDetails);
     }
 
     @Override
     public void update(InventoryDetails inventoryDetails) {
         Session session = this.getCurrentSession();
-        session.update(inventoryDetails);
+        session.merge(inventoryDetails);
     }
 
     @Override
@@ -54,14 +54,6 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
         Session session = this.getCurrentSession();
         InventoryDetails inventoryDetails = session.get(InventoryDetails.class, id);
         session.delete(inventoryDetails);
-    }
-
-    @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        InventoryDetails inventoryDetails = session.get(InventoryDetails.class, id);
-        inventoryDetails.setActive(false);
-        session.update(inventoryDetails);
     }
 
     @Override
@@ -81,14 +73,6 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        InventoryDetails inventoryDetails = session.get(InventoryDetails.class, id);
-
-        return inventoryDetails != null;
     }
 
     @Override

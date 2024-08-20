@@ -2,6 +2,8 @@ package com.fh.scm.repository.implement;
 
 import com.fh.scm.enums.CriteriaType;
 import com.fh.scm.pojo.Rating;
+import com.fh.scm.pojo.Supplier;
+import com.fh.scm.pojo.User;
 import com.fh.scm.repository.RatingRepository;
 import com.fh.scm.util.Pagination;
 import org.hibernate.Session;
@@ -12,10 +14,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.*;
 
 @Repository
@@ -37,15 +36,36 @@ public class RatingRepositoryImplement implements RatingRepository {
     }
 
     @Override
+    public Rating getByUserAndSupplier(Long userId, Long supplierId) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Rating> criteria = builder.createQuery(Rating.class);
+        Root<Rating> root = criteria.from(Rating.class);
+
+        criteria.select(root).where(
+                builder.equal(root.get("user").get("id"), userId),
+                builder.equal(root.get("supplier").get("id"), supplierId)
+        );
+        Query<Rating> query = session.createQuery(criteria);
+
+        try {
+            return query.getSingleResult();
+        } catch (Exception e) {
+            LoggerFactory.getLogger(RatingRepositoryImplement.class).error("An error occurred while getting Rating by User and Supplier", e);
+            return null;
+        }
+    }
+
+    @Override
     public void insert(Rating rating) {
         Session session = this.getCurrentSession();
-        session.save(rating);
+        session.persist(rating);
     }
 
     @Override
     public void update(Rating rating) {
         Session session = this.getCurrentSession();
-        session.update(rating);
+        session.merge(rating);
     }
 
     @Override
@@ -59,7 +79,7 @@ public class RatingRepositoryImplement implements RatingRepository {
         Session session = this.getCurrentSession();
         Rating rating = session.get(Rating.class, id);
         rating.setActive(false);
-        session.update(rating);
+        session.merge(rating);
     }
 
     @Override
@@ -79,14 +99,6 @@ public class RatingRepositoryImplement implements RatingRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Rating rating = session.get(Rating.class, id);
-
-        return rating != null;
     }
 
     @Override

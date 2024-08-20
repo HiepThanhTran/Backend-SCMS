@@ -1,5 +1,7 @@
 package com.fh.scm.repository.implement;
 
+import com.fh.scm.pojo.PaymentTerms;
+import com.fh.scm.pojo.Rating;
 import com.fh.scm.pojo.Supplier;
 import com.fh.scm.pojo.User;
 import com.fh.scm.repository.SupplierRepository;
@@ -13,14 +15,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import javax.persistence.criteria.*;
+import java.util.*;
 
 @Repository
 @Transactional
@@ -34,10 +30,45 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
+    public List<PaymentTerms> getAllPaymentTerms(String username) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+
+        CriteriaQuery<PaymentTerms> criteria = builder.createQuery(PaymentTerms.class);
+        Root<PaymentTerms> paymentTermsRoot = criteria.from(PaymentTerms.class);
+
+        Join<PaymentTerms, Supplier> supplierJoin = paymentTermsRoot.join("supplierSet");
+        Join<Supplier, User> userJoin = supplierJoin.join("user");
+
+        criteria.select(paymentTermsRoot).where(builder.equal(userJoin.get("username"), username)).distinct(true);
+        Query<PaymentTerms> query = session.createQuery(criteria);
+
+        return query.getResultList();
+    }
+
+    @Override
     public Supplier get(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Supplier.class, id);
+    }
+
+    @Override
+    public Supplier getByUser(User user) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Supplier> criteria = builder.createQuery(Supplier.class);
+        Root<Supplier> root = criteria.from(Supplier.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("user").get("id"), user.getId()));
+            Query<Supplier> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting supplier by user", e);
+            return null;
+        }
     }
 
     @Override
@@ -53,7 +84,7 @@ public class SupplierRepositoryImplement implements SupplierRepository {
 
             return query.getSingleResult();
         } catch (NoResultException e) {
-            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting user by phone", e);
+            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting supplier by phone", e);
             return null;
         }
     }
@@ -61,13 +92,13 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     @Override
     public void insert(Supplier supplier) {
         Session session = this.getCurrentSession();
-        session.save(supplier);
+        session.persist(supplier);
     }
 
     @Override
     public void update(Supplier supplier) {
         Session session = this.getCurrentSession();
-        session.update(supplier);
+        session.merge(supplier);
     }
 
     @Override
@@ -82,7 +113,7 @@ public class SupplierRepositoryImplement implements SupplierRepository {
         Session session = this.getCurrentSession();
         Supplier supplier = session.get(Supplier.class, id);
         supplier.setActive(false);
-        session.update(supplier);
+        session.merge(supplier);
     }
 
     @Override
@@ -102,14 +133,6 @@ public class SupplierRepositoryImplement implements SupplierRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Supplier supplier = session.get(Supplier.class, id);
-
-        return supplier != null;
     }
 
     @Override

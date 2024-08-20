@@ -21,7 +21,5 @@ public interface PaymentTermsRepository {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<PaymentTerms> getAll(Map<String, String> params);
 }

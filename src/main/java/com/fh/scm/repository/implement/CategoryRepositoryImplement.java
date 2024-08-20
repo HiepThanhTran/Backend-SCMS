@@ -40,13 +40,13 @@ public class CategoryRepositoryImplement implements CategoryRepository {
     @Override
     public void insert(Category category) {
         Session session = this.getCurrentSession();
-        session.save(category);
+        session.persist(category);
     }
 
     @Override
     public void update(Category category) {
         Session session = this.getCurrentSession();
-        session.update(category);
+        session.merge(category);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class CategoryRepositoryImplement implements CategoryRepository {
         Session session = this.getCurrentSession();
         Category category = session.get(Category.class, id);
         category.setActive(false);
-        session.update(category);
+        session.merge(category);
     }
 
     @Override
@@ -81,14 +81,6 @@ public class CategoryRepositoryImplement implements CategoryRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Category category = session.get(Category.class, id);
-
-        return category != null;
     }
 
     @Override

@@ -15,13 +15,9 @@ public interface SupplierCostingRepository {
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     void insertOrUpdate(SupplierCosting supplierCosting);
 
     Long count();
-
-    Boolean exists(Long id);
 
     List<SupplierCosting> getAll(Map<String, String> params);
 }

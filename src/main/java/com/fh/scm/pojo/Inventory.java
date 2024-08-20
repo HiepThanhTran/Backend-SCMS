@@ -14,7 +14,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "inventory")
-public class Inventory extends BaseEntity implements Serializable {
+public class Inventory extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{inventory.name.notNull}")
     @Column(nullable = false, unique = true)
@@ -24,6 +24,11 @@ public class Inventory extends BaseEntity implements Serializable {
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", nullable = false)
     private Warehouse warehouse;
 
-    @OneToMany(mappedBy = "inventory", cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
     private Set<InventoryDetails> inventoryDetailsSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Inventory[ id=" + this.id + " ]";
+    }
 }

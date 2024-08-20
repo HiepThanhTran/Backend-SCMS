@@ -18,7 +18,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "tax")
-public class Tax extends BaseEntity implements Serializable {
+public class Tax extends _BaseEntity implements Serializable {
 
     @Builder.Default
     @DecimalMin(value = "0.01", inclusive = true, message = "{tax.rate.min}")
@@ -35,4 +35,9 @@ public class Tax extends BaseEntity implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "tax", cascade = {CascadeType.PERSIST})
     private Set<Invoice> invoiceSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Tax[ id=" + this.id + " ]";
+    }
 }

@@ -36,11 +36,6 @@ public class InventoryDetailsServiceImplement implements InventoryDetailsService
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.inventoryDetailsRepository.softDelete(id);
-    }
-
-    @Override
     public void insertOrUpdate(InventoryDetails inventoryDetails) {
         this.inventoryDetailsRepository.insertOrUpdate(inventoryDetails);
     }
@@ -48,11 +43,6 @@ public class InventoryDetailsServiceImplement implements InventoryDetailsService
     @Override
     public Long count() {
         return this.inventoryDetailsRepository.count();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        return this.inventoryDetailsRepository.exists(id);
     }
 
     @Override

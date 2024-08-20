@@ -36,11 +36,6 @@ public class SupplierCostingServiceImplement implements SupplierCostingService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.supplierCostingRepository.softDelete(id);
-    }
-
-    @Override
     public void insertOrUpdate(SupplierCosting supplierCosting) {
         this.supplierCostingRepository.insertOrUpdate(supplierCosting);
     }
@@ -48,11 +43,6 @@ public class SupplierCostingServiceImplement implements SupplierCostingService {
     @Override
     public Long count() {
         return this.supplierCostingRepository.count();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        return this.supplierCostingRepository.exists(id);
     }
 
     @Override

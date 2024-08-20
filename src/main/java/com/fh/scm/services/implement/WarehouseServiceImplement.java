@@ -51,11 +51,6 @@ public class WarehouseServiceImplement implements WarehouseService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.warehouseRepository.exists(id);
-    }
-
-    @Override
     public List<Warehouse> getAll(Map<String, String> params) {
         return this.warehouseRepository.getAll(params);
     }

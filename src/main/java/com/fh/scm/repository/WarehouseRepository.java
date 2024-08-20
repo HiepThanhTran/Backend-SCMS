@@ -21,7 +21,5 @@ public interface WarehouseRepository {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Warehouse> getAll(Map<String, String> params);
 }

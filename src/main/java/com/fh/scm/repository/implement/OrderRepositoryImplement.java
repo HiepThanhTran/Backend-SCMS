@@ -40,13 +40,13 @@ public class OrderRepositoryImplement implements OrderRepository {
     @Override
     public void insert(Order order) {
         Session session = this.getCurrentSession();
-        session.save(order);
+        session.persist(order);
     }
 
     @Override
     public void update(Order order) {
         Session session = this.getCurrentSession();
-        session.update(order);
+        session.merge(order);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class OrderRepositoryImplement implements OrderRepository {
         Session session = this.getCurrentSession();
         Order order = session.get(Order.class, id);
         order.setActive(false);
-        session.update(order);
+        session.merge(order);
     }
 
     @Override
@@ -81,14 +81,6 @@ public class OrderRepositoryImplement implements OrderRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Order order = session.get(Order.class, id);
-
-        return order != null;
     }
 
     @Override

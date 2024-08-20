@@ -36,11 +36,6 @@ public class OrderDetailsServiceImplement implements OrderDetailsService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.orderDetailsRepository.softDelete(id);
-    }
-
-    @Override
     public void insertOrUpdate(OrderDetails orderDetails) {
         this.orderDetailsRepository.insertOrUpdate(orderDetails);
     }
@@ -48,11 +43,6 @@ public class OrderDetailsServiceImplement implements OrderDetailsService {
     @Override
     public Long count() {
         return this.orderDetailsRepository.count();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        return this.orderDetailsRepository.exists(id);
     }
 
     @Override

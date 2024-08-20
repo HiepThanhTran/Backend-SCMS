@@ -16,7 +16,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "customer")
-public class Customer extends BaseEntity implements Serializable {
+public class Customer extends _BaseEntity implements Serializable {
 
     @Column(nullable = false)
     @NotNull(message = "{customer.firstName.notNull}")
@@ -43,11 +43,16 @@ public class Customer extends BaseEntity implements Serializable {
 
     private Date dateOfBirth;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     public String getFullName() {
         return this.lastName + " " + this.middleName + " " + this.firstName;
+    }
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Customer[ id=" + this.id + " ]";
     }
 }

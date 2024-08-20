@@ -41,13 +41,13 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
     @Override
     public void insert(DeliverySchedule deliverySchedule) {
         Session session = this.getCurrentSession();
-        session.save(deliverySchedule);
+        session.persist(deliverySchedule);
     }
 
     @Override
     public void update(DeliverySchedule deliverySchedule) {
         Session session = this.getCurrentSession();
-        session.update(deliverySchedule);
+        session.merge(deliverySchedule);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
         Session session = this.getCurrentSession();
         DeliverySchedule deliverySchedule = session.get(DeliverySchedule.class, id);
         deliverySchedule.setActive(false);
-        session.update(deliverySchedule);
+        session.merge(deliverySchedule);
     }
 
     @Override
@@ -82,14 +82,6 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        DeliverySchedule deliverySchedule = session.get(DeliverySchedule.class, id);
-
-        return deliverySchedule != null;
     }
 
     @Override

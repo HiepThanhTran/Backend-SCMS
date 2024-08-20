@@ -15,10 +15,9 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "payment_terms")
-public class PaymentTerms extends BaseEntity implements Serializable {
+public class PaymentTerms extends _BaseEntity implements Serializable {
 
     @Builder.Default
     @NotNull(message = "{paymentTerms.discountDays.notNull}")
@@ -39,10 +38,15 @@ public class PaymentTerms extends BaseEntity implements Serializable {
     private PaymentTermType type = PaymentTermType.COD;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "paymentTerms", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "paymentTerms")
     private Set<Invoice> invoiceSet;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "paymentTerms", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Set<SupplierPaymentTerms> supplierPaymentTermsSet;
+    @ManyToMany(mappedBy = "paymentTermsSet", cascade = CascadeType.ALL)
+    private Set<Supplier> supplierSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.PaymentTerms[ id=" + this.id + " ]";
+    }
 }

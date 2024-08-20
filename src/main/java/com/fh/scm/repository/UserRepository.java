@@ -25,7 +25,5 @@ public interface UserRepository {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<User> getAll(Map<String, String> params);
 }

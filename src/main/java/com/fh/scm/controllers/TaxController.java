@@ -1,6 +1,6 @@
 package com.fh.scm.controllers;
 
-import com.fh.scm.dto.error.ErrorResponse;
+import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.Tax;
 import com.fh.scm.services.TaxService;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +37,10 @@ public class TaxController {
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addTax(HttpServletRequest request, Model model, @ModelAttribute(value = "tax") @Valid Tax tax,
-                              BindingResult bindingResult) {
+                         BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_tax";
@@ -56,10 +56,10 @@ public class TaxController {
 
     @RequestMapping(path = "/edit/{taxId}", method = {RequestMethod.GET, RequestMethod.PATCH})
     public String editTax(HttpServletRequest request, Model model, @PathVariable(value = "taxId") Long id,
-                               @ModelAttribute(value = "tax") @Valid Tax tax, BindingResult bindingResult) {
+                          @ModelAttribute(value = "tax") @Valid Tax tax, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_tax";

@@ -10,21 +10,20 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "inventory_details")
-public class InventoryDetails extends BaseEntity implements Serializable {
+public class InventoryDetails extends _BaseEntity implements Serializable {
 
     @Builder.Default
     @Column(nullable = false, columnDefinition = "float default 0")
     private Float quantity = 0.0f;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
 
     @JsonIgnore
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "inventory_id", referencedColumnName = "id", nullable = false)
     private Inventory inventory;
 }

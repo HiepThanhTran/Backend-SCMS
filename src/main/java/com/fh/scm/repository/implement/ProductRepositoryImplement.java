@@ -38,13 +38,13 @@ public class ProductRepositoryImplement implements ProductRepository {
     @Override
     public void insert(Product Product) {
         Session session = this.getCurrentSession();
-        session.save(Product);
+        session.persist(Product);
     }
 
     @Override
     public void update(Product Product) {
         Session session = this.getCurrentSession();
-        session.update(Product);
+        session.merge(Product);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ProductRepositoryImplement implements ProductRepository {
         Session session = this.getCurrentSession();
         Product Product = session.get(Product.class, id);
         Product.setActive(false);
-        session.update(Product);
+        session.merge(Product);
     }
 
     @Override
@@ -79,14 +79,6 @@ public class ProductRepositoryImplement implements ProductRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Product product = session.get(Product.class, id);
-
-        return product != null;
     }
 
     @Override

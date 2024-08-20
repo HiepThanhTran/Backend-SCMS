@@ -39,13 +39,13 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
     @Override
     public void insert(Invoice invoice) {
         Session session = getCurrentSession();
-        session.save(invoice);
+        session.persist(invoice);
     }
 
     @Override
     public void update(Invoice invoice) {
         Session session = getCurrentSession();
-        session.update(invoice);
+        session.merge(invoice);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
         Session session = getCurrentSession();
         Invoice invoice = session.get(Invoice.class, id);
         invoice.setActive(false);
-        session.update(invoice);
+        session.merge(invoice);
     }
 
     @Override
@@ -80,14 +80,6 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Invoice invoice = session.get(Invoice.class, id);
-
-        return invoice != null;
     }
 
     @Override

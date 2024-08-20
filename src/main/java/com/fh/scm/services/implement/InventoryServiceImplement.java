@@ -51,11 +51,6 @@ public class InventoryServiceImplement implements InventoryService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.inventoryRepository.exists(id);
-    }
-
-    @Override
     public List<Inventory> getAll(Map<String, String> params) {
         return this.inventoryRepository.getAll(params);
     }

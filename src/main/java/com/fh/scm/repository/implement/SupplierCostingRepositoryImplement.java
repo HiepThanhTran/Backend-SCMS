@@ -38,13 +38,13 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
     @Override
     public void insert(SupplierCosting supplierCosting) {
         Session session = this.getCurrentSession();
-        session.save(supplierCosting);
+        session.persist(supplierCosting);
     }
 
     @Override
     public void update(SupplierCosting supplierCosting) {
         Session session = this.getCurrentSession();
-        session.update(supplierCosting);
+        session.merge(supplierCosting);
     }
 
     @Override
@@ -52,14 +52,6 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
         Session session = this.getCurrentSession();
         SupplierCosting supplierCosting = session.get(SupplierCosting.class, id);
         session.delete(supplierCosting);
-    }
-
-    @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        SupplierCosting supplierCosting = session.get(SupplierCosting.class, id);
-        supplierCosting.setActive(false);
-        session.update(supplierCosting);
     }
 
     @Override
@@ -79,14 +71,6 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        SupplierCosting supplierCosting = session.get(SupplierCosting.class, id);
-
-        return supplierCosting != null;
     }
 
     @Override

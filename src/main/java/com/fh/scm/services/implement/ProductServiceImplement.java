@@ -51,11 +51,6 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.productRepository.exists(id);
-    }
-
-    @Override
     public List<Product> getAll(Map<String, String> params) {
         return this.productRepository.getAll(params);
     }

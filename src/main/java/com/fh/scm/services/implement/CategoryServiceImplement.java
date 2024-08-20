@@ -51,11 +51,6 @@ public class CategoryServiceImplement implements CategoryService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.categoryRepository.exists(id);
-    }
-
-    @Override
     public List<Category> getAll(Map<String, String> params) {
         return this.categoryRepository.getAll(params);
     }

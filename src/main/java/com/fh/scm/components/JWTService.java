@@ -13,7 +13,7 @@ import java.util.Date;
 @Component
 public class JWTService {
 
-    public static final String SECRET_KEY = "11111111111111111111111111111111";
+    public static final String SECRET_KEY = "77777777777777777777777777777777";
     public static final byte[] SHARED_SECRET_KEY = SECRET_KEY.getBytes();
     public static final int EXPIRE_TIME = 86400000;
 

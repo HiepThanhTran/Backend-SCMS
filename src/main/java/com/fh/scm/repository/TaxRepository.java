@@ -21,7 +21,5 @@ public interface TaxRepository {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Tax> getAll(Map<String, String> params);
 }

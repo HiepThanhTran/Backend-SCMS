@@ -51,11 +51,6 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.orderRepository.exists(id);
-    }
-
-    @Override
     public List<Order> getAll(Map<String, String> params) {
         return this.orderRepository.getAll(params);
     }

@@ -21,7 +21,5 @@ public interface CategoryRepository {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Category> getAll(Map<String, String> params);
 }

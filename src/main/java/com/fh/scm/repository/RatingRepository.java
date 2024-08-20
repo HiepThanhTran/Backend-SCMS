@@ -9,6 +9,8 @@ public interface RatingRepository {
 
     Rating get(Long id);
 
+    Rating getByUserAndSupplier(Long userId, Long supplierId);
+
     void insert(Rating rating);
 
     void update(Rating rating);
@@ -20,8 +22,6 @@ public interface RatingRepository {
     void insertOrUpdate(Rating rating);
 
     Long count();
-
-    Boolean exists(Long id);
 
     List<Rating> getAll(Map<String, String> params);
 }

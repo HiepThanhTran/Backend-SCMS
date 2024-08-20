@@ -15,7 +15,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "tag")
-public class Tag extends BaseEntity implements Serializable {
+public class Tag extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{tag.name.notNull}")
     @Column(nullable = false, unique = true)
@@ -24,6 +24,11 @@ public class Tag extends BaseEntity implements Serializable {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "tag", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Set<ProductTag> productTagSet;
+    @ManyToMany(mappedBy = "tagSet")
+    private Set<Product> productTagSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Tag[ id=" + this.id + " ]";
+    }
 }

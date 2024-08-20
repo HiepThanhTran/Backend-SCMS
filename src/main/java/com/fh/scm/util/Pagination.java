@@ -12,15 +12,10 @@ public class Pagination {
 
     public static void paginator(Query<?> query, Map<String, String> params) {
         if (params != null) {
-            String pageStr = Optional.ofNullable(params.get("page"))
-                    .filter(page -> !page.isEmpty())
-                    .orElse("1");
+            String pageStr = params.getOrDefault("page", "1");
+            String sizeStr = params.getOrDefault("size", String.valueOf(Constants.DEFAULT_PAGE_SIZE));
 
-            String limitStr = Optional.ofNullable(params.get("limit"))
-                    .filter(limit -> !limit.isEmpty())
-                    .orElse(String.valueOf(Constants.DEFAULT_PAGE_SIZE));
-
-            int page, limit;
+            int page, size;
             try {
                 page = Integer.parseInt(pageStr);
                 if (page < 1) {
@@ -30,17 +25,17 @@ public class Pagination {
                 page = 1;
             }
             try {
-                limit = Integer.parseInt(limitStr);
-                if (limit < 1) {
-                    limit = Constants.DEFAULT_PAGE_SIZE;
+                size = Integer.parseInt(sizeStr);
+                if (size < 1) {
+                    size = Constants.DEFAULT_PAGE_SIZE;
                 }
             } catch (NumberFormatException e) {
-                limit = Constants.DEFAULT_PAGE_SIZE;
+                size = Constants.DEFAULT_PAGE_SIZE;
             }
 
-            int start = (page - 1) * limit;
+            int start = (page - 1) * size;
             query.setFirstResult(start);
-            query.setMaxResults(limit);
+            query.setMaxResults(size);
         }
     }
 }

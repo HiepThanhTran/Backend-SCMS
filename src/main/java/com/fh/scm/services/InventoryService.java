@@ -21,7 +21,5 @@ public interface InventoryService {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Inventory> getAll(Map<String, String> params);
 }

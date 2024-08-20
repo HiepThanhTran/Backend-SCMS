@@ -40,13 +40,13 @@ public class WarehouseRepositoryImplement implements WarehouseRepository {
     @Override
     public void insert(Warehouse warehouse) {
         Session session = this.getCurrentSession();
-        session.save(warehouse);
+        session.persist(warehouse);
     }
 
     @Override
     public void update(Warehouse warehouse) {
         Session session = this.getCurrentSession();
-        session.update(warehouse);
+        session.merge(warehouse);
     }
 
     @Override
@@ -54,6 +54,7 @@ public class WarehouseRepositoryImplement implements WarehouseRepository {
         Session session = this.getCurrentSession();
         Warehouse warehouse = session.get(Warehouse.class, id);
         session.delete(warehouse);
+        session.merge(warehouse);
     }
 
     @Override
@@ -81,14 +82,6 @@ public class WarehouseRepositoryImplement implements WarehouseRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Warehouse warehouse = session.get(Warehouse.class, id);
-
-        return warehouse != null;
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "\"order\"")
-public class Order extends BaseEntity implements Serializable {
+public class Order extends _BaseEntity implements Serializable {
 
     @Column(name = "expected_delivery")
     private Date expectedDelivery;
@@ -45,9 +45,14 @@ public class Order extends BaseEntity implements Serializable {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "delivery_schedule_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "delivery_schedule_id", referencedColumnName = "id")
     private DeliverySchedule deliverySchedule;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetails> orderDetailsSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Order[ id=" + this.id + " ]";
+    }
 }

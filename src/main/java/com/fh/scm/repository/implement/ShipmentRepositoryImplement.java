@@ -39,13 +39,13 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
     @Override
     public void insert(Shipment shipment) {
         Session session = this.getCurrentSession();
-        session.save(shipment);
+        session.persist(shipment);
     }
 
     @Override
     public void update(Shipment shipment) {
         Session session = this.getCurrentSession();
-        session.update(shipment);
+        session.merge(shipment);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
         Session session = this.getCurrentSession();
         Shipment shipment = session.get(Shipment.class, id);
         shipment.setActive(false);
-        session.update(shipment);
+        session.merge(shipment);
     }
 
     @Override
@@ -80,14 +80,6 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Shipment shipment = session.get(Shipment.class, id);
-
-        return shipment != null;
     }
 
     @Override

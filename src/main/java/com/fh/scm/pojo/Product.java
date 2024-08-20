@@ -17,7 +17,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "product")
-public class Product extends BaseEntity implements Serializable {
+public class Product extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{product.name.notNull}")
     @Column(nullable = false, unique = true)
@@ -37,24 +37,35 @@ public class Product extends BaseEntity implements Serializable {
     @Column(name = "expiry_date", nullable = false)
     private Date expiryDate;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST}, optional = false)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Set<ProductUnit> productUnitSet;
+    @ManyToMany
+    @JoinTable(name = "product_unit",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "unit_id"))
+    private Set<Unit> unitSet;
 
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Set<ProductTag> productTagSet;
+    @ManyToMany
+    @JoinTable(name = "product_tag",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tagSet;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OrderDetails> orderDetailsSet;
 
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<SupplierCosting> supplierCostingSet;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<InventoryDetails> inventoryDetailsSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Product[ id=" + this.id + " ]";
+    }
 }

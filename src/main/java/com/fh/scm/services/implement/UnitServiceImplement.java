@@ -51,11 +51,6 @@ public class UnitServiceImplement implements UnitService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.unitRepository.exists(id);
-    }
-
-    @Override
     public List<Unit> getAll(Map<String, String> params) {
         return this.unitRepository.getAll(params);
     }

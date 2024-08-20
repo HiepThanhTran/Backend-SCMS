@@ -51,11 +51,6 @@ public class DeliveryScheduleServiceImplement implements DeliveryScheduleService
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.deliveryScheduleRepository.exists(id);
-    }
-
-    @Override
     public List<DeliverySchedule> getAll(Map<String, String> params) {
         return this.deliveryScheduleRepository.getAll(params);
     }

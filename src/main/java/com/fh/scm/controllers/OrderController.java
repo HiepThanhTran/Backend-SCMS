@@ -1,6 +1,6 @@
 package com.fh.scm.controllers;
 
-import com.fh.scm.dto.error.ErrorResponse;
+import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.Order;
 import com.fh.scm.services.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public String listOrder(Model model, @RequestParam(required = false, defaultValue = "")Map<String, String> params) {
+    public String listOrder(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("orders", orderService.getAll(params));
 
         return "orders";
@@ -40,7 +40,7 @@ public class OrderController {
                            BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_order";
@@ -59,7 +59,7 @@ public class OrderController {
                             @ModelAttribute(value = "order") @Valid Order order, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_order";

@@ -51,11 +51,6 @@ public class TagServiceImplement implements TagService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.tagRepository.exists(id);
-    }
-
-    @Override
     public List<Tag> getAll(Map<String, String> params) {
         return this.tagRepository.getAll(params);
     }

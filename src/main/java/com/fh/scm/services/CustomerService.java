@@ -23,7 +23,5 @@ public interface CustomerService {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Customer> getAll(Map<String, String> params);
 }

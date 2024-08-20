@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "supplier_costing")
-public class SupplierCosting extends BaseEntity implements Serializable {
+public class SupplierCosting extends _BaseEntity implements Serializable {
 
     @Builder.Default
     @Column(name = "unit_price", nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
@@ -25,11 +25,12 @@ public class SupplierCosting extends BaseEntity implements Serializable {
     private BigDecimal shippingCost = BigDecimal.ZERO;
 
     @JsonIgnore
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "supplier_id", referencedColumnName = "id", nullable = false)
     private Supplier supplier;
 }
+

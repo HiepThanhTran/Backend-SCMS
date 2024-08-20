@@ -56,11 +56,6 @@ public class CustomerServiceImplement implements CustomerService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.customerRepository.exists(id);
-    }
-
-    @Override
     public List<Customer> getAll(Map<String, String> params) {
         return this.customerRepository.getAll(params);
     }

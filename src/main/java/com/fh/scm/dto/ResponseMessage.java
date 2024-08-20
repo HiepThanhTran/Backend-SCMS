@@ -1,4 +1,4 @@
-package com.fh.scm.dto.error;
+package com.fh.scm.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,15 +11,15 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorResponse {
+public class ResponseMessage {
 
     private String message;
 
-    public static List<ErrorResponse> fromBindingResult(BindingResult bindingResult) {
+    public static List<ResponseMessage> fromBindingResult(BindingResult bindingResult) {
         return bindingResult
                 .getAllErrors()
                 .stream()
-                .map(e -> new ErrorResponse(e.getDefaultMessage()))
+                .map(e -> new ResponseMessage(e.getDefaultMessage()))
                 .collect(Collectors.toList());
     }
 }

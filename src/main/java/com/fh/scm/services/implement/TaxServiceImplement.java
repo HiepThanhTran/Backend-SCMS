@@ -51,11 +51,6 @@ public class TaxServiceImplement implements TaxService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.taxRepository.exists(id);
-    }
-
-    @Override
     public List<Tax> getAll(Map<String, String> params) {
         return this.taxRepository.getAll(params);
     }

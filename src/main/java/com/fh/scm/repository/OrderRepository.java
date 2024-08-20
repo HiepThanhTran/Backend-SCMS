@@ -22,7 +22,5 @@ public interface OrderRepository {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Order> getAll(Map<String, String> params);
 }

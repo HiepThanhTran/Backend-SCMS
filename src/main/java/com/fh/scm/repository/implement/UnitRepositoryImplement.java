@@ -40,13 +40,13 @@ public class UnitRepositoryImplement implements UnitRepository {
     @Override
     public void insert(Unit unit) {
         Session session = this.getCurrentSession();
-        session.save(unit);
+        session.persist(unit);
     }
 
     @Override
     public void update(Unit unit) {
         Session session = this.getCurrentSession();
-        session.update(unit);
+        session.merge(unit);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class UnitRepositoryImplement implements UnitRepository {
         Session session = this.getCurrentSession();
         Unit unit = session.get(Unit.class, id);
         unit.setActive(false);
-        session.update(unit);
+        session.merge(unit);
     }
 
     @Override
@@ -81,14 +81,6 @@ public class UnitRepositoryImplement implements UnitRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        Unit unit = session.get(Unit.class, id);
-
-        return unit != null;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.fh.scm.services;
 
 import com.fh.scm.dto.api.user.UserRequestRegister;
-import com.fh.scm.dto.api.user.UserRequestUpdate;
 import com.fh.scm.dto.api.user.UserResponse;
+import com.fh.scm.dto.api.user.UserRequestUpdate;
 import com.fh.scm.pojo.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -11,7 +11,9 @@ import java.util.Map;
 
 public interface UserService extends UserDetailsService {
 
-    void createAdmin();
+    UserResponse getUserResponse(User user);
+
+    List<UserResponse> getAllUserResponse(Map<String, String> params);
 
     boolean authenticateUser(String username, String password);
 
@@ -19,13 +21,11 @@ public interface UserService extends UserDetailsService {
 
     UserResponse register(UserRequestRegister userRequestRegister);
 
-    Boolean confirm(String username);
+    Boolean confirmUser(String username);
 
-    UserResponse profile(String username);
+    UserResponse getProfileUser(String username);
 
-    UserResponse updateProfile(String username, UserRequestUpdate userRequestUpdate);
-
-    UserResponse getUserResponse(Long id);
+    UserResponse updateProfileUser(String username, UserRequestUpdate userRequestUpdate);
 
     User get(Long id);
 
@@ -35,7 +35,7 @@ public interface UserService extends UserDetailsService {
 
     void insert(User user);
 
-    void updateProfile(User user);
+    void updateProfileUser(User user);
 
     void insertOrUpdate(User user);
 
@@ -45,7 +45,5 @@ public interface UserService extends UserDetailsService {
 
     Long count();
 
-    Boolean exists(Long id);
-
-    List<UserResponse> getAll(Map<String, String> params);
+    List<User> getAll(Map<String, String> params);
 }

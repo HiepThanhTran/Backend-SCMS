@@ -51,11 +51,6 @@ public class PaymentTermsServiceImplement implements PaymentTermsService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.paymentTermsRepository.exists(id);
-    }
-
-    @Override
     public List<PaymentTerms> getAll(Map<String, String> params) {
         return this.paymentTermsRepository.getAll(params);
     }

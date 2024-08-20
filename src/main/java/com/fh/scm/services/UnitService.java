@@ -21,7 +21,5 @@ public interface UnitService {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Unit> getAll(Map<String, String> params);
 }

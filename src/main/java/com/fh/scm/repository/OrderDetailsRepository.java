@@ -15,13 +15,9 @@ public interface OrderDetailsRepository {
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     void insertOrUpdate(OrderDetails orderDetails);
 
     Long count();
-
-    Boolean exists(Long id);
 
     List<OrderDetails> getAll(Map<String, String> params);
 }

@@ -3,7 +3,6 @@ package com.fh.scm.services.implement;
 import com.fh.scm.dto.api.user.UserRequestRegister;
 import com.fh.scm.dto.api.user.UserRequestUpdate;
 import com.fh.scm.dto.api.user.UserResponse;
-import com.fh.scm.enums.UserRole;
 import com.fh.scm.exceptions.UserException;
 import com.fh.scm.pojo.Customer;
 import com.fh.scm.pojo.Shipper;
@@ -13,7 +12,7 @@ import com.fh.scm.repository.CustomerRepository;
 import com.fh.scm.repository.ShipperRepository;
 import com.fh.scm.repository.SupplierRepository;
 import com.fh.scm.repository.UserRepository;
-import com.fh.scm.services.CloudinaryService;
+import com.fh.scm.services._CloudinaryService;
 import com.fh.scm.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,12 +21,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service("userDetailsService")
@@ -44,7 +47,7 @@ public class UserServiceImplement implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private CloudinaryService cloudinaryService;
+    private _CloudinaryService cloudinaryService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -61,24 +64,23 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public void createAdmin() {
-        Map<String, String> params = Map.of("role", UserRole.ADMIN.name());
-        List<User> users = this.userRepository.getAll(params);
-        if (!users.isEmpty()) {
-            System.out.println("Admin user already exists.");
-            return;
-        }
-
-        User admin = User.builder()
-                .email("admin@scm.com")
-                .username("adminscm")
-                .password(passwordEncoder.encode("admin@123"))
-                .userRole(UserRole.ADMIN)
-                .isConfirm(true)
+    public UserResponse getUserResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .avatar(user.getAvatar())
+                .role(user.getUserRole().getDisplayName())
+                .isConfirm(user.getIsConfirm())
+                .lastLogin(user.getLastLogin())
                 .build();
+    }
 
-        this.userRepository.insertOrUpdate(admin);
-        System.out.println("Admin user created successfully.");
+    @Override
+    public List<UserResponse> getAllUserResponse(Map<String, String> params) {
+        List<User> users = this.userRepository.getAll(params);
+
+        return users.stream().map(this::getUserResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -104,7 +106,7 @@ public class UserServiceImplement implements UserService {
             throw new UserException("Tên đăng nhập đã tồn tại");
         }
 
-        user = this.userRepository.getByUsername(userRequestRegister.getEmail());
+        user = this.userRepository.getByEmail(userRequestRegister.getEmail());
         if (user != null) {
             throw new UserException("Email đã được liên kết đến tài khoản khác");
         }
@@ -123,35 +125,10 @@ public class UserServiceImplement implements UserService {
                 .build();
 
         switch (user.getUserRole()) {
-            case ADMIN:
+            case ROLE_ADMIN:
                 user.setIsConfirm(true);
                 break;
-            case SUPPLIER:
-                Supplier supplier;
-                supplier = this.supplierRepository.getByPhone(userRequestRegister.getPhone());
-                if (supplier != null) {
-                    throw new UserException("Số điện thoại đã được liên kết đến tài khoản khác");
-                }
-
-                supplier = Supplier.builder()
-                        .name(userRequestRegister.getName())
-                        .address(userRequestRegister.getAddress())
-                        .phone(userRequestRegister.getPhone())
-                        .contactInfo(userRequestRegister.getContactInfo())
-                        .supplierPaymentTermsSet(userRequestRegister.getSupplierPaymentTermsSet())
-                        .user(user)
-                        .build();
-                user.setSupplier(supplier);
-                break;
-            case SHIPPER:
-                Shipper shipper = Shipper.builder()
-                        .name(userRequestRegister.getName())
-                        .contactInfo(userRequestRegister.getContactInfo())
-                        .user(user)
-                        .build();
-                user.setShipper(shipper);
-                break;
-            case CUSTOMER:
+            case ROLE_CUSTOMER:
                 Customer customer;
                 customer = this.customerRepository.getByPhone(userRequestRegister.getPhone());
                 if (customer != null) {
@@ -168,9 +145,33 @@ public class UserServiceImplement implements UserService {
                         .build();
                 user.setCustomer(customer);
                 break;
-            case DISTRIBUTOR:
+            case ROLE_SUPPLIER:
+                Supplier supplier;
+                supplier = this.supplierRepository.getByPhone(userRequestRegister.getPhone());
+                if (supplier != null) {
+                    throw new UserException("Số điện thoại đã được liên kết đến tài khoản khác");
+                }
+
+                supplier = Supplier.builder()
+                        .name(userRequestRegister.getName())
+                        .address(userRequestRegister.getAddress())
+                        .phone(userRequestRegister.getPhone())
+                        .contactInfo(userRequestRegister.getContactInfo())
+                        .user(user)
+                        .build();
+                user.setSupplier(supplier);
                 break;
-            case MANUFACTURER:
+            case ROLE_DISTRIBUTOR:
+                break;
+            case ROLE_MANUFACTURER:
+                break;
+            case ROLE_SHIPPER:
+                Shipper shipper = Shipper.builder()
+                        .name(userRequestRegister.getName())
+                        .contactInfo(userRequestRegister.getContactInfo())
+                        .user(user)
+                        .build();
+                user.setShipper(shipper);
                 break;
             default:
                 break;
@@ -178,18 +179,11 @@ public class UserServiceImplement implements UserService {
 
         this.userRepository.insert(user);
 
-        return UserResponse.builder()
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .avatar(user.getAvatar())
-                .role(user.getUserRole().getDisplayName())
-                .isConfirm(user.getIsConfirm())
-                .lastLogin(user.getLastLogin())
-                .build();
+        return this.getUserResponse(user);
     }
 
     @Override
-    public Boolean confirm(String username) {
+    public Boolean confirmUser(String username) {
         User user = this.userRepository.getByUsername(username);
         if (user != null && !user.getIsConfirm()) {
             user.setIsConfirm(true);
@@ -202,68 +196,47 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public UserResponse profile(String username) {
+    public UserResponse getProfileUser(String username) {
         User user = this.userRepository.getByUsername(username);
 
-        return UserResponse.builder()
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .avatar(user.getAvatar())
-                .role(user.getUserRole().getDisplayName())
-                .isConfirm(user.getIsConfirm())
-                .lastLogin(user.getLastLogin())
-                .build();
+        return this.getUserResponse(user);
     }
 
     @Override
-    public UserResponse updateProfile(String username, UserRequestUpdate userRequestUpdate) {
+    public UserResponse updateProfileUser(String username, UserRequestUpdate userRequestUpdate) {
         User user = this.userRepository.getByUsername(username);
 
         if (!user.getIsConfirm()) {
             throw new UserException("Tài khoản chưa được xác nhận");
         }
 
-        if (userRequestUpdate.getAvatar() != null && !userRequestUpdate.getAvatar().isEmpty()) {
-            String avatarUrl = this.cloudinaryService.uploadImage(userRequestUpdate.getAvatar());
-            user.setAvatar(avatarUrl);
-        }
+        Field[] fields = UserRequestUpdate.class.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object value = field.get(userRequestUpdate);
 
-        if (userRequestUpdate.getEmail() != null && !userRequestUpdate.getEmail().isEmpty()) {
-            user.setEmail(userRequestUpdate.getEmail());
-        }
+                if (value != null && !value.toString().isEmpty()) {
+                    Field userField = User.class.getDeclaredField(field.getName());
+                    userField.setAccessible(true);
 
-        if (userRequestUpdate.getUsername() != null && !userRequestUpdate.getUsername().isEmpty()) {
-            user.setUsername(userRequestUpdate.getUsername());
-        }
-
-        if (userRequestUpdate.getPassword() != null && !userRequestUpdate.getPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(userRequestUpdate.getPassword()));
+                    if (field.getName().equals("avatar")) {
+                        String avatarUrl = this.cloudinaryService.uploadImage((MultipartFile) value);
+                        userField.set(user, avatarUrl);
+                    } else if (field.getName().equals("password")) {
+                        userField.set(user, passwordEncoder.encode(value.toString()));
+                    } else {
+                        userField.set(user, value);
+                    }
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                Logger.getLogger(UserServiceImplement.class.getName()).log(Level.SEVERE, null, e);
+            }
         }
 
         this.userRepository.update(user);
 
-        return UserResponse.builder()
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .avatar(user.getAvatar())
-                .role(user.getUserRole().getDisplayName())
-                .isConfirm(user.getIsConfirm())
-                .lastLogin(user.getLastLogin())
-                .build();
-    }
-
-    @Override
-    public UserResponse getUserResponse(Long id) {
-        User user = this.userRepository.get(id);
-
-        return UserResponse.builder()
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .avatar(user.getAvatar())
-                .role(user.getUserRole().getDisplayName())
-                .isConfirm(user.getIsConfirm())
-                .lastLogin(user.getLastLogin())
-                .build();
+        return this.getUserResponse(user);
     }
 
     @Override
@@ -287,7 +260,7 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public void updateProfile(User user) {
+    public void updateProfileUser(User user) {
         this.userRepository.update(user);
     }
 
@@ -312,22 +285,7 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public Boolean exists(Long id) {
-        return this.userRepository.exists(id);
-    }
-
-    @Override
-    public List<UserResponse> getAll(Map<String, String> params) {
-        List<User> users = this.userRepository.getAll(params);
-
-        return users.stream().map(user -> UserResponse.builder()
-                        .email(user.getEmail())
-                        .username(user.getUsername())
-                        .avatar(user.getAvatar())
-                        .role(user.getUserRole().getDisplayName())
-                        .isConfirm(user.getIsConfirm())
-                        .lastLogin(user.getLastLogin())
-                        .build())
-                .collect(Collectors.toList());
+    public List<User> getAll(Map<String, String> params) {
+        return this.userRepository.getAll(params);
     }
 }

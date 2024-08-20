@@ -16,7 +16,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "warehouse")
-public class Warehouse extends BaseEntity implements Serializable {
+public class Warehouse extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{warehouse.name.notNull}")
     @Column(nullable = false, unique = true)
@@ -36,10 +36,15 @@ public class Warehouse extends BaseEntity implements Serializable {
     @Column(nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
     private BigDecimal cost = BigDecimal.ZERO;
 
-    @OneToMany(mappedBy = "warehouse", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL)
     private Set<Inventory> inventorySet;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "warehouse", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL)
     private Set<Shipment> shipmentSet;
+
+    @Override
+    public String toString() {
+        return "com.fh.scm.pojo.Warehouse[ id=" + this.id + " ]";
+    }
 }

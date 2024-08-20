@@ -1,7 +1,6 @@
 package com.fh.scm.controllers;
 
-import com.fh.scm.dto.error.ErrorResponse;
-import com.fh.scm.pojo.Category;
+import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.Product;
 import com.fh.scm.services.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public String listProducts(Model model, @RequestParam(required = false, defaultValue = "")Map<String, String> params) {
+    public String listProducts(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("products", productService.getAll(params));
 
         return "products";
@@ -41,7 +40,7 @@ public class ProductController {
                              BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_product";
@@ -60,7 +59,7 @@ public class ProductController {
                               @ModelAttribute(value = "product") @Valid Product product, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ErrorResponse> errors = ErrorResponse.fromBindingResult(bindingResult);
+                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_product";

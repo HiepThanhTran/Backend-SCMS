@@ -21,7 +21,5 @@ public interface ShipperService {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<Shipper> getAll(Map<String, String> params);
 }

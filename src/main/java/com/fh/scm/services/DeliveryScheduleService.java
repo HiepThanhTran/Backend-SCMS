@@ -21,7 +21,5 @@ public interface DeliveryScheduleService {
 
     Long count();
 
-    Boolean exists(Long id);
-
     List<DeliverySchedule> getAll(Map<String, String> params);
 }

@@ -27,8 +27,6 @@ public class UserRepositoryImplement implements UserRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
-    @Autowired
-    private PasswordEncoder passEncoder;
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
@@ -80,13 +78,13 @@ public class UserRepositoryImplement implements UserRepository {
     @Override
     public void insert(User user) {
         Session session = this.getCurrentSession();
-        session.save(user);
+        session.persist(user);
     }
 
     @Override
     public void update(User user) {
         Session session = this.getCurrentSession();
-        session.update(user);
+        session.merge(user);
     }
 
     @Override
@@ -107,7 +105,7 @@ public class UserRepositoryImplement implements UserRepository {
         Session session = this.getCurrentSession();
         User user = session.get(User.class, id);
         user.setActive(false);
-        session.update(user);
+        session.merge(user);
     }
 
     @Override
@@ -121,14 +119,6 @@ public class UserRepositoryImplement implements UserRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public Boolean exists(Long id) {
-        Session session = this.getCurrentSession();
-        User user = session.get(User.class, id);
-
-        return user != null;
     }
 
     @Override
