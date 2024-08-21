@@ -24,24 +24,24 @@ a {
     --hover-color: #3b7ddd;
 }
 
-/*Header*/
-.navbar-custom{
+/* Header */
+.navbar-custom {
     background-color: var(--background);
 }
 
-.navbar-custom .navbar-custom__logo{
+.navbar-custom .navbar-custom__logo {
     font-size: 1.25rem;
     color: var(--text-color-white);
     font-weight: 600;
 }
 
-.navbar-custom .navbar-custome__menu .navbar-custome__menu--item a{
+.navbar-custom .navbar-custome__menu .navbar-custome__menu--item a {
     font-size: 1rem;
     font-weight: 500;
     transition: all 0.3s ease;
 }
 
-.navbar-custom .navbar-custome__menu .navbar-custome__menu--item:hover{
+.navbar-custom .navbar-custome__menu .navbar-custome__menu--item:hover {
     color: var(--text-color-white);
 }
 
@@ -139,7 +139,12 @@ form label {
     color: var(--text-color);
 }
 
-/* Input chung */
+/* All input */
+.form-group{
+    margin-bottom: -20px;
+}
+
+form input[type="numberDecimal"],
 form input[type="text"],
 form input[type="tel"],
 form input[type="date"] {
@@ -150,6 +155,7 @@ form input[type="date"] {
     color: var(--text-color);
 }
 
+form input[type="numberDecimal"]:focus,
 form input[type="text"]:focus,
 form input[type="tel"]:focus,
 form input[type="date"]:focus {
@@ -158,7 +164,7 @@ form input[type="date"]:focus {
     box-shadow: 0 0 0 2px rgba(59, 125, 219, 0.2);
 }
 
-/* Giới tính */
+/* Input Gender */
 .gender-group {
     display: flex;
     gap: 15px;
@@ -187,10 +193,9 @@ form input[type="submit"]:hover {
     background-color: #3367d6;
 }
 
-
-/*Footer*/
-.footer__container{
+/* Footer */
+.footer__container {
     position: fixed;
-    botttom: 0;
+    bottom: 0;
     background-color: var(--background);
 }

@@ -27,14 +27,7 @@ public class InventoryController {
 
         return "inventories";
     }
-
-    @GetMapping(path = "/{inventoryId}")
-    public String retrieveInventory(@PathVariable(value = "inventoryId") Long id, Model model) {
-        model.addAttribute("inventory", inventoryService.get(id));
-
-        return "inventory";
-    }
-
+    
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addInventory(HttpServletRequest request, Model model, @ModelAttribute(value = "inventory") @Valid Inventory inventory,
                                BindingResult bindingResult) {

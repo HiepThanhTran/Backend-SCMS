@@ -28,13 +28,6 @@ public class DeliveryScheduleController {
         return "delivery_schedules";
     }
 
-    @GetMapping(path = "/{deliveryScheduleId}")
-    public String retrieveDeliverySchedule(@PathVariable(value = "deliveryScheduleId") Long id, Model model) {
-        model.addAttribute("deliverySchedule", deliveryScheduleService.get(id));
-
-        return "delivery_schedule";
-    }
-
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addDeliverySchedule(HttpServletRequest request, Model model, @ModelAttribute(value = "deliverySchedule") @Valid DeliverySchedule deliverySchedule,
                                       BindingResult bindingResult) {

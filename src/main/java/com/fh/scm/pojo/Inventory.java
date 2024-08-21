@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
@@ -17,6 +18,7 @@ import java.util.Set;
 public class Inventory extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{inventory.name.notNull}")
+    @NotBlank(message = "Tên hàng tồn kho không được rỗng")
     @Column(nullable = false, unique = true)
     private String name;
 

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,16 +29,9 @@ public class WarehouseController {
         return "warehouses";
     }
 
-    @GetMapping(path = "/{warehouseId}")
-    public String retrieveWarehouse(@PathVariable(value = "warehouseId") Long id, Model model) {
-        model.addAttribute("warehouse", warehouseService.get(id));
-
-        return "warehouse";
-    }
-
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addWarehouse(HttpServletRequest request, Model model, @ModelAttribute(value = "warehouse") @Valid Warehouse warehouse,
-                               BindingResult bindingResult) {
+            BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
@@ -54,10 +48,10 @@ public class WarehouseController {
         return "add_warehouse";
     }
 
-    @RequestMapping(path = "/edit/{warehouseId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{warehouseId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editWarehouse(HttpServletRequest request, Model model, @PathVariable(value = "warehouseId") Long id,
-                                @ModelAttribute(value = "warehouse") @Valid Warehouse warehouse, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+            @ModelAttribute(value = "warehouse") @Valid Warehouse warehouse, BindingResult bindingResult) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
@@ -76,6 +70,7 @@ public class WarehouseController {
     }
 
     @DeleteMapping(path = "/delete/{warehouseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteWarehouse(@PathVariable(value = "warehouseId") Long id) {
         warehouseService.delete(id);
 

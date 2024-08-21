@@ -2,11 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<c:url value="/admin/categories/edit/${category.id}" var="editCategory"/>
+<c:url value="/admin/tags/edit/${tag.id}" var="editTag"/>
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="text-center list__title">Chỉnh sửa danh mục</h1>
+        <h1 class="text-center list__title">Chỉnh sửa tag</h1>
     </div>
 </div>
 
@@ -18,11 +18,11 @@
     </c:forEach>
 </c:if>
 
-<form:form id="editCategoryForm" method="post" modelAttribute="category" action="${editCategory}">
+<form:form id="editTagForm" method="post" modelAttribute="tag" action="${editTag}">
     <form:hidden path="id"/>
 
     <div class="form-group">
-        <form:label path="name" cssClass="form-label">Tên danh mục</form:label>
+        <form:label path="name" cssClass="form-label">Tên tag</form:label>
         <form:input type="text" name="name" path="name" cssClass="form-control"/><br/>
     </div>
 

@@ -2,11 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<c:url value="/admin/categories/edit/${category.id}" var="editCategory"/>
+<c:url value="/admin/taxs/edit/${tax.id}" var="editTax"/>
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="text-center list__title">Chỉnh sửa danh mục</h1>
+        <h1 class="text-center list__title">Chỉnh sửa tax</h1>
     </div>
 </div>
 
@@ -18,17 +18,17 @@
     </c:forEach>
 </c:if>
 
-<form:form id="editCategoryForm" method="post" modelAttribute="category" action="${editCategory}">
+<form:form id="editTaxForm" method="post" modelAttribute="tax" action="${editTax}">
     <form:hidden path="id"/>
 
     <div class="form-group">
-        <form:label path="name" cssClass="form-label">Tên danh mục</form:label>
-        <form:input type="text" name="name" path="name" cssClass="form-control"/><br/>
+        <form:label path="rate" cssClass="form-label">Rate</form:label>
+        <form:input type="numberDecimal" name="rate" path="rate" cssClass="form-control"/><br/>
     </div>
 
     <div class="form-group">
-        <form:label path="description" cssClass="form-label">Mô tả</form:label>
-        <form:input type="text" name="description" path="description" cssClass="form-control"/><br/>
+        <form:label path="region" cssClass="form-label">Vùng</form:label>
+        <form:input type="text" name="region" path="region" cssClass="form-control"/><br/>
     </div>
 
     <div class="form-group d-flex align-items-center">

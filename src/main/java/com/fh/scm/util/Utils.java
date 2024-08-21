@@ -45,8 +45,8 @@ public final class Utils {
 
         mapping.put("categories", "Danh mục");
         mapping.put("customers", "Khách hàng");
-        mapping.put("delivery_schedules","Lịch giao hàng");
-//        mapping.add("Tồn kho");
+        mapping.put("delivery-schedules","Lịch giao hàng");
+        mapping.put("inventories","Tồn kho");
 //        mapping.add("Chi tiết tồn kho");
 //        mapping.add("Hóa đơn");
 //        mapping.add("Đơn hàng");
@@ -58,11 +58,11 @@ public final class Utils {
 //        mapping.add("Người giao hàng");
 //        mapping.add("Nhà cung cấp");
 //        mapping.add("Chi phí nhà cung cấp");
-//        mapping.add("Tag");
-//        mapping.add("Thuế");
-//        mapping.add("Đơn vị");
+        mapping.put("tags","Nhãn");
+        mapping.put("taxs","Thuế");
+        mapping.put("units","Đơn vị");
 //        mapping.add("Người dùng");
-//        mapping.add("Kho");
+        mapping.put("warehouses","Kho");
 
         return mapping;
     }

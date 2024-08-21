@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,13 +27,6 @@ public class TaxController {
         model.addAttribute("taxs", taxService.getAll(params));
 
         return "taxs";
-    }
-
-    @GetMapping(path = "/{taxId}")
-    public String retrieveTax(@PathVariable(value = "taxId") Long id, Model model) {
-        model.addAttribute("tax", taxService.get(id));
-
-        return "tax";
     }
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
@@ -54,10 +48,10 @@ public class TaxController {
         return "add_tax";
     }
 
-    @RequestMapping(path = "/edit/{taxId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{taxId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editTax(HttpServletRequest request, Model model, @PathVariable(value = "taxId") Long id,
                           @ModelAttribute(value = "tax") @Valid Tax tax, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
@@ -76,6 +70,7 @@ public class TaxController {
     }
 
     @DeleteMapping(path = "/delete/{taxId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteTax(@PathVariable(value = "taxId") Long id) {
         taxService.delete(id);
 

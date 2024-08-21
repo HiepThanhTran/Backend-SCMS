@@ -4,8 +4,8 @@
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="text-center list__title">Danh sách danh mục</h1>
-        <a href="<c:url value="/admin/categories/add"/>" class="list__icon-add">
+        <h1 class="text-center list__title">Danh sách đơn vị sản phẩm</h1>
+        <a href="<c:url value="/admin/units/add"/>" class="list__icon-add">
             <i class='bx bxs-plus-circle'></i>
         </a>
     </div>
@@ -17,7 +17,6 @@
             <tr>
                 <th>ID</th>
                 <th>Tên</th>
-                <th>Mô tả</th>
                 <th>Ngày tạo</th>
                 <th>Ngày cập nhập</th>
                 <th>Active</th>
@@ -25,32 +24,31 @@
             </tr>
         </thead>
         <tbody>
-            <c:forEach var="category" items="${categories}">
-                <tr id="item${category.id}">
-                    <td>${category.id}</td>
-                    <td>${category.name}</td>
-                    <td>${category.description}</td>
+            <c:forEach var="unit" items="${units}">
+                <tr id="item${unit.id}">
+                    <td>${unit.id}</td>
+                    <td>${unit.name}</td>
                     <td>
-                        <fmt:parseDate value="${ category.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                        <fmt:parseDate value="${ unit.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
                         <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/>
                     </td>
                     <td>
-                        <c:if test="${ category.updatedAt != null }">
-                            <fmt:parseDate value="${ category.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <c:if test="${ unit.updatedAt != null }">
+                            <fmt:parseDate value="${ unit.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
                             <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedUpdatedDateTime }"/>
                         </c:if>
-                        <c:if test="${ category.updatedAt == null }">
+                        <c:if test="${ unit.updatedAt == null }">
                             Chưa cập nhập
                         </c:if>
                     </td>
-                    <td>${category.active}</td>
+                    <td>${unit.active}</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" href="<c:url value="/admin/categories/edit/${category.id}"/>">
+                        <a class="btn btn-primary btn-sm" href="<c:url value="/admin/units/edit/${unit.id}"/>">
                             <i class='bx bxs-edit'></i>
                         </a>
 
-                        <c:url value="/admin/categories/delete/${category.id}" var="deleteCategory"/>
-                        <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteCategory}', ${category.id})">
+                        <c:url value="/admin/units/delete/${unit.id}" var="deleteUnit"/>
+                        <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteUnit}', ${unit.id})">
                             <i class='bx bx-x'></i>
                         </button>
                     </td>

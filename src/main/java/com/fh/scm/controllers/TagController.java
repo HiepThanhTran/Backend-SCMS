@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,13 +27,6 @@ public class TagController {
         model.addAttribute("tags", tagService.getAll(params));
 
         return "tags";
-    }
-
-    @GetMapping(path = "/{tagId}")
-    public String retrieveTag(@PathVariable(value = "tagId") Long id, Model model) {
-        model.addAttribute("tag", tagService.get(id));
-
-        return "tag";
     }
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
@@ -54,10 +48,10 @@ public class TagController {
         return "add_tag";
     }
 
-    @RequestMapping(path = "/edit/{tagId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{tagId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editTag(HttpServletRequest request, Model model, @PathVariable(value = "tagId") Long id,
                           @ModelAttribute(value = "tag") @Valid Tag tag, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
@@ -76,6 +70,7 @@ public class TagController {
     }
 
     @DeleteMapping(path = "/delete/{tagId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteTag(@PathVariable(value = "tagId") Long id) {
         tagService.delete(id);
 
