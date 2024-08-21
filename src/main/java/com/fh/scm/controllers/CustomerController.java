@@ -28,13 +28,6 @@ public class CustomerController {
         return "customers";
     }
 
-    @GetMapping(path = "/{customerId}")
-    public String retrieveCustomer(@PathVariable(value = "customerId") Long id, Model model) {
-        model.addAttribute("customer", customerService.get(id));
-
-        return "customer";
-    }
-
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addCustomer(HttpServletRequest request, Model model, @ModelAttribute(value = "customer") @Valid Customer customer,
                               BindingResult bindingResult) {

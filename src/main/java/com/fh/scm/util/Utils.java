@@ -45,7 +45,7 @@ public final class Utils {
 
         mapping.put("categories", "Danh mục");
         mapping.put("customers", "Khách hàng");
-//        mapping.add("Lịch giao hàng");
+        mapping.put("delivery_schedules","Lịch giao hàng");
 //        mapping.add("Tồn kho");
 //        mapping.add("Chi tiết tồn kho");
 //        mapping.add("Hóa đơn");

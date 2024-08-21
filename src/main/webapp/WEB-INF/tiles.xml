@@ -27,7 +27,8 @@
         <put-attribute name="title" value="Dashboard"/>
         <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
     </definition>
-
+    
+    <!--Categories-->
     <definition name="categories" extends="baseWithSidebar">
         <put-attribute name="title" value="Danh mục"/>
         <put-attribute name="content" value="/WEB-INF/pages/category/categories.jsp"/>
@@ -42,11 +43,24 @@
         <put-attribute name="title" value="Sửa danh mục"/>
         <put-attribute name="content" value="/WEB-INF/pages/category/edit_category.jsp"/>
     </definition>
-
+    
+    <!--Customer-->
     <definition name="customers" extends="baseWithSidebar">
-        <put-attribute name="title" value="Thêm danh mục"/>
+        <put-attribute name="title" value="Khách hàng"/>
         <put-attribute name="content" value="/WEB-INF/pages/customer/customers.jsp"/>
     </definition>
+    
+    <definition name="add_customer" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm khách hàng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/customer/add_customer.jsp"/>
+    </definition>
+    
+<!--    Delivery Schedules
+     <definition name="delivery_schedules" extends="baseWithSidebar">
+        <put-attribute name="title" value="Lịch giao hàng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/delivery_schedules/delivery_schedules.jsp"/>
+    </definition>
+    -->
     <!--    <definition name="account" extends="baseLayout">-->
     <!--        <put-attribute name="title" value="Danh sách người dùng" />-->
     <!--        <put-attribute name="content" value="/WEB-INF/pages/account.jsp" />-->

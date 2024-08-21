@@ -39,7 +39,7 @@
                         <i class='bx bxs-edit'></i>
                     </a>
 
-                    <c:url value="admin/categories/delete/${category.id}" var="deleteCategory"/>
+                    <c:url value="/admin/categories/delete/${category.id}" var="deleteCategory"/>
                     <a class="btn btn-danger btn-sm" href="#" onclick="deleteItem('${deleteCategory}', ${category.id})">
                         <i class='bx bx-x'></i>
                     </a>

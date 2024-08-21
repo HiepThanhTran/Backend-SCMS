@@ -24,10 +24,30 @@ a {
     --hover-color: #3b7ddd;
 }
 
+/*Header*/
+.navbar-custom{
+    background-color: var(--background);
+}
+
+.navbar-custom .navbar-custom__logo{
+    font-size: 1.25rem;
+    color: var(--text-color-white);
+    font-weight: 600;
+}
+
+.navbar-custom .navbar-custome__menu .navbar-custome__menu--item a{
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.navbar-custom .navbar-custome__menu .navbar-custome__menu--item:hover{
+    color: var(--text-color-white);
+}
+
 /* Container website */
 .container__content {
     margin-top: 50px;
-    padding-bottom: 100px;  
 }
 
 /* Sidebar */
@@ -73,7 +93,7 @@ a.sidebar-link:hover {
     border-left: 3px solid var(--hover-color);
 }
 
-/* Category */
+/* List */
 .list .list__title {
     width: 100%;
     font-size: 2rem;
@@ -119,7 +139,10 @@ form label {
     color: var(--text-color);
 }
 
-form input[type="text"] {
+/* Input chung */
+form input[type="text"],
+form input[type="tel"],
+form input[type="date"] {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -127,12 +150,28 @@ form input[type="text"] {
     color: var(--text-color);
 }
 
-form input[type="text"]:focus {
+form input[type="text"]:focus,
+form input[type="tel"]:focus,
+form input[type="date"]:focus {
     border-color: var(--hover-color);
     outline: none;
     box-shadow: 0 0 0 2px rgba(59, 125, 219, 0.2);
 }
 
+/* Giới tính */
+.gender-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.gender-group label {
+    margin-right: 5px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+/* Submit button */
 form input[type="submit"] {
     padding: 10px 15px;
     border: none;
@@ -148,25 +187,10 @@ form input[type="submit"]:hover {
     background-color: #3367d6;
 }
 
-/* Form specific adjustments */
-.form-group {
-    margin-bottom: -12px;
-}
 
-.form-label{
-    margin-bottom: 5px;
-}
-
-.form-control {
-    width: 100%;
-}
-
-.form-radio-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.form-radio {
-    margin-right: 5px;
+/*Footer*/
+.footer__container{
+    position: fixed;
+    botttom: 0;
+    background-color: var(--background);
 }
