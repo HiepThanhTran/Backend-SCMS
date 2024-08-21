@@ -1,11 +1,13 @@
 package com.fh.scm.configs;
 
+import com.fh.scm.formatter.WarehouseFormatter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.annotation.Order;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -64,10 +66,10 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
 //        registry.addViewController("/login").setViewName("login");
 //    }
 
-//    @Override
-//    public void addFormatters(FormatterRegistry registry) {
-//        registry.addFormatter(new CategoryFormatter());
-//    }
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new WarehouseFormatter());
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

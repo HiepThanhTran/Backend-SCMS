@@ -193,6 +193,22 @@ form input[type="submit"]:hover {
     background-color: #3367d6;
 }
 
+
+/*Input option*/
+form select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+form select:focus {
+    border-color: var(--hover-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 125, 219, 0.2);
+}
+
 /* Footer */
 .footer__container {
     position: fixed;

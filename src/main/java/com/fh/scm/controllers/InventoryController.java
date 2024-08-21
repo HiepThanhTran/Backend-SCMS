@@ -3,6 +3,7 @@ package com.fh.scm.controllers;
 import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.Inventory;
 import com.fh.scm.services.InventoryService;
+import com.fh.scm.services.WarehouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class InventoryController {
 
     private final InventoryService inventoryService;
+    private final WarehouseService warehouseService;
 
     @GetMapping
     public String listInventory(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
@@ -27,10 +29,10 @@ public class InventoryController {
 
         return "inventories";
     }
-    
+
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addInventory(HttpServletRequest request, Model model, @ModelAttribute(value = "inventory") @Valid Inventory inventory,
-                               BindingResult bindingResult) {
+            BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
@@ -40,17 +42,17 @@ public class InventoryController {
             }
 
             inventoryService.insert(inventory);
-
             return "redirect:/admin/inventories";
         }
 
+        model.addAttribute("warehouses", warehouseService.getAll(null));
         return "add_inventory";
     }
 
-    @RequestMapping(path = "/edit/{inventoryId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{inventoryId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editInventory(HttpServletRequest request, Model model, @PathVariable(value = "inventoryId") Long id,
-                                @ModelAttribute(value = "inventory") @Valid Inventory inventory, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+            @ModelAttribute(value = "inventory") @Valid Inventory inventory, BindingResult bindingResult) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
@@ -64,7 +66,7 @@ public class InventoryController {
         }
 
         model.addAttribute("inventory", inventoryService.get(id));
-
+        model.addAttribute("warehouses", warehouseService.getAll(null));
         return "edit_inventory";
     }
 

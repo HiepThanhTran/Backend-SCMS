@@ -53,7 +53,6 @@ public class ProductController {
         }
 
         model.addAttribute("categories", categoryService.getAll(null));
-        //Lay Categories duyet
         return "add_product";
     }
 

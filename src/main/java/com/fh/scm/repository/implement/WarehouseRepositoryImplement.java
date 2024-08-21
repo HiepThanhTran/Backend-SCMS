@@ -54,7 +54,6 @@ public class WarehouseRepositoryImplement implements WarehouseRepository {
         Session session = this.getCurrentSession();
         Warehouse warehouse = session.get(Warehouse.class, id);
         session.delete(warehouse);
-        session.merge(warehouse);
     }
 
     @Override

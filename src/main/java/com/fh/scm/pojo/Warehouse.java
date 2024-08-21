@@ -14,7 +14,6 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "warehouse")
 public class Warehouse extends _BaseEntity implements Serializable {

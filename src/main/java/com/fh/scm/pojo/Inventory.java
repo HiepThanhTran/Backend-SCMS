@@ -22,7 +22,7 @@ public class Inventory extends _BaseEntity implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST}, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", nullable = false)
     private Warehouse warehouse;
 
