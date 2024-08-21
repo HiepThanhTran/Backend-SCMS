@@ -26,7 +26,7 @@ public class Shipper extends _BaseEntity implements Serializable {
     @DecimalMin(value = "1.00", message = "{rating.min")
     @DecimalMax(value = "5.00", message = "{rating.max")
     @Column(precision = 2, scale = 1, columnDefinition = "float default 0.0")
-    private Float rating = 0.0f;
+    private Float rating = 5f;
 
     @NotNull(message = "{shipper.contactInfo.notnull}")
     @Column(name = "contact_info", nullable = false)

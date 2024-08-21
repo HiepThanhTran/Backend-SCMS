@@ -29,7 +29,7 @@ public class APIUserController {
     private final UserService userService;
 
     @PostMapping(path = "/login")
-    public ResponseEntity<?> authenticateUser(@ModelAttribute @Valid UserRequestLogin userRequestLogin, BindingResult bindingResult) {
+    public ResponseEntity<?> authenticateUser(@RequestBody @Valid UserRequestLogin userRequestLogin, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<ResponseMessage> errorMessages = ResponseMessage.fromBindingResult(bindingResult);
 
@@ -49,7 +49,7 @@ public class APIUserController {
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<?> register(@ModelAttribute @Valid UserRequestRegister userRequestRegister, BindingResult bindingResult) {
+    public ResponseEntity<?> register(@RequestBody @Valid UserRequestRegister userRequestRegister, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<ResponseMessage> errorMessages = ResponseMessage.fromBindingResult(bindingResult);
 

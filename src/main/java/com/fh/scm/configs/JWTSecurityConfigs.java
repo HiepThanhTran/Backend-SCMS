@@ -4,6 +4,7 @@ import com.fh.scm.enums.UserRole;
 import com.fh.scm.filters.CustomAccessDeniedHandler;
 import com.fh.scm.filters.JWTAuthenticationTokenFilter;
 import com.fh.scm.filters.RestAuthenticationEntryPoint;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -53,7 +54,7 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(@NotNull HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/api/**");
 
         http.authorizeRequests()

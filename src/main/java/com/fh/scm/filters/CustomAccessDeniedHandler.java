@@ -1,5 +1,6 @@
 package com.fh.scm.filters;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import javax.servlet.ServletException;
@@ -10,7 +11,7 @@ import java.io.IOException;
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
-    public void handle(HttpServletRequest hsr, HttpServletResponse response, org.springframework.security.access.AccessDeniedException ade) throws IOException, ServletException {
+    public void handle(HttpServletRequest hsr, @NotNull HttpServletResponse response, org.springframework.security.access.AccessDeniedException ade) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.getWriter().write("Access Denied!");
     }

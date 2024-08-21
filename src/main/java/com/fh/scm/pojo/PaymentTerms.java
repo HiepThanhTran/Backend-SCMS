@@ -25,7 +25,6 @@ public class PaymentTerms extends _BaseEntity implements Serializable {
     private Integer discountDays = 0; // Số ngày hưởng chiết khấu
 
     @Builder.Default
-    @NotNull(message = "{paymentTerms.discountPercentage.notNull}")
     @DecimalMin(value = "0.01", message = "{paymentTerms.discountPercentage.min}")
     @DecimalMax(value = "1.00", message = "{paymentTerms.discountPercentage.max}")
     @Column(name = "discount_percentage", precision = 5, scale = 2, columnDefinition = "float default 0.0")
@@ -38,12 +37,13 @@ public class PaymentTerms extends _BaseEntity implements Serializable {
     private PaymentTermType type = PaymentTermType.COD;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "paymentTerms")
-    private Set<Invoice> invoiceSet;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id", nullable = false)
+    private Supplier supplier;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "paymentTermsSet", cascade = CascadeType.ALL)
-    private Set<Supplier> supplierSet;
+    @OneToMany(mappedBy = "paymentTerms")
+    private Set<Invoice> invoiceSet;
 
     @Override
     public String toString() {

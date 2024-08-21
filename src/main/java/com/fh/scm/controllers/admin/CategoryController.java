@@ -1,9 +1,10 @@
-package com.fh.scm.controllers;
+package com.fh.scm.controllers.admin;
 
 import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.Category;
 import com.fh.scm.services.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,12 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import org.springframework.http.HttpStatus;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/categories")
-@CrossOrigin
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -70,7 +69,9 @@ public class CategoryController {
         return "edit_category";
     }
 
+    @CrossOrigin
     @DeleteMapping(path = "/delete/{categoryId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable(value = "categoryId") Long id) {
         categoryService.delete(id);
     }

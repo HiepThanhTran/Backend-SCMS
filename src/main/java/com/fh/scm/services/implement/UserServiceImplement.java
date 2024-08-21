@@ -4,10 +4,7 @@ import com.fh.scm.dto.api.user.UserRequestRegister;
 import com.fh.scm.dto.api.user.UserRequestUpdate;
 import com.fh.scm.dto.api.user.UserResponse;
 import com.fh.scm.exceptions.UserException;
-import com.fh.scm.pojo.Customer;
-import com.fh.scm.pojo.Shipper;
-import com.fh.scm.pojo.Supplier;
-import com.fh.scm.pojo.User;
+import com.fh.scm.pojo.*;
 import com.fh.scm.repository.CustomerRepository;
 import com.fh.scm.repository.ShipperRepository;
 import com.fh.scm.repository.SupplierRepository;
@@ -31,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service("userDetailsService")
 public class UserServiceImplement implements UserService {
@@ -91,9 +89,7 @@ public class UserServiceImplement implements UserService {
 
     @Override
     public UserResponse register(UserRequestRegister userRequestRegister) {
-        User user;
-
-        user = this.userRepository.getByUsername(userRequestRegister.getUsername());
+        User user = this.userRepository.getByUsername(userRequestRegister.getUsername());
         if (user != null) {
             throw new UserException("Tên đăng nhập đã tồn tại");
         }
@@ -138,8 +134,7 @@ public class UserServiceImplement implements UserService {
                 user.setCustomer(customer);
                 break;
             case ROLE_SUPPLIER:
-                Supplier supplier;
-                supplier = this.supplierRepository.getByPhone(userRequestRegister.getPhone());
+                Supplier supplier = this.supplierRepository.getByPhone(userRequestRegister.getPhone());
                 if (supplier != null) {
                     throw new UserException("Số điện thoại đã được liên kết đến tài khoản khác");
                 }
@@ -151,6 +146,18 @@ public class UserServiceImplement implements UserService {
                         .contactInfo(userRequestRegister.getContactInfo())
                         .user(user)
                         .build();
+                final Supplier finalSupplier = supplier;
+                Set<PaymentTerms> paymentTermsSet = userRequestRegister.getPaymentTermsSet()
+                        .stream()
+                        .map(termsRequest -> {
+                            return PaymentTerms.builder()
+                                    .discountDays(termsRequest.getDiscountDays())
+                                    .discountPercentage(termsRequest.getDiscountPercentage())
+                                    .type(termsRequest.getType())
+                                    .supplier(finalSupplier)
+                                    .build();
+                        }).collect(Collectors.toSet());
+                supplier.setPaymentTermsSet(paymentTermsSet);
                 user.setSupplier(supplier);
                 break;
             case ROLE_DISTRIBUTOR:

@@ -2,7 +2,7 @@ package com.fh.scm.controllers.api;
 
 import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.dto.api.rating.RatingRequestCreate;
-import com.fh.scm.dto.api.supplier.PaymentTermsRequest;
+import com.fh.scm.dto.api.payment_temrs.PaymentTermsRequest;
 import com.fh.scm.dto.api.supplier.SupplierDTO;
 import com.fh.scm.exceptions.RatingSupplierException;
 import com.fh.scm.exceptions.UserException;
@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -32,7 +33,6 @@ import java.util.Map;
 public class APISupplierController {
 
     private final SupplierService supplierService;
-    private final UserService userService;
     private final RatingService ratingService;
 
     @GetMapping("/list")
@@ -57,9 +57,9 @@ public class APISupplierController {
 
     @GetMapping(path = "/profile")
     public ResponseEntity<?> profileSupplier(Principal principal) {
-        Supplier supplierDTO = this.supplierService.getProfileSupplier(principal.getName());
+        Supplier supplier = this.supplierService.getProfileSupplier(principal.getName());
 
-        return ResponseEntity.ok(supplierDTO);
+        return ResponseEntity.ok(supplier);
     }
 
     @PostMapping(path = "/profile/update")
@@ -71,34 +71,12 @@ public class APISupplierController {
         }
 
         try {
-            System.out.println(principal.getName());
             SupplierDTO updatedSupplierDTO = this.supplierService.updateProfileSupplier(principal.getName(), supplierDTO);
 
             return ResponseEntity.ok(updatedSupplierDTO);
         } catch (UserException e) {
             return ResponseEntity.badRequest().body(new ResponseMessage(e.getMessage()));
         }
-    }
-
-    @GetMapping(path = "/payment-terms")
-    public ResponseEntity<?> getAllPaymentTerms(Principal principal) {
-        List<PaymentTerms> paymentTerms = this.supplierService.getAllPaymentTermsOfSupplier(principal.getName());
-
-        return ResponseEntity.ok(paymentTerms);
-    }
-
-    @PostMapping(path = "/payment-terms/add")
-    public ResponseEntity<?> addPaymentTerms(Principal principal, @RequestBody PaymentTermsRequest paymentTermsId) {
-        User user = this.userService.getByUsername(principal.getName());
-        Supplier supplier = this.supplierService.getByUser(user);
-
-        if (supplier == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        this.supplierService.addPaymentTermsForSupplier(supplier.getId(), paymentTermsId);
-
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = "/{supplierId}/rating")

@@ -18,7 +18,6 @@ public class WebInitializerConfigs {
     @PostConstruct
     public void initializer() {
         if (isFirstRun()) {
-            this.initializerDataService.createPaymentTerms();
             this.initializerDataService.createUser();
             this.systemService.insert("isFirstRun");
         }

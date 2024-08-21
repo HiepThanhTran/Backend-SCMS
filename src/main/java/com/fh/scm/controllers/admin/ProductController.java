@@ -1,4 +1,4 @@
-package com.fh.scm.controllers;
+package com.fh.scm.controllers.admin;
 
 import com.fh.scm.dto.ResponseMessage;
 import com.fh.scm.pojo.Product;

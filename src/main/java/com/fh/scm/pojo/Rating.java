@@ -27,7 +27,7 @@ public class Rating extends _BaseEntity implements Serializable {
     @DecimalMin(value = "1.00", message = "{rating.min}")
     @DecimalMax(value = "5.00", message = "{rating.max}")
     @Column(nullable = false, precision = 2, scale = 1, columnDefinition = "decimal default 0.0")
-    private Float rating = 0.0f;
+    private Float rating = 5f;
 
     private String content;
 

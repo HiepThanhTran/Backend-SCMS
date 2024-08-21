@@ -1,16 +1,22 @@
 package com.fh.scm.configs;
 
+import com.fh.scm.formatters.CategoryFormatter;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.annotation.Order;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Order(1)
 @Configuration
@@ -26,7 +32,7 @@ import org.springframework.web.servlet.config.annotation.*;
 public class WebApplicationContextConfigs implements WebMvcConfigurer {
 
     @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+    public void configureDefaultServletHandling(@NotNull DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
 
@@ -64,13 +70,13 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
 //        registry.addViewController("/login").setViewName("login");
 //    }
 
-//    @Override
-//    public void addFormatters(FormatterRegistry registry) {
-//        registry.addFormatter(new CategoryFormatter());
-//    }
+    @Override
+    public void addFormatters(@NotNull FormatterRegistry registry) {
+        registry.addFormatter(new CategoryFormatter());
+    }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**").addResourceLocations("/resources/images/");
         registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");

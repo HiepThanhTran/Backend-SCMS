@@ -1,5 +1,6 @@
 package com.fh.scm.configs;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class DispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -23,7 +24,7 @@ public class DispatcherServletInitializer extends AbstractAnnotationConfigDispat
     }
 
     @Override
-    protected String[] getServletMappings() {
+    protected String @NotNull [] getServletMappings() {
         return new String[]{"/"};
     }
 }

@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/payment-terms", produces = "application/json; charset=UTF-8")
-public class APIPaymentTermsController {
+@RequestMapping(path = "/api/order", produces = "application/json; charset=UTF-8")
+public class APIOrderController {
 }

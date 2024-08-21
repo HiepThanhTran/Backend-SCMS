@@ -9,11 +9,11 @@ import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "supplier")
 public class Supplier extends _BaseEntity implements Serializable {
@@ -47,11 +47,7 @@ public class Supplier extends _BaseEntity implements Serializable {
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
     private Set<SupplierCosting> supplierCostingSet;
 
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "supplier_payment_terms",
-            joinColumns = @JoinColumn(name = "supplier_id"),
-            inverseJoinColumns = @JoinColumn(name = "payment_terms_id"))
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<PaymentTerms> paymentTermsSet;
 
     @Override

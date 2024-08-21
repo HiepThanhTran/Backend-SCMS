@@ -15,11 +15,11 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "\"user\"")
 public class User extends _BaseEntity implements Serializable {

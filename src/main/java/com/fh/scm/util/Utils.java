@@ -1,13 +1,10 @@
 package com.fh.scm.util;
 
-import com.cloudinary.Cloudinary;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public final class Utils {
@@ -40,7 +37,7 @@ public final class Utils {
         }
     }
 
-    public static Map<String, String> generateMappingPojoClass() {
+    public static @NotNull Map<String, String> generateMappingPojoClass() {
         Map<String, String> mapping = new HashMap<>();
 
         mapping.put("categories", "Danh mục");

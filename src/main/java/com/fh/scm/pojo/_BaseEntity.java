@@ -1,9 +1,7 @@
 package com.fh.scm.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,7 +9,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass

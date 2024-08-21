@@ -3,6 +3,7 @@ package com.fh.scm.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class ResponseMessage {
 
     private String message;
 
-    public static List<ResponseMessage> fromBindingResult(BindingResult bindingResult) {
+    public static List<ResponseMessage> fromBindingResult(@NotNull BindingResult bindingResult) {
         return bindingResult
                 .getAllErrors()
                 .stream()

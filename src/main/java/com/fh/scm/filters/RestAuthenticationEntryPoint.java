@@ -1,5 +1,6 @@
 package com.fh.scm.filters;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -10,7 +11,7 @@ import java.io.IOException;
 public final class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+    public void commence(HttpServletRequest request, @NotNull HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write("Unauthorized");
     }

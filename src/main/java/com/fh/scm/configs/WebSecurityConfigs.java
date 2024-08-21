@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fh.scm.enums.UserRole;
 import com.fh.scm.services.UserService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -47,12 +48,12 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(@NotNull AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(this.passwordEncoder());
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(@NotNull HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
                 .authorizeRequests()

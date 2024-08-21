@@ -39,7 +39,9 @@ public class Customer extends _BaseEntity implements Serializable {
     @Pattern(regexp = "^[0-9]{10,15}$", message = "{user.phone.pattern}")
     private String phone;
 
-    private Boolean gender; // true (1): Nữ - false (0): Nam
+    @Builder.Default
+    @Column(columnDefinition = "TINYINT(1) default 1")
+    private Boolean gender = true; // true (1): Nữ - false (0): Nam
 
     private Date dateOfBirth;
 

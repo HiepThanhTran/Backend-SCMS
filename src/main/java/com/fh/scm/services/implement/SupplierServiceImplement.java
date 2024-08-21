@@ -1,7 +1,7 @@
 package com.fh.scm.services.implement;
 
 import com.fh.scm.dto.api.rating.RatingRequestCreate;
-import com.fh.scm.dto.api.supplier.PaymentTermsRequest;
+import com.fh.scm.dto.api.payment_temrs.PaymentTermsRequest;
 import com.fh.scm.dto.api.supplier.SupplierDTO;
 import com.fh.scm.exceptions.RatingSupplierException;
 import com.fh.scm.exceptions.UserException;
@@ -87,24 +87,6 @@ public class SupplierServiceImplement implements SupplierService {
         this.supplierRepository.update(supplier);
 
         return this.getSupplierResponse(supplier);
-    }
-
-    @Override
-    public List<PaymentTerms> getAllPaymentTermsOfSupplier(String username) {
-        return this.supplierRepository.getAllPaymentTerms(username);
-    }
-
-    @Override
-    public void addPaymentTermsForSupplier(Long supplierId, PaymentTermsRequest paymentTermsIdList) {
-        Supplier supplier = this.supplierRepository.get(supplierId);
-
-        Set<PaymentTerms> paymentTermsList = paymentTermsIdList.getPaymentTerms().stream()
-                .map(id -> this.paymentTermsRepository.get(id))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-
-        supplier.setPaymentTermsSet(paymentTermsList);
-        this.supplierRepository.update(supplier);
     }
 
     @Override

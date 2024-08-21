@@ -30,23 +30,6 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
-    public List<PaymentTerms> getAllPaymentTerms(String username) {
-        Session session = this.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-
-        CriteriaQuery<PaymentTerms> criteria = builder.createQuery(PaymentTerms.class);
-        Root<PaymentTerms> paymentTermsRoot = criteria.from(PaymentTerms.class);
-
-        Join<PaymentTerms, Supplier> supplierJoin = paymentTermsRoot.join("supplierSet");
-        Join<Supplier, User> userJoin = supplierJoin.join("user");
-
-        criteria.select(paymentTermsRoot).where(builder.equal(userJoin.get("username"), username)).distinct(true);
-        Query<PaymentTerms> query = session.createQuery(criteria);
-
-        return query.getResultList();
-    }
-
-    @Override
     public Supplier get(Long id) {
         Session session = this.getCurrentSession();
 
