@@ -19,6 +19,6 @@ public class OrderDetailsReponse {
     private Float quantity;
 
     private BigDecimal unitPrice;
-    
+
     private ProductResponse product;
 }

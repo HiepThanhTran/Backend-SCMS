@@ -1,6 +1,5 @@
 package com.fh.scm.dto.api.order;
 
-import com.fh.scm.enums.OrderStatus;
 import com.fh.scm.enums.OrderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.Set;
 
 @Data

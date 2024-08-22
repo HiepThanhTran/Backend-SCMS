@@ -74,7 +74,7 @@ public class APISupplierController {
 
     @PostMapping(path = "/{supplierId}/rating/add")
     public ResponseEntity<?> addRatingForSupplier(Principal principal, @PathVariable(value = "supplierId") Long supplierId,
-                                               @ModelAttribute @Valid RatingRequestCreate ratingRequestCreate, BindingResult bindingResult) {
+                                                  @ModelAttribute @Valid RatingRequestCreate ratingRequestCreate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
 

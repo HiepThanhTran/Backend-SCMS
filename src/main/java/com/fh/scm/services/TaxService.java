@@ -1,8 +1,6 @@
 package com.fh.scm.services;
 
-import com.fh.scm.dto.api.category.CategoryResponse;
 import com.fh.scm.dto.tax.TaxResponse;
-import com.fh.scm.pojo.Category;
 import com.fh.scm.pojo.Tax;
 
 import java.util.List;

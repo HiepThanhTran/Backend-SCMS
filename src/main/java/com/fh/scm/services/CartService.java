@@ -6,9 +6,7 @@ import com.fh.scm.dto.api.product.ProductRequestAddToCart;
 import com.fh.scm.pojo.Cart;
 import com.fh.scm.pojo.CartDetails;
 import com.fh.scm.pojo.User;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 import java.util.Map;
 
 public interface CartService {

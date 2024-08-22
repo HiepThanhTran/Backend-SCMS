@@ -46,7 +46,7 @@ public class APIRatingController {
 
     @PostMapping(path = "/{ratingId}")
     public ResponseEntity<?> updateRating(Principal principal, @PathVariable(value = "ratingId") Long id,
-                                     @ModelAttribute @Valid RatingRequestUpdate ratingRequestUpdate, BindingResult bindingResult) {
+                                          @ModelAttribute @Valid RatingRequestUpdate ratingRequestUpdate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<MessageResponse> messageResponses = MessageResponse.fromBindingResult(bindingResult);
 
