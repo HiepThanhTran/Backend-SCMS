@@ -205,6 +205,22 @@
         <put-attribute name="content" value="/WEB-INF/pages/rating/edit_rating.jsp"/>
     </definition>
     
+    <!--Shipment-->
+    <definition name="shipments" extends="baseWithSidebar">
+        <put-attribute name="title" value="Đơn vận chuyển"/>
+        <put-attribute name="content" value="/WEB-INF/pages/shipment/ratings.jsp"/>
+    </definition>
+
+    <definition name="add_shipment" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm đơn vận chuyển"/>
+        <put-attribute name="content" value="/WEB-INF/pages/shipment/add_shipment.jsp"/>
+    </definition>
+
+    <definition name="edit_shipment" extends="baseWithSidebar">
+        <put-attribute name="title" value="Chỉnh sửa đơn vận chuyển"/>
+        <put-attribute name="content" value="/WEB-INF/pages/shipment/edit_shipment.jsp"/>
+    </definition>
+    
     <!---->
     <!--    <definition name="account" extends="baseLayout">-->
     <!--        <put-attribute name="title" value="Danh sách người dùng" />-->

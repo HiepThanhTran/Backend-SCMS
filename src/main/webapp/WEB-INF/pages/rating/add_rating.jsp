@@ -26,7 +26,23 @@
 
     <div class="form-group">
         <label class="form-label">Nội dung</label>
-        <form:input type="text" name="content" path="content" placeholder="Nhập nội dung" cssClass="form-control"/><br/>
+        <form:input type="text" name="content" path="content" cssClass="form-control"/><br/>
     </div>
+
+    <div class="form-group">
+        <label class="form-label">Tiêu chí</label>
+        <form:input type="text" name="criteria" path="criteria" cssClass="form-control"/><br/>
+    </div>
+
+    <form:select path="supplier_id">
+        <form:option value="" label="Chọn nhà cung cấp"/>
+        <form:options items="${supplier}" itemValue="id" itemLabel="name"/>
+    </form:select>
+
+    <form:select path="user_id">
+        <form:option value="" label="Chọn users"/>
+        <form:options items="${user}" itemValue="id" itemLabel="name"/>
+    </form:select>
+
     <input type="submit" value="Thêm"/>
 </form:form>
