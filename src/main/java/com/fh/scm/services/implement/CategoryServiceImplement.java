@@ -2,12 +2,15 @@ package com.fh.scm.services.implement;
 
 import com.fh.scm.dto.api.category.CategoryResponse;
 import com.fh.scm.pojo.Category;
+import com.fh.scm.pojo.Product;
 import com.fh.scm.repository.CategoryRepository;
+import com.fh.scm.repository.ProductRepository;
 import com.fh.scm.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,6 +21,8 @@ public class CategoryServiceImplement implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Override
     public CategoryResponse getCategoryResponse(Category category) {
@@ -52,6 +57,14 @@ public class CategoryServiceImplement implements CategoryService {
 
     @Override
     public void delete(Long id) {
+        Category category = this.categoryRepository.get(id);
+        List<Product> productsToUpdate = new ArrayList<>(category.getProductSet());
+
+        productsToUpdate.forEach(product -> {
+            product.setCategory(null);
+            this.productRepository.update(product);
+        });
+
         this.categoryRepository.delete(id);
     }
 

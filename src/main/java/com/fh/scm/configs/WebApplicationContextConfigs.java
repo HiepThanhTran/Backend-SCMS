@@ -43,6 +43,8 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
         commonsMultipartResolver.setDefaultEncoding("UTF-8");
+        commonsMultipartResolver.setMaxUploadSize(20971520);
+        commonsMultipartResolver.setMaxInMemorySize(1048576);
 
         return commonsMultipartResolver;
     }
@@ -52,6 +54,7 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
+
         return filter;
     }
 
