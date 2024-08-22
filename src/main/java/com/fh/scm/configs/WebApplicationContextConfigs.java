@@ -1,6 +1,7 @@
 package com.fh.scm.configs;
 
 import com.fh.scm.formatter.SupplierFormatter;
+import com.fh.scm.formatter.UserFormatter;
 import com.fh.scm.formatter.WarehouseFormatter;
 import com.fh.scm.formatters.CategoryFormatter;
 import org.jetbrains.annotations.NotNull;
@@ -93,6 +94,7 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
         registry.addFormatter(new CategoryFormatter());
         registry.addFormatter(new WarehouseFormatter());
         registry.addFormatter(new SupplierFormatter());
+        registry.addFormatter(new UserFormatter());
     }
 
     @Override
