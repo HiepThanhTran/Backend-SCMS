@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/units")
+@RequestMapping(path = "/admin/units", produces = "application/json; charset=UTF-8")
 public class UnitController {
 
     private final UnitService unitService;
@@ -26,13 +26,6 @@ public class UnitController {
         model.addAttribute("units", unitService.getAll(params));
 
         return "units";
-    }
-
-    @GetMapping(path = "/{unitId}")
-    public String retrieveUnit(@PathVariable(value = "unitId") Long id, Model model) {
-        model.addAttribute("unit", unitService.get(id));
-
-        return "unit";
     }
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
@@ -54,10 +47,10 @@ public class UnitController {
         return "add_unit";
     }
 
-    @RequestMapping(path = "/edit/{unitId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{unitId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editUnit(HttpServletRequest request, Model model, @PathVariable(value = "unitId") Long id,
                            @ModelAttribute(value = "unit") @Valid Unit unit, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);

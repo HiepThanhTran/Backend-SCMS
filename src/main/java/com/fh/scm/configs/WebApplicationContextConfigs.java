@@ -1,5 +1,6 @@
 package com.fh.scm.configs;
 
+import com.fh.scm.formatter.WarehouseFormatter;
 import com.fh.scm.formatters.CategoryFormatter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.MessageSource;
@@ -12,6 +13,7 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -43,6 +45,14 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
         commonsMultipartResolver.setDefaultEncoding("UTF-8");
 
         return commonsMultipartResolver;
+    }
+
+    @Bean
+    public CharacterEncodingFilter characterEncodingFilter() {
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-8");
+        filter.setForceEncoding(true);
+        return filter;
     }
 
     @Bean
@@ -80,6 +90,7 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
     @Override
     public void addFormatters(@NotNull FormatterRegistry registry) {
         registry.addFormatter(new CategoryFormatter());
+        registry.addFormatter(new WarehouseFormatter());
     }
 
     @Override

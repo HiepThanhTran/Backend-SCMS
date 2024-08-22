@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/customers")
+@RequestMapping(path = "/admin/customers", produces = "application/json; charset=UTF-8")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -26,13 +26,6 @@ public class CustomerController {
         model.addAttribute("customers", customerService.getAll(params));
 
         return "customers";
-    }
-
-    @GetMapping(path = "/{customerId}")
-    public String retrieveCustomer(@PathVariable(value = "customerId") Long id, Model model) {
-        model.addAttribute("customer", customerService.get(id));
-
-        return "customer";
     }
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})

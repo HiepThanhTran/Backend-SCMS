@@ -1,6 +1,10 @@
 // Table Categories
 $(document).ready(function () {
-    $('#categoryTable').DataTable();
+    $('#categoryTable').DataTable({
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+        }
+    });
 });
 
 // Delete item
@@ -10,7 +14,7 @@ function deleteItem(endpoint, itemId) {
             method: "delete"
         }).then(res => {
             console.log(res);
-            if (res.status === 204 || res.status === 405) {
+            if (res.status === 204) {
                 let d = document.getElementById(`item${itemId}`);
                 d.style.display = "none";
             } else {

@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/products")
+@RequestMapping(path = "/admin/products", produces = "application/json; charset=UTF-8")
 public class ProductController {
 
     private final ProductService productService;
@@ -54,7 +54,6 @@ public class ProductController {
         }
 
         model.addAttribute("categories", categoryService.getAll(null));
-        //Lay Categories duyet
         return "add_product";
     }
 

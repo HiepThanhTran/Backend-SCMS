@@ -18,25 +18,22 @@
     </c:forEach>
 </c:if>
 
-<form:form id="editCategoryForm" method="post" modelAttribute="category" action="${editCategory}">
+<form:form id="editCategoryForm" method="post" modelAttribute="category" action="${editCategory}" acceptCharset="UTF-8">
     <form:hidden path="id"/>
 
-    <!-- Label and input for name -->
     <div class="form-group">
         <form:label path="name" cssClass="form-label">Tên danh mục</form:label>
-        <form:input id="name" type="text" name="name" path="name" cssClass="form-control"/><br/>
+        <form:input type="text" name="name" path="name" placeholder="Nhập tên danh mục" cssClass="form-control"/><br/>
     </div>
 
-    <!-- Label and input for description -->
     <div class="form-group">
         <form:label path="description" cssClass="form-label">Mô tả</form:label>
-        <form:input type="text" name="description" path="description" cssClass="form-control"/><br/>
+        <form:input type="text" name="description" path="description" placeholder="Mô tả" cssClass="form-control"/><br/>
     </div>
 
-    <!-- Label and radio buttons for active -->
     <div class="form-group d-flex align-items-center">
         <form:label path="active" cssClass="form-label">Active:</form:label>
-        <form:checkbox path="active" checked="${active}" class="ms-2"/>
+        <form:checkbox path="active" checked="${category.active}" class="ms-2"/>
     </div>
 
     <input type="submit" value="Cập nhật" class="mt-3"/>

@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/invoices")
+@RequestMapping(path = "/admin/invoices", produces = "application/json; charset=UTF-8")
 public class InvoiceController {
 
     private final InvoiceService invoiceService;

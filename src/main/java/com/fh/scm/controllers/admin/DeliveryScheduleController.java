@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/delivery-schedules")
+@RequestMapping(path = "/admin/delivery-schedules", produces = "application/json; charset=UTF-8")
 public class DeliveryScheduleController {
 
     private final DeliveryScheduleService deliveryScheduleService;
@@ -26,13 +26,6 @@ public class DeliveryScheduleController {
         model.addAttribute("deliverySchedules", deliveryScheduleService.getAll(params));
 
         return "delivery_schedules";
-    }
-
-    @GetMapping(path = "/{deliveryScheduleId}")
-    public String retrieveDeliverySchedule(@PathVariable(value = "deliveryScheduleId") Long id, Model model) {
-        model.addAttribute("deliverySchedule", deliveryScheduleService.get(id));
-
-        return "delivery_schedule";
     }
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})

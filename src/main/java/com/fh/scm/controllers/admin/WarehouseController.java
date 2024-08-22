@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Warehouse;
 import com.fh.scm.services.WarehouseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/warehouses")
+@RequestMapping(path = "/admin/warehouses", produces = "application/json; charset=UTF-8")
 public class WarehouseController {
 
     private final WarehouseService warehouseService;
@@ -26,13 +27,6 @@ public class WarehouseController {
         model.addAttribute("warehouses", warehouseService.getAll(params));
 
         return "warehouses";
-    }
-
-    @GetMapping(path = "/{warehouseId}")
-    public String retrieveWarehouse(@PathVariable(value = "warehouseId") Long id, Model model) {
-        model.addAttribute("warehouse", warehouseService.get(id));
-
-        return "warehouse";
     }
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
@@ -54,10 +48,10 @@ public class WarehouseController {
         return "add_warehouse";
     }
 
-    @RequestMapping(path = "/edit/{warehouseId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{warehouseId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editWarehouse(HttpServletRequest request, Model model, @PathVariable(value = "warehouseId") Long id,
                                 @ModelAttribute(value = "warehouse") @Valid Warehouse warehouse, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
@@ -76,6 +70,7 @@ public class WarehouseController {
     }
 
     @DeleteMapping(path = "/delete/{warehouseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteWarehouse(@PathVariable(value = "warehouseId") Long id) {
         warehouseService.delete(id);
 

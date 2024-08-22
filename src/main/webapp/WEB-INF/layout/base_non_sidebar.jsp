@@ -35,15 +35,17 @@
 
 <body>
 
-<tiles:insertAttribute name="header"/>
+<div class="wrapper">
+    <tiles:insertAttribute name="header"/>
 
-<div class="container container__content">
+    <div class="container container__content pb-5">
 
-    <tiles:insertAttribute name="content"/>
+        <tiles:insertAttribute name="content"/>
 
+    </div>
+
+    <tiles:insertAttribute name="footer"/>
 </div>
-
-<tiles:insertAttribute name="footer"/>
 
 </body>
 

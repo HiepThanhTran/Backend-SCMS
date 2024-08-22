@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/ratings")
+@RequestMapping(path = "/admin/ratings", produces = "application/json; charset=UTF-8")
 public class RatingController {
 
     private final RatingService ratingService;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -18,7 +19,7 @@ public class AdminController {
 
     @ModelAttribute
     public void commonAttributes(@NotNull Model model) {
-        Map<String, String> entities = Utils.generateMappingPojoClass();
+        List<Map.Entry<String, String>> entities = Utils.generateMappingPojoClass();
 
         model.addAttribute("entities", entities);
     }

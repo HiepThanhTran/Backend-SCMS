@@ -3,6 +3,7 @@ package com.fh.scm.controllers.admin;
 import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Inventory;
 import com.fh.scm.services.InventoryService;
+import com.fh.scm.services.WarehouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,23 +17,17 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/inventories")
+@RequestMapping(path = "/admin/inventories", produces = "application/json; charset=UTF-8")
 public class InventoryController {
 
     private final InventoryService inventoryService;
+    private final WarehouseService warehouseService;
 
     @GetMapping
     public String listInventory(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("inventories", inventoryService.getAll(params));
 
         return "inventories";
-    }
-
-    @GetMapping(path = "/{inventoryId}")
-    public String retrieveInventory(@PathVariable(value = "inventoryId") Long id, Model model) {
-        model.addAttribute("inventory", inventoryService.get(id));
-
-        return "inventory";
     }
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
@@ -47,17 +42,17 @@ public class InventoryController {
             }
 
             inventoryService.insert(inventory);
-
             return "redirect:/admin/inventories";
         }
 
+        model.addAttribute("warehouses", warehouseService.getAll(null));
         return "add_inventory";
     }
 
-    @RequestMapping(path = "/edit/{inventoryId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{inventoryId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editInventory(HttpServletRequest request, Model model, @PathVariable(value = "inventoryId") Long id,
                                 @ModelAttribute(value = "inventory") @Valid Inventory inventory, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
@@ -71,7 +66,7 @@ public class InventoryController {
         }
 
         model.addAttribute("inventory", inventoryService.get(id));
-
+        model.addAttribute("warehouses", warehouseService.getAll(null));
         return "edit_inventory";
     }
 

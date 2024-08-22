@@ -11,9 +11,11 @@ public class Pagination {
 
     public static void paginator(Query<?> query, Map<String, String> params) {
         if (params != null) {
-            String pageStr = params.getOrDefault("page", "1");
-            String sizeStr = params.getOrDefault("size", String.valueOf(Constants.DEFAULT_PAGE_SIZE));
+            String pageStr = params.getOrDefault("page", "ALL");
 
+            if (pageStr.equalsIgnoreCase("ALL")) return;
+
+            String sizeStr = params.getOrDefault("size", String.valueOf(Constants.DEFAULT_PAGE_SIZE));
             int page, size;
             try {
                 page = Integer.parseInt(pageStr);

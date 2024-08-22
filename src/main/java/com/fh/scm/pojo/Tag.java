@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
@@ -21,6 +22,7 @@ import java.util.Set;
 public class Tag extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{tag.name.notNull}")
+    @NotBlank(message = "Tên nhãn không được rỗng")
     @Column(nullable = false, unique = true)
     private String name;
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,10 +20,12 @@ import java.util.Set;
 public class Warehouse extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{warehouse.name.notNull}")
+    @NotBlank(message = "Tên kho không được rỗng")
     @Column(nullable = false, unique = true)
     private String name;
 
     @NotNull(message = "{warehouse.location.notNull}")
+    @NotBlank(message = "Địa chỉ kho không được rỗng")
     @Column(nullable = false)
     private String location;
 

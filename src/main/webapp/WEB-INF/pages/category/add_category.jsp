@@ -19,7 +19,15 @@
 </c:if>
 
 <form:form id="addCategoryForm" method="post" modelAttribute="category" action="${addCategory}">
-    <form:input id="name" type="text" name="name" path="name" placeholder="Nhập tên danh mục"/>
-    <form:input type="text" name="description" path="description" placeholder="Mô tả"/>
+    <div class="form-group">
+        <label class="form-label">Tên danh mục</label>
+        <form:input type="text" name="name" path="name" placeholder="Nhập tên danh mục" cssClass="form-control"/><br/>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Mô tả</label>
+        <form:input type="text" name="description" path="description" placeholder="Mô tả" cssClass="form-control"/><br/>
+    </div>
+
     <input type="submit" value="Thêm"/>
 </form:form>

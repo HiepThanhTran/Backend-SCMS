@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/users")
+@RequestMapping(path = "/admin/users", produces = "application/json; charset=UTF-8")
 public class UserController {
 
     private final UserService userService;

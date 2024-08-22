@@ -37,21 +37,21 @@
 
 <tiles:insertAttribute name="header"/>
 
-<div class="container container__content">
+<div class="wrapper">
+    <div class="container container__content pb-5">
+        <div class="row">
+            <div class="col-3">
+                <tiles:insertAttribute name="sidebar"/>
+            </div>
 
-    <div class="row">
-        <div class="col-3">
-            <tiles:insertAttribute name="sidebar"/>
-        </div>
-
-        <div class="col-9">
-            <tiles:insertAttribute name="content"/>
+            <div class="col-9">
+                <tiles:insertAttribute name="content"/>
+            </div>
         </div>
     </div>
 
+    <tiles:insertAttribute name="footer"/>
 </div>
-
-<tiles:insertAttribute name="footer"/>
 
 </body>
 

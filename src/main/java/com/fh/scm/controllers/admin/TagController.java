@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Tag;
 import com.fh.scm.services.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/tags")
+@RequestMapping(path = "/admin/tags", produces = "application/json; charset=UTF-8")
 public class TagController {
 
     private final TagService tagService;
@@ -26,13 +27,6 @@ public class TagController {
         model.addAttribute("tags", tagService.getAll(params));
 
         return "tags";
-    }
-
-    @GetMapping(path = "/{tagId}")
-    public String retrieveTag(@PathVariable(value = "tagId") Long id, Model model) {
-        model.addAttribute("tag", tagService.get(id));
-
-        return "tag";
     }
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
@@ -54,10 +48,10 @@ public class TagController {
         return "add_tag";
     }
 
-    @RequestMapping(path = "/edit/{tagId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{tagId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editTag(HttpServletRequest request, Model model, @PathVariable(value = "tagId") Long id,
                           @ModelAttribute(value = "tag") @Valid Tag tag, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
@@ -76,6 +70,7 @@ public class TagController {
     }
 
     @DeleteMapping(path = "/delete/{tagId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteTag(@PathVariable(value = "tagId") Long id) {
         tagService.delete(id);
 

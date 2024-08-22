@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Tax;
 import com.fh.scm.services.TaxService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/taxs")
+@RequestMapping(path = "/admin/taxs", produces = "application/json; charset=UTF-8")
 public class TaxController {
 
     private final TaxService taxService;
@@ -26,13 +27,6 @@ public class TaxController {
         model.addAttribute("taxs", taxService.getAll(params));
 
         return "taxs";
-    }
-
-    @GetMapping(path = "/{taxId}")
-    public String retrieveTax(@PathVariable(value = "taxId") Long id, Model model) {
-        model.addAttribute("tax", taxService.get(id));
-
-        return "tax";
     }
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
@@ -54,10 +48,10 @@ public class TaxController {
         return "add_tax";
     }
 
-    @RequestMapping(path = "/edit/{taxId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{taxId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editTax(HttpServletRequest request, Model model, @PathVariable(value = "taxId") Long id,
                           @ModelAttribute(value = "tax") @Valid Tax tax, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
@@ -76,6 +70,7 @@ public class TaxController {
     }
 
     @DeleteMapping(path = "/delete/{taxId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteTax(@PathVariable(value = "taxId") Long id) {
         taxService.delete(id);
 

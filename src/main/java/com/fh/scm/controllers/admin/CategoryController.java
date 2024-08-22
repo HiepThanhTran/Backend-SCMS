@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/categories")
+@RequestMapping(path = "/admin/categories", produces = "application/json; charset=UTF-8")
 public class CategoryController {
 
     private final CategoryService categoryService;

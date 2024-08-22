@@ -24,7 +24,7 @@ public class Inventory extends _BaseEntity implements Serializable {
     @Column(nullable = false, columnDefinition = "float default 0")
     private Float quantity = 0.0f;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST}, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", nullable = false)
     private Warehouse warehouse;
 
