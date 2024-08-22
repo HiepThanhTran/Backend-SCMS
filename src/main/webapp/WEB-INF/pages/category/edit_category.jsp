@@ -18,7 +18,7 @@
     </c:forEach>
 </c:if>
 
-<form:form id="editCategoryForm" method="post" modelAttribute="category" action="${editCategory}" acceptCharset="UTF-8">
+<form:form id="editCategoryForm" method="post" modelAttribute="category" action="${editCategory}">
     <form:hidden path="id"/>
 
     <div class="form-group">

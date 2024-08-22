@@ -3,10 +3,7 @@ package com.fh.scm.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -38,5 +35,12 @@ public class Unit extends _BaseEntity implements Serializable {
     @Override
     public String toString() {
         return "com.fh.scm.pojo.Unit[ id=" + this.id + " ]";
+    }
+
+    @PreRemove
+    private void removeUnitFromProduct() {
+        for (Product product : this.productSet) {
+            product.getUnitSet().remove(this);
+        }
     }
 }

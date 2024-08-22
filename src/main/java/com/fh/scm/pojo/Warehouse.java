@@ -20,12 +20,12 @@ import java.util.Set;
 public class Warehouse extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{warehouse.name.notNull}")
-    @NotBlank(message = "Tên kho không được rỗng")
+    @NotBlank(message = "{warehouse.name.notNull}")
     @Column(nullable = false, unique = true)
     private String name;
 
     @NotNull(message = "{warehouse.location.notNull}")
-    @NotBlank(message = "Địa chỉ kho không được rỗng")
+    @NotBlank(message = "{warehouse.location.notNull}")
     @Column(nullable = false)
     private String location;
 

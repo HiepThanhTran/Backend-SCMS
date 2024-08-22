@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -27,8 +24,9 @@ public class Tax extends _BaseEntity implements Serializable {
     @Column(nullable = false, precision = 5, scale = 2, columnDefinition = "float default 0.01")
     private BigDecimal rate = BigDecimal.valueOf(0.01);
 
-    @Size(min = 1, max = 15, message = "{tax.name.size}")
+    @Size(min = 1, max = 15, message = "{tax.region.size}")
     @NotNull(message = "{tax.region.notNull}")
+    @NotBlank(message = "{tax.region.notNull}")
     @Column(nullable = false, unique = true, length = 15)
     private String region;
 

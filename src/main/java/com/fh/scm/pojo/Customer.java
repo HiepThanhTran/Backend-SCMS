@@ -4,6 +4,7 @@ package com.fh.scm.pojo;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -19,22 +20,27 @@ import java.util.Date;
 public class Customer extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{customer.firstName.notNull}")
+    @NotBlank(message = "{customer.firstName.notNull}")
     @Column(nullable = false)
     private String firstName;
 
     @NotNull(message = "{customer.middleName.notNull}")
+    @NotBlank(message = "{customer.middleName.notNull}")
     @Column(nullable = false)
     private String middleName;
 
     @NotNull(message = "{customer.lastName.notNull}")
+    @NotBlank(message = "{customer.lastName.notNull}")
     @Column(nullable = false)
     private String lastName;
 
     @NotNull(message = "{customer.address.notNull}")
+    @NotBlank(message = "{customer.address.notNull}")
     @Column(nullable = false)
     private String address;
 
     @NotNull(message = "{user.phone.notNull}")
+    @NotBlank(message = "{user.phone.notNull}")
     @Pattern(regexp = "^[0-9]{10,15}$", message = "{user.phone.pattern}")
     @Column(nullable = false, unique = true, length = 15)
     private String phone;

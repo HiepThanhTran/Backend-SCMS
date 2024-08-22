@@ -76,12 +76,4 @@ public class TaxController {
 
         return "redirect:/admin/taxs";
     }
-
-    @DeleteMapping(path = "/hide/{taxId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public String hideTax(@PathVariable(value = "taxId") Long id) {
-        taxService.softDelete(id);
-
-        return "redirect:/admin/taxs";
-    }
 }

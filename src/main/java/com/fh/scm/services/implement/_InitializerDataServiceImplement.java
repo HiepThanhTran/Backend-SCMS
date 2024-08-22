@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -157,11 +154,14 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
 
         this.categoryRepository.getAll(null).forEach(category -> {
             for (int i = 1; i <= 3; i++) {
+                Collections.shuffle(tags, random);
                 Set<Tag> randomTags = tags.stream()
-                        .limit(1 + random.nextInt(2))
+                        .limit(2)
                         .collect(Collectors.toSet());
-                Set<Unit> randomUnit = units.stream()
-                        .limit(1 + random.nextInt(2))
+
+                Collections.shuffle(units, random);
+                Set<Unit> randomUnits = units.stream()
+                        .limit(2)
                         .collect(Collectors.toSet());
 
                 Product product = Product.builder()
@@ -171,7 +171,7 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
                         .expiryDate(new Date())
                         .category(category)
                         .tagSet(randomTags)
-                        .unitSet(randomUnit)
+                        .unitSet(randomUnits)
                         .build();
 
                 this.productRepository.insert(product);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,6 +21,7 @@ import java.util.Set;
 public class Product extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{product.name.notNull}")
+    @NotBlank(message = "{product.name.notNull}")
     @Column(nullable = false, unique = true)
     private String name;
 

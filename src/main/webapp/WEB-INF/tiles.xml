@@ -3,6 +3,7 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
+    <!--  Base không có sidebar  -->
     <definition name="baseNonSidebar" template="/WEB-INF/layout/base_non_sidebar.jsp">
         <put-attribute name="title" value=""/>
         <put-attribute name="content" value=""/>
@@ -10,6 +11,7 @@
         <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>
     </definition>
 
+    <!--  Base có sidebar  -->
     <definition name="baseWithSidebar" template="/WEB-INF/layout/base_with_sidebar.jsp">
         <put-attribute name="title" value=""/>
         <put-attribute name="content" value=""/>
@@ -18,12 +20,13 @@
         <put-attribute name="sidebar" value="/WEB-INF/layout/sidebar.jsp"/>
     </definition>
 
+    <!--  Trang chủ  -->
     <definition name="index" extends="baseNonSidebar">
         <put-attribute name="title" value="Trang chủ"/>
         <put-attribute name="content" value="/WEB-INF/pages/index.jsp"/>
     </definition>
 
-    <!-- NHỚ ĐỔI LẠI baseNonSidebar KHI XONGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG -->
+    <!--  CHANGEEEEEEEEEEEEEEEEEE  -->
     <definition name="dashboard" extends="baseWithSidebar">
         <put-attribute name="title" value="Dashboard"/>
         <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
@@ -41,7 +44,7 @@
     </definition>
 
     <definition name="edit_category" extends="baseWithSidebar">
-        <put-attribute name="title" value="Sửa danh mục"/>
+        <put-attribute name="title" value="Chỉnh sửa danh mục"/>
         <put-attribute name="content" value="/WEB-INF/pages/category/edit_category.jsp"/>
     </definition>
 
@@ -59,6 +62,22 @@
     <definition name="edit_customer" extends="baseWithSidebar">
         <put-attribute name="title" value="Chỉnh sửa khách hàng"/>
         <put-attribute name="content" value="/WEB-INF/pages/customer/edit_customer.jsp"/>
+    </definition>
+
+    <!--Supplier-->
+    <definition name="suppliers" extends="baseWithSidebar">
+        <put-attribute name="title" value="Nhà cung cấp"/>
+        <put-attribute name="content" value="/WEB-INF/pages/supplier/suppliers.jsp"/>
+    </definition>
+
+    <definition name="add_supplier" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm nhà cung cấp"/>
+        <put-attribute name="content" value="/WEB-INF/pages/supplier/add_supplier.jsp"/>
+    </definition>
+
+    <definition name="edit_supplier" extends="baseWithSidebar">
+        <put-attribute name="title" value="Chỉnh sửa nhà cung cấp"/>
+        <put-attribute name="content" value="/WEB-INF/pages/supplier/edit_supplier.jsp"/>
     </definition>
 
     <!--Delivery Schedules-->
@@ -95,33 +114,33 @@
 
     <!--Tag-->
     <definition name="tags" extends="baseWithSidebar">
-        <put-attribute name="title" value="Tag"/>
+        <put-attribute name="title" value="Nhãn"/>
         <put-attribute name="content" value="/WEB-INF/pages/tag/tags.jsp"/>
     </definition>
 
     <definition name="add_tag" extends="baseWithSidebar">
-        <put-attribute name="title" value="Thêm tag"/>
+        <put-attribute name="title" value="Thêm nhãn"/>
         <put-attribute name="content" value="/WEB-INF/pages/tag/add_tag.jsp"/>
     </definition>
 
     <definition name="edit_tag" extends="baseWithSidebar">
-        <put-attribute name="title" value="Chỉnh sửa tag"/>
+        <put-attribute name="title" value="Chỉnh sửa nhãn"/>
         <put-attribute name="content" value="/WEB-INF/pages/tag/edit_tag.jsp"/>
     </definition>
 
     <!--Tax-->
     <definition name="taxs" extends="baseWithSidebar">
-        <put-attribute name="title" value="Tax"/>
+        <put-attribute name="title" value="Thuế"/>
         <put-attribute name="content" value="/WEB-INF/pages/tax/taxs.jsp"/>
     </definition>
 
     <definition name="add_tax" extends="baseWithSidebar">
-        <put-attribute name="title" value="Thêm tax"/>
+        <put-attribute name="title" value="Thêm thuế"/>
         <put-attribute name="content" value="/WEB-INF/pages/tax/add_tax.jsp"/>
     </definition>
 
     <definition name="edit_tax" extends="baseWithSidebar">
-        <put-attribute name="title" value="Chỉnh sửa tax"/>
+        <put-attribute name="title" value="Chỉnh sửa thuế"/>
         <put-attribute name="content" value="/WEB-INF/pages/tax/edit_tax.jsp"/>
     </definition>
 
@@ -143,23 +162,65 @@
 
     <!--Warehouse-->
     <definition name="warehouses" extends="baseWithSidebar">
-        <put-attribute name="title" value="Đơn vị sản phẩm"/>
+        <put-attribute name="title" value="Nhà kho"/>
         <put-attribute name="content" value="/WEB-INF/pages/warehouse/warehouses.jsp"/>
     </definition>
 
     <definition name="add_warehouse" extends="baseWithSidebar">
-        <put-attribute name="title" value="Thêm đơn vị sản phẩm"/>
+        <put-attribute name="title" value="Thêm nhà kho"/>
         <put-attribute name="content" value="/WEB-INF/pages/warehouse/add_warehouse.jsp"/>
     </definition>
 
     <definition name="edit_warehouse" extends="baseWithSidebar">
-        <put-attribute name="title" value="Chỉnh sửa đơn vị sản phẩm"/>
+        <put-attribute name="title" value="Chỉnh sửa nhà kho"/>
         <put-attribute name="content" value="/WEB-INF/pages/warehouse/edit_warehouse.jsp"/>
     </definition>
 
-    <!---->
-    <!--    <definition name="account" extends="baseLayout">-->
-    <!--        <put-attribute name="title" value="Danh sách người dùng" />-->
-    <!--        <put-attribute name="content" value="/WEB-INF/pages/account.jsp" />-->
-    <!--    </definition>-->
+    <!--Payment term-->
+    <definition name="payment_terms" extends="baseWithSidebar">
+        <put-attribute name="title" value="Phương thức thanh toán"/>
+        <put-attribute name="content" value="/WEB-INF/pages/payment_term/payment_terms.jsp"/>
+    </definition>
+
+    <definition name="add_payment_term" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm phương thức thanh toan"/>
+        <put-attribute name="content" value="/WEB-INF/pages/payment_term/add_payment_term.jsp"/>
+    </definition>
+
+    <definition name="edit_payment_term" extends="baseWithSidebar">
+        <put-attribute name="title" value="Chỉnh sửa phương thức thanh toan"/>
+        <put-attribute name="content" value="/WEB-INF/pages/payment_term/edit_payment_term.jsp"/>
+    </definition>
+
+    <!--Rating-->
+    <definition name="ratings" extends="baseWithSidebar">
+        <put-attribute name="title" value="Đánh giá"/>
+        <put-attribute name="content" value="/WEB-INF/pages/rating/ratings.jsp"/>
+    </definition>
+
+    <definition name="add_rating" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm đánh giá"/>
+        <put-attribute name="content" value="/WEB-INF/pages/rating/add_rating.jsp"/>
+    </definition>
+
+    <definition name="edit_rating" extends="baseWithSidebar">
+        <put-attribute name="title" value="Chỉnh sửa đánh giá"/>
+        <put-attribute name="content" value="/WEB-INF/pages/rating/edit_rating.jsp"/>
+    </definition>
+
+    <!--Shipment-->
+    <definition name="shipments" extends="baseWithSidebar">
+        <put-attribute name="title" value="Đơn vận chuyển"/>
+        <put-attribute name="content" value="/WEB-INF/pages/shipment/ratings.jsp"/>
+    </definition>
+
+    <definition name="add_shipment" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm đơn vận chuyển"/>
+        <put-attribute name="content" value="/WEB-INF/pages/shipment/add_shipment.jsp"/>
+    </definition>
+
+    <definition name="edit_shipment" extends="baseWithSidebar">
+        <put-attribute name="title" value="Chỉnh sửa đơn vận chuyển"/>
+        <put-attribute name="content" value="/WEB-INF/pages/shipment/edit_shipment.jsp"/>
+    </definition>
 </tiles-definitions>

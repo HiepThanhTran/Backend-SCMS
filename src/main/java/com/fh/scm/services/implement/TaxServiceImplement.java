@@ -1,13 +1,16 @@
 package com.fh.scm.services.implement;
 
 import com.fh.scm.dto.tax.TaxResponse;
+import com.fh.scm.pojo.Invoice;
 import com.fh.scm.pojo.Tax;
 import com.fh.scm.repository.TaxRepository;
+import com.fh.scm.services.InvoiceService;
 import com.fh.scm.services.TaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,6 +21,8 @@ public class TaxServiceImplement implements TaxService {
 
     @Autowired
     private TaxRepository taxRepository;
+    @Autowired
+    private InvoiceService invoiceService;
 
     @Override
     public TaxResponse getTaxResponse(Tax tax) {
@@ -52,6 +57,14 @@ public class TaxServiceImplement implements TaxService {
 
     @Override
     public void delete(Long id) {
+        Tax tax = this.taxRepository.get(id);
+        List<Invoice> invoicesToUpdate = new ArrayList<>(tax.getInvoiceSet());
+
+        invoicesToUpdate.forEach(invoice -> {
+            invoice.setTax(null);
+            this.invoiceService.update(invoice);
+        });
+
         this.taxRepository.delete(id);
     }
 

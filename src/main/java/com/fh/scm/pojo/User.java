@@ -6,6 +6,7 @@ import com.fh.scm.enums.UserRole;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -26,17 +27,20 @@ import java.util.Set;
 public class User extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{user.email.notNull}")
+    @NotBlank(message = "{user.email.notNull}")
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "{user.email.pattern}")
     @Column(nullable = false, unique = true)
     private String email;
 
     @NotNull(message = "{user.username.notNull}")
+    @NotBlank(message = "{user.username.notNull}")
     @Size(min = 6, max = 50, message = "{user.username.size}")
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
     @JsonIgnore
     @NotNull(message = "{user.password.notNull}")
+    @NotBlank(message = "{user.password.notNull}")
     @Size(min = 8, max = 300, message = "{user.password.size}")
     @Column(nullable = false, length = 300)
     private String password;

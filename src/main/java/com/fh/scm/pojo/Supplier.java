@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -19,19 +20,23 @@ import java.util.Set;
 public class Supplier extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{supplier.name.notNull}")
+    @NotBlank(message = "{supplier.name.notNull}")
     @Column(nullable = false)
     private String name;
 
     @NotNull(message = "{supplier.address.notNull}")
+    @NotBlank(message = "{supplier.address.notNull}")
     @Column(nullable = false)
     private String address;
 
     @NotNull(message = "{user.phone.notNull}")
+    @NotBlank(message = "{user.phone.notNull}")
     @Pattern(regexp = "^[0-9]{10,15}$", message = "{user.phone.pattern}")
     @Column(nullable = false, unique = true, length = 15)
     private String phone;
 
     @NotNull(message = "{supplier.contactInfo.notNull}")
+    @NotBlank(message = "{supplier.contactInfo.notNull}")
     @Column(name = "contact_info", nullable = false)
     private String contactInfo;
 

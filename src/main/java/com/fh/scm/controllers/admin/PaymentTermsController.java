@@ -3,6 +3,7 @@ package com.fh.scm.controllers.admin;
 import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.PaymentTerms;
 import com.fh.scm.services.PaymentTermsService;
+import com.fh.scm.services.SupplierService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,8 @@ import java.util.Map;
 public class PaymentTermsController {
 
     private final PaymentTermsService paymentTermsService;
-
+    private final SupplierService supplierService;
+    
     @GetMapping
     public String listPaymentTerms(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("paymentTerms", paymentTermsService.getAll(params));
@@ -49,6 +51,8 @@ public class PaymentTermsController {
 
             paymentTermsService.insert(paymentTerms);
 
+
+            model.addAttribute("supplier", supplierService.getAll(null));
             return "redirect:/admin/payment-terms";
         }
 

@@ -26,9 +26,9 @@
         <form:input type="text" name="name" path="name" placeholder="Nhập tên hàng tồn kho" cssClass="form-control"/><br/>
     </div>
 
-    <form:select path="warehouse">
+    <form:select path="warehouse" cssClass="mt-3">
         <form:option value="" label="Chọn kho"/>
-        <form:options items="${warehouses}" itemValue="id" itemLabel="name"/>
+        <form:options items="${warehouse}" itemValue="id" itemLabel="name"/>
     </form:select>
 
     <div class="form-group d-flex align-items-center">

@@ -69,17 +69,10 @@ public class CategoryController {
         return "edit_category";
     }
 
-    @CrossOrigin
     @DeleteMapping(path = "/delete/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable(value = "categoryId") Long id) {
+    public String deleteCategory(@PathVariable(value = "categoryId") Long id) {
         categoryService.delete(id);
-    }
-
-    @DeleteMapping(path = "/hide/{categoryId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public String hideCategory(@PathVariable(value = "categoryId") Long id) {
-        categoryService.softDelete(id);
 
         return "redirect:/admin/categories";
     }

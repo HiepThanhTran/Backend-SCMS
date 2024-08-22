@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,6 +21,7 @@ import java.util.Set;
 public class Shipper extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{shipper.name.notnull}")
+    @NotBlank(message = "{shipper.name.notnull}")
     @Column(nullable = false)
     private String name;
 
@@ -30,6 +32,7 @@ public class Shipper extends _BaseEntity implements Serializable {
     private BigDecimal rating = BigDecimal.valueOf(5);
 
     @NotNull(message = "{shipper.contactInfo.notnull}")
+    @NotBlank(message = "{shipper.contactInfo.notnull}")
     @Column(name = "contact_info", nullable = false)
     private String contactInfo;
 

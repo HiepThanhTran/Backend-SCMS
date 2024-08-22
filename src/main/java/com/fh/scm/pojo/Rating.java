@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -23,6 +24,7 @@ public class Rating extends _BaseEntity implements Serializable {
 
     @Builder.Default
     @NotNull(message = "{rating.notNull}")
+    @NotBlank(message = "{rating.notNull}")
     @DecimalMin(value = "1.00", message = "{rating.min}")
     @DecimalMax(value = "5.00", message = "{rating.max}")
     @Column(nullable = false, precision = 2, scale = 1, columnDefinition = "decimal default 5.0")
@@ -34,6 +36,7 @@ public class Rating extends _BaseEntity implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{rating.criteria.notNull}")
+    @NotBlank(message = "{rating.criteria.notNull}")
     private CriteriaType criteria = CriteriaType.QUALITY;
 
     @ManyToOne(optional = false)

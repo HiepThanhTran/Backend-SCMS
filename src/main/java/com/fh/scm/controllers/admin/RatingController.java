@@ -3,6 +3,8 @@ package com.fh.scm.controllers.admin;
 import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Rating;
 import com.fh.scm.services.RatingService;
+import com.fh.scm.services.SupplierService;
+import com.fh.scm.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,9 @@ import java.util.Map;
 public class RatingController {
 
     private final RatingService ratingService;
-
+    private final UserService userService;
+    private final SupplierService supplierService;
+    
     @GetMapping
     public String listRating(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("ratings", ratingService.getAll(params));
@@ -52,6 +56,8 @@ public class RatingController {
             return "redirect:/admin/ratings";
         }
 
+        model.addAttribute("supplier", supplierService.getAll(null));
+        model.addAttribute("user", userService.getAll(null));
         return "add_rating";
     }
 

@@ -1,7 +1,9 @@
 package com.fh.scm.configs;
 
-import com.fh.scm.formatter.WarehouseFormatter;
 import com.fh.scm.formatters.CategoryFormatter;
+import com.fh.scm.formatters.SupplierFormatter;
+import com.fh.scm.formatters.UserFormatter;
+import com.fh.scm.formatters.WarehouseFormatter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -93,7 +95,9 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
     @Override
     public void addFormatters(@NotNull FormatterRegistry registry) {
         registry.addFormatter(new CategoryFormatter());
+        registry.addFormatter(new SupplierFormatter());
         registry.addFormatter(new WarehouseFormatter());
+        registry.addFormatter(new UserFormatter());
     }
 
     @Override

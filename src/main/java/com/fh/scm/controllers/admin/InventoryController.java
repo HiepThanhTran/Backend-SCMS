@@ -67,7 +67,7 @@ public class InventoryController {
         }
 
         model.addAttribute("inventory", inventoryService.get(id));
-        model.addAttribute("warehouses", warehouseService.getAll(null));
+        model.addAttribute("warehouse", warehouseService.getAll(null));
         return "edit_inventory";
     }
 

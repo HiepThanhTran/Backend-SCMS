@@ -48,10 +48,10 @@ public class CustomerController {
         return "add_customer";
     }
 
-    @RequestMapping(path = "/edit/{customerId}", method = {RequestMethod.GET, RequestMethod.PATCH})
+    @RequestMapping(path = "/edit/{customerId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editCustomer(HttpServletRequest request, Model model, @PathVariable(value = "customerId") Long id,
                                @ModelAttribute(value = "customer") @Valid Customer customer, BindingResult bindingResult) {
-        if (request.getMethod().equals("PATCH")) {
+        if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
                 List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);

@@ -3,6 +3,7 @@ package com.fh.scm.pojo;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
@@ -17,6 +18,7 @@ import java.util.Set;
 public class Inventory extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{inventory.name.notNull}")
+    @NotBlank(message = "{inventory.name.notNull}")
     @Column(nullable = false, unique = true)
     private String name;
 
