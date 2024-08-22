@@ -28,7 +28,7 @@
 
     <form:select path="warehouse">
         <form:option value="" label="Chọn kho"/>
-        <form:options items="${warehouses}" itemValue="id" itemLabel="name"/>
+        <form:options items="${warehouse}" itemValue="id" itemLabel="name"/>
     </form:select>
 
     <div class="form-group d-flex align-items-center">

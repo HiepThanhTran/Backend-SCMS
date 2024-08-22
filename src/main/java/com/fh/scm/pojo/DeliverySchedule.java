@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
+import javax.validation.constraints.NotBlank;
 
 @Setter
 @Getter
@@ -20,6 +21,7 @@ import java.util.Set;
 public class DeliverySchedule extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{deliverySchedule.scheduledDate.notNull}")
+    @NotBlank(message = "Ngày giao hàng không được để trống")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false)
     private LocalDateTime scheduledDate;
@@ -27,6 +29,7 @@ public class DeliverySchedule extends _BaseEntity implements Serializable {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{deliverySchedule.method.notNull}")
+    @NotBlank(message = "Phương thức giao hàng không được để trống")
     @Column(nullable = false)
     private DeliveryMethodType method = DeliveryMethodType.EXPRESS;
 

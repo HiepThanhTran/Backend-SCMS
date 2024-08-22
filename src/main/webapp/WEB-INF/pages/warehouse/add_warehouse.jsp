@@ -13,21 +13,22 @@
 <c:if test="${errors != null}">
     <c:forEach var="error" items="${errors}">
         <div class="alert alert-danger">
-                ${error.message}
+            ${error.message}
         </div>
     </c:forEach>
 </c:if>
 
 <form:form id="addWarehouseForm" method="post" modelAttribute="warehouse" action="${addWarehouse}">
-    <div class="form-group">
+    <div class="form-group d-flex flex-column mb-1">
         <form:label path="name" cssClass="form-label">Tên kho</form:label>
         <form:input type="text" name="name" path="name" placeholder="Nhập tên kho"/>
     </div>
 
-    <div class="form-group">
+    <div class="form-group d-flex flex-column mb-1">
         <form:label path="location" cssClass="form-label">Địa chỉ kho</form:label>
         <form:input type="text" name="location" path="location" placeholder="Nhập địa chỉ kho"/>
     </div>
+
 
     <div class="form-group">
         <form:label path="capacity" cssClass="form-label">Dung tích kho</form:label>

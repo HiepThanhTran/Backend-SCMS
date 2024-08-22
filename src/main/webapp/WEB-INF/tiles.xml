@@ -60,7 +60,23 @@
         <put-attribute name="title" value="Chỉnh sửa khách hàng"/>
         <put-attribute name="content" value="/WEB-INF/pages/customer/edit_customer.jsp"/>
     </definition>
+    
+    <!--Supplier-->
+    <definition name="suppliers" extends="baseWithSidebar">
+        <put-attribute name="title" value="Nhà cung cấp"/>
+        <put-attribute name="content" value="/WEB-INF/pages/supplier/suppliers.jsp"/>
+    </definition>
 
+    <definition name="add_supplier" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm nhà cung cấp"/>
+        <put-attribute name="content" value="/WEB-INF/pages/supplier/add_supplier.jsp"/>
+    </definition>
+
+    <definition name="edit_supplier" extends="baseWithSidebar">
+        <put-attribute name="title" value="Chỉnh sửa nhà cung cấp"/>
+        <put-attribute name="content" value="/WEB-INF/pages/supplier/edit_supplier.jsp"/>
+    </definition>
+    
     <!--Delivery Schedules-->
     <definition name="delivery_schedules" extends="baseWithSidebar">
         <put-attribute name="title" value="Lịch giao hàng"/>
@@ -156,7 +172,39 @@
         <put-attribute name="title" value="Chỉnh sửa đơn vị sản phẩm"/>
         <put-attribute name="content" value="/WEB-INF/pages/warehouse/edit_warehouse.jsp"/>
     </definition>
+    
+    <!--Payment term-->
+    <definition name="payment_terms" extends="baseWithSidebar">
+        <put-attribute name="title" value="Phương thức thanh toán"/>
+        <put-attribute name="content" value="/WEB-INF/pages/payment_term/payment_terms.jsp"/>
+    </definition>
 
+    <definition name="add_payment_term" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm phương thức thanh toan"/>
+        <put-attribute name="content" value="/WEB-INF/pages/payment_term/add_payment_term.jsp"/>
+    </definition>
+
+    <definition name="edit_payment_term" extends="baseWithSidebar">
+        <put-attribute name="title" value="Chỉnh sửa phương thức thanh toan"/>
+        <put-attribute name="content" value="/WEB-INF/pages/payment_term/edit_payment_term.jsp"/>
+    </definition>
+    
+    <!--Rating-->
+    <definition name="ratings" extends="baseWithSidebar">
+        <put-attribute name="title" value="Đánh giá"/>
+        <put-attribute name="content" value="/WEB-INF/pages/rating/ratings.jsp"/>
+    </definition>
+
+    <definition name="add_rating" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm đánh giá"/>
+        <put-attribute name="content" value="/WEB-INF/pages/rating/add_rating.jsp"/>
+    </definition>
+
+    <definition name="edit_rating" extends="baseWithSidebar">
+        <put-attribute name="title" value="Chỉnh sửa đánh giá"/>
+        <put-attribute name="content" value="/WEB-INF/pages/rating/edit_rating.jsp"/>
+    </definition>
+    
     <!---->
     <!--    <definition name="account" extends="baseLayout">-->
     <!--        <put-attribute name="title" value="Danh sách người dùng" />-->
