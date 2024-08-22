@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Shipper;
 import com.fh.scm.services.ShipperService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -74,6 +75,7 @@ public class ShipperController {
     }
 
     @DeleteMapping(path = "/delete/{shipperId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteShipper(@PathVariable(value = "shipperId") Long id) {
         shipperService.delete(id);
 
@@ -81,6 +83,7 @@ public class ShipperController {
     }
 
     @DeleteMapping(path = "/hide/{shipperId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideShipper(@PathVariable(value = "shipperId") Long id) {
         shipperService.softDelete(id);
 

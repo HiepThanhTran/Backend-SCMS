@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Supplier;
 import com.fh.scm.services.SupplierService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -74,6 +75,7 @@ public class SupplierController {
     }
 
     @DeleteMapping(path = "/delete/{supplierId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteSupplier(@PathVariable(value = "supplierId") Long id) {
         supplierService.delete(id);
 
@@ -81,6 +83,7 @@ public class SupplierController {
     }
 
     @DeleteMapping(path = "/hide/{supplierId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideSupplier(@PathVariable(value = "supplierId") Long id) {
         supplierService.softDelete(id);
 

@@ -38,7 +38,7 @@
 <tiles:insertAttribute name="header"/>
 
 <div class="wrapper">
-    <div class="container container__content pb-5">
+    <div class="container-fluid container__content pb-5">
         <div class="row">
             <div class="col-3">
                 <tiles:insertAttribute name="sidebar"/>

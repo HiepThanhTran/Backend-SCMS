@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Shipment;
 import com.fh.scm.services.ShipmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -76,6 +77,7 @@ public class ShipmentController {
     }
 
     @DeleteMapping(path = "/delete/{shipmentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteShipment(@PathVariable(value = "shipmentId") Long id) {
         shipmentService.delete(id);
 
@@ -83,6 +85,7 @@ public class ShipmentController {
     }
 
     @DeleteMapping(path = "/hide/{shipmentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideShipment(@PathVariable(value = "shipmentId") Long id) {
         shipmentService.softDelete(id);
 

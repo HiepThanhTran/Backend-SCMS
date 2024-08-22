@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.DeliverySchedule;
 import com.fh.scm.services.DeliveryScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -69,6 +70,7 @@ public class DeliveryScheduleController {
     }
 
     @DeleteMapping(path = "/delete/{deliveryScheduleId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteDeliverySchedule(@PathVariable(value = "deliveryScheduleId") Long id) {
         deliveryScheduleService.delete(id);
 
@@ -76,6 +78,7 @@ public class DeliveryScheduleController {
     }
 
     @DeleteMapping(path = "/hide/{deliveryScheduleId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideDeliverySchedule(@PathVariable(value = "deliveryScheduleId") Long id) {
         deliveryScheduleService.softDelete(id);
 

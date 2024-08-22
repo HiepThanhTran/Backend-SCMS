@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Order;
 import com.fh.scm.services.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -74,6 +75,7 @@ public class OrderController {
     }
 
     @DeleteMapping(path = "/delete/{orderId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteOrder(@PathVariable(value = "orderId") Long id) {
         orderService.delete(id);
 
@@ -81,6 +83,7 @@ public class OrderController {
     }
 
     @DeleteMapping(path = "/hide/{orderId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideOrder(@PathVariable(value = "orderId") Long id) {
         orderService.softDelete(id);
 

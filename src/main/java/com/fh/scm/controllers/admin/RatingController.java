@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Rating;
 import com.fh.scm.services.RatingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -76,6 +77,7 @@ public class RatingController {
     }
 
     @DeleteMapping(path = "/delete/{ratingId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteRating(@PathVariable(value = "ratingId") Long id) {
         ratingService.delete(id);
 
@@ -83,6 +85,7 @@ public class RatingController {
     }
 
     @DeleteMapping(path = "/hide/{ratingId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideRating(@PathVariable(value = "ratingId") Long id) {
         ratingService.softDelete(id);
 

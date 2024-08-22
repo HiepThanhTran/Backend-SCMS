@@ -78,6 +78,7 @@ public class WarehouseController {
     }
 
     @DeleteMapping(path = "/hide/{warehouseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideWarehouse(@PathVariable(value = "warehouseId") Long id) {
         warehouseService.softDelete(id);
 

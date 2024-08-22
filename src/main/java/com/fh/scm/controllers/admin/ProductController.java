@@ -5,6 +5,7 @@ import com.fh.scm.pojo.Product;
 import com.fh.scm.services.CategoryService;
 import com.fh.scm.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -79,6 +80,7 @@ public class ProductController {
     }
 
     @DeleteMapping(path = "/delete/{productId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteProduct(@PathVariable(value = "productId") Long id) {
         productService.delete(id);
 
@@ -86,6 +88,7 @@ public class ProductController {
     }
 
     @DeleteMapping(path = "/hide/{productId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideProduct(@PathVariable(value = "productId") Long id) {
         productService.softDelete(id);
 

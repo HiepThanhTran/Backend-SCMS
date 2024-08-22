@@ -78,6 +78,7 @@ public class TagController {
     }
 
     @DeleteMapping(path = "/hide/{tagId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideTag(@PathVariable(value = "tagId") Long id) {
         tagService.softDelete(id);
 

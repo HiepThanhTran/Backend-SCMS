@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.PaymentTerms;
 import com.fh.scm.services.PaymentTermsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -76,6 +77,7 @@ public class PaymentTermsController {
     }
 
     @DeleteMapping(path = "/delete/{paymentTermsId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deletePaymentTerms(@PathVariable(value = "paymentTermsId") Long id) {
         paymentTermsService.delete(id);
 
@@ -83,6 +85,7 @@ public class PaymentTermsController {
     }
 
     @DeleteMapping(path = "/hide/{paymentTermsId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hidePaymentTerms(@PathVariable(value = "paymentTermsId") Long id) {
         paymentTermsService.softDelete(id);
 

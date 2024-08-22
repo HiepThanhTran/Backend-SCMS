@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.User;
 import com.fh.scm.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -76,6 +77,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/delete/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteUser(@PathVariable(value = "userId") Long id) {
         userService.delete(id);
 
@@ -83,6 +85,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/hide/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideUser(@PathVariable(value = "userId") Long id) {
         userService.softDelete(id);
 

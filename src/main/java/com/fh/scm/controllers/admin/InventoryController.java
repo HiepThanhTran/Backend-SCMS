@@ -5,6 +5,7 @@ import com.fh.scm.pojo.Inventory;
 import com.fh.scm.services.InventoryService;
 import com.fh.scm.services.WarehouseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -71,6 +72,7 @@ public class InventoryController {
     }
 
     @DeleteMapping(path = "/delete/{inventoryId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteInventory(@PathVariable(value = "inventoryId") Long id) {
         inventoryService.delete(id);
 
@@ -78,6 +80,7 @@ public class InventoryController {
     }
 
     @DeleteMapping(path = "/hide/{inventoryId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideInventory(@PathVariable(value = "inventoryId") Long id) {
         inventoryService.softDelete(id);
 

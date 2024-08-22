@@ -78,6 +78,7 @@ public class TaxController {
     }
 
     @DeleteMapping(path = "/hide/{taxId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideTax(@PathVariable(value = "taxId") Long id) {
         taxService.softDelete(id);
 

@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Unit;
 import com.fh.scm.services.UnitService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -69,6 +70,7 @@ public class UnitController {
     }
 
     @DeleteMapping(path = "/delete/{unitId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteUnit(@PathVariable(value = "unitId") Long id) {
         unitService.delete(id);
 
@@ -76,6 +78,7 @@ public class UnitController {
     }
 
     @DeleteMapping(path = "/hide/{unitId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideUnit(@PathVariable(value = "unitId") Long id) {
         unitService.softDelete(id);
 

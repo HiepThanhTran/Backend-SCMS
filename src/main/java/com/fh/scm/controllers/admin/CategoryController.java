@@ -77,6 +77,7 @@ public class CategoryController {
     }
 
     @DeleteMapping(path = "/hide/{categoryId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideCategory(@PathVariable(value = "categoryId") Long id) {
         categoryService.softDelete(id);
 

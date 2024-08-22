@@ -4,6 +4,7 @@ import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Invoice;
 import com.fh.scm.services.InvoiceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -76,6 +77,7 @@ public class InvoiceController {
     }
 
     @DeleteMapping(path = "/delete/{invoiceId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteInvoice(@PathVariable(value = "invoiceId") Long id) {
         invoiceService.delete(id);
 
@@ -83,6 +85,7 @@ public class InvoiceController {
     }
 
     @DeleteMapping(path = "/hide/{invoiceId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String hideInvoice(@PathVariable(value = "invoiceId") Long id) {
         invoiceService.softDelete(id);
 
