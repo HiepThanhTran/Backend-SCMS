@@ -4,8 +4,10 @@ import com.fh.scm.dto.api.rating.RatingRequestUpdate;
 import com.fh.scm.pojo.Rating;
 import com.fh.scm.repository.RatingRepository;
 import com.fh.scm.services.RatingService;
+import com.fh.scm.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
+@Transactional
 public class RatingServiceImplement implements RatingService {
 
     @Autowired
@@ -30,7 +33,8 @@ public class RatingServiceImplement implements RatingService {
                 if (value != null && !value.toString().isEmpty()) {
                     Field ratingField = Rating.class.getDeclaredField(field.getName());
                     ratingField.setAccessible(true);
-                    ratingField.set(rating, value);
+                    Object convertedValue = Utils.convertValue(ratingField.getType(), value.toString());
+                    ratingField.set(rating, convertedValue);
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 Logger.getLogger(UserServiceImplement.class.getName()).log(Level.SEVERE, null, e);

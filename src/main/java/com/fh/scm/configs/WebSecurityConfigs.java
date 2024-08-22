@@ -15,15 +15,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Order(2)
 @Configuration
@@ -65,12 +59,9 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
 //                .loginPage("/login")
                 .permitAll()
                 .usernameParameter("username").passwordParameter("password")
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
-                        userService.updateLastLogin(authentication.getName());
-                        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/admin");
-                    }
+                .successHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                    userService.updateLastLogin(authentication.getName());
+                    httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/admin");
                 }).failureUrl("/login?error").permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/login").permitAll()

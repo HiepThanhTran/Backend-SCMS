@@ -5,12 +5,10 @@ import com.fh.scm.dto.api.user.UserRequestUpdate;
 import com.fh.scm.dto.api.user.UserResponse;
 import com.fh.scm.exceptions.UserException;
 import com.fh.scm.pojo.*;
-import com.fh.scm.repository.CustomerRepository;
-import com.fh.scm.repository.ShipperRepository;
-import com.fh.scm.repository.SupplierRepository;
-import com.fh.scm.repository.UserRepository;
+import com.fh.scm.repository.*;
 import com.fh.scm.services.UserService;
-import com.fh.scm.services._CloudinaryService;
+import com.fh.scm.services._GlobalService;
+import com.fh.scm.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Field;
@@ -31,6 +30,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service("userDetailsService")
+@Transactional
 public class UserServiceImplement implements UserService {
 
     @Autowired
@@ -42,9 +42,11 @@ public class UserServiceImplement implements UserService {
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private _CloudinaryService cloudinaryService;
+    private _GlobalService globalService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -101,7 +103,7 @@ public class UserServiceImplement implements UserService {
 
         String avatarUrl = null;
         if (userRequestRegister.getAvatar() != null && !userRequestRegister.getAvatar().isEmpty()) {
-            avatarUrl = this.cloudinaryService.uploadImage(userRequestRegister.getAvatar());
+            avatarUrl = this.globalService.uploadImage(userRequestRegister.getAvatar());
         }
 
         user = User.builder()
@@ -149,14 +151,12 @@ public class UserServiceImplement implements UserService {
                 final Supplier finalSupplier = supplier;
                 Set<PaymentTerms> paymentTermsSet = userRequestRegister.getPaymentTermsSet()
                         .stream()
-                        .map(termsRequest -> {
-                            return PaymentTerms.builder()
-                                    .discountDays(termsRequest.getDiscountDays())
-                                    .discountPercentage(termsRequest.getDiscountPercentage())
-                                    .type(termsRequest.getType())
-                                    .supplier(finalSupplier)
-                                    .build();
-                        }).collect(Collectors.toSet());
+                        .map(termsRequest -> PaymentTerms.builder()
+                                .discountDays(termsRequest.getDiscountDays())
+                                .discountPercentage(termsRequest.getDiscountPercentage())
+                                .type(termsRequest.getType())
+                                .supplier(finalSupplier)
+                                .build()).collect(Collectors.toSet());
                 supplier.setPaymentTermsSet(paymentTermsSet);
                 user.setSupplier(supplier);
                 break;
@@ -220,12 +220,13 @@ public class UserServiceImplement implements UserService {
                     userField.setAccessible(true);
 
                     if (field.getName().equals("avatar")) {
-                        String avatarUrl = this.cloudinaryService.uploadImage((MultipartFile) value);
+                        String avatarUrl = this.globalService.uploadImage((MultipartFile) value);
                         userField.set(user, avatarUrl);
                     } else if (field.getName().equals("password")) {
                         userField.set(user, passwordEncoder.encode(value.toString()));
                     } else {
-                        userField.set(user, value);
+                        Object convertedValue = Utils.convertValue(userField.getType(), value.toString());
+                        userField.set(user, convertedValue);
                     }
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {

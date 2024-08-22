@@ -12,15 +12,15 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseMessage {
+public class MessageResponse {
 
     private String message;
 
-    public static List<ResponseMessage> fromBindingResult(@NotNull BindingResult bindingResult) {
+    public static List<MessageResponse> fromBindingResult(@NotNull BindingResult bindingResult) {
         return bindingResult
                 .getAllErrors()
                 .stream()
-                .map(e -> new ResponseMessage(e.getDefaultMessage()))
+                .map(e -> new MessageResponse(e.getDefaultMessage()))
                 .collect(Collectors.toList());
     }
 }

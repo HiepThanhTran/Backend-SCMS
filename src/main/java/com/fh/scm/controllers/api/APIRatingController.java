@@ -1,6 +1,6 @@
 package com.fh.scm.controllers.api;
 
-import com.fh.scm.dto.ResponseMessage;
+import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.dto.api.rating.RatingRequestUpdate;
 import com.fh.scm.pojo.Rating;
 import com.fh.scm.pojo.User;
@@ -20,21 +20,21 @@ import java.util.Objects;
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/rating", produces = "application/json; charset=UTF-8")
+@RequestMapping(path = "/api/ratings", produces = "application/json; charset=UTF-8")
 public class APIRatingController {
 
     private final RatingService ratingService;
     private final UserService userService;
 
-    @GetMapping(path = "/list")
-    public ResponseEntity<?> list(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
+    @GetMapping
+    public ResponseEntity<?> listRatings(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         List<Rating> ratingList = this.ratingService.getAll(params);
 
         return ResponseEntity.ok(ratingList);
     }
 
-    @GetMapping(path = "/{ratingId}/retrieve")
-    public ResponseEntity<?> retrieve(@PathVariable(value = "ratingId") Long id) {
+    @GetMapping(path = "/{ratingId}")
+    public ResponseEntity<?> getRating(@PathVariable(value = "ratingId") Long id) {
         Rating rating = this.ratingService.get(id);
 
         if (rating == null) {
@@ -44,13 +44,13 @@ public class APIRatingController {
         return ResponseEntity.ok(rating);
     }
 
-    @PostMapping(path = "/{ratingId}/edit")
-    public ResponseEntity<?> details(Principal principal, @PathVariable(value = "ratingId") Long id,
+    @PostMapping(path = "/{ratingId}")
+    public ResponseEntity<?> updateRating(Principal principal, @PathVariable(value = "ratingId") Long id,
                                      @ModelAttribute @Valid RatingRequestUpdate ratingRequestUpdate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<ResponseMessage> responseMessages = ResponseMessage.fromBindingResult(bindingResult);
+            List<MessageResponse> messageResponses = MessageResponse.fromBindingResult(bindingResult);
 
-            return ResponseEntity.badRequest().body(responseMessages);
+            return ResponseEntity.badRequest().body(messageResponses);
         }
 
         Rating rating = this.ratingService.get(id);
@@ -66,11 +66,11 @@ public class APIRatingController {
             return ResponseEntity.ok(rating);
         }
 
-        return ResponseEntity.badRequest().body(new ResponseMessage("Bạn không có quyền sửa đánh giá này"));
+        return ResponseEntity.badRequest().body(new MessageResponse("Bạn không có quyền sửa đánh giá này"));
     }
 
-    @DeleteMapping(path = "/{ratingId}/delete")
-    public ResponseEntity<?> delete(Principal principal, @PathVariable(value = "ratingId") Long id) {
+    @DeleteMapping(path = "/{ratingId}")
+    public ResponseEntity<?> deleteRating(Principal principal, @PathVariable(value = "ratingId") Long id) {
         Rating rating = this.ratingService.get(id);
 
         if (rating == null) {
@@ -84,6 +84,6 @@ public class APIRatingController {
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.badRequest().body(new ResponseMessage("Bạn không có quyền xóa đánh giá này"));
+        return ResponseEntity.badRequest().body(new MessageResponse("Bạn không có quyền xóa đánh giá này"));
     }
 }

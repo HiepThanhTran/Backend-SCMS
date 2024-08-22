@@ -1,6 +1,6 @@
 package com.fh.scm.controllers.admin;
 
-import com.fh.scm.dto.ResponseMessage;
+import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Product;
 import com.fh.scm.services.CategoryService;
 import com.fh.scm.services.ProductService;
@@ -22,6 +22,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+
     @GetMapping
     public String listProducts(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("products", productService.getAll(params));
@@ -41,7 +42,7 @@ public class ProductController {
                              BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
+                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_product";
@@ -62,7 +63,7 @@ public class ProductController {
                               @ModelAttribute(value = "product") @Valid Product product, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
+                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_product";

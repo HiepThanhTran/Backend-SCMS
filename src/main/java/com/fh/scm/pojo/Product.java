@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "product")
 public class Product extends _BaseEntity implements Serializable {
@@ -22,6 +22,8 @@ public class Product extends _BaseEntity implements Serializable {
     @NotNull(message = "{product.name.notNull}")
     @Column(nullable = false, unique = true)
     private String name;
+
+    private String description;
 
     @Builder.Default
     @NotNull(message = "{product.price.notNull}")
@@ -31,23 +33,25 @@ public class Product extends _BaseEntity implements Serializable {
     @Column(length = 300)
     private String image;
 
-    private String description;
-
     @NotNull(message = "{product.expiryDate.notNull}")
     @Column(name = "expiry_date", nullable = false)
     private Date expiryDate;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST}, optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @ManyToMany
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "inventory_id", referencedColumnName = "id")
+    private Inventory inventory;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "product_unit",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "unit_id"))
     private Set<Unit> unitSet;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "product_tag",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
@@ -57,12 +61,12 @@ public class Product extends _BaseEntity implements Serializable {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OrderDetails> orderDetailsSet;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<SupplierCosting> supplierCostingSet;
-
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<InventoryDetails> inventoryDetailsSet;
+    private Set<CartDetails> cartDetailsSet;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<SupplierCosting> supplierCostingSet;
 
     @Override
     public String toString() {

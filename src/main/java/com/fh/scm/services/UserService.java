@@ -1,8 +1,8 @@
 package com.fh.scm.services;
 
 import com.fh.scm.dto.api.user.UserRequestRegister;
-import com.fh.scm.dto.api.user.UserResponse;
 import com.fh.scm.dto.api.user.UserRequestUpdate;
+import com.fh.scm.dto.api.user.UserResponse;
 import com.fh.scm.pojo.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

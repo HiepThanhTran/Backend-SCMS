@@ -1,6 +1,6 @@
 package com.fh.scm.dto.api.user;
 
-import com.fh.scm.dto.api.payment_temrs.PaymentTermsRequest;
+import com.fh.scm.dto.api.pt.PaymentTermsRequest;
 import com.fh.scm.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

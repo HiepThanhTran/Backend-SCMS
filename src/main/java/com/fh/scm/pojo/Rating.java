@@ -1,6 +1,5 @@
 package com.fh.scm.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fh.scm.enums.CriteriaType;
 import lombok.*;
 
@@ -9,13 +8,13 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Setter
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "rating", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"supplier_id", "user_id"})
@@ -26,8 +25,8 @@ public class Rating extends _BaseEntity implements Serializable {
     @NotNull(message = "{rating.notNull}")
     @DecimalMin(value = "1.00", message = "{rating.min}")
     @DecimalMax(value = "5.00", message = "{rating.max}")
-    @Column(nullable = false, precision = 2, scale = 1, columnDefinition = "decimal default 0.0")
-    private Float rating = 5f;
+    @Column(nullable = false, precision = 2, scale = 1, columnDefinition = "decimal default 5.0")
+    private BigDecimal rating = BigDecimal.valueOf(5);
 
     private String content;
 

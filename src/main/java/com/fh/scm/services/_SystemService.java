@@ -1,6 +1,6 @@
 package com.fh.scm.services;
 
-public interface  _SystemService {
+public interface _SystemService {
 
     Boolean isExist(String name);
 

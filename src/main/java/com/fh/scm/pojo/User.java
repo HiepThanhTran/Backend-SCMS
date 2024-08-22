@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fh.scm.enums.UserRole;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,32 +19,35 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "\"user\"", indexes = {
+        @Index(name = "idx_user_email", columnList = "email"),
+        @Index(name = "idx_user_username", columnList = "username"),
+})
 public class User extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{user.email.notNull}")
-    @Column(nullable = false, unique = true)
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "{user.email.pattern}")
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotNull(message = "{user.username.notNull}")
-    @Column(nullable = false, unique = true, length = 50)
     @Size(min = 6, max = 50, message = "{user.username.size}")
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
     @JsonIgnore
-    @Column(nullable = false, length = 300)
     @NotNull(message = "{user.password.notNull}")
     @Size(min = 8, max = 300, message = "{user.password.size}")
+    @Column(nullable = false, length = 300)
     private String password;
 
     @Column(length = 300)
     private String avatar;
 
     @Builder.Default
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{user.role.notNull}")
+    @Column(nullable = false)
     private UserRole userRole = UserRole.ROLE_CUSTOMER;
 
     @Builder.Default
@@ -54,9 +55,13 @@ public class User extends _BaseEntity implements Serializable {
     @Column(name = "is_confirm", nullable = false, columnDefinition = "boolean default false")
     private Boolean isConfirm = false;
 
-    @Column(name = "last_login")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "last_login")
     private LocalDateTime lastLogin;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

@@ -10,24 +10,24 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "delivery_schedule")
 public class DeliverySchedule extends _BaseEntity implements Serializable {
 
-    @Column(nullable = false)
     @NotNull(message = "{deliverySchedule.scheduledDate.notNull}")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(nullable = false)
     private LocalDateTime scheduledDate;
 
     @Builder.Default
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{deliverySchedule.method.notNull}")
+    @Column(nullable = false)
     private DeliveryMethodType method = DeliveryMethodType.EXPRESS;
 
     @OneToMany(mappedBy = "deliverySchedule")

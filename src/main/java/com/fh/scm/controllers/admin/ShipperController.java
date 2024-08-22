@@ -1,6 +1,6 @@
 package com.fh.scm.controllers.admin;
 
-import com.fh.scm.dto.ResponseMessage;
+import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Shipper;
 import com.fh.scm.services.ShipperService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class ShipperController {
                              BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
+                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_shipper";
@@ -59,7 +59,7 @@ public class ShipperController {
                               @ModelAttribute(value = "shipper") @Valid Shipper shipper, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
+                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_shipper";

@@ -1,7 +1,5 @@
 package com.fh.scm.repository.implement;
 
-import com.fh.scm.pojo.PaymentTerms;
-import com.fh.scm.pojo.Rating;
 import com.fh.scm.pojo.Supplier;
 import com.fh.scm.pojo.User;
 import com.fh.scm.repository.SupplierRepository;
@@ -15,8 +13,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.*;
-import java.util.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Repository
 @Transactional

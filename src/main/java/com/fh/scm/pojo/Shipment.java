@@ -3,16 +3,18 @@ package com.fh.scm.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fh.scm.enums.ShipmentStatus;
 import lombok.*;
+import org.eclipse.persistence.annotations.UuidGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.UUID;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "shipment")
 public class Shipment extends _BaseEntity implements Serializable {
@@ -26,8 +28,9 @@ public class Shipment extends _BaseEntity implements Serializable {
     @Column(name = "current_location", nullable = false)
     private String currentLocation;
 
-    @Column(name = "tracking_number", nullable = false, unique = true)
-    private String trackingNumber;
+    @Builder.Default
+    @Column(name = "tracking_number", nullable = false, unique = true, length = 36)
+    private String trackingNumber = String.valueOf(UUID.randomUUID());
 
     @Builder.Default
     @Column(nullable = false)

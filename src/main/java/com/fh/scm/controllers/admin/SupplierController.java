@@ -1,6 +1,6 @@
 package com.fh.scm.controllers.admin;
 
-import com.fh.scm.dto.ResponseMessage;
+import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Supplier;
 import com.fh.scm.services.SupplierService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class SupplierController {
                               BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
+                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_supplier";
@@ -59,7 +59,7 @@ public class SupplierController {
                                @ModelAttribute(value = "supplier") @Valid Supplier supplier, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
+                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_supplier";

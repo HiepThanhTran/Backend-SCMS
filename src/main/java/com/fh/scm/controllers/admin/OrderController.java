@@ -1,6 +1,6 @@
 package com.fh.scm.controllers.admin;
 
-import com.fh.scm.dto.ResponseMessage;
+import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Order;
 import com.fh.scm.services.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class OrderController {
                            BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
+                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_order";
@@ -59,7 +59,7 @@ public class OrderController {
                             @ModelAttribute(value = "order") @Valid Order order, BindingResult bindingResult) {
         if (request.getMethod().equals("PATCH")) {
             if (bindingResult.hasErrors()) {
-                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
+                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_order";

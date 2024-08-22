@@ -2,8 +2,6 @@ package com.fh.scm.repository.implement;
 
 import com.fh.scm.enums.CriteriaType;
 import com.fh.scm.pojo.Rating;
-import com.fh.scm.pojo.Supplier;
-import com.fh.scm.pojo.User;
 import com.fh.scm.repository.RatingRepository;
 import com.fh.scm.util.Pagination;
 import org.hibernate.Session;
@@ -14,7 +12,11 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Repository
@@ -110,11 +112,11 @@ public class RatingRepositoryImplement implements RatingRepository {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
                         case "fromRating":
-                            Predicate p1 = builder.greaterThanOrEqualTo(root.get("rating"), Float.parseFloat(params.get(key)));
+                            Predicate p1 = builder.greaterThanOrEqualTo(root.get("rating"), new BigDecimal(params.get(key)));
                             predicates.add(p1);
                             break;
                         case "toRating":
-                            Predicate p2 = builder.lessThanOrEqualTo(root.get("rating"), Float.parseFloat(params.get(key)));
+                            Predicate p2 = builder.lessThanOrEqualTo(root.get("rating"), new BigDecimal(params.get(key)));
                             predicates.add(p2);
                             break;
                         case "criteria":

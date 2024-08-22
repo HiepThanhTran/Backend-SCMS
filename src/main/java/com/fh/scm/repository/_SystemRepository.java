@@ -1,8 +1,8 @@
 package com.fh.scm.repository;
 
-public interface  _SystemRepository {
-
-    Boolean isExist(String name);
+public interface _SystemRepository {
 
     void insert(String name);
+
+    Boolean isExist(String name);
 }

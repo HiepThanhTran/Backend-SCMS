@@ -9,11 +9,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "warehouse")
 public class Warehouse extends _BaseEntity implements Serializable {

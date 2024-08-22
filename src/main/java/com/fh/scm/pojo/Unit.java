@@ -3,16 +3,19 @@ package com.fh.scm.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "unit")
 public class Unit extends _BaseEntity implements Serializable {
@@ -20,6 +23,10 @@ public class Unit extends _BaseEntity implements Serializable {
     @NotNull(message = "{unit.name.notNull}")
     @Column(nullable = false, unique = true)
     private String name;
+
+    @NotNull(message = "{unit.abbreviation.notNull}")
+    @Column(nullable = false, unique = true)
+    private String abbreviation;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "unitSet")

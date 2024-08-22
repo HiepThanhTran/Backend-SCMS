@@ -5,12 +5,14 @@ import com.fh.scm.repository.ShipmentRepository;
 import com.fh.scm.services.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 
 
 @Service
+@Transactional
 public class ShipmentServiceImplement implements ShipmentService {
 
     @Autowired

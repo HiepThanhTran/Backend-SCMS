@@ -2,6 +2,7 @@ package com.fh.scm.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 @AllArgsConstructor
@@ -16,8 +17,7 @@ public enum UserRole {
 
     private final String displayName;
 
-    public String alias() {
-
+    public @NotNull String alias() {
         return this.name().substring(5);
     }
 }

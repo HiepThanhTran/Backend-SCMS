@@ -7,12 +7,15 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "order_details")
+@Table(name = "order_details", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"order_id", "product_id"})
+})
 public class OrderDetails extends _BaseEntity implements Serializable {
 
     @Builder.Default
@@ -25,7 +28,7 @@ public class OrderDetails extends _BaseEntity implements Serializable {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
     @ManyToOne

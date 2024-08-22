@@ -7,13 +7,15 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "supplier_costing")
+@Table(name = "supplier_costing", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"product_id", "supplier_id"})
+})
 public class SupplierCosting extends _BaseEntity implements Serializable {
 
     @Builder.Default

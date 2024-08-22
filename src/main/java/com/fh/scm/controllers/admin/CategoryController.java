@@ -1,6 +1,6 @@
 package com.fh.scm.controllers.admin;
 
-import com.fh.scm.dto.ResponseMessage;
+import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.pojo.Category;
 import com.fh.scm.services.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +31,10 @@ public class CategoryController {
 
     @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     public String addCategory(HttpServletRequest request, Model model, @ModelAttribute(value = "category") @Valid Category category,
-            BindingResult bindingResult) {
+                              BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
+                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "add_category";
@@ -50,10 +50,10 @@ public class CategoryController {
 
     @RequestMapping(path = "/edit/{categoryId}", method = {RequestMethod.GET, RequestMethod.POST})
     public String editCategory(HttpServletRequest request, Model model, @PathVariable(value = "categoryId") Long id,
-            @ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult) {
+                               @ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult) {
         if (request.getMethod().equals("POST")) {
             if (bindingResult.hasErrors()) {
-                List<ResponseMessage> errors = ResponseMessage.fromBindingResult(bindingResult);
+                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
                 model.addAttribute("errors", errors);
 
                 return "edit_category";

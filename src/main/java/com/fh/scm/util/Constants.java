@@ -1,7 +1,5 @@
 package com.fh.scm.util;
 
-import com.fh.scm.enums.UserRole;
-
 import java.time.format.DateTimeFormatter;
 
 public final class Constants {

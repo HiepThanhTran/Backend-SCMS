@@ -19,6 +19,13 @@ public class WebInitializerConfigs {
     public void initializer() {
         if (isFirstRun()) {
             this.initializerDataService.createUser();
+            this.initializerDataService.createCategory();
+            this.initializerDataService.createTag();
+            this.initializerDataService.createUnit();
+            this.initializerDataService.createProduct();
+            this.initializerDataService.createTax();
+            this.initializerDataService.createWarehouse();
+            this.initializerDataService.createInventory();
             this.systemService.insert("isFirstRun");
         }
     }

@@ -1,6 +1,5 @@
 package com.fh.scm.repository;
 
-import com.fh.scm.pojo.PaymentTerms;
 import com.fh.scm.pojo.Supplier;
 import com.fh.scm.pojo.User;
 

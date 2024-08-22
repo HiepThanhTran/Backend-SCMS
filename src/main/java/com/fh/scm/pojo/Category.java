@@ -4,24 +4,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "category")
 public class Category extends _BaseEntity implements Serializable {
 
-    @Column(nullable = false, unique = true)
     @NotNull(message = "{category.name.notNull}")
-    @NotBlank(message = "Tên danh mục không được rỗng")
+    @Column(nullable = false, unique = true)
     private String name;
 
     private String description;

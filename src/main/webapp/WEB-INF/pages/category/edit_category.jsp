@@ -11,9 +11,9 @@
 </div>
 
 <c:if test="${errors != null}">
-    <c:forEach  var="error" items="${errors}">
+    <c:forEach var="error" items="${errors}">
         <div class="alert alert-danger">
-            ${error.message}
+                ${error.message}
         </div>
     </c:forEach>
 </c:if>

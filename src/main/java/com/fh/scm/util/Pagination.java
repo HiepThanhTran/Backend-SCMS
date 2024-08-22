@@ -3,7 +3,6 @@ package com.fh.scm.util;
 import org.hibernate.query.Query;
 
 import java.util.Map;
-import java.util.Optional;
 
 public class Pagination {
 
@@ -18,17 +17,13 @@ public class Pagination {
             int page, size;
             try {
                 page = Integer.parseInt(pageStr);
-                if (page < 1) {
-                    page = 1;
-                }
+                if (page < 1) page = 1;
             } catch (NumberFormatException e) {
                 page = 1;
             }
             try {
                 size = Integer.parseInt(sizeStr);
-                if (size < 1) {
-                    size = Constants.DEFAULT_PAGE_SIZE;
-                }
+                if (size < 1) size = Constants.DEFAULT_PAGE_SIZE;
             } catch (NumberFormatException e) {
                 size = Constants.DEFAULT_PAGE_SIZE;
             }

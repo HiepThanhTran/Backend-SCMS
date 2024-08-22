@@ -4,24 +4,31 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fh.scm.enums.OrderStatus;
 import com.fh.scm.enums.OrderType;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "\"order\"")
 public class Order extends _BaseEntity implements Serializable {
 
-    @Column(name = "expected_delivery")
-    private Date expectedDelivery;
+    @Builder.Default
+    @Column(name = "order_number", nullable = false, unique = true, length = 36)
+    private String orderNumber = String.valueOf(UUID.randomUUID());
+
+    @Builder.Default
+    @Column(name = "is_cancel", columnDefinition = "boolean default false")
+    private Boolean cancel = false;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
@@ -33,6 +40,9 @@ public class Order extends _BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false)
     private OrderStatus status = OrderStatus.PENDING;
+
+    @Column(name = "expected_delivery")
+    private Date expectedDelivery;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)

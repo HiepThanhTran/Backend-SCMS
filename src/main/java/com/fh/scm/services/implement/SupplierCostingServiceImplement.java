@@ -5,11 +5,13 @@ import com.fh.scm.repository.SupplierCostingRepository;
 import com.fh.scm.services.SupplierCostingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class SupplierCostingServiceImplement implements SupplierCostingService {
 
     @Autowired

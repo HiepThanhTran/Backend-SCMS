@@ -4,8 +4,10 @@ import com.fh.scm.repository._SystemRepository;
 import com.fh.scm.services._SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class _SystemServiceImplement implements _SystemService {
 
     @Autowired

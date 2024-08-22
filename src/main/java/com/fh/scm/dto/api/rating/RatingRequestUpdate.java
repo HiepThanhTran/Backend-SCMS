@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import java.math.BigDecimal;
 
 @Data
 @Builder
@@ -17,7 +18,7 @@ public class RatingRequestUpdate {
 
     @DecimalMin(value = "1.00", message = "{rating.min}")
     @DecimalMax(value = "5.00", message = "{rating.max}")
-    private Float rating;
+    private BigDecimal rating;
 
     private String content;
 

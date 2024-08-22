@@ -26,6 +26,13 @@ public class _SystemRepositoryImplement implements _SystemRepository {
     }
 
     @Override
+    public void insert(String name) {
+        Session session = this.getCurrentSession();
+        _System system = _System.builder().name(name).build();
+        session.persist(system);
+    }
+
+    @Override
     public Boolean isExist(String name) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -36,12 +43,5 @@ public class _SystemRepositoryImplement implements _SystemRepository {
         Query<Long> query = session.createQuery(criteria);
 
         return query.getSingleResult() > 0;
-    }
-
-    @Override
-    public void insert(String name) {
-        Session session = this.getCurrentSession();
-        _System system = _System.builder().name(name).build();
-        session.persist(system);
     }
 }

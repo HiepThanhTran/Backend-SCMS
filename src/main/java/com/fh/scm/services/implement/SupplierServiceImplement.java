@@ -1,19 +1,18 @@
 package com.fh.scm.services.implement;
 
 import com.fh.scm.dto.api.rating.RatingRequestCreate;
-import com.fh.scm.dto.api.payment_temrs.PaymentTermsRequest;
 import com.fh.scm.dto.api.supplier.SupplierDTO;
 import com.fh.scm.exceptions.RatingSupplierException;
 import com.fh.scm.exceptions.UserException;
-import com.fh.scm.pojo.PaymentTerms;
 import com.fh.scm.pojo.Rating;
 import com.fh.scm.pojo.Supplier;
 import com.fh.scm.pojo.User;
 import com.fh.scm.repository.PaymentTermsRepository;
+import com.fh.scm.repository.RatingRepository;
 import com.fh.scm.repository.SupplierRepository;
 import com.fh.scm.repository.UserRepository;
-import com.fh.scm.services.RatingService;
 import com.fh.scm.services.SupplierService;
+import com.fh.scm.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,10 +22,8 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -39,7 +36,7 @@ public class SupplierServiceImplement implements SupplierService {
     @Autowired
     private PaymentTermsRepository paymentTermsRepository;
     @Autowired
-    private RatingService ratingService;
+    private RatingRepository ratingRepository;
 
     @Override
     public SupplierDTO getSupplierResponse(Supplier supplier) {
@@ -77,7 +74,8 @@ public class SupplierServiceImplement implements SupplierService {
                 if (value != null && !value.toString().isEmpty()) {
                     Field supplierField = Supplier.class.getDeclaredField(field.getName());
                     supplierField.setAccessible(true);
-                    supplierField.set(supplier, value);
+                    Object convertedValue = Utils.convertValue(supplierField.getType(), value.toString());
+                    supplierField.set(supplier, convertedValue);
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 Logger.getLogger(UserServiceImplement.class.getName()).log(Level.SEVERE, null, e);
@@ -102,7 +100,7 @@ public class SupplierServiceImplement implements SupplierService {
             throw new RatingSupplierException("Không thể đánh giá chính mình");
         }
 
-        Rating rating = this.ratingService.getByUserAndSupplier(user.getId(), supplierId);
+        Rating rating = this.ratingRepository.getByUserAndSupplier(user.getId(), supplierId);
 
         if (rating == null) {
             rating = Rating.builder()
@@ -112,12 +110,12 @@ public class SupplierServiceImplement implements SupplierService {
                     .content(ratingRequestCreate.getContent())
                     .criteria(ratingRequestCreate.getCriteria())
                     .build();
-            this.ratingService.insert(rating);
+            this.ratingRepository.insert(rating);
         } else {
             rating.setRating(ratingRequestCreate.getRating());
             rating.setContent(ratingRequestCreate.getContent());
             rating.setCriteria(ratingRequestCreate.getCriteria());
-            this.ratingService.update(rating);
+            this.ratingRepository.update(rating);
         }
 
         return rating;

@@ -1,7 +1,7 @@
 package com.fh.scm.controllers.api;
 
 import com.fh.scm.components.JWTService;
-import com.fh.scm.dto.ResponseMessage;
+import com.fh.scm.dto.MessageResponse;
 import com.fh.scm.dto.api.user.UserRequestLogin;
 import com.fh.scm.dto.api.user.UserRequestRegister;
 import com.fh.scm.dto.api.user.UserRequestUpdate;
@@ -22,7 +22,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/user", produces = "application/json; charset=UTF-8")
+@RequestMapping(path = "/api/users", produces = "application/json; charset=UTF-8")
 public class APIUserController {
 
     private final JWTService jwtService;
@@ -31,15 +31,15 @@ public class APIUserController {
     @PostMapping(path = "/login")
     public ResponseEntity<?> authenticateUser(@RequestBody @Valid UserRequestLogin userRequestLogin, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<ResponseMessage> errorMessages = ResponseMessage.fromBindingResult(bindingResult);
+            List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
 
             return ResponseEntity.badRequest().body(errorMessages);
         }
 
         if (!this.userService.authenticateUser(userRequestLogin.getUsername(), userRequestLogin.getPassword())) {
-            ResponseMessage responseMessage = new ResponseMessage("Tài khoản hoặc mật khẩu không đúng");
+            MessageResponse messageResponse = new MessageResponse("Tài khoản hoặc mật khẩu không đúng");
 
-            return ResponseEntity.badRequest().body(responseMessage);
+            return ResponseEntity.badRequest().body(messageResponse);
         }
 
         String token = this.jwtService.generateTokenLogin(userRequestLogin.getUsername());
@@ -51,7 +51,7 @@ public class APIUserController {
     @PostMapping(path = "/register")
     public ResponseEntity<?> register(@RequestBody @Valid UserRequestRegister userRequestRegister, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<ResponseMessage> errorMessages = ResponseMessage.fromBindingResult(bindingResult);
+            List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
 
             return ResponseEntity.badRequest().body(errorMessages);
         }
@@ -61,25 +61,23 @@ public class APIUserController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
         } catch (UserException e) {
-            return ResponseEntity.badRequest().body(new ResponseMessage(e.getMessage()));
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 
     @PostMapping(path = "/confirm")
-    public ResponseEntity<?> confirm(Principal principal) {
+    public ResponseEntity<?> confirmUser(Principal principal) {
         if (this.userService.confirmUser(principal.getName())) {
-            ResponseMessage responseMessage = new ResponseMessage("Xác nhận tài khoản thành công");
-
-            return ResponseEntity.ok().body(responseMessage);
+            return ResponseEntity.ok().build();
         }
 
-        ResponseMessage responseMessage = new ResponseMessage("Xác nhận tài khoản không thành công");
+        MessageResponse messageResponse = new MessageResponse("Xác nhận tài khoản không thành công");
 
-        return ResponseEntity.badRequest().body(responseMessage);
+        return ResponseEntity.badRequest().body(messageResponse);
     }
 
     @GetMapping(path = "/profile")
-    public ResponseEntity<?> profileUser(Principal principal) {
+    public ResponseEntity<?> getProfileUser(Principal principal) {
         UserResponse userResponse = this.userService.getProfileUser(principal.getName());
 
         return ResponseEntity.ok(userResponse);
@@ -88,7 +86,7 @@ public class APIUserController {
     @PostMapping(path = "/profile/update")
     public ResponseEntity<?> updateProfileUser(Principal principal, @ModelAttribute @Valid UserRequestUpdate userRequestUpdate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<ResponseMessage> errorMessages = ResponseMessage.fromBindingResult(bindingResult);
+            List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
 
             return ResponseEntity.badRequest().body(errorMessages);
         }
@@ -98,12 +96,12 @@ public class APIUserController {
 
             return ResponseEntity.ok(userResponse);
         } catch (UserException e) {
-            return ResponseEntity.badRequest().body(new ResponseMessage(e.getMessage()));
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 
     @DeleteMapping(path = "/profile/delete")
-    public ResponseEntity<?> delete(Principal principal) {
+    public ResponseEntity<?> deleteUser(Principal principal) {
         User user = this.userService.getByUsername(principal.getName());
 
         if (user == null) {

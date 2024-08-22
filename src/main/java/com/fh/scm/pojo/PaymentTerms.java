@@ -9,9 +9,11 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,8 +29,8 @@ public class PaymentTerms extends _BaseEntity implements Serializable {
     @Builder.Default
     @DecimalMin(value = "0.01", message = "{paymentTerms.discountPercentage.min}")
     @DecimalMax(value = "1.00", message = "{paymentTerms.discountPercentage.max}")
-    @Column(name = "discount_percentage", precision = 5, scale = 2, columnDefinition = "float default 0.0")
-    private Float discountPercentage = 0.0f; // Phần trăm chiết khấu (nếu có)
+    @Column(name = "discount_percentage", precision = 5, scale = 2, columnDefinition = "float default 0.01")
+    private BigDecimal discountPercentage = BigDecimal.valueOf(0.01); // Phần trăm chiết khấu (nếu có)
 
     @Builder.Default
     @Enumerated(EnumType.STRING)

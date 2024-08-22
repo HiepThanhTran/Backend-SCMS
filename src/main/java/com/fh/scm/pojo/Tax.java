@@ -9,28 +9,28 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "tax")
 public class Tax extends _BaseEntity implements Serializable {
 
     @Builder.Default
-    @DecimalMin(value = "0.01", inclusive = true, message = "{tax.rate.min}")
-    @DecimalMax(value = "1.00", inclusive = true, message = "{tax.rate.max}")
-    @Column(nullable = false, precision = 5, scale = 2, columnDefinition = "float default 0.0")
-    private Float rate = 0.0f;
+    @DecimalMin(value = "0.01", message = "{tax.rate.min}")
+    @DecimalMax(value = "1.00", message = "{tax.rate.max}")
+    @Column(nullable = false, precision = 5, scale = 2, columnDefinition = "float default 0.01")
+    private BigDecimal rate = BigDecimal.valueOf(0.01);
 
-    @Builder.Default
     @Size(min = 1, max = 15, message = "{tax.name.size}")
     @NotNull(message = "{tax.region.notNull}")
-    @Column(nullable = false, unique = true, length = 15, columnDefinition = "varchar(15) default 'VI'")
-    private String region = "VI";
+    @Column(nullable = false, unique = true, length = 15)
+    private String region;
 
     @JsonIgnore
     @OneToMany(mappedBy = "tax", cascade = {CascadeType.PERSIST})

@@ -58,19 +58,37 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/api/**");
 
         http.authorizeRequests()
-                // User
-                .antMatchers("/api/user/profile/**").authenticated()
-                .antMatchers("/api/user/confirm").authenticated()
-                .antMatchers("/api/user/**").permitAll()
-                // Supplier
-                .antMatchers("/api/supplier/payment-terms/**").hasRole(UserRole.ROLE_SUPPLIER.alias())
-                .antMatchers("/api/supplier/profile/**").hasRole(UserRole.ROLE_SUPPLIER.alias())
-                .antMatchers("/api/supplier/**/rating/add").authenticated()
-                .antMatchers("/api/supplier/**").permitAll()
+                // Cart
+                .antMatchers("/api/cart/**").authenticated()
+                // Category
+                .antMatchers("/api/categories/**").permitAll()
+                // Order
+                .antMatchers("/api/orders/**/status").hasAnyRole(
+                        UserRole.ROLE_ADMIN.alias(),
+                        UserRole.ROLE_SUPPLIER.alias(),
+                        UserRole.ROLE_DISTRIBUTOR.alias(),
+                        UserRole.ROLE_MANUFACTURER.alias(),
+                        UserRole.ROLE_SHIPPER.alias()
+                )
+                .antMatchers("/api/orders/**").authenticated()
                 // Rating
-                .antMatchers("/api/rating/**/edit").authenticated()
-                .antMatchers("/api/rating/**/delete").authenticated()
-                .antMatchers("/api/rating/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/ratings/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/ratings/**").authenticated()
+                .antMatchers("/api/ratings/**").permitAll()
+                // Supplier
+                .antMatchers("/api/suppliers/profile/**").hasRole(UserRole.ROLE_SUPPLIER.alias())
+                .antMatchers("/api/suppliers/**/rating/add").authenticated()
+                .antMatchers("/api/suppliers/**").permitAll()
+                // Tag
+                .antMatchers("/api/tags/**").permitAll()
+                // Tax
+                .antMatchers("/api/taxes/**").permitAll()
+                // Unit
+                .antMatchers("/api/units/**").permitAll()
+                // User
+                .antMatchers("/api/users/confirm").authenticated()
+                .antMatchers("/api/users/profile/**").authenticated()
+                .antMatchers("/api/users/**").permitAll()
                 .and()
                 .antMatcher("/api/**").httpBasic().authenticationEntryPoint(this.restServicesEntryPoint())
                 .and()

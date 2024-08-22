@@ -7,11 +7,11 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "inventory")
 public class Inventory extends _BaseEntity implements Serializable {
@@ -20,12 +20,16 @@ public class Inventory extends _BaseEntity implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "float default 0")
+    private Float quantity = 0.0f;
+
     @ManyToOne(cascade = {CascadeType.PERSIST}, optional = false)
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", nullable = false)
     private Warehouse warehouse;
 
     @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
-    private Set<InventoryDetails> inventoryDetailsSet;
+    private Set<Product> productSet;
 
     @Override
     public String toString() {
