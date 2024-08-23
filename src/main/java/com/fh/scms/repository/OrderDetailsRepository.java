@@ -7,9 +7,9 @@ import java.util.Map;
 
 public interface OrderDetailsRepository {
 
-    OrderDetails get(Long id);
+    OrderDetails findById(Long id);
 
-    void insert(OrderDetails orderDetails);
+    void save(OrderDetails orderDetails);
 
     void update(OrderDetails orderDetails);
 
@@ -17,5 +17,5 @@ public interface OrderDetailsRepository {
 
     Long count();
 
-    List<OrderDetails> getAll(Map<String, String> params);
+    List<OrderDetails> findAllWithFilter(Map<String, String> params);
 }

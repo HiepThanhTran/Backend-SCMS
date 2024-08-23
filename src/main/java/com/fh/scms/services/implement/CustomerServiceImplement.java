@@ -18,18 +18,18 @@ public class CustomerServiceImplement implements CustomerService {
     private CustomerRepository customerRepository;
 
     @Override
-    public Customer get(Long id) {
-        return this.customerRepository.get(id);
+    public Customer findById(Long id) {
+        return this.customerRepository.findById(id);
     }
 
     @Override
-    public Customer getByPhone(String phone) {
-        return this.customerRepository.getByPhone(phone);
+    public Customer findByPhone(String phone) {
+        return this.customerRepository.findByPhone(phone);
     }
 
     @Override
-    public void insert(Customer customer) {
-        this.customerRepository.insert(customer);
+    public void save(Customer customer) {
+        this.customerRepository.save(customer);
     }
 
     @Override
@@ -43,17 +43,12 @@ public class CustomerServiceImplement implements CustomerService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.customerRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.customerRepository.count();
     }
 
     @Override
-    public List<Customer> getAll(Map<String, String> params) {
-        return this.customerRepository.getAll(params);
+    public List<Customer> findAllWithFilter(Map<String, String> params) {
+        return this.customerRepository.findAllWithFilter(params);
     }
 }

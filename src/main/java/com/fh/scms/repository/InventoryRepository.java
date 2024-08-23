@@ -7,17 +7,15 @@ import java.util.Map;
 
 public interface InventoryRepository {
 
-    Inventory get(Long id);
+    Inventory findById(Long id);
 
-    void insert(Inventory inventory);
+    void save(Inventory inventory);
 
     void update(Inventory inventory);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Inventory> getAll(Map<String, String> params);
+    List<Inventory> findAllWithFilter(Map<String, String> params);
 }

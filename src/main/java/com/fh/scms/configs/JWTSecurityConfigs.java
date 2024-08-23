@@ -62,6 +62,8 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/cart/**").authenticated()
                 // Category
                 .antMatchers("/api/categories/**").permitAll()
+                // Invoice
+                .antMatchers("/api/invoices/**").authenticated()
                 // Order
                 .antMatchers("/api/orders/**/status").hasAnyRole(
                         UserRole.ROLE_ADMIN.alias(),
@@ -71,6 +73,8 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
                         UserRole.ROLE_SHIPPER.alias()
                 )
                 .antMatchers("/api/orders/**").authenticated()
+                // Product
+                .antMatchers("/api/products/**").permitAll()
                 // Rating
                 .antMatchers(HttpMethod.POST, "/api/ratings/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/api/ratings/**").authenticated()

@@ -24,17 +24,15 @@ public interface OrderService {
 
     void updateOrderStatus(Long orderId, String status);
 
-    Order get(Long id);
+    Order findById(Long id);
 
-    void insert(Order order);
+    void save(Order order);
 
     void update(Order order);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Order> getAll(Map<String, String> params);
+    List<Order> findAllWithFilter(Map<String, String> params);
 }

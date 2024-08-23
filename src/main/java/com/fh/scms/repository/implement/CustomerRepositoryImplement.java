@@ -30,14 +30,14 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     }
 
     @Override
-    public Customer get(Long id) {
+    public Customer findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Customer.class, id);
     }
 
     @Override
-    public Customer getByPhone(String phone) {
+    public Customer findByPhone(String phone) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Customer> criteria = builder.createQuery(Customer.class);
@@ -55,7 +55,7 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     }
 
     @Override
-    public void insert(Customer customer) {
+    public void save(Customer customer) {
         Session session = this.getCurrentSession();
         session.persist(customer);
     }
@@ -74,14 +74,6 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Customer customer = session.get(Customer.class, id);
-        customer.setActive(false);
-        session.merge(customer);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -95,7 +87,7 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     }
 
     @Override
-    public List<Customer> getAll(Map<String, String> params) {
+    public List<Customer> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Customer> criteria = builder.createQuery(Customer.class);

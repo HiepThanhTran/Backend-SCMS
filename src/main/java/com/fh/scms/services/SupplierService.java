@@ -19,21 +19,19 @@ public interface SupplierService {
 
     Rating addRatingForSupplier(String username, Long supplierId, RatingRequestCreate ratingRequestCreate);
 
-    Supplier get(Long id);
+    Supplier findById(Long id);
 
-    Supplier getByUser(User user);
+    Supplier findByUser(User user);
 
-    Supplier getByPhone(String phone);
+    Supplier findByPhone(String phone);
 
-    void insert(Supplier supplier);
+    void save(Supplier supplier);
 
     void update(Supplier supplier);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Supplier> getAll(Map<String, String> params);
+    List<Supplier> findAllWithFilter(Map<String, String> params);
 }

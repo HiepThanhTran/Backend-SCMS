@@ -30,24 +30,24 @@ public class UnitServiceImplement implements UnitService {
 
     @Override
     public List<UnitResponse> getAllUnitResponse(Map<String, String> params) {
-        return this.unitRepository.getAll(params).stream()
+        return this.unitRepository.findAllWithFilter(params).stream()
                 .map(this::getUnitResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Unit get(Long id) {
-        return this.unitRepository.get(id);
+    public Unit findById(Long id) {
+        return this.unitRepository.findById(id);
     }
 
     @Override
-    public List<Unit> getByProduct(Long productId) {
-        return this.unitRepository.getByProduct(productId);
+    public List<Unit> findByProductId(Long productId) {
+        return this.unitRepository.findByProductId(productId);
     }
 
     @Override
-    public void insert(Unit unit) {
-        this.unitRepository.insert(unit);
+    public void save(Unit unit) {
+        this.unitRepository.save(unit);
     }
 
     @Override
@@ -61,17 +61,12 @@ public class UnitServiceImplement implements UnitService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.unitRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.unitRepository.count();
     }
 
     @Override
-    public List<Unit> getAll(Map<String, String> params) {
-        return this.unitRepository.getAll(params);
+    public List<Unit> findAllWithFilter(Map<String, String> params) {
+        return this.unitRepository.findAllWithFilter(params);
     }
 }

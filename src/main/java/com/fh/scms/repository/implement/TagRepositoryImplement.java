@@ -29,14 +29,14 @@ public class TagRepositoryImplement implements TagRepository {
     }
 
     @Override
-    public Tag get(Long id) {
+    public Tag findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Tag.class, id);
     }
 
     @Override
-    public List<Tag> getByProduct(Long productId) {
+    public List<Tag> findByProductId(Long productId) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Tag> criteria = builder.createQuery(Tag.class);
@@ -52,7 +52,7 @@ public class TagRepositoryImplement implements TagRepository {
     }
 
     @Override
-    public void insert(Tag tag) {
+    public void save(Tag tag) {
         Session session = this.getCurrentSession();
         session.persist(tag);
     }
@@ -71,14 +71,6 @@ public class TagRepositoryImplement implements TagRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Tag tag = session.get(Tag.class, id);
-        tag.setActive(false);
-        session.merge(tag);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -92,7 +84,7 @@ public class TagRepositoryImplement implements TagRepository {
     }
 
     @Override
-    public List<Tag> getAll(Map<String, String> params) {
+    public List<Tag> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Tag> criteria = builder.createQuery(Tag.class);

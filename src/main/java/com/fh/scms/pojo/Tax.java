@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tax")
+@Table(name = "tax", indexes = {@Index(name = "idx_tax_region", columnList = "region")})
 public class Tax extends _BaseEntity implements Serializable {
 
     @Builder.Default

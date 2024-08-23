@@ -27,59 +27,63 @@ public class ShipperController {
 
     @GetMapping
     public String listShippers(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("shippers", this.shipperService.getAll(params));
+        model.addAttribute("shippers", this.shipperService.findAllWithFilter(params));
 
         return "shippers";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addShipper(HttpServletRequest request, Model model, @ModelAttribute(value = "shipper") @Valid UserRequestRegister shipper,
-                             BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_shipper";
-            }
-
-            try {
-                this.userService.register(shipper);
-            } catch (Exception e) {
-                model.addAttribute("errors", List.of(new MessageResponse(e.getMessage())));
-
-                return "add_shipper";
-            }
-
-            return "redirect:/admin/shippers";
-        }
+    @GetMapping(path = "/add")
+    public String addShipper(Model model) {
+        model.addAttribute("shipper", new UserRequestRegister());
 
         return "add_shipper";
     }
 
-    @RequestMapping(path = "/edit/{shipperId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editShipper(HttpServletRequest request, Model model, @PathVariable(value = "shipperId") Long id,
-                              @ModelAttribute(value = "shipper") @Valid Shipper shipper, BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
+    @PostMapping(path = "/add")
+    public String addShipper(Model model, @ModelAttribute(value = "shipper") @Valid UserRequestRegister shipper,
+                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
 
-                return "edit_shipper";
-            }
-
-            this.shipperService.update(shipper);
-
-            return "redirect:/admin/shippers";
+            return "add_shipper";
         }
 
-        model.addAttribute("shipper", this.shipperService.get(id));
+        try {
+            this.userService.registerUser(shipper);
+        } catch (Exception e) {
+            model.addAttribute("errors", List.of(new MessageResponse(e.getMessage())));
+
+            return "add_shipper";
+        }
+
+        return "redirect:/admin/shippers";
+    }
+
+    @GetMapping(path = "/edit/{shipperId}")
+    public String editShipper(Model model, @PathVariable(value = "shipperId") Long id) {
+        model.addAttribute("shipper", this.shipperService.findById(id));
 
         return "edit_shipper";
     }
 
-    @DeleteMapping(path = "/delete/{shipperId}")
+    @PostMapping(path = "/edit/{shipperId}")
+    public String editShipper(Model model, @PathVariable(value = "shipperId") Long id,
+                              @ModelAttribute(value = "shipper") @Valid Shipper shipper, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+
+            return "edit_shipper";
+        }
+
+        this.shipperService.update(shipper);
+
+        return "redirect:/admin/shippers";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{shipperId}")
     public String deleteShipper(@PathVariable(value = "shipperId") Long id) {
         this.shipperService.delete(id);
 

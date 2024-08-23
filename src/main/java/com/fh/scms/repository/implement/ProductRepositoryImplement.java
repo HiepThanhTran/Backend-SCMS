@@ -29,14 +29,14 @@ public class ProductRepositoryImplement implements ProductRepository {
     }
 
     @Override
-    public Product get(Long id) {
+    public Product findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Product.class, id);
     }
 
     @Override
-    public void insert(Product Product) {
+    public void save(Product Product) {
         Session session = this.getCurrentSession();
         session.persist(Product);
     }
@@ -55,14 +55,6 @@ public class ProductRepositoryImplement implements ProductRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Product Product = session.get(Product.class, id);
-        Product.setActive(false);
-        session.merge(Product);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -76,7 +68,7 @@ public class ProductRepositoryImplement implements ProductRepository {
     }
 
     @Override
-    public List<Product> getAll(Map<String, String> params) {
+    public List<Product> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Product> criteria = builder.createQuery(Product.class);

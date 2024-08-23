@@ -31,14 +31,14 @@ public class InventoryRepositoryImplement implements InventoryRepository {
     }
 
     @Override
-    public Inventory get(Long id) {
+    public Inventory findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Inventory.class, id);
     }
 
     @Override
-    public void insert(Inventory inventory) {
+    public void save(Inventory inventory) {
         Session session = this.getCurrentSession();
         session.persist(inventory);
     }
@@ -57,14 +57,6 @@ public class InventoryRepositoryImplement implements InventoryRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Inventory inventory = session.get(Inventory.class, id);
-        inventory.setActive(false);
-        session.merge(inventory);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -78,7 +70,7 @@ public class InventoryRepositoryImplement implements InventoryRepository {
     }
 
     @Override
-    public List<Inventory> getAll(Map<String, String> params) {
+    public List<Inventory> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Inventory> criteria = builder.createQuery(Inventory.class);

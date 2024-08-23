@@ -24,53 +24,56 @@ public class CategoryController {
 
     @GetMapping
     public String listCategory(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("categories", this.categoryService.getAll(params));
+        model.addAttribute("categories", this.categoryService.findAllWithFilter(params));
 
         return "categories";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addCategory(HttpServletRequest request, Model model, @ModelAttribute(value = "category") @Valid Category category,
-                              BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_category";
-            }
-
-            this.categoryService.insert(category);
-
-            return "redirect:/admin/categories";
-        }
+    @GetMapping(path = "/add")
+    public String addCategory(Model model) {
+        model.addAttribute("category", new Category());
 
         return "add_category";
     }
 
-    @RequestMapping(path = "/edit/{categoryId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editCategory(HttpServletRequest request, Model model, @PathVariable(value = "categoryId") Long id,
-                               @ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
+    @PostMapping(path = "/add")
+    public String addCategory(Model model, @ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
 
-                return "edit_category";
-            }
-
-            this.categoryService.update(category);
-
-            return "redirect:/admin/categories";
+            return "add_category";
         }
 
-        model.addAttribute("category", this.categoryService.get(id));
+        this.categoryService.save(category);
+
+        return "redirect:/admin/categories";
+    }
+
+    @GetMapping(path = "/edit/{categoryId}")
+    public String editCategory(Model model, @PathVariable(value = "categoryId") Long id) {
+        model.addAttribute("category", this.categoryService.findById(id));
 
         return "edit_category";
     }
 
-    @DeleteMapping(path = "/delete/{categoryId}")
+    @PostMapping(path = "/edit/{categoryId}")
+    public String editCategory(Model model, @PathVariable(value = "categoryId") Long id,
+                               @ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+
+            return "edit_category";
+        }
+
+        this.categoryService.update(category);
+
+        return "redirect:/admin/categories";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{categoryId}")
     public String deleteCategory(@PathVariable(value = "categoryId") Long id) {
         categoryService.delete(id);
 

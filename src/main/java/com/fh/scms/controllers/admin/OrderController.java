@@ -24,51 +24,56 @@ public class OrderController {
 
     @GetMapping
     public String listOrder(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("orders", this.orderService.getAll(params));
+        model.addAttribute("orders", this.orderService.findAllWithFilter(params));
 
         return "orders";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addOrder(HttpServletRequest request, Model model, @ModelAttribute(value = "order") @Valid Order order,
-                           BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_order";
-            }
-
-            this.orderService.insert(order);
-
-            return "redirect:/admin/orders";
-        }
+    @GetMapping(path = "/add")
+    public String addOrder(Model model) {
+        model.addAttribute("order", new Order());
 
         return "add_order";
     }
 
-    @RequestMapping(path = "/edit/{orderId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editOrder(HttpServletRequest request, Model model, @PathVariable(value = "orderId") Long id,
-                            @ModelAttribute(value = "order") @Valid Order order, BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
+    @PostMapping(path = "/add")
+    public String addOrder(Model model, @ModelAttribute(value = "order") @Valid Order order, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
 
-                return "edit_order";
-            }
-
-            this.orderService.update(order);
-
-            return "redirect:/admin/orders";
+            return "add_order";
         }
+
+        this.orderService.save(order);
+
+        return "redirect:/admin/orders";
+    }
+
+    @GetMapping(path = "/edit/{orderId}")
+    public String editOrder(Model model, @PathVariable(value = "orderId") Long id) {
+        model.addAttribute("order", this.orderService.findById(id));
 
         return "edit_order";
     }
 
-    @DeleteMapping(path = "/delete/{orderId}")
+    @PostMapping(path = "/edit/{orderId}")
+    public String editOrder(Model model, @PathVariable(value = "orderId") Long id,
+                            @ModelAttribute(value = "order") @Valid Order order, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+
+            return "edit_order";
+        }
+
+        this.orderService.update(order);
+
+        return "redirect:/admin/orders";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{orderId}")
     public String deleteOrder(@PathVariable(value = "orderId") Long id) {
         this.orderService.delete(id);
 

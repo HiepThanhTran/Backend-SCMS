@@ -7,17 +7,15 @@ import java.util.Map;
 
 public interface ProductRepository {
 
-    Product get(Long id);
+    Product findById(Long id);
 
-    void insert(Product Product);
+    void save(Product Product);
 
     void update(Product Product);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Product> getAll(Map<String, String> params);
+    List<Product> findAllWithFilter(Map<String, String> params);
 }

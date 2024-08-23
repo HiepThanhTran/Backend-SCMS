@@ -30,61 +30,67 @@ public class ShipmentController {
 
     @GetMapping
     public String listShipment(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("shipments", this.shipmentService.getAll(params));
+        model.addAttribute("shipments", this.shipmentService.findAllWithFilter(params));
 
         return "shipments";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addShipment(HttpServletRequest request, Model model, @ModelAttribute(value = "shipment") @Valid Shipment shipment,
-                              BindingResult bindingResult) {
-        model.addAttribute("shippers", this.shipperService.getAll(null));
-        model.addAttribute("warehouses", this.warehouseService.getAll(null));
-        model.addAttribute("deliverySchedules", this.deliveryScheduleService.getAll(null));
-
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_shipment";
-            }
-
-            this.shipmentService.insert(shipment);
-
-            return "redirect:/admin/shipments";
-        }
+    @GetMapping(path = "/add")
+    public String addShipment(Model model) {
+        model.addAttribute("shippers", this.shipperService.findAllWithFilter(null));
+        model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
+        model.addAttribute("deliverySchedules", this.deliveryScheduleService.findAllWithFilter(null));
 
         return "add_shipment";
     }
 
-    @RequestMapping(path = "/edit/{shipmentId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editShipment(HttpServletRequest request, Model model, @PathVariable(value = "shipmentId") Long id,
-                               @ModelAttribute(value = "shipment") @Valid Shipment shipment, BindingResult bindingResult) {
-        model.addAttribute("shippers", this.shipperService.getAll(null));
-        model.addAttribute("warehouses", this.warehouseService.getAll(null));
-        model.addAttribute("deliverySchedules", this.deliveryScheduleService.getAll(null));
+    @PostMapping(path = "/add")
+    public String addShipment(Model model, @ModelAttribute(value = "shipment") @Valid Shipment shipment, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+            model.addAttribute("shippers", this.shipperService.findAllWithFilter(null));
+            model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
+            model.addAttribute("deliverySchedules", this.deliveryScheduleService.findAllWithFilter(null));
 
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "edit_shipment";
-            }
-
-            this.shipmentService.update(shipment);
-
-            return "redirect:/admin/shipments";
+            return "add_shipment";
         }
 
-        model.addAttribute("shipment", this.shipmentService.get(id));
+        this.shipmentService.save(shipment);
+
+        return "redirect:/admin/shipments";
+    }
+
+    @GetMapping(path = "/edit/{shipmentId}")
+    public String editShipment(Model model, @PathVariable(value = "shipmentId") Long id) {
+        model.addAttribute("shippers", this.shipperService.findAllWithFilter(null));
+        model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
+        model.addAttribute("deliverySchedules", this.deliveryScheduleService.findAllWithFilter(null));
+        model.addAttribute("shipment", this.shipmentService.findById(id));
 
         return "edit_shipment";
     }
 
-    @DeleteMapping(path = "/delete/{shipmentId}")
+    @PostMapping(path = "/edit/{shipmentId}")
+    public String editShipment(Model model, @PathVariable(value = "shipmentId") Long id,
+                               @ModelAttribute(value = "shipment") @Valid Shipment shipment, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+            model.addAttribute("shippers", this.shipperService.findAllWithFilter(null));
+            model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
+            model.addAttribute("deliverySchedules", this.deliveryScheduleService.findAllWithFilter(null));
+
+            return "edit_shipment";
+        }
+
+        this.shipmentService.update(shipment);
+
+        return "redirect:/admin/shipments";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{shipmentId}")
     public String deleteShipment(@PathVariable(value = "shipmentId") Long id) {
         this.shipmentService.delete(id);
 

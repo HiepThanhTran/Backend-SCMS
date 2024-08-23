@@ -22,13 +22,13 @@ public class CartDetailsRepositoryImplement implements CartDetailsRepository {
     }
 
     @Override
-    public void persist(CartDetails cartDetails) {
+    public void save(CartDetails cartDetails) {
         Session session = this.getCurrentSession();
         session.persist(cartDetails);
     }
 
     @Override
-    public void merge(CartDetails cartDetails) {
+    public void update(CartDetails cartDetails) {
         Session session = this.getCurrentSession();
         session.merge(cartDetails);
     }

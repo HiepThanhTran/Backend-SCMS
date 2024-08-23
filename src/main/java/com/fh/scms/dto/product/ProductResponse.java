@@ -1,5 +1,6 @@
 package com.fh.scms.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.scms.dto.category.CategoryResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class ProductResponse {
 
     private String image;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate expiryDate;
 
     private CategoryResponse category;

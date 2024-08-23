@@ -35,19 +35,19 @@ public class CategoryServiceImplement implements CategoryService {
 
     @Override
     public List<CategoryResponse> getAllCategoryResponse(Map<String, String> params) {
-        return this.categoryRepository.getAll(params).stream()
+        return this.categoryRepository.findAllWithFilter(params).stream()
                 .map(this::getCategoryResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Category get(Long id) {
-        return this.categoryRepository.get(id);
+    public Category findById(Long id) {
+        return this.categoryRepository.findById(id);
     }
 
     @Override
-    public void insert(Category category) {
-        this.categoryRepository.insert(category);
+    public void save(Category category) {
+        this.categoryRepository.save(category);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class CategoryServiceImplement implements CategoryService {
 
     @Override
     public void delete(Long id) {
-        Category category = this.categoryRepository.get(id);
+        Category category = this.categoryRepository.findById(id);
         List<Product> productsToUpdate = new ArrayList<>(category.getProductSet());
 
         productsToUpdate.forEach(product -> {
@@ -69,17 +69,12 @@ public class CategoryServiceImplement implements CategoryService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.categoryRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.categoryRepository.count();
     }
 
     @Override
-    public List<Category> getAll(Map<String, String> params) {
-        return this.categoryRepository.getAll(params);
+    public List<Category> findAllWithFilter(Map<String, String> params) {
+        return this.categoryRepository.findAllWithFilter(params);
     }
 }

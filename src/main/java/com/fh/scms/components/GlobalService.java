@@ -1,5 +1,7 @@
-package com.fh.scms.services.implement;
+package com.fh.scms.components;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.fh.scms.dto.pt.PaymentTermsRequest;
 import com.fh.scms.dto.user.UserRequestRegister;
 import com.fh.scms.enums.PaymentTermType;
@@ -7,24 +9,30 @@ import com.fh.scms.enums.UserRole;
 import com.fh.scms.pojo.*;
 import com.fh.scms.repository.*;
 import com.fh.scms.services.UserService;
-import com.fh.scms.services._InitializerDataService;
+import org.hibernate.Session;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 @Transactional
-public class _InitializerDataServiceImplement implements _InitializerDataService {
+public class GlobalService {
 
+    @Autowired
+    private LocalSessionFactoryBean factory;
+    @Autowired
+    private Cloudinary cloudinary;
     @Autowired
     private UserService userService;
     @Autowired
@@ -42,19 +50,42 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
     @Autowired
     private InventoryRepository inventoryRepository;
 
-    @Override
+    private Session getCurrentSession() {
+        return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
+    }
+
+    @SuppressWarnings("rawtypes")
+    public String uploadImage(@NotNull MultipartFile file) {
+        try {
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            return uploadResult.get("secure_url").toString();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public Boolean isFirstRun() {
+        return this.getCurrentSession().get(_System.class, 1L) != null;
+    }
+
+    public void saveFirstRun() {
+        Session session = this.getCurrentSession();
+        _System system = _System.builder().name("isFirstRun").build();
+        session.persist(system);
+    }
+
     public void createUser() {
-        List<User> users = this.userService.getAll(null);
+        List<User> users = this.userService.findAllWithFilter(null);
 
         if (users.isEmpty()) {
-            this.userService.register(UserRequestRegister.builder()
+            this.userService.registerUser(UserRequestRegister.builder()
                     .email("admin@scm.com")
                     .username("adminscm")
                     .password("admin@123")
                     .userRole(UserRole.ROLE_ADMIN)
                     .build());
 
-            this.userService.register(UserRequestRegister.builder()
+            this.userService.registerUser(UserRequestRegister.builder()
                     .email("customer1@scm.com")
                     .username("customer1")
                     .password("user@123")
@@ -66,7 +97,7 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
                     .phone("0123456789")
                     .build());
 
-            this.userService.register(UserRequestRegister.builder()
+            this.userService.registerUser(UserRequestRegister.builder()
                     .email("supplier1@scm.com")
                     .username("supplier1")
                     .password("user@123")
@@ -89,7 +120,7 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
                     ))
                     .build());
 
-            this.userService.register(UserRequestRegister.builder()
+            this.userService.registerUser(UserRequestRegister.builder()
                     .email("shipper1@scm.com")
                     .username("shipper1")
                     .password("user@123")
@@ -100,7 +131,6 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
         }
     }
 
-    @Override
     public void createCategory() {
         List.of(
                 Category.builder().name("Thiết Bị Mạng").description("Thiết Bị Mạng").build(),
@@ -113,10 +143,9 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
                 Category.builder().name("Thiết Bị Đầu Vào và Đầu Ra").description("Thiết Bị Đầu Vào và Đầu Ra").build(),
                 Category.builder().name("Phát Triển Web và Ứng Dụng").description("Phát Triển Web và Ứng Dụng").build(),
                 Category.builder().name("Khoa Học Dữ Liệu và Trí Tuệ Nhân Tạo").description("Khoa Học Dữ Liệu và Trí Tuệ Nhân Tạo").build()
-        ).forEach(category -> this.categoryRepository.insert(category));
+        ).forEach(category -> this.categoryRepository.save(category));
     }
 
-    @Override
     public void createTag() {
         List.of(
                 Tag.builder().name("Artificial Intelligence").description("Artificial Intelligence").build(),
@@ -129,10 +158,9 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
                 Tag.builder().name("Internet of Things").description("Internet of Things").build(),
                 Tag.builder().name("Big Data").description("Big Data").build(),
                 Tag.builder().name("Software Development").description("Software Development").build()
-        ).forEach(tag -> this.tagRepository.insert(tag));
+        ).forEach(tag -> this.tagRepository.save(tag));
     }
 
-    @Override
     public void createUnit() {
         List.of(
                 Unit.builder().name("Piece").abbreviation("PCS").build(),
@@ -145,18 +173,17 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
                 Unit.builder().name("Package").abbreviation("PKG").build(),
                 Unit.builder().name("Dozen").abbreviation("DZ").build(),
                 Unit.builder().name("Roll").abbreviation("RL").build()
-        ).forEach(unit -> this.unitRepository.insert(unit));
+        ).forEach(unit -> this.unitRepository.save(unit));
     }
 
-    @Override
     public void createProduct() {
         AtomicInteger count = new AtomicInteger(1);
         Random random = new Random();
 
-        List<Tag> tags = this.tagRepository.getAll(null);
-        List<Unit> units = this.unitRepository.getAll(null);
+        List<Tag> tags = this.tagRepository.findAllWithFilter(null);
+        List<Unit> units = this.unitRepository.findAllWithFilter(null);
 
-        this.categoryRepository.getAll(null).forEach(category -> {
+        this.categoryRepository.findAllWithFilter(null).forEach(category -> {
             for (int i = 1; i <= 3; i++) {
                 Collections.shuffle(tags, random);
                 Set<Tag> randomTags = tags.stream()
@@ -178,13 +205,12 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
                         .unitSet(randomUnits)
                         .build();
 
-                this.productRepository.insert(product);
+                this.productRepository.save(product);
                 count.getAndIncrement();
             }
         });
     }
 
-    @Override
     public void createTax() {
         List.of(
                 Tax.builder().rate(BigDecimal.valueOf(0.01)).region("VN").build(),
@@ -193,10 +219,9 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
                 Tax.builder().rate(BigDecimal.valueOf(0.10)).region("APAC").build(),
                 Tax.builder().rate(BigDecimal.valueOf(0.15)).region("LATAM").build(),
                 Tax.builder().rate(BigDecimal.valueOf(0.08)).region("MEA").build()
-        ).forEach(this.taxRepository::insert);
+        ).forEach(this.taxRepository::save);
     }
 
-    @Override
     public void createWarehouse() {
         List.of(
                 Warehouse.builder().name("Warehouse 1").location("TPHCM").capacity(1000.0F).cost(new BigDecimal(100000)).build(),
@@ -204,25 +229,22 @@ public class _InitializerDataServiceImplement implements _InitializerDataService
                 Warehouse.builder().name("Warehouse 3").location("Đà Nẵng").capacity(3000.0F).cost(new BigDecimal(300000)).build(),
                 Warehouse.builder().name("Warehouse 4").location("Cần Thơ").capacity(4000.0F).cost(new BigDecimal(400000)).build(),
                 Warehouse.builder().name("Warehouse 5").location("Hải Phòng").capacity(5000.0F).cost(new BigDecimal(500000)).build()
-        ).forEach(this.warehouseRepository::insert);
+        ).forEach(this.warehouseRepository::save);
     }
 
-    @Override
     public void createInventory() {
-        List<Product> products = this.productRepository.getAll(null);
+        List<Product> products = this.productRepository.findAllWithFilter(null);
 
-        this.warehouseRepository.getAll(null).forEach(warehouse -> {
-            products.forEach(product -> {
-                Inventory inventory = Inventory.builder()
-                        .name("Inventory " + product.getName() + " " + warehouse.getName())
-                        .quantity(100.0F)
-                        .warehouse(warehouse)
-                        .build();
-                this.inventoryRepository.insert(inventory);
+        this.warehouseRepository.findAllWithFilter(null).forEach(warehouse -> products.forEach(product -> {
+            Inventory inventory = Inventory.builder()
+                    .name("Inventory " + product.getName() + " " + warehouse.getName())
+                    .quantity(100.0F)
+                    .warehouse(warehouse)
+                    .build();
+            this.inventoryRepository.save(inventory);
 
-                product.setInventory(inventory);
-                this.productRepository.update(product);
-            });
-        });
+            product.setInventory(inventory);
+            this.productRepository.update(product);
+        }));
     }
 }

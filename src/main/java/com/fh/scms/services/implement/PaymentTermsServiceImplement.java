@@ -23,13 +23,13 @@ public class PaymentTermsServiceImplement implements PaymentTermsService {
     private InvoiceService invoiceService;
 
     @Override
-    public PaymentTerms get(Long id) {
-        return this.paymentTermsRepository.get(id);
+    public PaymentTerms findById(Long id) {
+        return this.paymentTermsRepository.findById(id);
     }
 
     @Override
-    public void insert(PaymentTerms paymentTerms) {
-        this.paymentTermsRepository.insert(paymentTerms);
+    public void save(PaymentTerms paymentTerms) {
+        this.paymentTermsRepository.save(paymentTerms);
     }
 
     @Override
@@ -39,20 +39,7 @@ public class PaymentTermsServiceImplement implements PaymentTermsService {
 
     @Override
     public void delete(Long id) {
-        PaymentTerms paymentTerms = this.paymentTermsRepository.get(id);
-        List<Invoice> invoicesToUpdate = new ArrayList<>(paymentTerms.getInvoiceSet());
-
-        invoicesToUpdate.forEach(invoice -> {
-            invoice.setPaymentTerms(null);
-            this.invoiceService.update(invoice);
-        });
-
         this.paymentTermsRepository.delete(id);
-    }
-
-    @Override
-    public void softDelete(Long id) {
-        this.paymentTermsRepository.softDelete(id);
     }
 
     @Override
@@ -61,7 +48,7 @@ public class PaymentTermsServiceImplement implements PaymentTermsService {
     }
 
     @Override
-    public List<PaymentTerms> getAll(Map<String, String> params) {
-        return this.paymentTermsRepository.getAll(params);
+    public List<PaymentTerms> findAllWithFilter(Map<String, String> params) {
+        return this.paymentTermsRepository.findAllWithFilter(params);
     }
 }

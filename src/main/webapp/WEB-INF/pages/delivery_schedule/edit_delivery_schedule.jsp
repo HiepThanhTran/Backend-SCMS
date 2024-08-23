@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:url value="/admin/delivery-schedules/edit/${deliverySchedule.id}" var="editDeliverySchedule"/>
+<c:url value="/admin/schedules/edit/${deliverySchedule.id}" var="editDeliverySchedule"/>
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">

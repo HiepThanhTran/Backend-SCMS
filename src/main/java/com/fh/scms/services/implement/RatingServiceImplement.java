@@ -47,18 +47,18 @@ public class RatingServiceImplement implements RatingService {
     }
 
     @Override
-    public Rating get(Long id) {
-        return this.ratingRepository.get(id);
+    public Rating findById(Long id) {
+        return this.ratingRepository.findById(id);
     }
 
     @Override
-    public Rating getByUserAndSupplier(Long userId, Long supplierId) {
-        return this.ratingRepository.getByUserAndSupplier(userId, supplierId);
+    public Rating findByUserIdAndSupplierId(Long userId, Long supplierId) {
+        return this.ratingRepository.findByUserIdAndSupplierId(userId, supplierId);
     }
 
     @Override
-    public void insert(Rating rating) {
-        this.ratingRepository.insert(rating);
+    public void save(Rating rating) {
+        this.ratingRepository.save(rating);
     }
 
     @Override
@@ -72,17 +72,12 @@ public class RatingServiceImplement implements RatingService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.ratingRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.ratingRepository.count();
     }
 
     @Override
-    public List<Rating> getAll(Map<String, String> params) {
-        return this.ratingRepository.getAll(params);
+    public List<Rating> findAllWithFilter(Map<String, String> params) {
+        return this.ratingRepository.findAllWithFilter(params);
     }
 }

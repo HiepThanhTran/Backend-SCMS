@@ -7,19 +7,17 @@ import java.util.Map;
 
 public interface RatingRepository {
 
-    Rating get(Long id);
+    Rating findById(Long id);
 
-    Rating getByUserAndSupplier(Long userId, Long supplierId);
+    Rating findByUserIdAndSupplierId(Long userId, Long supplierId);
 
-    void insert(Rating rating);
+    void save(Rating rating);
 
     void update(Rating rating);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Rating> getAll(Map<String, String> params);
+    List<Rating> findAllWithFilter(Map<String, String> params);
 }

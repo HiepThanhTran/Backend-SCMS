@@ -30,14 +30,14 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
     }
 
     @Override
-    public PaymentTerms get(Long id) {
+    public PaymentTerms findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(PaymentTerms.class, id);
     }
 
     @Override
-    public void insert(PaymentTerms paymentTerms) {
+    public void save(PaymentTerms paymentTerms) {
         Session session = this.getCurrentSession();
         session.persist(paymentTerms);
     }
@@ -56,14 +56,6 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        PaymentTerms paymentTerms = session.get(PaymentTerms.class, id);
-        paymentTerms.setActive(false);
-        session.merge(paymentTerms);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -77,7 +69,7 @@ public class PaymentTermsRepositoryImplement implements PaymentTermsRepository {
     }
 
     @Override
-    public List<PaymentTerms> getAll(Map<String, String> params) {
+    public List<PaymentTerms> findAllWithFilter(Map<String, String> params) {
         Session session = Objects.requireNonNull(factory.getObject()).getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<PaymentTerms> criteria = builder.createQuery(PaymentTerms.class);

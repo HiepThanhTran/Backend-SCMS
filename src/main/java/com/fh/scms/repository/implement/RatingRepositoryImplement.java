@@ -31,14 +31,14 @@ public class RatingRepositoryImplement implements RatingRepository {
     }
 
     @Override
-    public Rating get(Long id) {
+    public Rating findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Rating.class, id);
     }
 
     @Override
-    public Rating getByUserAndSupplier(Long userId, Long supplierId) {
+    public Rating findByUserIdAndSupplierId(Long userId, Long supplierId) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Rating> criteria = builder.createQuery(Rating.class);
@@ -59,7 +59,7 @@ public class RatingRepositoryImplement implements RatingRepository {
     }
 
     @Override
-    public void insert(Rating rating) {
+    public void save(Rating rating) {
         Session session = this.getCurrentSession();
         session.persist(rating);
     }
@@ -77,13 +77,6 @@ public class RatingRepositoryImplement implements RatingRepository {
         session.delete(rating);
     }
 
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Rating rating = session.get(Rating.class, id);
-        rating.setActive(false);
-        session.merge(rating);
-    }
-
     @Override
     public Long count() {
         Session session = this.getCurrentSession();
@@ -98,7 +91,7 @@ public class RatingRepositoryImplement implements RatingRepository {
     }
 
     @Override
-    public List<Rating> getAll(Map<String, String> params) {
+    public List<Rating> findAllWithFilter(Map<String, String> params) {
         Session session = Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Rating> criteria = builder.createQuery(Rating.class);

@@ -24,60 +24,56 @@ public class InvoiceController {
 
     @GetMapping
     public String listInvoice(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("invoices", this.invoiceService.getAll(params));
+        model.addAttribute("invoices", this.invoiceService.findAllWithFilter(params));
 
         return "invoices";
     }
 
-    @GetMapping(path = "/{invoiceId}")
-    public String retrieveInvoice(@PathVariable(value = "invoiceId") Long id, Model model) {
-        model.addAttribute("invoice", this.invoiceService.get(id));
-
-        return "invoice";
-    }
-
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addInvoice(HttpServletRequest request, Model model, @ModelAttribute(value = "invoice") @Valid Invoice invoice,
-                             BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_invoice";
-            }
-
-            this.invoiceService.insert(invoice);
-
-            return "redirect:/admin/invoices";
-        }
+    @GetMapping(path = "/add")
+    public String addInvoice(Model model) {
+        model.addAttribute("invoice", new Invoice());
 
         return "add_invoice";
     }
 
-    @RequestMapping(path = "/edit/{invoiceId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editInvoice(HttpServletRequest request, Model model, @PathVariable(value = "invoiceId") Long id,
-                              @ModelAttribute(value = "invoice") @Valid Invoice invoice, BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
+    @PostMapping(path = "/add")
+    public String addInvoice(Model model, @ModelAttribute(value = "invoice") @Valid Invoice invoice, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
 
-                return "edit_invoice";
-            }
-
-            this.invoiceService.update(invoice);
-
-            return "redirect:/admin/invoices";
+            return "add_invoice";
         }
 
-        model.addAttribute("invoice", this.invoiceService.get(id));
+        this.invoiceService.save(invoice);
+
+        return "redirect:/admin/invoices";
+    }
+
+    @GetMapping(path = "/edit/{invoiceId}")
+    public String editInvoice(Model model, @PathVariable(value = "invoiceId") Long id) {
+        model.addAttribute("invoice", this.invoiceService.findById(id));
 
         return "edit_invoice";
     }
 
-    @DeleteMapping(path = "/delete/{invoiceId}")
+    @PostMapping(path = "/edit/{invoiceId}")
+    public String editInvoice(Model model, @PathVariable(value = "invoiceId") Long id,
+                              @ModelAttribute(value = "invoice") @Valid Invoice invoice, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+
+            return "edit_invoice";
+        }
+
+        this.invoiceService.update(invoice);
+
+        return "redirect:/admin/invoices";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{invoiceId}")
     public String deleteInvoice(@PathVariable(value = "invoiceId") Long id) {
         this.invoiceService.delete(id);
 

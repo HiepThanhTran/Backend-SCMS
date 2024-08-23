@@ -12,15 +12,15 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/taxs", produces = "application/json; charset=UTF-8")
+@RequestMapping(path = "/api/taxes", produces = "application/json; charset=UTF-8")
 public class APITaxController {
 
     private final TaxService taxService;
 
     @GetMapping
-    public ResponseEntity<?> getTaxs(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        List<TaxResponse> taxs = this.taxService.getAllTaxResponse(params);
+    public ResponseEntity<?> getTaxes(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
+        List<TaxResponse> taxes = this.taxService.getAllTaxResponse(params);
 
-        return ResponseEntity.ok(taxs);
+        return ResponseEntity.ok(taxes);
     }
 }

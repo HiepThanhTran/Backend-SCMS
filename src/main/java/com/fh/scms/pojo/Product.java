@@ -53,7 +53,7 @@ public class Product extends _BaseEntity implements Serializable {
     @JoinColumn(name = "inventory_id", referencedColumnName = "id")
     private Inventory inventory;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "product_unit",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "unit_id"))

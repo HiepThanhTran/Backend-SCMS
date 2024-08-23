@@ -24,53 +24,56 @@ public class TaxController {
 
     @GetMapping
     public String listTax(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("taxs", this.taxService.getAll(params));
+        model.addAttribute("taxes", this.taxService.findAllWithFilter(params));
 
-        return "taxs";
+        return "taxes";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addTax(HttpServletRequest request, Model model, @ModelAttribute(value = "tax") @Valid Tax tax,
-                         BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_tax";
-            }
-
-            this.taxService.insert(tax);
-
-            return "redirect:/admin/taxs";
-        }
+    @GetMapping(path = "/add")
+    public String addTax(Model model) {
+        model.addAttribute("tax", new Tax());
 
         return "add_tax";
     }
 
-    @RequestMapping(path = "/edit/{taxId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editTax(HttpServletRequest request, Model model, @PathVariable(value = "taxId") Long id,
-                          @ModelAttribute(value = "tax") @Valid Tax tax, BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
+    @PostMapping(path = "/add")
+    public String addTax(Model model, @ModelAttribute(value = "tax") @Valid Tax tax, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
 
-                return "edit_tax";
-            }
-
-            this.taxService.update(tax);
-
-            return "redirect:/admin/taxs";
+            return "add_tax";
         }
 
-        model.addAttribute("tax", this.taxService.get(id));
+        this.taxService.save(tax);
+
+        return "redirect:/admin/taxs";
+    }
+
+    @GetMapping(path = "/edit/{taxId}")
+    public String editTax(Model model, @PathVariable(value = "taxId") Long id) {
+        model.addAttribute("tax", this.taxService.findById(id));
 
         return "edit_tax";
     }
 
-    @DeleteMapping(path = "/delete/{taxId}")
+    @PostMapping(path = "/edit/{taxId}")
+    public String editTax(Model model, @PathVariable(value = "taxId") Long id,
+                          @ModelAttribute(value = "tax") @Valid Tax tax, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+
+            return "edit_tax";
+        }
+
+        this.taxService.update(tax);
+
+        return "redirect:/admin/taxs";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{taxId}")
     public String deleteTax(@PathVariable(value = "taxId") Long id) {
         this.taxService.delete(id);
 

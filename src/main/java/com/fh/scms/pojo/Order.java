@@ -50,8 +50,7 @@ public class Order extends _BaseEntity implements Serializable {
     private User user;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Invoice invoice;
 
     @JsonIgnore

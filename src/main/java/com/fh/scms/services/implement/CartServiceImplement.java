@@ -60,14 +60,14 @@ public class CartServiceImplement implements CartService {
         return Optional.ofNullable(user.getCart()).orElseGet(() -> {
             Cart newCart = new Cart();
             newCart.setUser(user);
-            this.cartRepository.insert(newCart);
+            this.cartRepository.save(newCart);
             return newCart;
         });
     }
 
     @Override
     public void addProductToCart(@NotNull Cart cart, @NotNull ProductRequestAddToCart productRequestAddToCart) {
-        Product product = this.productService.get(productRequestAddToCart.getProductId());
+        Product product = this.productService.findById(productRequestAddToCart.getProductId());
         CartDetails existingCartDetails = Optional.ofNullable(cart.getCartDetailsSet()).orElseGet(Set::of).stream()
                 .filter(cd -> cd.getProduct().getId().equals(product.getId()))
                 .findFirst()
@@ -75,7 +75,7 @@ public class CartServiceImplement implements CartService {
 
         if (existingCartDetails != null) {
             existingCartDetails.setQuantity(existingCartDetails.getQuantity() + productRequestAddToCart.getQuantity());
-            this.cartDetailsRepository.merge(existingCartDetails);
+            this.cartDetailsRepository.update(existingCartDetails);
         } else {
             CartDetails cartDetails = CartDetails.builder()
                     .cart(cart)
@@ -83,7 +83,7 @@ public class CartServiceImplement implements CartService {
                     .unitPrice(product.getPrice())
                     .quantity(productRequestAddToCart.getQuantity())
                     .build();
-            this.cartDetailsRepository.persist(cartDetails);
+            this.cartDetailsRepository.save(cartDetails);
         }
     }
 
@@ -105,7 +105,7 @@ public class CartServiceImplement implements CartService {
             }
         });
 
-        this.cartDetailsRepository.merge(cartDetails);
+        this.cartDetailsRepository.update(cartDetails);
     }
 
     @Override

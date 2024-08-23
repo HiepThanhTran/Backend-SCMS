@@ -7,17 +7,15 @@ import java.util.Map;
 
 public interface DeliveryScheduleRepository {
 
-    DeliverySchedule get(Long id);
+    DeliverySchedule findById(Long id);
 
-    void insert(DeliverySchedule deliverySchedule);
+    void save(DeliverySchedule deliverySchedule);
 
     void update(DeliverySchedule deliverySchedule);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<DeliverySchedule> getAll(Map<String, String> params);
+    List<DeliverySchedule> findAllWithFilter(Map<String, String> params);
 }

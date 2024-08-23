@@ -25,36 +25,37 @@ public class UserController {
 
     @GetMapping
     public String listUser(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("users", this.userService.getAll(params));
+        model.addAttribute("users", this.userService.findAllWithFilter(params));
 
         return "users";
     }
 
-    @RequestMapping(path = "/edit/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editUser(HttpServletRequest request, Model model, @PathVariable(value = "userId") Long id,
-                           @ModelAttribute(value = "user") @Valid User user, BindingResult bindingResult) {
+    @GetMapping(path = "/edit/{userId}")
+    public String editUser(Model model, @PathVariable(value = "userId") Long id) {
+        model.addAttribute("user", this.userService.findById(id));
         model.addAttribute("userRoles", UserRole.getAllDisplayNames());
-
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "edit_user";
-            }
-
-            this.userService.update(user);
-
-            return "redirect:/admin/users";
-        }
-
-        model.addAttribute("user", this.userService.get(id));
 
         return "edit_user";
     }
 
-    @DeleteMapping(path = "/delete/{userId}")
+    @PostMapping(path = "/edit/{userId}")
+    public String editUser(Model model, @PathVariable(value = "userId") Long id,
+                           @ModelAttribute(value = "user") @Valid User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+            model.addAttribute("userRoles", UserRole.getAllDisplayNames());
+
+            return "edit_user";
+        }
+
+        this.userService.update(user);
+
+        return "redirect:/admin/users";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{userId}")
     public String deleteUser(@PathVariable(value = "userId") Long id) {
         this.userService.delete(id);
 

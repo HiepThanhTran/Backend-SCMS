@@ -31,14 +31,14 @@ public class CategoryRepositoryImplement implements CategoryRepository {
     }
 
     @Override
-    public Category get(Long id) {
+    public Category findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Category.class, id);
     }
 
     @Override
-    public void insert(Category category) {
+    public void save(Category category) {
         Session session = this.getCurrentSession();
         session.persist(category);
     }
@@ -57,14 +57,6 @@ public class CategoryRepositoryImplement implements CategoryRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Category category = session.get(Category.class, id);
-        category.setActive(false);
-        session.merge(category);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -78,7 +70,7 @@ public class CategoryRepositoryImplement implements CategoryRepository {
     }
 
     @Override
-    public List<Category> getAll(Map<String, String> params) {
+    public List<Category> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Category> criteria = builder.createQuery(Category.class);

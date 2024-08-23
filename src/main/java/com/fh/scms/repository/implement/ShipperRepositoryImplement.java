@@ -31,14 +31,14 @@ public class ShipperRepositoryImplement implements ShipperRepository {
     }
 
     @Override
-    public Shipper get(Long id) {
+    public Shipper findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Shipper.class, id);
     }
 
     @Override
-    public void insert(Shipper shipper) {
+    public void save(Shipper shipper) {
         Session session = this.getCurrentSession();
         session.persist(shipper);
     }
@@ -57,14 +57,6 @@ public class ShipperRepositoryImplement implements ShipperRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Shipper shipper = session.get(Shipper.class, id);
-        shipper.setActive(false);
-        session.merge(shipper);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -78,7 +70,7 @@ public class ShipperRepositoryImplement implements ShipperRepository {
     }
 
     @Override
-    public List<Shipper> getAll(Map<String, String> params) {
+    public List<Shipper> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Shipper> criteria = builder.createQuery(Shipper.class);

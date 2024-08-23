@@ -24,7 +24,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="tax" items="${taxs}">
+        <c:forEach var="tax" items="${taxes}">
             <tr id="item${tax.id}">
                 <td>${tax.id}</td>
                 <td>${tax.rate}</td>
@@ -43,11 +43,11 @@
                     </c:if>
                 </td>
                 <td>
-                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/taxs/edit/${tax.id}"/>">
+                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/taxes/edit/${tax.id}"/>">
                         <i class='bx bxs-edit'></i>
                     </a>
 
-                    <c:url value="/admin/taxs/delete/${tax.id}" var="deleteTax"/>
+                    <c:url value="/admin/taxes/delete/${tax.id}" var="deleteTax"/>
                     <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteTax}', ${tax.id})">
                         <i class='bx bx-x'></i>
                     </button>

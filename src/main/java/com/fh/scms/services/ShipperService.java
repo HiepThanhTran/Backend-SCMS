@@ -7,17 +7,15 @@ import java.util.Map;
 
 public interface ShipperService {
 
-    Shipper get(Long id);
+    Shipper findById(Long id);
 
-    void insert(Shipper shipper);
+    void save(Shipper shipper);
 
     void update(Shipper shipper);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Shipper> getAll(Map<String, String> params);
+    List<Shipper> findAllWithFilter(Map<String, String> params);
 }

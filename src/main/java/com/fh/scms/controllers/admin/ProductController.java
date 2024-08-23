@@ -30,16 +30,16 @@ public class ProductController {
 
     @GetMapping
     public String listProducts(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("products", this.productService.getAll(params));
+        model.addAttribute("products", this.productService.findAllWithFilter(params));
 
         return "products";
     }
 
     @GetMapping(path = "/add")
     public String addProduct(Model model) {
-        model.addAttribute("categories", this.categoryService.getAll(null));
-        model.addAttribute("units", this.unitService.getAll(null));
-        model.addAttribute("tags", this.tagService.getAll(null));
+        model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
+        model.addAttribute("units", this.unitService.findAllWithFilter(null));
+        model.addAttribute("tags", this.tagService.findAllWithFilter(null));
         model.addAttribute("product", new Product());
 
         return "add_product";
@@ -51,9 +51,9 @@ public class ProductController {
                              @RequestParam(value = "unitIds", required = false, defaultValue = "") List<String> unitIds,
                              @ModelAttribute(value = "product") @Valid Product product,
                              BindingResult bindingResult) {
-        model.addAttribute("categories", this.categoryService.getAll(null));
-        model.addAttribute("units", this.unitService.getAll(null));
-        model.addAttribute("tags", this.tagService.getAll(null));
+        model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
+        model.addAttribute("units", this.unitService.findAllWithFilter(null));
+        model.addAttribute("tags", this.tagService.findAllWithFilter(null));
 
         if (bindingResult.hasErrors()) {
             List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
@@ -62,19 +62,19 @@ public class ProductController {
             return "add_product";
         }
 
-        this.productService.insert(product, tagIds, unitIds);
+        this.productService.save(product, tagIds, unitIds);
 
         return "redirect:/admin/products";
     }
 
     @GetMapping(path = "/edit/{productId}")
     public String editProduct(Model model, @PathVariable(value = "productId") Long id) {
-        model.addAttribute("categories", this.categoryService.getAll(null));
-        model.addAttribute("units", this.unitService.getAll(null));
-        model.addAttribute("tags", this.tagService.getAll(null));
-        model.addAttribute("product", this.productService.get(id));
-        model.addAttribute("productTags", this.tagService.getByProduct(id));
-        model.addAttribute("productUnits", this.unitService.getByProduct(id));
+        model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
+        model.addAttribute("units", this.unitService.findAllWithFilter(null));
+        model.addAttribute("tags", this.tagService.findAllWithFilter(null));
+        model.addAttribute("product", this.productService.findById(id));
+        model.addAttribute("productTags", this.tagService.findByProductId(id));
+        model.addAttribute("productUnits", this.unitService.findByProductId(id));
 
         return "edit_product";
     }
@@ -85,9 +85,9 @@ public class ProductController {
                               @RequestParam(value = "unitIds", required = false, defaultValue = "") List<String> unitIds,
                               @ModelAttribute(value = "product") @Valid Product product,
                               BindingResult bindingResult) {
-        model.addAttribute("categories", this.categoryService.getAll(null));
-        model.addAttribute("units", this.unitService.getAll(null));
-        model.addAttribute("tags", this.tagService.getAll(null));
+        model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
+        model.addAttribute("units", this.unitService.findAllWithFilter(null));
+        model.addAttribute("tags", this.tagService.findAllWithFilter(null));
 
         if (bindingResult.hasErrors()) {
             List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
@@ -101,8 +101,8 @@ public class ProductController {
         return "redirect:/admin/products";
     }
 
-    @DeleteMapping(path = "/delete/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{productId}")
     public String deleteProduct(@PathVariable(value = "productId") Long id) {
         this.productService.delete(id);
 

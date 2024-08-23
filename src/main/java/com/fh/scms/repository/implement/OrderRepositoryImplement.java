@@ -31,14 +31,14 @@ public class OrderRepositoryImplement implements OrderRepository {
     }
 
     @Override
-    public Order get(Long id) {
+    public Order findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Order.class, id);
     }
 
     @Override
-    public void insert(Order order) {
+    public void save(Order order) {
         Session session = this.getCurrentSession();
         session.persist(order);
     }
@@ -57,14 +57,6 @@ public class OrderRepositoryImplement implements OrderRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Order order = session.get(Order.class, id);
-        order.setActive(false);
-        session.merge(order);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -78,7 +70,7 @@ public class OrderRepositoryImplement implements OrderRepository {
     }
 
     @Override
-    public List<Order> getAll(Map<String, String> params) {
+    public List<Order> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Order> criteria = builder.createQuery(Order.class);

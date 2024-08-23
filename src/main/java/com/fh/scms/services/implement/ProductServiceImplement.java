@@ -1,15 +1,14 @@
 package com.fh.scms.services.implement;
 
+import com.fh.scms.components.GlobalService;
 import com.fh.scms.dto.product.ProductResponse;
+import com.fh.scms.dto.product.ProductResponseWithTagUnit;
+import com.fh.scms.dto.tag.TagResponse;
 import com.fh.scms.pojo.Product;
 import com.fh.scms.pojo.Tag;
 import com.fh.scms.pojo.Unit;
 import com.fh.scms.repository.ProductRepository;
-import com.fh.scms.repository.TagRepository;
-import com.fh.scms.repository.UnitRepository;
-import com.fh.scms.services.CategoryService;
-import com.fh.scms.services.ProductService;
-import com.fh.scms.services._GlobalService;
+import com.fh.scms.services.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,22 +18,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class ProductServiceImplement implements ProductService {
 
     @Autowired
+    private GlobalService globalService;
+    @Autowired
     private ProductRepository productRepository;
     @Autowired
     private CategoryService categoryService;
     @Autowired
-    private TagRepository tagRepository;
+    private TagService tagService;
     @Autowired
-    private UnitRepository unitRepository;
-    @Autowired
-    private _GlobalService globalService;
+    private UnitService unitService;
 
+    @Override
     public ProductResponse getProductResponse(@NotNull Product product) {
         return ProductResponse.builder()
                 .id(product.getId())
@@ -48,20 +49,36 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public Product get(Long id) {
-        return this.productRepository.get(id);
+    public ProductResponseWithTagUnit getProductResponseWithTagUnit(Product product) {
+            return ProductResponseWithTagUnit.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .image(product.getImage())
+                .expiryDate(product.getExpiryDate())
+                .category(this.categoryService.getCategoryResponse(product.getCategory()))
+                .tagSet(product.getTagSet().stream()
+                        .map(tag -> this.tagService.getTagResponse(tag))
+                        .collect(Collectors.toSet())
+                )
+                .unitSet(product.getUnitSet().stream()
+                        .map(unit -> this.unitService.getUnitResponse(unit))
+                        .collect(Collectors.toSet()))
+                .build(); }
+
+    @Override
+    public List<ProductResponseWithTagUnit> getAllProductResponseWithTagUnit(Map<String, String> params) {
+        return this.productRepository.findAllWithFilter(params)
+                .stream().map(this::getProductResponseWithTagUnit)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void insert(Product Product) {
-        this.productRepository.insert(Product);
-    }
-
-    @Override
-    public void insert(Product product, List<String> tagIds, List<String> unitIds) {
+    public void save(Product product, @NotNull List<String> tagIds, List<String> unitIds) {
         Set<Tag> tags = new HashSet<>();
         for (String tagId : tagIds) {
-            Tag tag = this.tagRepository.get(Long.parseLong(tagId));
+            Tag tag = this.tagService.findById(Long.parseLong(tagId));
             if (tag != null) {
                 tags.add(tag);
             }
@@ -70,7 +87,7 @@ public class ProductServiceImplement implements ProductService {
 
         Set<Unit> units = new HashSet<>();
         for (String unitId : unitIds) {
-            Unit unit = this.unitRepository.get(Long.parseLong(unitId));
+            Unit unit = this.unitService.findById(Long.parseLong(unitId));
             if (unit != null) {
                 units.add(unit);
             }
@@ -81,19 +98,14 @@ public class ProductServiceImplement implements ProductService {
             product.setImage(this.globalService.uploadImage(product.getFile()));
         }
 
-        this.productRepository.insert(product);
-    }
-
-    @Override
-    public void update(Product Product) {
-        this.productRepository.update(Product);
+        this.productRepository.save(product);
     }
 
     @Override
     public void update(Product product, @NotNull List<String> tagIds, List<String> unitIds) {
         Set<Tag> tags = new HashSet<>();
         for (String tagId : tagIds) {
-            Tag tag = this.tagRepository.get(Long.parseLong(tagId));
+            Tag tag = this.tagService.findById(Long.parseLong(tagId));
             if (tag != null) {
                 tags.add(tag);
             }
@@ -102,7 +114,7 @@ public class ProductServiceImplement implements ProductService {
 
         Set<Unit> units = new HashSet<>();
         for (String unitId : unitIds) {
-            Unit unit = this.unitRepository.get(Long.parseLong(unitId));
+            Unit unit = this.unitService.findById(Long.parseLong(unitId));
             if (unit != null) {
                 units.add(unit);
             }
@@ -113,13 +125,23 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public void delete(Long id) {
-        this.productRepository.delete(id);
+    public Product findById(Long id) {
+        return this.productRepository.findById(id);
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.productRepository.softDelete(id);
+    public void save(Product Product) {
+        this.productRepository.save(Product);
+    }
+
+    @Override
+    public void update(Product Product) {
+        this.productRepository.update(Product);
+    }
+
+    @Override
+    public void delete(Long id) {
+        this.productRepository.delete(id);
     }
 
     @Override
@@ -128,7 +150,7 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public List<Product> getAll(Map<String, String> params) {
-        return this.productRepository.getAll(params);
+    public List<Product> findAllWithFilter(Map<String, String> params) {
+        return this.productRepository.findAllWithFilter(params);
     }
 }

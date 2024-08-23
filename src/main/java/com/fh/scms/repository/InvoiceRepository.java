@@ -7,17 +7,17 @@ import java.util.Map;
 
 public interface InvoiceRepository {
 
-    Invoice get(Long id);
+    Invoice findById(Long id);
 
-    void insert(Invoice invoice);
+    Invoice findByOrderId(Long orderId);
+
+    void save(Invoice invoice);
 
     void update(Invoice invoice);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Invoice> getAll(Map<String, String> params);
+    List<Invoice> findAllWithFilter(Map<String, String> params);
 }

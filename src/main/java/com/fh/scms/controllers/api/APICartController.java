@@ -24,7 +24,7 @@ public class APICartController {
 
     @GetMapping
     public ResponseEntity<?> getCart(Principal principal) {
-        User user = this.userService.getByUsername(principal.getName());
+        User user = this.userService.findByUsername(principal.getName());
 
         if (user == null) {
             return ResponseEntity.notFound().build();
@@ -37,7 +37,7 @@ public class APICartController {
 
     @PostMapping(path = "/product/add")
     public ResponseEntity<?> addProductToCart(Principal principal, @RequestBody ProductRequestAddToCart productRequestAddToCart) {
-        User user = this.userService.getByUsername(principal.getName());
+        User user = this.userService.findByUsername(principal.getName());
 
         if (user == null) {
             return ResponseEntity.notFound().build();
@@ -51,7 +51,7 @@ public class APICartController {
     @PatchMapping(path = "/product/{productId}/update")
     public ResponseEntity<?> updateProductInCart(Principal principal, @PathVariable(value = "productId") Long productId,
                                                  @RequestBody Map<String, String> params) {
-        User user = this.userService.getByUsername(principal.getName());
+        User user = this.userService.findByUsername(principal.getName());
 
         if (user == null) {
             return ResponseEntity.notFound().build();
@@ -68,7 +68,7 @@ public class APICartController {
 
     @DeleteMapping(path = "/product/{productId}/delete")
     public ResponseEntity<?> deleteProductFromCart(Principal principal, @PathVariable(value = "productId") Long productId) {
-        User user = this.userService.getByUsername(principal.getName());
+        User user = this.userService.findByUsername(principal.getName());
 
         if (user == null) {
             return ResponseEntity.notFound().build();
@@ -85,7 +85,7 @@ public class APICartController {
 
     @DeleteMapping(path = "/product/clear")
     public ResponseEntity<?> clearCart(Principal principal) {
-        User user = this.userService.getByUsername(principal.getName());
+        User user = this.userService.findByUsername(principal.getName());
 
         if (user == null) {
             return ResponseEntity.notFound().build();

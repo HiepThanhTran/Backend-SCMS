@@ -26,12 +26,6 @@
         <put-attribute name="content" value="/WEB-INF/pages/index.jsp"/>
     </definition>
 
-    <!--  CHANGEEEEEEEEEEEEEEEEEE  -->
-    <definition name="dashboard" extends="baseWithSidebar">
-        <put-attribute name="title" value="Dashboard"/>
-        <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
-    </definition>
-
     <!--Thống kê-->
     <definition name="statistics" extends="baseNonSidebar">
         <put-attribute name="title" value="Thống kế"/>
@@ -42,6 +36,11 @@
     <definition name="analytics" extends="baseNonSidebar">
         <put-attribute name="title" value="Phân tích"/>
         <put-attribute name="content" value="/WEB-INF/pages/analytics.jsp"/>
+    </definition>
+
+    <definition name="dashboard" extends="baseWithSidebar">
+        <put-attribute name="title" value="Dashboard"/>
+        <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
     </definition>
 
     <!--Category-->
@@ -106,6 +105,38 @@
     <definition name="edit_inventory" extends="baseWithSidebar">
         <put-attribute name="title" value="Chỉnh sửa tồn kho"/>
         <put-attribute name="content" value="/WEB-INF/pages/inventory/edit_inventory.jsp"/>
+    </definition>
+
+    <!--Invoice-->
+    <definition name="invoices" extends="baseWithSidebar">
+        <put-attribute name="title" value="Danh sách hóa đơn"/>
+        <put-attribute name="content" value="/WEB-INF/pages/invoice/invoices.jsp"/>
+    </definition>
+
+    <definition name="add_invoice" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm hóa đơn"/>
+        <put-attribute name="content" value="/WEB-INF/pages/invoice/add_invoice.jsp"/>
+    </definition>
+
+    <definition name="edit_invoice" extends="baseWithSidebar">
+        <put-attribute name="title" value="Chỉnh sửa hóa đơn"/>
+        <put-attribute name="content" value="/WEB-INF/pages/invoice/edit_invoice.jsp"/>
+    </definition>
+
+    <!--Order-->
+    <definition name="orders" extends="baseWithSidebar">
+        <put-attribute name="title" value="Danh sách đơn hàng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/order/orders.jsp"/>
+    </definition>
+
+    <definition name="add_order" extends="baseWithSidebar">
+        <put-attribute name="title" value="Thêm đơn hàng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/order/add_order.jsp"/>
+    </definition>
+
+    <definition name="edit_order" extends="baseWithSidebar">
+        <put-attribute name="title" value="Chỉnh sửa đơn hàng"/>
+        <put-attribute name="content" value="/WEB-INF/pages/order/edit_order.jsp"/>
     </definition>
 
     <!--Payment Terms-->
@@ -221,9 +252,9 @@
     </definition>
 
     <!--Tax-->
-    <definition name="taxs" extends="baseWithSidebar">
+    <definition name="taxes" extends="baseWithSidebar">
         <put-attribute name="title" value="Danh sách thuế"/>
-        <put-attribute name="content" value="/WEB-INF/pages/tax/taxs.jsp"/>
+        <put-attribute name="content" value="/WEB-INF/pages/tax/taxes.jsp"/>
     </definition>
 
     <definition name="add_tax" extends="baseWithSidebar">

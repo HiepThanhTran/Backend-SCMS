@@ -32,14 +32,14 @@ public class UserRepositoryImplement implements UserRepository {
     }
 
     @Override
-    public User get(Long id) {
+    public User findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(User.class, id);
     }
 
     @Override
-    public User getByUsername(String username) {
+    public User findByUsername(String username) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
@@ -57,7 +57,7 @@ public class UserRepositoryImplement implements UserRepository {
     }
 
     @Override
-    public User getByEmail(String email) {
+    public User findByEmail(String email) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
@@ -75,7 +75,7 @@ public class UserRepositoryImplement implements UserRepository {
     }
 
     @Override
-    public void insert(User user) {
+    public void save(User user) {
         Session session = this.getCurrentSession();
         session.persist(user);
     }
@@ -94,14 +94,6 @@ public class UserRepositoryImplement implements UserRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        User user = session.get(User.class, id);
-        user.setActive(false);
-        session.merge(user);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -115,7 +107,7 @@ public class UserRepositoryImplement implements UserRepository {
     }
 
     @Override
-    public List<User> getAll(Map<String, String> params) {
+    public List<User> findAllWithFilter(Map<String, String> params) {
         Session session = Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<User> criteria = builder.createQuery(User.class);

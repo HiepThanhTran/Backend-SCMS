@@ -2,8 +2,6 @@ package com.fh.scms.services.implement;
 
 import com.fh.scms.dto.rating.RatingRequestCreate;
 import com.fh.scms.dto.supplier.SupplierDTO;
-import com.fh.scms.exceptions.RatingSupplierException;
-import com.fh.scms.exceptions.UserException;
 import com.fh.scms.pojo.Rating;
 import com.fh.scms.pojo.Supplier;
 import com.fh.scms.pojo.User;
@@ -14,10 +12,10 @@ import com.fh.scms.repository.UserRepository;
 import com.fh.scms.services.SupplierService;
 import com.fh.scms.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -50,20 +48,20 @@ public class SupplierServiceImplement implements SupplierService {
 
     @Override
     public Supplier getProfileSupplier(String username) {
-        User user = this.userRepository.getByUsername(username);
+        User user = this.userRepository.findByUsername(username);
 
-        return this.getByUser(user);
+        return this.findByUser(user);
     }
 
     @Override
     public SupplierDTO updateProfileSupplier(String username, SupplierDTO supplierDTO) {
-        User user = this.userRepository.getByUsername(username);
+        User user = this.userRepository.findByUsername(username);
 
         if (!user.getConfirm()) {
-            throw new UserException("Tài khoản chưa được xác nhận");
+            throw new IllegalArgumentException("Tài khoản chưa được xác nhận");
         }
 
-        Supplier supplier = this.supplierRepository.getByUser(user);
+        Supplier supplier = this.supplierRepository.findByUser(user);
 
         Field[] fields = SupplierDTO.class.getDeclaredFields();
         for (Field field : fields) {
@@ -89,18 +87,18 @@ public class SupplierServiceImplement implements SupplierService {
 
     @Override
     public Rating addRatingForSupplier(String username, Long supplierId, RatingRequestCreate ratingRequestCreate) {
-        User user = this.userRepository.getByUsername(username);
-        Supplier supplier = this.supplierRepository.get(supplierId);
+        User user = this.userRepository.findByUsername(username);
+        Supplier supplier = this.supplierRepository.findById(supplierId);
 
         if (supplier == null) {
-            throw new RatingSupplierException("Nhà cung cấp không tồn tại", HttpStatus.NOT_FOUND.value());
+            throw new EntityNotFoundException("Nhà cung cấp không tồn tại");
         }
 
         if (user.getSupplier() != null && Objects.equals(user.getSupplier().getId(), supplierId)) {
-            throw new RatingSupplierException("Không thể đánh giá chính mình");
+            throw new IllegalArgumentException("Không thể đánh giá chính mình");
         }
 
-        Rating rating = this.ratingRepository.getByUserAndSupplier(user.getId(), supplierId);
+        Rating rating = this.ratingRepository.findByUserIdAndSupplierId(user.getId(), supplierId);
 
         if (rating == null) {
             rating = Rating.builder()
@@ -110,7 +108,7 @@ public class SupplierServiceImplement implements SupplierService {
                     .content(ratingRequestCreate.getContent())
                     .criteria(ratingRequestCreate.getCriteria())
                     .build();
-            this.ratingRepository.insert(rating);
+            this.ratingRepository.save(rating);
         } else {
             rating.setRating(ratingRequestCreate.getRating());
             rating.setContent(ratingRequestCreate.getContent());
@@ -122,23 +120,23 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
-    public Supplier get(Long id) {
-        return this.supplierRepository.get(id);
+    public Supplier findById(Long id) {
+        return this.supplierRepository.findById(id);
     }
 
     @Override
-    public Supplier getByUser(User user) {
-        return this.supplierRepository.getByUser(user);
+    public Supplier findByUser(User user) {
+        return this.supplierRepository.findByUser(user);
     }
 
     @Override
-    public Supplier getByPhone(String phone) {
-        return this.supplierRepository.getByPhone(phone);
+    public Supplier findByPhone(String phone) {
+        return this.supplierRepository.findByPhone(phone);
     }
 
     @Override
-    public void insert(Supplier supplier) {
-        this.supplierRepository.insert(supplier);
+    public void save(Supplier supplier) {
+        this.supplierRepository.save(supplier);
     }
 
     @Override
@@ -152,17 +150,12 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.supplierRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.supplierRepository.count();
     }
 
     @Override
-    public List<Supplier> getAll(Map<String, String> params) {
-        return this.supplierRepository.getAll(params);
+    public List<Supplier> findAllWithFilter(Map<String, String> params) {
+        return this.supplierRepository.findAllWithFilter(params);
     }
 }

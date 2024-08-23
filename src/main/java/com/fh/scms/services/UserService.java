@@ -17,7 +17,7 @@ public interface UserService extends UserDetailsService {
 
     void updateLastLogin(String username);
 
-    UserResponse register(UserRequestRegister userRequestRegister);
+    UserResponse registerUser(UserRequestRegister userRequestRegister);
 
     Boolean confirmUser(String username);
 
@@ -25,19 +25,17 @@ public interface UserService extends UserDetailsService {
 
     UserResponse updateProfileUser(String username, UserRequestUpdate userRequestUpdate);
 
-    User get(Long id);
+    User findById(Long id);
 
-    User getByUsername(String username);
+    User findByUsername(String username);
 
-    void insert(User user);
+    void save(User user);
 
     void update(User user);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<User> getAll(Map<String, String> params);
+    List<User> findAllWithFilter(Map<String, String> params);
 }

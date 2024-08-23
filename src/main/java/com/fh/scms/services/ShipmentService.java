@@ -7,17 +7,15 @@ import java.util.Map;
 
 public interface ShipmentService {
 
-    Shipment get(Long id);
+    Shipment findById(Long id);
 
-    void insert(Shipment shipment);
+    void save(Shipment shipment);
 
     void update(Shipment shipment);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Shipment> getAll(Map<String, String> params);
+    List<Shipment> findAllWithFilter(Map<String, String> params);
 }

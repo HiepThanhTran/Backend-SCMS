@@ -12,17 +12,15 @@ public interface TaxService {
 
     List<TaxResponse> getAllTaxResponse(Map<String, String> params);
 
-    Tax get(Long id);
+    Tax findById(Long id);
 
-    void insert(Tax tax);
+    void save(Tax tax);
 
     void update(Tax tax);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Tax> getAll(Map<String, String> params);
+    List<Tax> findAllWithFilter(Map<String, String> params);
 }

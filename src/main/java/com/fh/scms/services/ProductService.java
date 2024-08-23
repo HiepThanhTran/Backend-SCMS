@@ -1,6 +1,7 @@
 package com.fh.scms.services;
 
 import com.fh.scms.dto.product.ProductResponse;
+import com.fh.scms.dto.product.ProductResponseWithTagUnit;
 import com.fh.scms.pojo.Product;
 
 import java.util.List;
@@ -10,11 +11,15 @@ public interface ProductService {
 
     ProductResponse getProductResponse(Product product);
 
-    Product get(Long id);
+    ProductResponseWithTagUnit getProductResponseWithTagUnit(Product product);
 
-    void insert(Product Product);
+    List<ProductResponseWithTagUnit> getAllProductResponseWithTagUnit(Map<String, String> params);
 
-    void insert(Product product, List<String> tagIds, List<String> unitIds);
+    Product findById(Long id);
+
+    void save(Product Product);
+
+    void save(Product product, List<String> tagIds, List<String> unitIds);
 
     void update(Product Product);
 
@@ -22,9 +27,7 @@ public interface ProductService {
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Product> getAll(Map<String, String> params);
+    List<Product> findAllWithFilter(Map<String, String> params);
 }

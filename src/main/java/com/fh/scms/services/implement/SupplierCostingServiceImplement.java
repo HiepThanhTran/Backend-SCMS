@@ -18,13 +18,13 @@ public class SupplierCostingServiceImplement implements SupplierCostingService {
     private SupplierCostingRepository supplierCostingRepository;
 
     @Override
-    public SupplierCosting get(Long id) {
-        return this.supplierCostingRepository.get(id);
+    public SupplierCosting findById(Long id) {
+        return this.supplierCostingRepository.findById(id);
     }
 
     @Override
-    public void insert(SupplierCosting supplierCosting) {
-        this.supplierCostingRepository.insert(supplierCosting);
+    public void save(SupplierCosting supplierCosting) {
+        this.supplierCostingRepository.save(supplierCosting);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SupplierCostingServiceImplement implements SupplierCostingService {
     }
 
     @Override
-    public List<SupplierCosting> getAll(Map<String, String> params) {
-        return this.supplierCostingRepository.getAll(params);
+    public List<SupplierCosting> findAllWithFilter(Map<String, String> params) {
+        return this.supplierCostingRepository.findAllWithFilter(params);
     }
 }

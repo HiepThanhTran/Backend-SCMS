@@ -12,17 +12,15 @@ public interface CategoryService {
 
     List<CategoryResponse> getAllCategoryResponse(Map<String, String> params);
 
-    Category get(Long id);
+    Category findById(Long id);
 
-    void insert(Category category);
+    void save(Category category);
 
     void update(Category category);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Category> getAll(Map<String, String> params);
+    List<Category> findAllWithFilter(Map<String, String> params);
 }

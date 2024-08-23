@@ -26,56 +26,61 @@ public class InventoryController {
 
     @GetMapping
     public String listInventory(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("inventories", this.inventoryService.getAll(params));
+        model.addAttribute("inventories", this.inventoryService.findAllWithFilter(params));
 
         return "inventories";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addInventory(HttpServletRequest request, Model model, @ModelAttribute(value = "inventory") @Valid Inventory inventory,
-                               BindingResult bindingResult) {
-        model.addAttribute("warehouses", this.warehouseService.getAll(null));
-
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_inventory";
-            }
-
-            this.inventoryService.insert(inventory);
-            return "redirect:/admin/inventories";
-        }
+    @GetMapping(path = "/add")
+    public String addInventory(Model model) {
+        model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
+        model.addAttribute("inventory", new Inventory());
 
         return "add_inventory";
     }
 
-    @RequestMapping(path = "/edit/{inventoryId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editInventory(HttpServletRequest request, Model model, @PathVariable(value = "inventoryId") Long id,
-                                @ModelAttribute(value = "inventory") @Valid Inventory inventory, BindingResult bindingResult) {
-        model.addAttribute("warehouse", warehouseService.getAll(null));
+    @PostMapping(path = "/add")
+    public String addInventory(Model model, @ModelAttribute(value = "inventory") @Valid Inventory inventory,
+                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+            model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
 
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "edit_inventory";
-            }
-
-            this.inventoryService.update(inventory);
-
-            return "redirect:/admin/inventories";
+            return "add_inventory";
         }
 
-        model.addAttribute("inventory", inventoryService.get(id));
+        this.inventoryService.save(inventory);
+
+        return "redirect:/admin/inventories";
+    }
+
+    @GetMapping(path = "/edit/{inventoryId}")
+    public String editInventory(Model model, @PathVariable(value = "inventoryId") Long id) {
+        model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
+        model.addAttribute("inventory", this.inventoryService.findById(id));
 
         return "edit_inventory";
     }
 
-    @DeleteMapping(path = "/delete/{inventoryId}")
+    @PostMapping(path = "/edit/{inventoryId}")
+    public String editInventory(Model model, @PathVariable(value = "inventoryId") Long id,
+                                @ModelAttribute(value = "inventory") @Valid Inventory inventory, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+            model.addAttribute("warehouse", warehouseService.findAllWithFilter(null));
+
+            return "edit_inventory";
+        }
+
+        this.inventoryService.update(inventory);
+
+        return "redirect:/admin/inventories";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{inventoryId}")
     public String deleteInventory(@PathVariable(value = "inventoryId") Long id) {
         this.inventoryService.delete(id);
 

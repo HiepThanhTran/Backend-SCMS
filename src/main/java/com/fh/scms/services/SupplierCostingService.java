@@ -7,9 +7,9 @@ import java.util.Map;
 
 public interface SupplierCostingService {
 
-    SupplierCosting get(Long id);
+    SupplierCosting findById(Long id);
 
-    void insert(SupplierCosting supplierCosting);
+    void save(SupplierCosting supplierCosting);
 
     void update(SupplierCosting supplierCosting);
 
@@ -17,5 +17,5 @@ public interface SupplierCostingService {
 
     Long count();
 
-    List<SupplierCosting> getAll(Map<String, String> params);
+    List<SupplierCosting> findAllWithFilter(Map<String, String> params);
 }

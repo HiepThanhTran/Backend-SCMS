@@ -32,14 +32,14 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
     }
 
     @Override
-    public DeliverySchedule get(Long id) {
+    public DeliverySchedule findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(DeliverySchedule.class, id);
     }
 
     @Override
-    public void insert(DeliverySchedule deliverySchedule) {
+    public void save(DeliverySchedule deliverySchedule) {
         Session session = this.getCurrentSession();
         session.persist(deliverySchedule);
     }
@@ -58,14 +58,6 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        DeliverySchedule deliverySchedule = session.get(DeliverySchedule.class, id);
-        deliverySchedule.setActive(false);
-        session.merge(deliverySchedule);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -79,7 +71,7 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
     }
 
     @Override
-    public List<DeliverySchedule> getAll(Map<String, String> params) {
+    public List<DeliverySchedule> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<DeliverySchedule> criteria = builder.createQuery(DeliverySchedule.class);

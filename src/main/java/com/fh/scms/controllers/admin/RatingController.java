@@ -31,61 +31,68 @@ public class RatingController {
 
     @GetMapping
     public String listRating(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("ratings", this.ratingService.getAll(params));
+        model.addAttribute("ratings", this.ratingService.findAllWithFilter(params));
 
         return "ratings";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addRating(HttpServletRequest request, Model model, @ModelAttribute(value = "rating") @Valid Rating rating,
-                            BindingResult bindingResult) {
+    @GetMapping(path = "/add")
+    public String addRating(Model model) {
         model.addAttribute("criterias", CriteriaType.getAllDisplayNames());
-        model.addAttribute("suppliers", this.supplierService.getAll(null));
-        model.addAttribute("users", this.userService.getAll(null));
-
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_rating";
-            }
-
-            this.ratingService.insert(rating);
-
-            return "redirect:/admin/ratings";
-        }
+        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
+        model.addAttribute("users", this.userService.findAllWithFilter(null));
+        model.addAttribute("rating", new Rating());
 
         return "add_rating";
     }
 
-    @RequestMapping(path = "/edit/{ratingId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editRating(HttpServletRequest request, Model model, @PathVariable(value = "ratingId") Long id,
-                             @ModelAttribute(value = "rating") @Valid Rating rating, BindingResult bindingResult) {
-        model.addAttribute("criterias", CriteriaType.getAllDisplayNames());
-        model.addAttribute("suppliers", this.supplierService.getAll(null));
-        model.addAttribute("users", this.userService.getAll(null));
+    @PostMapping(path = "/add")
+    public String addRating(Model model, @ModelAttribute(value = "rating") @Valid Rating rating, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+            model.addAttribute("criterias", CriteriaType.getAllDisplayNames());
+            model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
+            model.addAttribute("users", this.userService.findAllWithFilter(null));
 
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "edit_rating";
-            }
-
-            this.ratingService.update(rating);
-
-            return "redirect:/admin/ratings";
+            return "add_rating";
         }
 
-        model.addAttribute("rating", this.ratingService.get(id));
+        this.ratingService.save(rating);
+
+        return "redirect:/admin/ratings";
+    }
+
+    @GetMapping(path = "/edit/{ratingId}")
+    public String editRating(Model model, @PathVariable(value = "ratingId") Long id) {
+        model.addAttribute("criterias", CriteriaType.getAllDisplayNames());
+        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
+        model.addAttribute("users", this.userService.findAllWithFilter(null));
+        model.addAttribute("rating", this.ratingService.findById(id));
 
         return "edit_rating";
     }
 
-    @DeleteMapping(path = "/delete/{ratingId}")
+    @RequestMapping(path = "/edit/{ratingId}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String editRating(Model model, @PathVariable(value = "ratingId") Long id,
+                             @ModelAttribute(value = "rating") @Valid Rating rating, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+            model.addAttribute("criterias", CriteriaType.getAllDisplayNames());
+            model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
+            model.addAttribute("users", this.userService.findAllWithFilter(null));
+
+            return "edit_rating";
+        }
+
+        this.ratingService.update(rating);
+
+        return "redirect:/admin/ratings";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{ratingId}")
     public String deleteRating(@PathVariable(value = "ratingId") Long id) {
         this.ratingService.delete(id);
 

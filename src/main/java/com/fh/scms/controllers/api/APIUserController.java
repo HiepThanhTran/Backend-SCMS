@@ -6,7 +6,6 @@ import com.fh.scms.dto.user.UserRequestLogin;
 import com.fh.scms.dto.user.UserRequestRegister;
 import com.fh.scms.dto.user.UserRequestUpdate;
 import com.fh.scms.dto.user.UserResponse;
-import com.fh.scms.exceptions.UserException;
 import com.fh.scms.pojo.User;
 import com.fh.scms.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -57,10 +56,10 @@ public class APIUserController {
         }
 
         try {
-            UserResponse userResponse = this.userService.register(userRequestRegister);
+            UserResponse userResponse = this.userService.registerUser(userRequestRegister);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
-        } catch (UserException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
@@ -95,14 +94,14 @@ public class APIUserController {
             UserResponse userResponse = this.userService.updateProfileUser(principal.getName(), userRequestUpdate);
 
             return ResponseEntity.ok(userResponse);
-        } catch (UserException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 
     @DeleteMapping(path = "/profile/delete")
     public ResponseEntity<?> deleteUser(Principal principal) {
-        User user = this.userService.getByUsername(principal.getName());
+        User user = this.userService.findByUsername(principal.getName());
 
         if (user == null) {
             return ResponseEntity.notFound().build();

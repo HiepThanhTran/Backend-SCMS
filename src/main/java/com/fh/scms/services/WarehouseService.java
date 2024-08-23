@@ -7,17 +7,15 @@ import java.util.Map;
 
 public interface WarehouseService {
 
-    Warehouse get(Long id);
+    Warehouse findById(Long id);
 
-    void insert(Warehouse warehouse);
+    void save(Warehouse warehouse);
 
     void update(Warehouse warehouse);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Warehouse> getAll(Map<String, String> params);
+    List<Warehouse> findAllWithFilter(Map<String, String> params);
 }

@@ -29,21 +29,22 @@ public class APIOrderController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> listOrders(Principal principal) {
-        User user = this.userService.getByUsername(principal.getName());
+    public ResponseEntity<?> listOrders(Principal principal, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
+        User user = this.userService.findByUsername(principal.getName());
 
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
 
-        List<OrderResponse> orderList = this.orderService.getAllOrderResponse(Map.of("userId", user.getId().toString()));
+        params.put("userId", user.getId().toString());
+        List<OrderResponse> orderList = this.orderService.getAllOrderResponse(params);
 
         return ResponseEntity.ok(orderList);
     }
 
     @PostMapping(path = "/checkout")
     public ResponseEntity<?> checkout(Principal principal, @RequestBody @Valid OrderRequest orderRequest) {
-        User user = this.userService.getByUsername(principal.getName());
+        User user = this.userService.findByUsername(principal.getName());
 
         if (user == null) {
             return ResponseEntity.notFound().build();
@@ -60,7 +61,7 @@ public class APIOrderController {
 
     @PatchMapping(path = "/{orderId}/cancel")
     public ResponseEntity<?> cancelOrder(Principal principal, @PathVariable(value = "orderId") Long orderId) {
-        User user = this.userService.getByUsername(principal.getName());
+        User user = this.userService.findByUsername(principal.getName());
 
         if (user == null) {
             return ResponseEntity.notFound().build();

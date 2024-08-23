@@ -38,9 +38,6 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
         configurer.enable();
     }
 
-//    @Bean
-//    public JavaMailS
-
     @Bean
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();

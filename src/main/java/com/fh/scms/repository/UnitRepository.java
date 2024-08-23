@@ -7,19 +7,17 @@ import java.util.Map;
 
 public interface UnitRepository {
 
-    Unit get(Long id);
+    Unit findById(Long id);
 
-    List<Unit> getByProduct(Long productId);
+    List<Unit> findByProductId(Long productId);
 
-    void insert(Unit unit);
+    void save(Unit unit);
 
     void update(Unit unit);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Unit> getAll(Map<String, String> params);
+    List<Unit> findAllWithFilter(Map<String, String> params);
 }

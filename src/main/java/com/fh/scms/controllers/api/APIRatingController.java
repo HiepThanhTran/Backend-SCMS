@@ -28,14 +28,14 @@ public class APIRatingController {
 
     @GetMapping
     public ResponseEntity<?> listRatings(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        List<Rating> ratingList = this.ratingService.getAll(params);
+        List<Rating> ratingList = this.ratingService.findAllWithFilter(params);
 
         return ResponseEntity.ok(ratingList);
     }
 
     @GetMapping(path = "/{ratingId}")
     public ResponseEntity<?> getRating(@PathVariable(value = "ratingId") Long id) {
-        Rating rating = this.ratingService.get(id);
+        Rating rating = this.ratingService.findById(id);
 
         if (rating == null) {
             return ResponseEntity.notFound().build();
@@ -53,13 +53,13 @@ public class APIRatingController {
             return ResponseEntity.badRequest().body(messageResponses);
         }
 
-        Rating rating = this.ratingService.get(id);
+        Rating rating = this.ratingService.findById(id);
 
         if (rating == null) {
             return ResponseEntity.notFound().build();
         }
 
-        User user = this.userService.getByUsername(principal.getName());
+        User user = this.userService.findByUsername(principal.getName());
         if (Objects.equals(user.getId(), rating.getUser().getId())) {
             rating = this.ratingService.update(rating, ratingRequestUpdate);
 
@@ -71,13 +71,13 @@ public class APIRatingController {
 
     @DeleteMapping(path = "/{ratingId}")
     public ResponseEntity<?> deleteRating(Principal principal, @PathVariable(value = "ratingId") Long id) {
-        Rating rating = this.ratingService.get(id);
+        Rating rating = this.ratingService.findById(id);
 
         if (rating == null) {
             return ResponseEntity.notFound().build();
         }
 
-        User user = this.userService.getByUsername(principal.getName());
+        User user = this.userService.findByUsername(principal.getName());
         if (Objects.equals(user.getId(), rating.getUser().getId())) {
             this.ratingService.delete(id);
 

@@ -18,13 +18,13 @@ public class WarehouseServiceImplement implements WarehouseService {
     private WarehouseRepository warehouseRepository;
 
     @Override
-    public Warehouse get(Long id) {
-        return this.warehouseRepository.get(id);
+    public Warehouse findById(Long id) {
+        return this.warehouseRepository.findById(id);
     }
 
     @Override
-    public void insert(Warehouse warehouse) {
-        this.warehouseRepository.insert(warehouse);
+    public void save(Warehouse warehouse) {
+        this.warehouseRepository.save(warehouse);
     }
 
     @Override
@@ -38,17 +38,12 @@ public class WarehouseServiceImplement implements WarehouseService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.warehouseRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.warehouseRepository.count();
     }
 
     @Override
-    public List<Warehouse> getAll(Map<String, String> params) {
-        return this.warehouseRepository.getAll(params);
+    public List<Warehouse> findAllWithFilter(Map<String, String> params) {
+        return this.warehouseRepository.findAllWithFilter(params);
     }
 }

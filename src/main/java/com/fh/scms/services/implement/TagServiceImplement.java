@@ -29,24 +29,24 @@ public class TagServiceImplement implements TagService {
 
     @Override
     public List<TagResponse> getAllTagResponse(Map<String, String> params) {
-        return this.tagRepository.getAll(params).stream()
+        return this.tagRepository.findAllWithFilter(params).stream()
                 .map(this::getTagResponse)
                 .collect(java.util.stream.Collectors.toList());
     }
 
     @Override
-    public Tag get(Long id) {
-        return this.tagRepository.get(id);
+    public Tag findById(Long id) {
+        return this.tagRepository.findById(id);
     }
 
     @Override
-    public List<Tag> getByProduct(Long productId) {
-        return this.tagRepository.getByProduct(productId);
+    public List<Tag> findByProductId(Long productId) {
+        return this.tagRepository.findByProductId(productId);
     }
 
     @Override
-    public void insert(Tag tag) {
-        this.tagRepository.insert(tag);
+    public void save(Tag tag) {
+        this.tagRepository.save(tag);
     }
 
     @Override
@@ -60,17 +60,12 @@ public class TagServiceImplement implements TagService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.tagRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.tagRepository.count();
     }
 
     @Override
-    public List<Tag> getAll(Map<String, String> params) {
-        return this.tagRepository.getAll(params);
+    public List<Tag> findAllWithFilter(Map<String, String> params) {
+        return this.tagRepository.findAllWithFilter(params);
     }
 }

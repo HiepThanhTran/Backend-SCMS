@@ -24,53 +24,56 @@ public class TagController {
 
     @GetMapping
     public String listTag(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("tags", this.tagService.getAll(params));
+        model.addAttribute("tags", this.tagService.findAllWithFilter(params));
 
         return "tags";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addTag(HttpServletRequest request, Model model, @ModelAttribute(value = "tag") @Valid Tag tag,
-                         BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_tag";
-            }
-
-            this.tagService.insert(tag);
-
-            return "redirect:/admin/tags";
-        }
+    @GetMapping(path = "/add")
+    public String addTag(Model model) {
+        model.addAttribute("tag", new Tag());
 
         return "add_tag";
     }
 
-    @RequestMapping(path = "/edit/{tagId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editTag(HttpServletRequest request, Model model, @PathVariable(value = "tagId") Long id,
-                          @ModelAttribute(value = "tag") @Valid Tag tag, BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
+    @PostMapping(path = "/add")
+    public String addTag(Model model, @ModelAttribute(value = "tag") @Valid Tag tag, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
 
-                return "edit_tag";
-            }
-
-            this.tagService.update(tag);
-
-            return "redirect:/admin/tags";
+            return "add_tag";
         }
 
-        model.addAttribute("tag", tagService.get(id));
+        this.tagService.save(tag);
+
+        return "redirect:/admin/tags";
+    }
+
+    @GetMapping(path = "/edit/{tagId}")
+    public String editTag(Model model, @PathVariable(value = "tagId") Long id) {
+        model.addAttribute("tag", tagService.findById(id));
 
         return "edit_tag";
     }
 
-    @DeleteMapping(path = "/delete/{tagId}")
+    @PostMapping(path = "/edit/{tagId}")
+    public String editTag(Model model, @PathVariable(value = "tagId") Long id,
+                          @ModelAttribute(value = "tag") @Valid Tag tag, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+
+            return "edit_tag";
+        }
+
+        this.tagService.update(tag);
+
+        return "redirect:/admin/tags";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{tagId}")
     public String deleteTag(@PathVariable(value = "tagId") Long id) {
         this.tagService.delete(id);
 

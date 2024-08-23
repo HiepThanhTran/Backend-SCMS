@@ -5,8 +5,10 @@ import com.fh.scms.dto.order.OrderRequest;
 import com.fh.scms.dto.order.OrderResponse;
 import com.fh.scms.enums.OrderStatus;
 import com.fh.scms.pojo.*;
+import com.fh.scms.repository.InvoiceRepository;
 import com.fh.scms.repository.OrderDetailsRepository;
 import com.fh.scms.repository.OrderRepository;
+import com.fh.scms.repository.TaxRepository;
 import com.fh.scms.services.InventoryService;
 import com.fh.scms.services.OrderService;
 import com.fh.scms.services.ProductService;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,10 @@ public class OrderServiceImplement implements OrderService {
     private ProductService productService;
     @Autowired
     private InventoryService inventoryService;
+    @Autowired
+    private InvoiceRepository invoiceRepository;
+    @Autowired
+    private TaxRepository taxRepository;
 
     @Override
     public OrderResponse getOrderResponse(@NotNull Order order) {
@@ -60,7 +67,7 @@ public class OrderServiceImplement implements OrderService {
 
     @Override
     public List<OrderResponse> getAllOrderResponse(Map<String, String> params) {
-        return this.orderRepository.getAll(params).stream()
+        return this.orderRepository.findAllWithFilter(params).stream()
                 .map(this::getOrderResponse)
                 .collect(Collectors.toList());
     }
@@ -72,10 +79,11 @@ public class OrderServiceImplement implements OrderService {
                     .user(user)
                     .type(orderRequest.getType())
                     .build();
-            this.orderRepository.insert(order);
+            this.orderRepository.save(order);
 
+            final BigDecimal[] totalAmount = {BigDecimal.ZERO};
             orderRequest.getOrderDetails().forEach(orderDetailsRequest -> {
-                Product product = this.productService.get(orderDetailsRequest.getProductId());
+                Product product = this.productService.findById(orderDetailsRequest.getProductId());
 
                 Inventory inventory = product.getInventory();
                 if (inventory.getQuantity() < orderDetailsRequest.getQuantity()) {
@@ -84,18 +92,29 @@ public class OrderServiceImplement implements OrderService {
 
                 OrderDetails orderDetails = OrderDetails.builder()
                         .order(order)
-                        .product(this.productService.get(orderDetailsRequest.getProductId()))
+                        .product(this.productService.findById(orderDetailsRequest.getProductId()))
                         .quantity(orderDetailsRequest.getQuantity())
                         .unitPrice(orderDetailsRequest.getUnitPrice())
                         .build();
-                this.orderDetailsRepository.insert(orderDetails);
+                this.orderDetailsRepository.save(orderDetails);
+
+                totalAmount[0] = totalAmount[0].add(orderDetailsRequest.getUnitPrice()
+                        .multiply(BigDecimal.valueOf(orderDetailsRequest.getQuantity())));
             });
+
+            Invoice invoice = Invoice.builder()
+                    .user(user)
+                    .order(order)
+                    .tax(this.taxRepository.findByRegion("VN"))
+                    .totalAmount(totalAmount[0])
+                    .build();
+            this.invoiceRepository.save(invoice);
         }
     }
 
     @Override
     public void cancelOrder(User user, Long orderId) {
-        Order order = this.orderRepository.get(orderId);
+        Order order = this.orderRepository.findById(orderId);
 
         if (order == null || !Objects.equals(order.getUser().getId(), user.getId())) {
             throw new EntityNotFoundException("Không tìm thấy đơn hàng");
@@ -115,11 +134,14 @@ public class OrderServiceImplement implements OrderService {
         order.setCancel(true);
         order.setStatus(OrderStatus.CANCELLED);
         this.orderRepository.update(order);
+
+        Invoice invoice = this.invoiceRepository.findByOrderId(orderId);
+        this.invoiceRepository.delete(invoice.getId());
     }
 
     @Override
     public void updateOrderStatus(Long orderId, String status) {
-        Order order = this.orderRepository.get(orderId);
+        Order order = this.orderRepository.findById(orderId);
 
         if (order == null) {
             throw new EntityNotFoundException("Không tìm thấy đơn hàng");
@@ -152,6 +174,14 @@ public class OrderServiceImplement implements OrderService {
                 });
                 break;
             case CANCELLED:
+                products.forEach(product -> {
+                    product.getInventory().setQuantity(product.getInventory().getQuantity() + totalQuantity);
+                    this.inventoryService.update(product.getInventory());
+                });
+
+                Invoice invoice = this.invoiceRepository.findByOrderId(orderId);
+                this.invoiceRepository.delete(invoice.getId());
+                break;
             case RETURNED:
                 products.forEach(product -> {
                     product.getInventory().setQuantity(product.getInventory().getQuantity() + totalQuantity);
@@ -165,13 +195,13 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
-    public Order get(Long id) {
-        return this.orderRepository.get(id);
+    public Order findById(Long id) {
+        return this.orderRepository.findById(id);
     }
 
     @Override
-    public void insert(Order order) {
-        this.orderRepository.insert(order);
+    public void save(Order order) {
+        this.orderRepository.save(order);
     }
 
     @Override
@@ -185,17 +215,12 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.orderRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.orderRepository.count();
     }
 
     @Override
-    public List<Order> getAll(Map<String, String> params) {
-        return this.orderRepository.getAll(params);
+    public List<Order> findAllWithFilter(Map<String, String> params) {
+        return this.orderRepository.findAllWithFilter(params);
     }
 }

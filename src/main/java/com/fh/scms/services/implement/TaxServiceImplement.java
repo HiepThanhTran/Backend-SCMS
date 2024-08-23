@@ -35,19 +35,19 @@ public class TaxServiceImplement implements TaxService {
 
     @Override
     public List<TaxResponse> getAllTaxResponse(Map<String, String> params) {
-        return this.taxRepository.getAll(params).stream()
+        return this.taxRepository.findAllWithFilter(params).stream()
                 .map(this::getTaxResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Tax get(Long id) {
-        return this.taxRepository.get(id);
+    public Tax findById(Long id) {
+        return this.taxRepository.findById(id);
     }
 
     @Override
-    public void insert(Tax tax) {
-        this.taxRepository.insert(tax);
+    public void save(Tax tax) {
+        this.taxRepository.save(tax);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class TaxServiceImplement implements TaxService {
 
     @Override
     public void delete(Long id) {
-        Tax tax = this.taxRepository.get(id);
+        Tax tax = this.taxRepository.findById(id);
         List<Invoice> invoicesToUpdate = new ArrayList<>(tax.getInvoiceSet());
 
         invoicesToUpdate.forEach(invoice -> {
@@ -69,17 +69,12 @@ public class TaxServiceImplement implements TaxService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.taxRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.taxRepository.count();
     }
 
     @Override
-    public List<Tax> getAll(Map<String, String> params) {
-        return this.taxRepository.getAll(params);
+    public List<Tax> findAllWithFilter(Map<String, String> params) {
+        return this.taxRepository.findAllWithFilter(params);
     }
 }

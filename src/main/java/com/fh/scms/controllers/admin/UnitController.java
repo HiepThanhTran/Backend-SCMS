@@ -24,53 +24,49 @@ public class UnitController {
 
     @GetMapping
     public String listUnit(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("units", this.unitService.getAll(params));
+        model.addAttribute("units", this.unitService.findAllWithFilter(params));
 
         return "units";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addUnit(HttpServletRequest request, Model model, @ModelAttribute(value = "unit") @Valid Unit unit,
-                          BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_unit";
-            }
-
-            this.unitService.insert(unit);
-
-            return "redirect:/admin/units";
-        }
+    @GetMapping(path = "/add")
+    public String addUnit(Model model) {
+        model.addAttribute("unit", new Unit());
 
         return "add_unit";
     }
 
-    @RequestMapping(path = "/edit/{unitId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editUnit(HttpServletRequest request, Model model, @PathVariable(value = "unitId") Long id,
-                           @ModelAttribute(value = "unit") @Valid Unit unit, BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
+    @PostMapping(path = "/add")
+    public String addUnit(Model model, @ModelAttribute(value = "unit") @Valid Unit unit, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
 
-                return "edit_unit";
-            }
-
-            this.unitService.update(unit);
-
-            return "redirect:/admin/units";
+            return "add_unit";
         }
 
-        model.addAttribute("unit", unitService.get(id));
+        this.unitService.save(unit);
 
-        return "edit_unit";
+        return "redirect:/admin/units";
     }
 
-    @DeleteMapping(path = "/delete/{unitId}")
+    @PostMapping(path = "/edit/{unitId}")
+    public String editUnit(Model model, @PathVariable(value = "unitId") Long id,
+                           @ModelAttribute(value = "unit") @Valid Unit unit, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+
+            return "edit_unit";
+        }
+
+        this.unitService.update(unit);
+
+        return "redirect:/admin/units";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{unitId}")
     public String deleteUnit(@PathVariable(value = "unitId") Long id) {
         this.unitService.delete(id);
 

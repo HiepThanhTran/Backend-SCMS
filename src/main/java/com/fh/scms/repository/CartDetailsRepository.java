@@ -4,9 +4,9 @@ import com.fh.scms.pojo.CartDetails;
 
 public interface CartDetailsRepository {
 
-    void persist(CartDetails cartDetails);
+    void save(CartDetails cartDetails);
 
-    void merge(CartDetails cartDetails);
+    void update(CartDetails cartDetails);
 
     void delete(Long id);
 }

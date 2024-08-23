@@ -31,14 +31,14 @@ public class WarehouseRepositoryImplement implements WarehouseRepository {
     }
 
     @Override
-    public Warehouse get(Long id) {
+    public Warehouse findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Warehouse.class, id);
     }
 
     @Override
-    public void insert(Warehouse warehouse) {
+    public void save(Warehouse warehouse) {
         Session session = this.getCurrentSession();
         session.persist(warehouse);
     }
@@ -57,14 +57,6 @@ public class WarehouseRepositoryImplement implements WarehouseRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Warehouse warehouse = session.get(Warehouse.class, id);
-        warehouse.setActive(false);
-        session.merge(warehouse);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -78,7 +70,7 @@ public class WarehouseRepositoryImplement implements WarehouseRepository {
     }
 
     @Override
-    public List<Warehouse> getAll(Map<String, String> params) {
+    public List<Warehouse> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Warehouse> criteria = builder.createQuery(Warehouse.class);

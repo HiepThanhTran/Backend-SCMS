@@ -30,14 +30,14 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
     }
 
     @Override
-    public Shipment get(Long id) {
+    public Shipment findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Shipment.class, id);
     }
 
     @Override
-    public void insert(Shipment shipment) {
+    public void save(Shipment shipment) {
         Session session = this.getCurrentSession();
         session.persist(shipment);
     }
@@ -56,14 +56,6 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Shipment shipment = session.get(Shipment.class, id);
-        shipment.setActive(false);
-        session.merge(shipment);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -77,7 +69,7 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
     }
 
     @Override
-    public List<Shipment> getAll(Map<String, String> params) {
+    public List<Shipment> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Shipment> criteria = builder.createQuery(Shipment.class);

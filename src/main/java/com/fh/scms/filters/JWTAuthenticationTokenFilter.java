@@ -24,6 +24,7 @@ import java.util.Set;
 public class JWTAuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
     private final static String TOKEN_HEADER = "Authorization";
+
     @Autowired
     private JWTService jwtService;
     @Autowired
@@ -35,7 +36,7 @@ public class JWTAuthenticationTokenFilter extends UsernamePasswordAuthentication
         String authToken = httpRequest.getHeader(TOKEN_HEADER);
         if (jwtService.validateTokenLogin(authToken)) {
             String username = jwtService.getUsernameFromToken(authToken);
-            User user = userService.getByUsername(username);
+            User user = userService.findByUsername(username);
             if (user != null) {
                 boolean enabled = true;
                 boolean accountNonExpired = true;

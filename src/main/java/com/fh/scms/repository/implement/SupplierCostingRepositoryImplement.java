@@ -29,14 +29,14 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
     }
 
     @Override
-    public SupplierCosting get(Long id) {
+    public SupplierCosting findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(SupplierCosting.class, id);
     }
 
     @Override
-    public void insert(SupplierCosting supplierCosting) {
+    public void save(SupplierCosting supplierCosting) {
         Session session = this.getCurrentSession();
         session.persist(supplierCosting);
     }
@@ -68,7 +68,7 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
     }
 
     @Override
-    public List<SupplierCosting> getAll(Map<String, String> params) {
+    public List<SupplierCosting> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<SupplierCosting> criteria = builder.createQuery(SupplierCosting.class);

@@ -6,6 +6,7 @@ import com.fh.scms.repository.SupplierRepository;
 import com.fh.scms.util.Pagination;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -34,14 +35,14 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
-    public Supplier get(Long id) {
+    public Supplier findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Supplier.class, id);
     }
 
     @Override
-    public Supplier getByUser(User user) {
+    public Supplier findByUser(@NotNull User user) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Supplier> criteria = builder.createQuery(Supplier.class);
@@ -59,7 +60,7 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
-    public Supplier getByPhone(String phone) {
+    public Supplier findByPhone(String phone) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Supplier> criteria = builder.createQuery(Supplier.class);
@@ -77,7 +78,7 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
-    public void insert(Supplier supplier) {
+    public void save(Supplier supplier) {
         Session session = this.getCurrentSession();
         session.persist(supplier);
     }
@@ -96,14 +97,6 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Supplier supplier = session.get(Supplier.class, id);
-        supplier.setActive(false);
-        session.merge(supplier);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -117,7 +110,7 @@ public class SupplierRepositoryImplement implements SupplierRepository {
     }
 
     @Override
-    public List<Supplier> getAll(Map<String, String> params) {
+    public List<Supplier> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Supplier> criteria = builder.createQuery(Supplier.class);

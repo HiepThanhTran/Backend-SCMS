@@ -29,14 +29,14 @@ public class UnitRepositoryImplement implements UnitRepository {
     }
 
     @Override
-    public Unit get(Long id) {
+    public Unit findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Unit.class, id);
     }
 
     @Override
-    public List<Unit> getByProduct(Long productId) {
+    public List<Unit> findByProductId(Long productId) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Unit> criteria = builder.createQuery(Unit.class);
@@ -52,7 +52,7 @@ public class UnitRepositoryImplement implements UnitRepository {
     }
 
     @Override
-    public void insert(Unit unit) {
+    public void save(Unit unit) {
         Session session = this.getCurrentSession();
         session.persist(unit);
     }
@@ -71,14 +71,6 @@ public class UnitRepositoryImplement implements UnitRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Unit unit = session.get(Unit.class, id);
-        unit.setActive(false);
-        session.merge(unit);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -92,7 +84,7 @@ public class UnitRepositoryImplement implements UnitRepository {
     }
 
     @Override
-    public List<Unit> getAll(Map<String, String> params) {
+    public List<Unit> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Unit> criteria = builder.createQuery(Unit.class);

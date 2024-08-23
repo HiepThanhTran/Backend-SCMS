@@ -7,19 +7,17 @@ import java.util.Map;
 
 public interface CustomerRepository {
 
-    Customer get(Long id);
+    Customer findById(Long id);
 
-    Customer getByPhone(String phone);
+    Customer findByPhone(String phone);
 
-    void insert(Customer customer);
+    void save(Customer customer);
 
     void update(Customer customer);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Customer> getAll(Map<String, String> params);
+    List<Customer> findAllWithFilter(Map<String, String> params);
 }

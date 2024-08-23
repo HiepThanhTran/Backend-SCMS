@@ -27,59 +27,62 @@ public class CustomerController {
 
     @GetMapping
     public String listCustomers(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("customers", this.customerService.getAll(params));
+        model.addAttribute("customers", this.customerService.findAllWithFilter(params));
 
         return "customers";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addCustomer(HttpServletRequest request, Model model, @ModelAttribute(value = "customer") @Valid UserRequestRegister customer,
-                              BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_customer";
-            }
-
-            try {
-                this.userService.register(customer);
-            } catch (Exception e) {
-                model.addAttribute("errors", List.of(new MessageResponse(e.getMessage())));
-
-                return "add_customer";
-            }
-
-            return "redirect:/admin/customers";
-        }
+    @GetMapping(path = "/add")
+    public String addCustomer(Model model) {
+        model.addAttribute("customer", new UserRequestRegister());
 
         return "add_customer";
     }
 
-    @RequestMapping(path = "/edit/{customerId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editCustomer(HttpServletRequest request, Model model, @PathVariable(value = "customerId") Long id,
-                               @ModelAttribute(value = "customer") @Valid Customer customer, BindingResult bindingResult) {
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
+    @PostMapping(path = "/add")
+    public String addCustomer(Model model, @ModelAttribute(value = "customer") @Valid UserRequestRegister customer, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
 
-                return "edit_customer";
-            }
-
-            this.customerService.update(customer);
-
-            return "redirect:/admin/customers";
+            return "add_customer";
         }
 
-        model.addAttribute("customer", this.customerService.get(id));
+        try {
+            this.userService.registerUser(customer);
+        } catch (Exception e) {
+            model.addAttribute("errors", List.of(new MessageResponse(e.getMessage())));
+
+            return "add_customer";
+        }
+
+        return "redirect:/admin/customers";
+    }
+
+    @GetMapping(path = "/edit/{customerId}")
+    public String editCustomer(Model model, @PathVariable(value = "customerId") Long id) {
+        model.addAttribute("customer", this.customerService.findById(id));
 
         return "edit_customer";
     }
 
-    @DeleteMapping(path = "/delete/{customerId}")
+    @PostMapping(path = "/edit/{customerId}")
+    public String editCustomer(Model model, @PathVariable(value = "customerId") Long id,
+                               @ModelAttribute(value = "customer") @Valid Customer customer, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+
+            return "edit_customer";
+        }
+
+        this.customerService.update(customer);
+
+        return "redirect:/admin/customers";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{customerId}")
     public String deleteCustomer(@PathVariable(value = "customerId") Long id) {
         this.customerService.delete(id);
 

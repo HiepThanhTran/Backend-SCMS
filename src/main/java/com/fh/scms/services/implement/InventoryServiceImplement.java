@@ -18,13 +18,13 @@ public class InventoryServiceImplement implements InventoryService {
     private InventoryRepository inventoryRepository;
 
     @Override
-    public Inventory get(Long id) {
-        return this.inventoryRepository.get(id);
+    public Inventory findById(Long id) {
+        return this.inventoryRepository.findById(id);
     }
 
     @Override
-    public void insert(Inventory inventory) {
-        this.inventoryRepository.insert(inventory);
+    public void save(Inventory inventory) {
+        this.inventoryRepository.save(inventory);
     }
 
     @Override
@@ -38,17 +38,12 @@ public class InventoryServiceImplement implements InventoryService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.inventoryRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.inventoryRepository.count();
     }
 
     @Override
-    public List<Inventory> getAll(Map<String, String> params) {
-        return this.inventoryRepository.getAll(params);
+    public List<Inventory> findAllWithFilter(Map<String, String> params) {
+        return this.inventoryRepository.findAllWithFilter(params);
     }
 }

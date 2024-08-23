@@ -1,5 +1,6 @@
 package com.fh.scms.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fh.scms.enums.PaymentTermType;
 import lombok.*;
 
@@ -38,13 +39,11 @@ public class PaymentTerms extends _BaseEntity implements Serializable {
     @Column(name = "term_type", nullable = false)
     private PaymentTermType type = PaymentTermType.COD;
 
+    @JsonIgnore
     @ManyToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @NotNull(message = "{paymentTerms.supplier.notNull}")
     @JoinColumn(name = "supplier_id", referencedColumnName = "id", nullable = false)
     private Supplier supplier;
-
-    @OneToMany(mappedBy = "paymentTerms")
-    private Set<Invoice> invoiceSet;
 
     @Override
     public String toString() {

@@ -18,13 +18,13 @@ public class DeliveryScheduleServiceImplement implements DeliveryScheduleService
     private DeliveryScheduleRepository deliveryScheduleRepository;
 
     @Override
-    public DeliverySchedule get(Long id) {
-        return this.deliveryScheduleRepository.get(id);
+    public DeliverySchedule findById(Long id) {
+        return this.deliveryScheduleRepository.findById(id);
     }
 
     @Override
-    public void insert(DeliverySchedule deliverySchedule) {
-        this.deliveryScheduleRepository.insert(deliverySchedule);
+    public void save(DeliverySchedule deliverySchedule) {
+        this.deliveryScheduleRepository.save(deliverySchedule);
     }
 
     @Override
@@ -38,17 +38,12 @@ public class DeliveryScheduleServiceImplement implements DeliveryScheduleService
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.deliveryScheduleRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.deliveryScheduleRepository.count();
     }
 
     @Override
-    public List<DeliverySchedule> getAll(Map<String, String> params) {
-        return this.deliveryScheduleRepository.getAll(params);
+    public List<DeliverySchedule> findAllWithFilter(Map<String, String> params) {
+        return this.deliveryScheduleRepository.findAllWithFilter(params);
     }
 }

@@ -7,17 +7,17 @@ import java.util.Map;
 
 public interface TaxRepository {
 
-    Tax get(Long id);
+    Tax findById(Long id);
 
-    void insert(Tax tax);
+    Tax findByRegion(String region);
+
+    void save(Tax tax);
 
     void update(Tax tax);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Tax> getAll(Map<String, String> params);
+    List<Tax> findAllWithFilter(Map<String, String> params);
 }

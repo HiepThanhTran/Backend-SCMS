@@ -5,11 +5,13 @@ import com.fh.scms.repository.TaxRepository;
 import com.fh.scms.util.Pagination;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -31,14 +33,32 @@ public class TaxRepositoryImplement implements TaxRepository {
     }
 
     @Override
-    public Tax get(Long id) {
+    public Tax findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(Tax.class, id);
     }
 
     @Override
-    public void insert(Tax tax) {
+    public Tax findByRegion(String region) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Tax> criteria = builder.createQuery(Tax.class);
+        Root<Tax> root = criteria.from(Tax.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("region"), region));
+            Query<Tax> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            LoggerFactory.getLogger(TaxRepositoryImplement.class).error("An error occurred while getting tax by region", e);
+            return null;
+        }
+    }
+
+    @Override
+    public void save(Tax tax) {
         Session session = this.getCurrentSession();
         session.persist(tax);
     }
@@ -57,14 +77,6 @@ public class TaxRepositoryImplement implements TaxRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = this.getCurrentSession();
-        Tax tax = session.get(Tax.class, id);
-        session.delete(tax);
-        session.merge(tax);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -78,7 +90,7 @@ public class TaxRepositoryImplement implements TaxRepository {
     }
 
     @Override
-    public List<Tax> getAll(Map<String, String> params) {
+    public List<Tax> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Tax> criteria = builder.createQuery(Tax.class);

@@ -29,14 +29,14 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
     }
 
     @Override
-    public OrderDetails get(Long id) {
+    public OrderDetails findById(Long id) {
         Session session = this.getCurrentSession();
 
         return session.get(OrderDetails.class, id);
     }
 
     @Override
-    public void insert(OrderDetails orderDetails) {
+    public void save(OrderDetails orderDetails) {
         Session session = this.getCurrentSession();
         session.persist(orderDetails);
     }
@@ -68,7 +68,7 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
     }
 
     @Override
-    public List<OrderDetails> getAll(Map<String, String> params) {
+    public List<OrderDetails> findAllWithFilter(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<OrderDetails> criteria = builder.createQuery(OrderDetails.class);

@@ -1,13 +1,12 @@
 package com.fh.scms.services.implement;
 
+import com.fh.scms.components.GlobalService;
 import com.fh.scms.dto.user.UserRequestRegister;
 import com.fh.scms.dto.user.UserRequestUpdate;
 import com.fh.scms.dto.user.UserResponse;
-import com.fh.scms.exceptions.UserException;
 import com.fh.scms.pojo.*;
 import com.fh.scms.repository.*;
 import com.fh.scms.services.UserService;
-import com.fh.scms.services._GlobalService;
 import com.fh.scms.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,8 @@ import java.util.stream.Collectors;
 public class UserServiceImplement implements UserService {
 
     @Autowired
+    private GlobalService globalService;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private SupplierRepository supplierRepository;
@@ -43,12 +44,10 @@ public class UserServiceImplement implements UserService {
     private OrderRepository orderRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private _GlobalService globalService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userRepository.getByUsername(username);
+        User user = this.userRepository.findByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("Invalid User!");
@@ -75,28 +74,28 @@ public class UserServiceImplement implements UserService {
 
     @Override
     public boolean authenticateUser(String username, String password) {
-        User user = this.userRepository.getByUsername(username);
+        User user = this.userRepository.findByUsername(username);
 
         return user != null && this.passwordEncoder.matches(password, user.getPassword());
     }
 
     @Override
     public void updateLastLogin(String username) {
-        User user = this.userRepository.getByUsername(username);
+        User user = this.userRepository.findByUsername(username);
         user.setLastLogin(LocalDateTime.now());
         this.userRepository.update(user);
     }
 
     @Override
-    public UserResponse register(@NotNull UserRequestRegister userRequestRegister) {
-        User user = this.userRepository.getByUsername(userRequestRegister.getUsername());
+    public UserResponse registerUser(@NotNull UserRequestRegister userRequestRegister) {
+        User user = this.userRepository.findByUsername(userRequestRegister.getUsername());
         if (user != null) {
-            throw new UserException("Tên đăng nhập đã tồn tại");
+            throw new IllegalArgumentException("Tên đăng nhập đã tồn tại");
         }
 
-        user = this.userRepository.getByEmail(userRequestRegister.getEmail());
+        user = this.userRepository.findByEmail(userRequestRegister.getEmail());
         if (user != null) {
-            throw new UserException("Email đã được liên kết đến tài khoản khác");
+            throw new IllegalArgumentException("Email đã được liên kết đến tài khoản khác");
         }
 
         String avatarUrl = null;
@@ -118,9 +117,9 @@ public class UserServiceImplement implements UserService {
                 break;
             case ROLE_CUSTOMER:
                 Customer customer;
-                customer = this.customerRepository.getByPhone(userRequestRegister.getPhone());
+                customer = this.customerRepository.findByPhone(userRequestRegister.getPhone());
                 if (customer != null) {
-                    throw new UserException("Số điện thoại đã được liên kết đến tài khoản khác");
+                    throw new IllegalArgumentException("Số điện thoại đã được liên kết đến tài khoản khác");
                 }
 
                 customer = Customer.builder()
@@ -136,9 +135,9 @@ public class UserServiceImplement implements UserService {
                 user.setCustomer(customer);
                 break;
             case ROLE_SUPPLIER:
-                Supplier supplier = this.supplierRepository.getByPhone(userRequestRegister.getPhone());
+                Supplier supplier = this.supplierRepository.findByPhone(userRequestRegister.getPhone());
                 if (supplier != null) {
-                    throw new UserException("Số điện thoại đã được liên kết đến tài khoản khác");
+                    throw new IllegalArgumentException("Số điện thoại đã được liên kết đến tài khoản khác");
                 }
 
                 supplier = Supplier.builder()
@@ -179,14 +178,14 @@ public class UserServiceImplement implements UserService {
                 break;
         }
 
-        this.userRepository.insert(user);
+        this.userRepository.save(user);
 
         return this.getUserResponse(user);
     }
 
     @Override
     public Boolean confirmUser(String username) {
-        User user = this.userRepository.getByUsername(username);
+        User user = this.userRepository.findByUsername(username);
         if (user != null && !user.getConfirm()) {
             user.setConfirm(true);
             this.userRepository.update(user);
@@ -199,17 +198,17 @@ public class UserServiceImplement implements UserService {
 
     @Override
     public UserResponse getProfileUser(String username) {
-        User user = this.userRepository.getByUsername(username);
+        User user = this.userRepository.findByUsername(username);
 
         return this.getUserResponse(user);
     }
 
     @Override
     public UserResponse updateProfileUser(String username, UserRequestUpdate userRequestUpdate) {
-        User user = this.userRepository.getByUsername(username);
+        User user = this.userRepository.findByUsername(username);
 
         if (!user.getConfirm()) {
-            throw new UserException("Tài khoản chưa được xác nhận");
+            throw new IllegalArgumentException("Tài khoản chưa được xác nhận");
         }
 
         Field[] fields = UserRequestUpdate.class.getDeclaredFields();
@@ -243,18 +242,18 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public User get(Long id) {
-        return this.userRepository.get(id);
+    public User findById(Long id) {
+        return this.userRepository.findById(id);
     }
 
     @Override
-    public User getByUsername(String username) {
-        return this.userRepository.getByUsername(username);
+    public User findByUsername(String username) {
+        return this.userRepository.findByUsername(username);
     }
 
     @Override
-    public void insert(User user) {
-        this.userRepository.insert(user);
+    public void save(User user) {
+        this.userRepository.save(user);
     }
 
     @Override
@@ -262,7 +261,6 @@ public class UserServiceImplement implements UserService {
         if (user.getFile() != null && !user.getFile().isEmpty()) {
             user.setAvatar(this.globalService.uploadImage(user.getFile()));
         }
-        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
         this.userRepository.update(user);
     }
@@ -273,17 +271,12 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.userRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.userRepository.count();
     }
 
     @Override
-    public List<User> getAll(Map<String, String> params) {
-        return this.userRepository.getAll(params);
+    public List<User> findAllWithFilter(Map<String, String> params) {
+        return this.userRepository.findAllWithFilter(params);
     }
 }

@@ -5,7 +5,7 @@
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-center list__title">Danh sách lịch giao hàng</h1>
-        <a href="<c:url value="/admin/delivery-schedules/add"/>" class="list__icon-add">
+        <a href="<c:url value="/admin/schedules/add"/>" class="list__icon-add">
             <i class='bx bxs-plus-circle'></i>
         </a>
     </div>
@@ -46,11 +46,11 @@
                     </c:if>
                 </td>
                 <td>
-                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/delivery-schedules/edit/${deliverySchedule.id}"/>">
+                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/schedules/edit/${deliverySchedule.id}"/>">
                         <i class='bx bxs-edit'></i>
                     </a>
 
-                    <c:url value="/admin/delivery-schedules/delete/${deliverySchedule.id}" var="deleteDeliverySchedule"/>
+                    <c:url value="/admin/schedules/delete/${deliverySchedule.id}" var="deleteDeliverySchedule"/>
                     <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteDeliverySchedule}', ${deliverySchedule.id})">
                         <i class='bx bx-x'></i>
                     </button>

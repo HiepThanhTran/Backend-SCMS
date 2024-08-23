@@ -18,13 +18,13 @@ public class ShipperServiceImplement implements ShipperService {
     private ShipperRepository shipperRepository;
 
     @Override
-    public Shipper get(Long id) {
-        return this.shipperRepository.get(id);
+    public Shipper findById(Long id) {
+        return this.shipperRepository.findById(id);
     }
 
     @Override
-    public void insert(Shipper shipper) {
-        this.shipperRepository.insert(shipper);
+    public void save(Shipper shipper) {
+        this.shipperRepository.save(shipper);
     }
 
     @Override
@@ -38,17 +38,12 @@ public class ShipperServiceImplement implements ShipperService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.shipperRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.shipperRepository.count();
     }
 
     @Override
-    public List<Shipper> getAll(Map<String, String> params) {
-        return this.shipperRepository.getAll(params);
+    public List<Shipper> findAllWithFilter(Map<String, String> params) {
+        return this.shipperRepository.findAllWithFilter(params);
     }
 }

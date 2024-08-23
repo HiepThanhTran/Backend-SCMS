@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<c:url value="/admin/delivery-schedules/add" var="addDeliverySchedule"/>
+<c:url value="/admin/schedules/add" var="addDeliverySchedule"/>
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">

@@ -83,6 +83,10 @@ public class User extends _BaseEntity implements Serializable {
     private Shipper shipper;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST})
+    private Set<Invoice> invoiceSet;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Order> orderSet;
 

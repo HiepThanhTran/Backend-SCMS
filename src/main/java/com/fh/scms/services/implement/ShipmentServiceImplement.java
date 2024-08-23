@@ -19,13 +19,13 @@ public class ShipmentServiceImplement implements ShipmentService {
     private ShipmentRepository shipmentRepository;
 
     @Override
-    public Shipment get(Long id) {
-        return this.shipmentRepository.get(id);
+    public Shipment findById(Long id) {
+        return this.shipmentRepository.findById(id);
     }
 
     @Override
-    public void insert(Shipment shipment) {
-        this.shipmentRepository.insert(shipment);
+    public void save(Shipment shipment) {
+        this.shipmentRepository.save(shipment);
     }
 
     @Override
@@ -39,17 +39,12 @@ public class ShipmentServiceImplement implements ShipmentService {
     }
 
     @Override
-    public void softDelete(Long id) {
-        this.shipmentRepository.softDelete(id);
-    }
-
-    @Override
     public Long count() {
         return this.shipmentRepository.count();
     }
 
     @Override
-    public List<Shipment> getAll(Map<String, String> params) {
-        return this.shipmentRepository.getAll(params);
+    public List<Shipment> findAllWithFilter(Map<String, String> params) {
+        return this.shipmentRepository.findAllWithFilter(params);
     }
 }

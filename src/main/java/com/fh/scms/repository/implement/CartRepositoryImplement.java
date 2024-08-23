@@ -22,8 +22,21 @@ public class CartRepositoryImplement implements CartRepository {
     }
 
     @Override
-    public void insert(Cart cart) {
+    public void save(Cart cart) {
         Session session = this.getCurrentSession();
         session.persist(cart);
+    }
+
+    @Override
+    public void update(Cart cart) {
+        Session session = this.getCurrentSession();
+        session.merge(cart);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Session session = this.getCurrentSession();
+        Cart cart = session.get(Cart.class, id);
+        session.delete(cart);
     }
 }

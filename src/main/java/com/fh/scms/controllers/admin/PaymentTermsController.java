@@ -27,59 +27,64 @@ public class PaymentTermsController {
     
     @GetMapping
     public String listPaymentTerms(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        model.addAttribute("paymentTerms", this.paymentTermsService.getAll(params));
+        model.addAttribute("paymentTerms", this.paymentTermsService.findAllWithFilter(params));
 
         return "payment_terms";
     }
 
-    @RequestMapping(path = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addPaymentTerms(HttpServletRequest request, Model model, @ModelAttribute(value = "paymentTerms") @Valid PaymentTerms paymentTerms,
-                                  BindingResult bindingResult) {
-        model.addAttribute("suppliers", this.supplierService.getAll(null));
+    @GetMapping(path = "/add")
+    public String addPaymentTerms(Model model) {
+        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
         model.addAttribute("paymentTermTypes", PaymentTermType.getAllDisplayNames());
-
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "add_payment_terms";
-            }
-
-            this.paymentTermsService.insert(paymentTerms);
-
-            return "redirect:/admin/payment-terms";
-        }
+        model.addAttribute("paymentTerms", new PaymentTerms());
 
         return "add_payment_terms";
     }
 
-    @RequestMapping(path = "/edit/{paymentTermsId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String editPaymentTerms(HttpServletRequest request, Model model, @PathVariable(value = "paymentTermsId") Long id,
-                                   @ModelAttribute(value = "paymentTerms") @Valid PaymentTerms paymentTerms, BindingResult bindingResult) {
-        model.addAttribute("suppliers", this.supplierService.getAll(null));
-        model.addAttribute("paymentTermTypes", PaymentTermType.getAllDisplayNames());
+    @PostMapping(path = "/add")
+    public String addPaymentTerms(Model model, @ModelAttribute(value = "paymentTerms") @Valid PaymentTerms paymentTerms, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+            model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
+            model.addAttribute("paymentTermTypes", PaymentTermType.getAllDisplayNames());
 
-        if (request.getMethod().equals("POST")) {
-            if (bindingResult.hasErrors()) {
-                List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-                model.addAttribute("errors", errors);
-
-                return "edit_payment_terms";
-            }
-
-            this.paymentTermsService.update(paymentTerms);
-
-            return "redirect:/admin/payment-terms";
+            return "add_payment_terms";
         }
 
-        model.addAttribute("paymentTerms", this.paymentTermsService.get(id));
+        this.paymentTermsService.save(paymentTerms);
+
+        return "redirect:/admin/payment-terms";
+    }
+
+    @GetMapping(path = "/edit/{paymentTermsId}")
+    public String editPaymentTerms(Model model, @PathVariable(value = "paymentTermsId") Long id) {
+        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
+        model.addAttribute("paymentTermTypes", PaymentTermType.getAllDisplayNames());
+        model.addAttribute("paymentTerms", this.paymentTermsService.findById(id));
 
         return "edit_payment_terms";
     }
 
-    @DeleteMapping(path = "/delete/{paymentTermsId}")
+    @PostMapping(path = "/edit/{paymentTermsId}")
+    public String editPaymentTerms(Model model, @PathVariable(value = "paymentTermsId") Long id,
+                                   @ModelAttribute(value = "paymentTerms") @Valid PaymentTerms paymentTerms, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
+            model.addAttribute("errors", errors);
+            model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
+            model.addAttribute("paymentTermTypes", PaymentTermType.getAllDisplayNames());
+
+            return "edit_payment_terms";
+        }
+
+        this.paymentTermsService.update(paymentTerms);
+
+        return "redirect:/admin/payment-terms";
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/delete/{paymentTermsId}")
     public String deletePaymentTerms(@PathVariable(value = "paymentTermsId") Long id) {
         this.paymentTermsService.delete(id);
 

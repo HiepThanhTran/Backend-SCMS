@@ -6,11 +6,13 @@ import com.fh.scms.util.Pagination;
 import com.fh.scms.util.Utils;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -30,14 +32,32 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
     }
 
     @Override
-    public Invoice get(Long id) {
+    public Invoice findById(Long id) {
         Session session = getCurrentSession();
 
         return session.get(Invoice.class, id);
     }
 
     @Override
-    public void insert(Invoice invoice) {
+    public Invoice findByOrderId(Long orderId) {
+        Session session = getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Invoice> criteria = builder.createQuery(Invoice.class);
+        Root<Invoice> root = criteria.from(Invoice.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("order").get("id"), orderId));
+            Query<Invoice> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            LoggerFactory.getLogger(InvoiceRepositoryImplement.class).error("An error occurred while getting invoice by order", e);
+            return null;
+        }
+    }
+
+    @Override
+    public void save(Invoice invoice) {
         Session session = getCurrentSession();
         session.persist(invoice);
     }
@@ -56,14 +76,6 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
-        Session session = getCurrentSession();
-        Invoice invoice = session.get(Invoice.class, id);
-        invoice.setActive(false);
-        session.merge(invoice);
-    }
-
-    @Override
     public Long count() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -77,7 +89,7 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
     }
 
     @Override
-    public List<Invoice> getAll(Map<String, String> params) {
+    public List<Invoice> findAllWithFilter(Map<String, String> params) {
         Session session = getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Invoice> criteria = builder.createQuery(Invoice.class);
@@ -87,9 +99,12 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
         predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
-            Arrays.asList("isPaid", "taxId", "paymentTermsId", "fromCreatedAt", "toCreatedAt").forEach(key -> {
+            Arrays.asList("userId", "isPaid", "taxId", "paymentTermsId", "fromCreatedAt", "toCreatedAt").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
+                        case "userId":
+                            predicates.add(builder.equal(root.get("user").get("id"), Long.parseLong(params.get(key))));
+                            break;
                         case "isPaid":
                             Boolean isPaid = Utils.parseBoolean(params.get(key));
                             if (isPaid != null) {

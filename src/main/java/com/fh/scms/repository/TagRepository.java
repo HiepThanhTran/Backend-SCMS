@@ -7,19 +7,17 @@ import java.util.Map;
 
 public interface TagRepository {
 
-    Tag get(Long id);
+    Tag findById(Long id);
 
-    List<Tag> getByProduct(Long productId);
+    List<Tag> findByProductId(Long productId);
 
-    void insert(Tag tag);
+    void save(Tag tag);
 
     void update(Tag tag);
 
     void delete(Long id);
 
-    void softDelete(Long id);
-
     Long count();
 
-    List<Tag> getAll(Map<String, String> params);
+    List<Tag> findAllWithFilter(Map<String, String> params);
 }
