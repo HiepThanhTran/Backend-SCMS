@@ -146,7 +146,7 @@ form {
 }
 
 form label {
-    margin-bottom: 5px;
+    margin-bottom: 0 !important;
     font-weight: 600;
     color: var(--text-color);
 }
@@ -157,6 +157,8 @@ form label {
 }
 
 form input[type="numberDecimal"],
+form input[type="email"],
+form input[type="password"],
 form input[type="text"],
 form input[type="tel"],
 form input[type="date"] {
@@ -168,6 +170,8 @@ form input[type="date"] {
 }
 
 form input[type="numberDecimal"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus,
 form input[type="text"]:focus,
 form input[type="tel"]:focus,
 form input[type="date"]:focus {

@@ -1,0 +1,21 @@
+package com.fh.scms.repository;
+
+import com.fh.scms.pojo.SupplierCosting;
+
+import java.util.List;
+import java.util.Map;
+
+public interface SupplierCostingRepository {
+
+    SupplierCosting get(Long id);
+
+    void insert(SupplierCosting supplierCosting);
+
+    void update(SupplierCosting supplierCosting);
+
+    void delete(Long id);
+
+    Long count();
+
+    List<SupplierCosting> getAll(Map<String, String> params);
+}

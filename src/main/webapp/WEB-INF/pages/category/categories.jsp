@@ -20,37 +20,35 @@
             <th>Mô tả</th>
             <th>Ngày tạo</th>
             <th>Ngày cập nhập</th>
-            <th>Active</th>
             <th>Hành động</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="category" items="${categories}">
-            <tr id="item${category.id}">
-                <td>${category.id}</td>
-                <td>${category.name}</td>
-                <td>${category.description}</td>
+        <c:forEach var="product" items="${categories}">
+            <tr id="item${product.id}">
+                <td>${product.id}</td>
+                <td>${product.name}</td>
+                <td>${product.description}</td>
                 <td>
-                    <fmt:parseDate value="${ category.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/>
+                    <fmt:parseDate value="${ product.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
-                    <c:if test="${ category.updatedAt != null }">
-                        <fmt:parseDate value="${ category.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
-                        <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedUpdatedDateTime }"/>
+                    <c:if test="${ product.updatedAt != null }">
+                        <fmt:parseDate value="${ product.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
-                    <c:if test="${ category.updatedAt == null }">
+                    <c:if test="${ product.updatedAt == null }">
                         Chưa cập nhập
                     </c:if>
                 </td>
-                <td>${category.active}</td>
                 <td>
-                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/categories/edit/${category.id}"/>">
+                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/categories/edit/${product.id}"/>">
                         <i class='bx bxs-edit'></i>
                     </a>
 
-                    <c:url value="/admin/categories/delete/${category.id}" var="deleteCategory"/>
-                    <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteCategory}', ${category.id})">
+                    <c:url value="/admin/categories/delete/${product.id}" var="deleteProduct"/>
+                    <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteProduct}', ${product.id})">
                         <i class='bx bx-x'></i>
                     </button>
                 </td>

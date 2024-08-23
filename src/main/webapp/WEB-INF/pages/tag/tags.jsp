@@ -20,37 +20,35 @@
             <th>Mô tả</th>
             <th>Ngày tạo</th>
             <th>Ngày cập nhập</th>
-            <th>Active</th>
             <th>Hành động</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="tag" items="${tags}">
-            <tr id="item${tag.id}">
-                <td>${tag.id}</td>
-                <td>${tag.name}</td>
-                <td>${tag.description}</td>
+        <c:forEach var="unit" items="${tags}">
+            <tr id="item${unit.id}">
+                <td>${unit.id}</td>
+                <td>${unit.name}</td>
+                <td>${unit.description}</td>
                 <td>
-                    <fmt:parseDate value="${ tag.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/>
+                    <fmt:parseDate value="${ unit.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
-                    <c:if test="${ tag.updatedAt != null }">
-                        <fmt:parseDate value="${ tag.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
-                        <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedUpdatedDateTime }"/>
+                    <c:if test="${ unit.updatedAt != null }">
+                        <fmt:parseDate value="${ unit.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
-                    <c:if test="${ tag.updatedAt == null }">
+                    <c:if test="${ unit.updatedAt == null }">
                         Chưa cập nhập
                     </c:if>
                 </td>
-                <td>${tag.active}</td>
                 <td>
-                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/tags/edit/${tag.id}"/>">
+                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/tags/edit/${unit.id}"/>">
                         <i class='bx bxs-edit'></i>
                     </a>
 
-                    <c:url value="/admin/tags/delete/${tag.id}" var="deleteTag"/>
-                    <button class="btn btn-danger btn-sm" href="#" onclick="deleteItem('${deleteTag}', ${tag.id})">
+                    <c:url value="/admin/tags/delete/${unit.id}" var="deleteTag"/>
+                    <button class="btn btn-danger btn-sm" href="#" onclick="deleteItem('${deleteTag}', ${unit.id})">
                         <i class='bx bx-x'></i>
                     </button>
                 </td>

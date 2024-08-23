@@ -31,5 +31,10 @@
         <form:input type="text" name="abbreviation" path="abbreviation" placeholder="Nhập ký hiệu đơn vị" cssClass="form-control"/><br/>
     </div>
 
+    <div class="form-group d-flex align-items-center">
+        <form:label path="active" cssClass="form-label">Active:</form:label>
+        <form:checkbox path="active" checked="${active}" class="ms-2"/>
+    </div>
+
     <input type="submit" value="Cập nhật" class="mt-3"/>
 </form:form>

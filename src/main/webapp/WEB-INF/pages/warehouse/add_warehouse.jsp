@@ -6,7 +6,7 @@
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="text-center list__title">Thêm kho</h1>
+        <h1 class="text-center list__title">Thêm nhà kho</h1>
     </div>
 </div>
 
@@ -29,16 +29,15 @@
         <form:input type="text" name="location" path="location" placeholder="Nhập địa chỉ kho"/>
     </div>
 
-
     <div class="form-group">
         <form:label path="capacity" cssClass="form-label">Dung tích kho</form:label>
-        <form:input type="numberDecimal" name="capacity" path="capacity" cssClass="form-control"/><br/>
+        <form:input type="text" name="capacity" path="capacity" cssClass="form-control"/><br/>
     </div>
 
     <div class="form-group">
         <form:label path="cost" cssClass="form-label">Giá kho</form:label>
-        <form:input type="numberDecimal" name="cost" path="cost" cssClass="form-control"/><br/>
+        <form:input type="text" name="cost" path="cost" cssClass="form-control"/><br/>
     </div>
 
-    <input type="submit" value="Thêm"/>
+    <input type="submit" value="Thêm mới"/>
 </form:form>

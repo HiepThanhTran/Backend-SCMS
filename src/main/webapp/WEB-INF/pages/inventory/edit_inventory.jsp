@@ -26,10 +26,13 @@
         <form:input type="text" name="name" path="name" placeholder="Nhập tên hàng tồn kho" cssClass="form-control"/><br/>
     </div>
 
-    <form:select path="warehouse" cssClass="mt-3">
-        <form:option value="" label="Chọn kho"/>
-        <form:options items="${warehouse}" itemValue="id" itemLabel="name"/>
-    </form:select>
+    <div class="form-group">
+        <form:label path="name" cssClass="form-label mt-3">Nhà kho</form:label>
+        <form:select path="warehouse" cssClass="w-100 mb-3">
+            <form:option value="" label="Chọn nhà kho"/>
+            <form:options items="${warehouses}" itemValue="id" itemLabel="name"/>
+        </form:select>
+    </div>
 
     <div class="form-group d-flex align-items-center">
         <form:label path="active" cssClass="form-label">Active:</form:label>

@@ -29,5 +29,5 @@
         <form:input type="text" name="abbreviation" path="abbreviation" placeholder="Nhập ký hiệu đơn vị" cssClass="form-control"/><br/>
     </div>
 
-    <input type="submit" value="Thêm"/>
+    <input type="submit" value="Thêm mới"/>
 </form:form>

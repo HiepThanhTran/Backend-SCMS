@@ -6,7 +6,7 @@
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="text-center list__title">Chỉnh sửa tag</h1>
+        <h1 class="text-center list__title">Chỉnh sửa nhãn</h1>
     </div>
 </div>
 

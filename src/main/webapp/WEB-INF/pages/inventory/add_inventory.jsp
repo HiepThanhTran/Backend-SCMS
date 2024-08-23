@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<c:url value="/admin/inventories/add" var="addInventory"/>
+<c:url value="/admin/inventories/add" var="editpaymentTerms"/>
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
@@ -18,16 +18,19 @@
     </c:forEach>
 </c:if>
 
-<form:form id="addInventoryForm" method="post" modelAttribute="inventory" action="${addInventory}">
+<form:form id="addInventoryForm" method="post" modelAttribute="inventory" action="${editpaymentTerms}">
     <div class="form-group">
         <form:label path="name" cssClass="form-label">Tên hàng tồn kho</form:label>
         <form:input type="text" name="name" path="name" placeholder="Nhập tên hàng tồn kho" cssClass="form-control"/>
     </div>
 
-    <form:select path="warehouse" cssClass="mt-3">
-        <form:option value="" label="Chọn kho"/>
-        <form:options items="${warehouses}" itemValue="id" itemLabel="name"/>
-    </form:select>
+    <div class="form-group">
+        <form:label path="warehouse" cssClass="form-label mt-3">Tên hàng tồn kho</form:label>
+        <form:select path="warehouse" cssClass="w-100 mb-3">
+            <form:option value="" label="Chọn kho"/>
+            <form:options items="${warehouses}" itemValue="id" itemLabel="name"/>
+        </form:select>
+    </div>
 
-    <input type="submit" value="Thêm"/>
+    <input type="submit" value="Thêm mới"/>
 </form:form>

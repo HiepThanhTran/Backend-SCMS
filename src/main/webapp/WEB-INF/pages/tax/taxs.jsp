@@ -20,7 +20,6 @@
             <th>Vùng</th>
             <th>Ngày tạo</th>
             <th>Ngày cập nhập</th>
-            <th>Active</th>
             <th>Hành động</th>
         </tr>
         </thead>
@@ -32,18 +31,17 @@
                 <td>${tax.region}</td>
                 <td>
                     <fmt:parseDate value="${ tax.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/>
+                    <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
                     <c:if test="${ tax.updatedAt != null }">
                         <fmt:parseDate value="${ tax.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
-                        <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedUpdatedDateTime }"/>
+                        <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
                     <c:if test="${ tax.updatedAt == null }">
                         Chưa cập nhập
                     </c:if>
                 </td>
-                <td>${tax.active}</td>
                 <td>
                     <a class="btn btn-primary btn-sm" href="<c:url value="/admin/taxs/edit/${tax.id}"/>">
                         <i class='bx bxs-edit'></i>

@@ -6,7 +6,7 @@
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="text-center list__title">Thêm tag</h1>
+        <h1 class="text-center list__title">Thêm nhãn</h1>
     </div>
 </div>
 
@@ -29,5 +29,5 @@
         <form:input type="text" name="description" path="description" placeholder="Mô tả" cssClass="form-control"/><br/>
     </div>
 
-    <input type="submit" value="Thêm"/>
+    <input type="submit" value="Thêm mới"/>
 </form:form>

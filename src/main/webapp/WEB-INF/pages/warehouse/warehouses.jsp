@@ -4,7 +4,7 @@
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="text-center list__title">Danh sách kho</h1>
+        <h1 class="text-center list__title">Danh sách nhà kho</h1>
         <a href="<c:url value="/admin/warehouses/add"/>" class="list__icon-add">
             <i class='bx bxs-plus-circle'></i>
         </a>
@@ -22,7 +22,6 @@
             <th>Giá</th>
             <th>Ngày tạo</th>
             <th>Ngày cập nhập</th>
-            <th>Active</th>
             <th>Hành động</th>
         </tr>
         </thead>
@@ -36,18 +35,17 @@
                 <td>${warehouse.cost}</td>
                 <td>
                     <fmt:parseDate value="${ warehouse.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/>
+                    <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
                     <c:if test="${ warehouse.updatedAt != null }">
                         <fmt:parseDate value="${ warehouse.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
-                        <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedUpdatedDateTime }"/>
+                        <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
                     <c:if test="${ warehouse.updatedAt == null }">
                         Chưa cập nhập
                     </c:if>
                 </td>
-                <td>${warehouse.active}</td>
                 <td>
                     <a class="btn btn-primary btn-sm" href="<c:url value="/admin/warehouses/edit/${warehouse.id}"/>">
                         <i class='bx bxs-edit'></i>

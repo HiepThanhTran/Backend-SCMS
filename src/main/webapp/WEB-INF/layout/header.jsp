@@ -4,7 +4,7 @@
 
 <nav class="navbar navbar-expand-sm navbar-dark navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand navbar-custom__logo" href="<c:url value="/admin" />">SCM Admin</a>
+        <a class="navbar-brand navbar-custom__logo" href="<c:url value="/admin" />">SCMS Admin</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -16,11 +16,6 @@
                 <li class="nav-item navbar-custome__menu--item">
                     <a class="nav-link" href="<c:url value="/admin" />">Dashboard</a>
                 </li>
-                <s:authorize access="!isAuthenticated()">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<c:url value="/login" />">Đăng nhập</a>
-                    </li>
-                </s:authorize>
                 <s:authorize access="hasAnyRole('ADMIN')">
                     <li class="nav-item navbar-custome__menu--item">
                         <a class="nav-link" href="<c:url value="/admin/statistics" />">Thống kê</a>
@@ -29,18 +24,21 @@
                         <a class="nav-link" href="<c:url value="/admin/admin/analytics" />">Phân tích</a>
                     </li>
                 </s:authorize>
-                <div class="navbar-nav ms-auto">
-                    <s:authorize access="hasAnyRole('ADMIN')">
-                        <li class="nav-item me-2">
-                            <a class="nav-link" href="<c:url value="/" />">
-                                Xin chào <s:authentication property="principal.username"/>!
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-danger" href="<c:url value="/logout" />">Đăng xuất</a>
-                        </li>
-                    </s:authorize>
-                </div>
+                <s:authorize access="!isAuthenticated()">
+                    <li class="nav-item ms-auto">
+                        <a class="btn btn-info" href="<c:url value="/login" />">Đăng nhập</a>
+                    </li>
+                </s:authorize>
+                <s:authorize access="isAuthenticated()">
+                    <li class="nav-item me-2 ms-auto">
+                        <a class="nav-link" href="<c:url value="/" />">
+                            Xin chào <s:authentication property="principal.username"/>!
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-danger" href="<c:url value="/logout" />">Đăng xuất</a>
+                    </li>
+                </s:authorize>
             </ul>
         </div>
     </div>

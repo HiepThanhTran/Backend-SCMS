@@ -18,12 +18,11 @@
         <tr>
             <th>ID</th>
             <th>Người đánh giá</th>
-            <th>Nội dung</th>
-            <th>Tiêu chuẩn</th>
+            <th>Người được đánh giá</th>
             <th>Đánh giá</th>
+            <th>Tiêu chí</th>
             <th>Ngày tạo</th>
             <th>Ngày cập nhập</th>
-            <th>Active</th>
             <th>Hành động</th>
         </tr>
         </thead>
@@ -31,24 +30,23 @@
         <c:forEach var="rating" items="${ratings}">
             <tr id="item${rating.id}">
                 <td>${rating.id}</td>
+                <td>${rating.user.username}</td>
                 <td>${rating.supplier.name}</td>
-                <td>${rating.content}</td>
-                <td>${rating.criteria}</td>
-                <td>${rating.rating}</td>
+                <td>${rating.rating} sao</td>
+                <td>${rating.criteria.getDisplayName()}</td>
                 <td>
                     <fmt:parseDate value="${ rating.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/>
+                    <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
                     <c:if test="${ rating.updatedAt != null }">
                         <fmt:parseDate value="${ rating.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
-                        <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedUpdatedDateTime }"/>
+                        <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
                     <c:if test="${ rating.updatedAt == null }">
                         Chưa cập nhập
                     </c:if>
                 </td>
-                <td>${rating.active}</td>
                 <td>
                     <a class="btn btn-primary btn-sm" href="<c:url value="/admin/ratings/edit/${rating.id}"/>">
                         <i class='bx bxs-edit'></i>

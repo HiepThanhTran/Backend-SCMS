@@ -19,42 +19,38 @@
             <th>Tên</th>
             <th>Địa chỉ</th>
             <th>Số điện thoại</th>
-            <th>Liên hệ</th>
             <th>Ngày tạo</th>
             <th>Ngày cập nhập</th>
-            <th>Active</th>
             <th>Hành động</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="supplier" items="${suppliers}">
-            <tr id="item${supplier.id}">
-                <td>${supplier.id}</td>
-                <td>${supplier.name}</td>
-                <td>${supplier.address}</td>
-                <td>${supplier.phone}</td>
-                <td>${supplier.contactInfo}</td>
+        <c:forEach var="shipper" items="${suppliers}">
+            <tr id="item${shipper.id}">
+                <td>${shipper.id}</td>
+                <td>${shipper.name}</td>
+                <td>${shipper.address}</td>
+                <td>${shipper.phone}</td>
                 <td>
-                    <fmt:parseDate value="${ supplier.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/>
+                    <fmt:parseDate value="${ shipper.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
-                    <c:if test="${ supplier.updatedAt != null }">
-                        <fmt:parseDate value="${ supplier.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
-                        <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedUpdatedDateTime }"/>
+                    <c:if test="${ shipper.updatedAt != null }">
+                        <fmt:parseDate value="${ shipper.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
-                    <c:if test="${ supplier.updatedAt == null }">
+                    <c:if test="${ shipper.updatedAt == null }">
                         Chưa cập nhập
                     </c:if>
                 </td>
-                <td>${supplier.active}</td>
                 <td>
-                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/suppliers/edit/${supplier.id}"/>">
+                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/suppliers/edit/${shipper.id}"/>">
                         <i class='bx bxs-edit'></i>
                     </a>
 
-                    <c:url value="/admin/categories/delete/${category.id}" var="deleteCategory"/>
-                    <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteCategory}', ${category.id})">
+                    <c:url value="/admin/suppliers/delete/${shipper.id}" var="deleteShipper"/>
+                    <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteShipper}', ${shipper.id})">
                         <i class='bx bx-x'></i>
                     </button>
                 </td>

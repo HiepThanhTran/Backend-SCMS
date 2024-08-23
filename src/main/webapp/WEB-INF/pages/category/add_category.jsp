@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<c:url value="/admin/categories/add" var="addCategory"/>
+<c:url value="/admin/categories/add" var="editProduct"/>
 
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
@@ -18,7 +18,7 @@
     </c:forEach>
 </c:if>
 
-<form:form id="addCategoryForm" method="post" modelAttribute="category" action="${addCategory}">
+<form:form id="addCategoryForm" method="post" modelAttribute="category" action="${editProduct}">
     <div class="form-group">
         <label class="form-label">Tên danh mục</label>
         <form:input type="text" name="name" path="name" placeholder="Nhập tên danh mục" cssClass="form-control"/><br/>
@@ -29,5 +29,5 @@
         <form:input type="text" name="description" path="description" placeholder="Mô tả" cssClass="form-control"/><br/>
     </div>
 
-    <input type="submit" value="Thêm"/>
+    <input type="submit" value="Thêm mới"/>
 </form:form>

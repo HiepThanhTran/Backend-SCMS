@@ -20,29 +20,40 @@
 
 <form:form id="addRatingForm" method="post" modelAttribute="rating" action="${addRating}">
     <div class="form-group">
-        <label class="form-label">Đánh giá</label>
+        <form:label class="form-label" path="rating">Đánh giá</form:label>
         <form:input type="numberDecimal" name="rating" path="rating" placeholder="Nhập đánh giá" cssClass="form-control"/><br/>
     </div>
 
     <div class="form-group">
-        <label class="form-label">Nội dung</label>
+        <form:label class="form-label" path="content">Nội dung</form:label>
         <form:input type="text" name="content" path="content" cssClass="form-control"/><br/>
     </div>
 
     <div class="form-group">
-        <label class="form-label">Tiêu chí</label>
-        <form:input type="text" name="criteria" path="criteria" cssClass="form-control"/><br/>
+        <form:label path="criteria" cssClass="form-label">Tiêu chí đánh giá</form:label><br/>
+        <form:select path="criteria" cssClass="w-100 mb-3">
+            <form:option value="" label="Chọn tiêu chí đánh giá"/>
+            <c:forEach items="${criterias}" var="paymentTermsType">
+                <form:option value="${paymentTermsType['key']}" label="${paymentTermsType.value}"/>
+            </c:forEach>
+        </form:select>
     </div>
 
-    <form:select path="supplier_id">
-        <form:option value="" label="Chọn nhà cung cấp"/>
-        <form:options items="${supplier}" itemValue="id" itemLabel="name"/>
-    </form:select>
+    <div class="form-group">
+        <form:label path="supplier" cssClass="form-label mt-3">Nhà cung cấp</form:label><br/>
+        <form:select path="supplier" cssClass="w-100 mb-3">
+            <form:option value="" label="Chọn nhà cung cấp"/>
+            <form:options items="${suppliers}" itemValue="id" itemLabel="name"/>
+        </form:select>
+    </div>
 
-    <form:select path="user_id">
-        <form:option value="" label="Chọn users"/>
-        <form:options items="${user}" itemValue="id" itemLabel="name"/>
-    </form:select>
+    <div class="form-group">
+        <form:label path="user" cssClass="form-label mt-3">Người đánh giá</form:label><br/>
+        <form:select path="user" cssClass="w-100 mb-3">
+            <form:option value="" label="Chọn người đánh giá"/>
+            <form:options items="${users}" itemValue="id" itemLabel="username"/>
+        </form:select>
+    </div>
 
-    <input type="submit" value="Thêm"/>
+    <input type="submit" value="Thêm mới"/>
 </form:form>

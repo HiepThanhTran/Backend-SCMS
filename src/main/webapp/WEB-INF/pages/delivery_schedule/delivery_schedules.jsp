@@ -12,7 +12,7 @@
 </div>
 
 <div class="container mt-4">
-    <table id="categoryTable" class="table table-striped">
+    <table id="table" class="table table-striped">
         <thead>
         <tr>
             <th>ID</th>
@@ -20,37 +20,38 @@
             <th>Phương thức giao hàng</th>
             <th>Ngày tạo</th>
             <th>Ngày cập nhập</th>
-            <th>Active</th>
             <th>Hành động</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="delivery_schedule" items="${deliverySchedules}">
-            <tr id="item${delivery_schedule.id}">
-                <td>${delivery_schedule.id}</td>
-                <td>${delivery_schedule.scheduledDate}</td>
-                <td>${delivery_schedule.method.name}</td>
+        <c:forEach var="deliverySchedule" items="${deliverySchedules}">
+            <tr id="item${deliverySchedule.id}">
+                <td>${deliverySchedule.id}</td>
                 <td>
-                    <fmt:parseDate value="${ delivery_schedule.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/>
+                    <fmt:parseDate value="${ deliverySchedule.scheduledDate }" pattern="yyyy-MM-dd" var="parsedDeliveryDate" type="date"/>
+                    <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDeliveryDate }"/>
+                </td>
+                <td>${deliverySchedule.method.getDisplayName()}</td>
+                <td>
+                    <fmt:parseDate value="${ deliverySchedule.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
-                    <c:if test="${ delivery_schedule.updatedAt != null }">
-                        <fmt:parseDate value="${ delivery_schedule.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
-                        <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedUpdatedDateTime }"/>
+                    <c:if test="${ deliverySchedule.updatedAt != null }">
+                        <fmt:parseDate value="${ deliverySchedule.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
-                    <c:if test="${ delivery_schedule.updatedAt == null }">
+                    <c:if test="${ deliverySchedule.updatedAt == null }">
                         Chưa cập nhập
                     </c:if>
                 </td>
-                <td>${delivery_schedule.active}</td>
                 <td>
-                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/delivery-schedules/edit/${delivery_schedule.id}"/>">
+                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/delivery-schedules/edit/${deliverySchedule.id}"/>">
                         <i class='bx bxs-edit'></i>
                     </a>
 
-                    <c:url value="/admin/delivery-schedules/delete/${delivery_schedule.id}" var="deleteDeliverySchedule"/>
-                    <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteDeliverySchedule}', ${delivery_schedule.id})">
+                    <c:url value="/admin/delivery-schedules/delete/${deliverySchedule.id}" var="deleteDeliverySchedule"/>
+                    <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteDeliverySchedule}', ${deliverySchedule.id})">
                         <i class='bx bx-x'></i>
                     </button>
                 </td>

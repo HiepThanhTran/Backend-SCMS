@@ -20,37 +20,35 @@
             <th>Kho</th>
             <th>Ngày tạo</th>
             <th>Ngày cập nhập</th>
-            <th>Active</th>
             <th>Hành động</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="inventory" items="${inventories}">
-            <tr id="item${inventory.id}">
-                <td>${inventory.id}</td>
-                <td>${inventory.name}</td>
-                <td>${inventory.warehouse.name}</td>
+        <c:forEach var="shipment" items="${inventories}">
+            <tr id="item${shipment.id}">
+                <td>${shipment.id}</td>
+                <td>${shipment.name}</td>
+                <td>${shipment.warehouse.name}</td>
                 <td>
-                    <fmt:parseDate value="${ inventory.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/>
+                    <fmt:parseDate value="${ shipment.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
-                    <c:if test="${ inventory.updatedAt != null }">
-                        <fmt:parseDate value="${ inventory.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
-                        <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedUpdatedDateTime }"/>
+                    <c:if test="${ shipment.updatedAt != null }">
+                        <fmt:parseDate value="${ shipment.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
-                    <c:if test="${ inventory.updatedAt == null }">
+                    <c:if test="${ shipment.updatedAt == null }">
                         Chưa cập nhập
                     </c:if>
                 </td>
-                <td>${inventory.active}</td>
                 <td>
-                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/inventories/edit/${inventory.id}"/>">
+                    <a class="btn btn-primary btn-sm" href="<c:url value="/admin/inventories/edit/${shipment.id}"/>">
                         <i class='bx bxs-edit'></i>
                     </a>
 
-                    <c:url value="/admin/inventories/delete/${inventory.id}" var="deleteInventory"/>
-                    <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteInventory}', ${inventory.id})">
+                    <c:url value="/admin/inventories/delete/${shipment.id}" var="deleteInventory"/>
+                    <button class="btn btn-danger btn-sm" onclick="deleteItem('${deleteInventory}', ${shipment.id})">
                         <i class='bx bx-x'></i>
                     </button>
                 </td>

@@ -19,7 +19,6 @@
             <th>Tên</th>
             <th>Ngày tạo</th>
             <th>Ngày cập nhập</th>
-            <th>Active</th>
             <th>Hành động</th>
         </tr>
         </thead>
@@ -30,18 +29,17 @@
                 <td>${unit.name}</td>
                 <td>
                     <fmt:parseDate value="${ unit.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                    <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedDateTime }"/>
+                    <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
                     <c:if test="${ unit.updatedAt != null }">
                         <fmt:parseDate value="${ unit.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
-                        <fmt:formatDate pattern="dd.MM.yyyy" value="${ parsedUpdatedDateTime }"/>
+                        <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
                     <c:if test="${ unit.updatedAt == null }">
                         Chưa cập nhập
                     </c:if>
                 </td>
-                <td>${unit.active}</td>
                 <td>
                     <a class="btn btn-primary btn-sm" href="<c:url value="/admin/units/edit/${unit.id}"/>">
                         <i class='bx bxs-edit'></i>
