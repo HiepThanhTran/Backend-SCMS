@@ -49,9 +49,8 @@ public class Product extends _BaseEntity implements Serializable {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "inventory_id", referencedColumnName = "id")
-    private Inventory inventory;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<InventoryDetails> inventoryDetailsSet;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "product_unit",

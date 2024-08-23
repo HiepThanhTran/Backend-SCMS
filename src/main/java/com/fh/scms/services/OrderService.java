@@ -20,6 +20,8 @@ public interface OrderService {
 
     void checkout(User user, OrderRequest orderRequest);
 
+    void checkin(User user, OrderRequest orderRequest);
+
     void cancelOrder(User user, Long orderId);
 
     void updateOrderStatus(Long orderId, String status);

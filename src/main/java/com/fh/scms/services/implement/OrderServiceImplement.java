@@ -1,14 +1,13 @@
 package com.fh.scms.services.implement;
 
 import com.fh.scms.dto.order.OrderDetailsReponse;
+import com.fh.scms.dto.order.OrderDetailsRequest;
 import com.fh.scms.dto.order.OrderRequest;
 import com.fh.scms.dto.order.OrderResponse;
 import com.fh.scms.enums.OrderStatus;
+import com.fh.scms.enums.OrderType;
 import com.fh.scms.pojo.*;
-import com.fh.scms.repository.InvoiceRepository;
-import com.fh.scms.repository.OrderDetailsRepository;
-import com.fh.scms.repository.OrderRepository;
-import com.fh.scms.repository.TaxRepository;
+import com.fh.scms.repository.*;
 import com.fh.scms.services.InventoryService;
 import com.fh.scms.services.OrderService;
 import com.fh.scms.services.ProductService;
@@ -31,13 +30,36 @@ public class OrderServiceImplement implements OrderService {
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
     @Autowired
-    private ProductService productService;
-    @Autowired
     private InventoryService inventoryService;
+    @Autowired
+    private InventoryDetailsRepository inventoryDetailsRepository;
+    @Autowired
+    private WarehouseRepository warehouseRepository;
+    @Autowired
+    private ProductService productService;
     @Autowired
     private InvoiceRepository invoiceRepository;
     @Autowired
     private TaxRepository taxRepository;
+
+    private static @NotNull InventoryDetails checkAndGetInventoryDetails(OrderDetailsRequest odr, @NotNull Product product) {
+        InventoryDetails inventoryDetails = null;
+
+        Set<InventoryDetails> inventoryDetailsSet = product.getInventoryDetailsSet();
+        for (InventoryDetails details : inventoryDetailsSet) {
+            if (details.getQuantity() >= odr.getQuantity()) {
+                inventoryDetails = details;
+                break;
+            }
+        }
+
+        // Nếu không có tồn kho nào đủ số lượng sản phẩm thì thông báo lỗi
+        if (inventoryDetails == null) {
+            throw new IllegalArgumentException(String.format("Số lượng %s không đủ trong kho", product.getName()));
+        }
+
+        return inventoryDetails;
+    }
 
     @Override
     public OrderResponse getOrderResponse(@NotNull Order order) {
@@ -73,40 +95,66 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
-    public void checkout(User user, OrderRequest orderRequest) {
-        if (orderRequest != null) {
+    public void checkout(User user, @NotNull OrderRequest orderRequest) {
+        if (orderRequest.getType() == OrderType.OUTBOUND) {
             Order order = Order.builder()
                     .user(user)
                     .type(orderRequest.getType())
                     .build();
             this.orderRepository.save(order);
 
-            final BigDecimal[] totalAmount = {BigDecimal.ZERO};
-            orderRequest.getOrderDetails().forEach(orderDetailsRequest -> {
-                Product product = this.productService.findById(orderDetailsRequest.getProductId());
+            final BigDecimal[] totalAmount = this.checkAndGetTotalAmountOfOrder(orderRequest, order);
 
-                Inventory inventory = product.getInventory();
-                if (inventory.getQuantity() < orderDetailsRequest.getQuantity()) {
-                    throw new IllegalArgumentException("Số lượng sản phẩm không đủ trong kho: " + inventory.getName());
-                }
-
-                OrderDetails orderDetails = OrderDetails.builder()
-                        .order(order)
-                        .product(this.productService.findById(orderDetailsRequest.getProductId()))
-                        .quantity(orderDetailsRequest.getQuantity())
-                        .unitPrice(orderDetailsRequest.getUnitPrice())
-                        .build();
-                this.orderDetailsRepository.save(orderDetails);
-
-                totalAmount[0] = totalAmount[0].add(orderDetailsRequest.getUnitPrice()
-                        .multiply(BigDecimal.valueOf(orderDetailsRequest.getQuantity())));
-            });
-
+            Tax tax = this.taxRepository.findByRegion("VN");
             Invoice invoice = Invoice.builder()
                     .user(user)
                     .order(order)
-                    .tax(this.taxRepository.findByRegion("VN"))
-                    .totalAmount(totalAmount[0])
+                    .tax(tax)
+                    .totalAmount(this.calculateTotalAmountWithTax(totalAmount[0], tax))
+                    .build();
+            this.invoiceRepository.save(invoice);
+        }
+    }
+
+    @Override
+    public void checkin(User user, @NotNull OrderRequest orderRequest) {
+        if (orderRequest.getType() == OrderType.INBOUND) {
+            Inventory inventory = this.inventoryService.findById(orderRequest.getInventoryId());
+
+            if (inventory == null) {
+                throw new EntityNotFoundException("Không tìm thấy kho hàng");
+            }
+
+            Order order = Order.builder()
+                    .user(user)
+                    .type(orderRequest.getType())
+                    .build();
+            this.orderRepository.save(order);
+
+            // Tính tổng số lượng sản phẩm hiện tại của tất cả tồn kho trong kho hàng
+            Float totalCurrentQuantity = this.inventoryDetailsRepository.getTotalQuantityByWarehouseId(inventory.getWarehouse().getId());
+
+            // Tính tổng số lượng sản phẩm trong đơn hàng
+            Float totalOrderQuantity = orderRequest.getOrderDetails().stream()
+                    .map(OrderDetailsRequest::getQuantity)
+                    .reduce(0F, Float::sum);
+
+            // Tính tổng số lượng sản phẩm sau khi nhập hàng
+            float totalQuantity = totalCurrentQuantity + totalOrderQuantity;
+
+            // Kiểm tra tổng số lượng sản phẩm vượt quá sức chứa của kho hàng không
+            if (totalQuantity > inventory.getWarehouse().getCapacity()) {
+                throw new IllegalArgumentException("Số lượng sản phẩm vượt quá sức chứa của kho " + inventory.getWarehouse().getName());
+            }
+
+            final BigDecimal[] totalAmount = this.updateAmountOfInventory(orderRequest, inventory, order);
+
+            Tax tax = this.taxRepository.findByRegion("VN");
+            Invoice invoice = Invoice.builder()
+                    .user(user)
+                    .order(order)
+                    .tax(tax)
+                    .totalAmount(this.calculateTotalAmountWithTax(totalAmount[0], tax))
                     .build();
             this.invoiceRepository.save(invoice);
         }
@@ -135,12 +183,28 @@ public class OrderServiceImplement implements OrderService {
         order.setStatus(OrderStatus.CANCELLED);
         this.orderRepository.update(order);
 
-        Invoice invoice = this.invoiceRepository.findByOrderId(orderId);
-        this.invoiceRepository.delete(invoice.getId());
+        Set<OrderDetails> orderDetailsSet = order.getOrderDetailsSet();
+        orderDetailsSet.forEach(od -> {
+            InventoryDetails inventoryDetails = od.getInventoryDetails();
+            inventoryDetails.setQuantity(inventoryDetails.getQuantity() + od.getQuantity());
+            this.inventoryDetailsRepository.update(inventoryDetails);
+        });
+
+        Optional.ofNullable(this.invoiceRepository.findByOrderId(orderId)).ifPresent(invoice -> {
+            order.setInvoice(null);
+            this.invoiceRepository.delete(invoice.getId());
+        });
     }
 
     @Override
-    public void updateOrderStatus(Long orderId, String status) {
+    public void updateOrderStatus(Long orderId, @NotNull String status) {
+        OrderStatus orderStatus;
+        try {
+            orderStatus = OrderStatus.valueOf(status.toUpperCase(Locale.getDefault()));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Trạng thái đơn hàng không hợp lệ");
+        }
+
         Order order = this.orderRepository.findById(orderId);
 
         if (order == null) {
@@ -151,41 +215,32 @@ public class OrderServiceImplement implements OrderService {
             throw new IllegalStateException("Đơn hàng đã bị hủy");
         }
 
-        OrderStatus orderStatus;
-        try {
-            orderStatus = OrderStatus.valueOf(status.toUpperCase(Locale.ROOT));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Trạng thái đơn hàng không hợp lệ");
+        if (order.getStatus() == orderStatus) {
+            throw new IllegalStateException("Đơn hàng đã ở trạng thái " + orderStatus);
         }
 
-        Set<OrderDetails> orderDetails = order.getOrderDetailsSet();
-        List<Product> products = orderDetails.stream()
-                .map(OrderDetails::getProduct)
-                .collect(Collectors.toList());
-        Float totalQuantity = orderDetails.stream()
-                .map(OrderDetails::getQuantity)
-                .reduce(0F, Float::sum);
-
+        Set<OrderDetails> orderDetailsSet = order.getOrderDetailsSet();
         switch (orderStatus) {
             case DELIVERED:
-                products.forEach(product -> {
-                    product.getInventory().setQuantity(product.getInventory().getQuantity() - totalQuantity);
-                    this.inventoryService.update(product.getInventory());
-                });
+//                if (order.getType() == OrderType.INBOUND) {
+//                    orderDetailsSet.forEach(od -> {
+//                        Inventory inventory = od.getProduct().getInventory();
+//                        inventory.setQuantity(inventory.getQuantity() + od.getQuantity());
+//                        this.inventoryService.update(inventory);
+//                    });
+//                }
                 break;
             case CANCELLED:
-                products.forEach(product -> {
-                    product.getInventory().setQuantity(product.getInventory().getQuantity() + totalQuantity);
-                    this.inventoryService.update(product.getInventory());
+            case RETURNED:
+                orderDetailsSet.forEach(od -> {
+                    InventoryDetails inventoryDetails = od.getInventoryDetails();
+                    inventoryDetails.setQuantity(inventoryDetails.getQuantity() + od.getQuantity());
+                    this.inventoryDetailsRepository.update(inventoryDetails);
                 });
 
-                Invoice invoice = this.invoiceRepository.findByOrderId(orderId);
-                this.invoiceRepository.delete(invoice.getId());
-                break;
-            case RETURNED:
-                products.forEach(product -> {
-                    product.getInventory().setQuantity(product.getInventory().getQuantity() + totalQuantity);
-                    this.inventoryService.update(product.getInventory());
+                Optional.ofNullable(this.invoiceRepository.findByOrderId(orderId)).ifPresent(invoice -> {
+                    order.setInvoice(null);
+                    this.invoiceRepository.delete(invoice.getId());
                 });
                 break;
         }
@@ -222,5 +277,75 @@ public class OrderServiceImplement implements OrderService {
     @Override
     public List<Order> findAllWithFilter(Map<String, String> params) {
         return this.orderRepository.findAllWithFilter(params);
+    }
+
+    private @NotNull BigDecimal calculateTotalAmountWithTax(@NotNull BigDecimal totalAmount, @NotNull Tax tax) {
+        return totalAmount.add(totalAmount.multiply(tax.getRate()));
+    }
+
+    private void createOrderDetails(Order order, BigDecimal @NotNull [] totalAmount, @NotNull OrderDetailsRequest odr, Product product, InventoryDetails inventoryDetails) {
+        OrderDetails orderDetails = OrderDetails.builder()
+                .order(order)
+                .product(product)
+                .quantity(odr.getQuantity())
+                .unitPrice(odr.getUnitPrice())
+                .inventoryDetails(inventoryDetails)
+                .build();
+        this.orderDetailsRepository.save(orderDetails);
+
+        totalAmount[0] = totalAmount[0].add(odr.getUnitPrice().multiply(BigDecimal.valueOf(odr.getQuantity())));
+    }
+
+    private BigDecimal @NotNull [] checkAndGetTotalAmountOfOrder(@NotNull OrderRequest orderRequest, Order order) {
+        Set<OrderDetailsRequest> orderDetailsRequests = orderRequest.getOrderDetails();
+        final BigDecimal[] totalAmount = {BigDecimal.ZERO};
+
+        orderDetailsRequests.forEach(odr -> {
+            if (odr.getQuantity() > 0) {
+                Product product = this.productService.findById(odr.getProductId());
+
+                // Tìm kiếm và kiểm tra tồn kho nào còn hàng không
+                InventoryDetails inventoryDetails = checkAndGetInventoryDetails(odr, product);
+
+                // Cập nhật lại số lượng tồn kho
+                inventoryDetails.setQuantity(inventoryDetails.getQuantity() - odr.getQuantity());
+                this.inventoryDetailsRepository.update(inventoryDetails);
+
+                this.createOrderDetails(order, totalAmount, odr, product, inventoryDetails);
+            }
+        });
+
+        return totalAmount;
+    }
+
+    private BigDecimal @NotNull [] updateAmountOfInventory(@NotNull OrderRequest orderRequest, Inventory inventory, Order order) {
+        Set<OrderDetailsRequest> orderDetailsRequests = orderRequest.getOrderDetails();
+        final BigDecimal[] totalAmount = {BigDecimal.ZERO};
+
+        orderDetailsRequests.forEach(odr -> {
+            if (odr.getQuantity() > 0) {
+                Product product = this.productService.findById(odr.getProductId());
+                InventoryDetails inventoryDetails = this.inventoryDetailsRepository
+                        .findByInventoryIdAndProductId(inventory.getId(), product.getId());
+
+                // Chưa có tồn kho nào cho sản phẩm này thì tạo mới
+                if (inventoryDetails == null) {
+                    inventoryDetails = InventoryDetails.builder()
+                            .inventory(inventory)
+                            .product(product)
+                            .quantity(0F)
+                            .build();
+                    this.inventoryDetailsRepository.save(inventoryDetails);
+                }
+
+                // Có rồi thì cập nhật lại số lượng tồn kho
+                inventoryDetails.setQuantity(inventoryDetails.getQuantity() + odr.getQuantity());
+                this.inventoryDetailsRepository.update(inventoryDetails);
+
+                this.createOrderDetails(order, totalAmount, odr, product, inventoryDetails);
+            }
+        });
+
+        return totalAmount;
     }
 }

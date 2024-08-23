@@ -52,7 +52,24 @@ public class APIOrderController {
 
         try {
             this.orderService.checkout(user, orderRequest);
-        } catch (IllegalStateException | IllegalArgumentException e) {
+        } catch (IllegalStateException | IllegalArgumentException | EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping(path = "/checkin")
+    public ResponseEntity<?> checkin(Principal principal, @RequestBody @Valid OrderRequest orderRequest) {
+        User user = this.userService.findByUsername(principal.getName());
+
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            this.orderService.checkin(user, orderRequest);
+        } catch (IllegalStateException | IllegalArgumentException | EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
 

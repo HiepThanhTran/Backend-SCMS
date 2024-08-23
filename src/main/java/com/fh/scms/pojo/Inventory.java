@@ -22,16 +22,12 @@ public class Inventory extends _BaseEntity implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Builder.Default
-    @Column(nullable = false, columnDefinition = "float default 0")
-    private Float quantity = 0.0f;
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", nullable = false)
     private Warehouse warehouse;
 
     @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
-    private Set<Product> productSet;
+    private Set<InventoryDetails> inventoryDetailsSet;
 
     @Override
     public String toString() {

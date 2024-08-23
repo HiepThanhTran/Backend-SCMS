@@ -1,5 +1,6 @@
 package com.fh.scms.controllers.api;
 
+import com.fh.scms.services.DeliveryScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,5 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/schedules", produces = "application/json; charset=UTF-8")
-public class APIDeliveryScheduleController {
+public class APIScheduleController {
+
+    private final DeliveryScheduleService deliveryScheduleService;
 }

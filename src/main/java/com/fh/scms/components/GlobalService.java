@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -238,13 +237,17 @@ public class GlobalService {
         this.warehouseRepository.findAllWithFilter(null).forEach(warehouse -> products.forEach(product -> {
             Inventory inventory = Inventory.builder()
                     .name("Inventory " + product.getName() + " " + warehouse.getName())
-                    .quantity(100.0F)
                     .warehouse(warehouse)
                     .build();
-            this.inventoryRepository.save(inventory);
+            Set<InventoryDetails> inventoryDetailsSet = new HashSet<>();
+            inventoryDetailsSet.add(InventoryDetails.builder()
+                    .quantity(100F)
+                    .product(product)
+                    .inventory(inventory)
+                    .build());
+            inventory.setInventoryDetailsSet(inventoryDetailsSet);
 
-            product.setInventory(inventory);
-            this.productRepository.update(product);
+            this.inventoryRepository.save(inventory);
         }));
     }
 }

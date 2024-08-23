@@ -62,10 +62,17 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/cart/**").authenticated()
                 // Category
                 .antMatchers("/api/categories/**").permitAll()
+                // Delivery Schedule
+                .antMatchers("/api/schedules/**").hasAnyRole(
+                        UserRole.ROLE_ADMIN.alias(),
+                        UserRole.ROLE_SUPPLIER.alias(),
+                        UserRole.ROLE_DISTRIBUTOR.alias(),
+                        UserRole.ROLE_MANUFACTURER.alias()
+                )
                 // Invoice
                 .antMatchers("/api/invoices/**").authenticated()
                 // Order
-                .antMatchers("/api/orders/**/status").hasAnyRole(
+                .antMatchers("/api/orders/**/status", "/api/orders/**/checkin").hasAnyRole(
                         UserRole.ROLE_ADMIN.alias(),
                         UserRole.ROLE_SUPPLIER.alias(),
                         UserRole.ROLE_DISTRIBUTOR.alias(),

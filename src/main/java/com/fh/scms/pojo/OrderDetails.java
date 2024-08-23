@@ -34,4 +34,8 @@ public class OrderDetails extends _BaseEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "inventory_details_id", referencedColumnName = "id", nullable = false)
+    private InventoryDetails inventoryDetails;
 }

@@ -8,4 +8,5 @@ public final class Constants {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public static final int DEFAULT_PAGE_SIZE = 20;
+    public static final int EXPIRING_SOON_DAYS = 30;
 }
