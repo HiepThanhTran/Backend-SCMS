@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +47,14 @@ public class UnitController {
         this.unitService.save(unit);
 
         return "redirect:/admin/units";
+    }
+
+    @GetMapping(path = "/edit/{unitId}")
+    public String editUnit(Model model, @PathVariable(value = "unitId") Long id) {
+        Unit unit = this.unitService.findById(id);
+        model.addAttribute("unit", unit);
+
+        return "edit_unit";
     }
 
     @PostMapping(path = "/edit/{unitId}")

@@ -1,9 +1,7 @@
 package com.fh.scms.repository.implement;
 
 import com.fh.scms.pojo.Inventory;
-import com.fh.scms.pojo.Product;
 import com.fh.scms.repository.InventoryRepository;
-import com.fh.scms.util.Constants;
 import com.fh.scms.util.Pagination;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -16,7 +14,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,42 +28,6 @@ public class InventoryRepositoryImplement implements InventoryRepository {
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
-    }
-
-    @Override
-    public List<Product> findProductsExpiringSoon(Long inventoryId) {
-        Session session = this.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Product> criteria = builder.createQuery(Product.class);
-        Root<Product> root = criteria.from(Product.class);
-
-        List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("active"), true));
-        predicates.add(builder.equal(root.get("inventory").get("id"), inventoryId));
-        predicates.add(builder.lessThanOrEqualTo(root.get("expiryDate"), LocalDate.now().plusDays(Constants.EXPIRING_SOON_DAYS)));
-
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
-
-        Query<Product> query = session.createQuery(criteria);
-        return query.getResultList();
-    }
-
-    @Override
-    public List<Product> getExpiredProducts(Long inventoryId) {
-        Session session = this.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Product> criteria = builder.createQuery(Product.class);
-        Root<Product> root = criteria.from(Product.class);
-
-        List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.equal(root.get("active"), true));
-        predicates.add(builder.equal(root.get("inventory").get("id"), inventoryId));
-        predicates.add(builder.greaterThan(root.get("expiryDate"), LocalDate.now()));
-
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
-
-        Query<Product> query = session.createQuery(criteria);
-        return query.getResultList();
     }
 
     @Override

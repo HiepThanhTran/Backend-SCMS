@@ -52,11 +52,6 @@ public class RatingServiceImplement implements RatingService {
     }
 
     @Override
-    public Rating findByUserIdAndSupplierId(Long userId, Long supplierId) {
-        return this.ratingRepository.findByUserIdAndSupplierId(userId, supplierId);
-    }
-
-    @Override
     public void save(Rating rating) {
         this.ratingRepository.save(rating);
     }

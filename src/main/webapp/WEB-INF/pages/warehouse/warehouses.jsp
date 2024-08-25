@@ -31,8 +31,8 @@
                 <td>${warehouse.id}</td>
                 <td>${warehouse.name}</td>
                 <td>${warehouse.location}</td>
-                <td>${warehouse.capacity}</td>
-                <td>${warehouse.cost}</td>
+                <td>${String.format("%,.3f", warehouse.capacity)}</td>
+                <td>${String.format("%,.3f", warehouse.cost)} VNĐ</td>
                 <td>
                     <fmt:parseDate value="${ warehouse.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
                     <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
@@ -61,3 +61,14 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable({
+            columns: [null, null, null, {searchable: false}, {searchable: false}, {searchable: false}, {searchable: false}, {searchable: false}],
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+        });
+    });
+</script>

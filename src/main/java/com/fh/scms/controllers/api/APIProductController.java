@@ -1,6 +1,7 @@
 package com.fh.scms.controllers.api;
 
-import com.fh.scms.dto.product.ProductResponseWithTagUnit;
+import com.fh.scms.dto.product.ProductResponseForDetails;
+import com.fh.scms.dto.product.ProductResponseForList;
 import com.fh.scms.pojo.Product;
 import com.fh.scms.services.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class APIProductController {
 
     @GetMapping
     public ResponseEntity<?> listProducts(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        List<ProductResponseWithTagUnit> products = this.productService.getAllProductResponseWithTagUnit(params);
+        List<ProductResponseForList> products = this.productService.getAllProductResponseForList(params);
 
         return ResponseEntity.ok(products);
     }
@@ -35,8 +36,8 @@ public class APIProductController {
             return ResponseEntity.notFound().build();
         }
 
-        ProductResponseWithTagUnit productResponseWithTagUnit = this.productService.getProductResponseWithTagUnit(product);
+        ProductResponseForDetails productResponseForDetails = this.productService.getProductResponseForDetails(product);
 
-        return ResponseEntity.ok(productResponseWithTagUnit);
+        return ResponseEntity.ok(productResponseForDetails);
     }
 }

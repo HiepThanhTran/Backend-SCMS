@@ -51,12 +51,12 @@ public class CartServiceImplement implements CartService {
                 .id(cartDetails.getId())
                 .quantity(cartDetails.getQuantity())
                 .unitPrice(cartDetails.getUnitPrice())
-                .product(this.productService.getProductResponse(cartDetails.getProduct()))
+                .product(this.productService.getProductResponseForList(cartDetails.getProduct()))
                 .build();
     }
 
     @Override
-    public Cart getCart(@NotNull User user) {
+    public Cart findCartByUser(@NotNull User user) {
         return Optional.ofNullable(user.getCart()).orElseGet(() -> {
             Cart newCart = new Cart();
             newCart.setUser(user);

@@ -84,11 +84,6 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
         return this.validator();
     }
 
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/login").setViewName("login");
-//    }
-
     @Override
     public void addFormatters(@NotNull FormatterRegistry registry) {
         registry.addConverter(new StringToLocalDateTimeConverter());
@@ -109,5 +104,7 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**").addResourceLocations("/resources/images/");
         registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");
+        registry.addResourceHandler("/fonts/**").addResourceLocations("/resources/fonts/");
+        registry.addResourceHandler("/vendor/**").addResourceLocations("/resources/vendor/");
     }
 }

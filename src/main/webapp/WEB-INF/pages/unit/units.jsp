@@ -17,6 +17,7 @@
         <tr>
             <th>ID</th>
             <th>Tên</th>
+            <th>Ký hiệu</th>
             <th>Ngày tạo</th>
             <th>Ngày cập nhập</th>
             <th>Hành động</th>
@@ -27,6 +28,7 @@
             <tr id="item${unit.id}">
                 <td>${unit.id}</td>
                 <td>${unit.name}</td>
+                <td>${unit.abbreviation}</td>
                 <td>
                     <fmt:parseDate value="${ unit.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
                     <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
@@ -55,3 +57,14 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable({
+            columns: [null, null, null, {searchable: false}, {searchable: false}, {searchable: false}],
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+        });
+    });
+</script>

@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/security/tags" %>
 
 <div class="jumbotron bg-light p-5 rounded">
-    <h1 class="display-4">Chào mừng đến với SCMS Admin</h1>
+    <h1 class="display-4">Chào mừng đến với SCMS ADMIN</h1>
     <p class="lead">Trang quản lý dành cho quản trị viên.</p>
     <hr class="my-4">
 </div>

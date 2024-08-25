@@ -9,21 +9,28 @@
         <put-attribute name="content" value=""/>
         <put-attribute name="header" value="/WEB-INF/layout/header.jsp"/>
         <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>
+        <put-attribute name="preloading" value="/WEB-INF/layout/preloading.jsp"/>
     </definition>
 
     <!--Base có sidebar-->
     <definition name="baseWithSidebar" template="/WEB-INF/layout/base_with_sidebar.jsp">
         <put-attribute name="title" value=""/>
         <put-attribute name="content" value=""/>
+        <put-attribute name="sidebar" value="/WEB-INF/layout/sidebar.jsp"/>
         <put-attribute name="header" value="/WEB-INF/layout/header.jsp"/>
         <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>
-        <put-attribute name="sidebar" value="/WEB-INF/layout/sidebar.jsp"/>
+        <put-attribute name="preloading" value="/WEB-INF/layout/preloading.jsp"/>
     </definition>
 
-    <!--Trang chủ-->
-    <definition name="index" extends="baseNonSidebar">
-        <put-attribute name="title" value="Trang chủ"/>
-        <put-attribute name="content" value="/WEB-INF/pages/index.jsp"/>
+    <!--Đăng nhập-->
+    <definition name="login" template="/WEB-INF/pages/login.jsp">
+        <put-attribute name="title" value="Đăng nhập"/>
+    </definition>
+
+    <!--Dashboard-->
+    <definition name="dashboard" extends="baseWithSidebar">
+        <put-attribute name="title" value="Dashboard"/>
+        <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
     </definition>
 
     <!--Thống kê-->
@@ -34,13 +41,8 @@
 
     <!--Phân tích-->
     <definition name="analytics" extends="baseNonSidebar">
-        <put-attribute name="title" value="Phân tích"/>
+        <put-attribute name="title" value="Phân tích và báo cáo"/>
         <put-attribute name="content" value="/WEB-INF/pages/analytics.jsp"/>
-    </definition>
-
-    <definition name="dashboard" extends="baseWithSidebar">
-        <put-attribute name="title" value="Dashboard"/>
-        <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
     </definition>
 
     <!--Category-->

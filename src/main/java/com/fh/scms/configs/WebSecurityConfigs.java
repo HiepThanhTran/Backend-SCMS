@@ -48,7 +48,7 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(@NotNull HttpSecurity http) throws Exception {
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole(UserRole.ROLE_ADMIN.alias())
@@ -56,17 +56,17 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
-//                .loginPage("/login")
+                .loginPage("/login")
                 .permitAll()
                 .usernameParameter("username").passwordParameter("password")
                 .successHandler((httpServletRequest, httpServletResponse, authentication) -> {
                     userService.updateLastLogin(authentication.getName());
-                    httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/admin");
-                }).failureUrl("/login?error").permitAll()
+                    httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/");
+                }).failureUrl("/login?error=true").permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/login").permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/login?accessDenied")
+                .exceptionHandling().accessDeniedPage("/login?accessDenied=true")
                 .and();
 
         http.csrf().disable();

@@ -6,6 +6,7 @@ import com.fh.scms.pojo.Product;
 import com.fh.scms.repository.CategoryRepository;
 import com.fh.scms.repository.ProductRepository;
 import com.fh.scms.services.CategoryService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class CategoryServiceImplement implements CategoryService {
     private ProductRepository productRepository;
 
     @Override
-    public CategoryResponse getCategoryResponse(Category category) {
+    public CategoryResponse getCategoryResponse(@NotNull Category category) {
         return CategoryResponse.builder()
                 .id(category.getId())
                 .name(category.getName())

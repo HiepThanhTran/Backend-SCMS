@@ -77,7 +77,7 @@ public final class Utils {
 
         mapping.put("categories", "Danh mục");
         mapping.put("customers", "Khách hàng");
-        mapping.put("delivery-schedules", "Lịch giao hàng");
+        mapping.put("schedules", "Lịch giao hàng");
         mapping.put("inventories", "Tồn kho");
         mapping.put("invoices", "Hóa đơn");
         mapping.put("orders", "Đơn hàng");

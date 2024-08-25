@@ -23,7 +23,7 @@ Phát triển một hệ thống quản lý chuỗi cung ứng, từ việc qu�
 	- Thanh toán và hóa đơn: Quản lý các thanh toán cho nhà cung cấp và tạo hóa đơn cho các giao dịch, bao gồm việc theo dõi các khoản phải trả và phải thu (sinh viên có thể nghiên cứu hỗ trợ thanh toán trực tuyến). (Done)
 
 6. Báo Cáo và Phân Tích
-	- Cung cấp các báo cáo chi tiết về tình trạng tồn kho, bao gồm mức tồn kho hiện tại, hàng hóa sắp hết hạn và hàng hóa hết hạn.
+	- Cung cấp các báo cáo chi tiết về tình trạng tồn kho, bao gồm mức tồn kho hiện tại, hàng hóa sắp hết hạn và hàng hóa hết hạn. (Done)
 	- Báo cáo hiệu suất nhà cung cấp: Cung cấp các báo cáo về hiệu suất của các nhà cung cấp dựa trên các chỉ số như chất lượng, giao hàng đúng hạn và giá cả.
 
 7. Hỗ trợ khách hàng: Cung cấp các kênh hỗ trợ khách hàng để giải quyết các vấn đề liên quan đến đơn hàng, giao hàng và các vấn đề khác. (Optional)

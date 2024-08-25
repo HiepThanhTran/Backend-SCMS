@@ -30,7 +30,7 @@ public class APICartController {
             return ResponseEntity.notFound().build();
         }
 
-        Cart cart = this.cartService.getCart(user);
+        Cart cart = this.cartService.findCartByUser(user);
 
         return ResponseEntity.ok(this.cartService.getCartResponse(cart));
     }
@@ -43,7 +43,7 @@ public class APICartController {
             return ResponseEntity.notFound().build();
         }
 
-        this.cartService.addProductToCart(this.cartService.getCart(user), productRequestAddToCart);
+        this.cartService.addProductToCart(this.cartService.findCartByUser(user), productRequestAddToCart);
 
         return ResponseEntity.ok().build();
     }
@@ -58,7 +58,7 @@ public class APICartController {
         }
 
         try {
-            this.cartService.updateProductInCart(this.cartService.getCart(user), productId, params);
+            this.cartService.updateProductInCart(this.cartService.findCartByUser(user), productId, params);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
@@ -75,7 +75,7 @@ public class APICartController {
         }
 
         try {
-            this.cartService.deleteProductFromCart(this.cartService.getCart(user), productId);
+            this.cartService.deleteProductFromCart(this.cartService.findCartByUser(user), productId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
@@ -91,7 +91,7 @@ public class APICartController {
             return ResponseEntity.notFound().build();
         }
 
-        this.cartService.clearCart(this.cartService.getCart(user));
+        this.cartService.clearCart(this.cartService.findCartByUser(user));
 
         return ResponseEntity.noContent().build();
     }

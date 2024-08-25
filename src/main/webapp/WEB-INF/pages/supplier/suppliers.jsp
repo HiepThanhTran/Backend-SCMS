@@ -59,3 +59,14 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable({
+            columns: [null, null, {searchable: false}, {searchable: false}, {searchable: false}, {searchable: false}, {searchable: false}],
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+        });
+    });
+</script>

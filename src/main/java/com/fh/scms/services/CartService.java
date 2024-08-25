@@ -15,7 +15,7 @@ public interface CartService {
 
     CartDetailsResponse getCartDetailsResponse(CartDetails cartDetails);
 
-    Cart getCart(User user);
+    Cart findCartByUser(User user);
 
     void addProductToCart(Cart cart, ProductRequestAddToCart productRequestAddToCart);
 

@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +23,7 @@ public class PaymentTermsController {
 
     private final PaymentTermsService paymentTermsService;
     private final SupplierService supplierService;
-    
+
     @GetMapping
     public String listPaymentTerms(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("paymentTerms", this.paymentTermsService.findAllWithFilter(params));

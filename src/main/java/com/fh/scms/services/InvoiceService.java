@@ -16,8 +16,6 @@ public interface InvoiceService {
 
     Invoice findById(Long id);
 
-    Invoice findByOrderId(Long orderId);
-
     void save(Invoice invoice);
 
     void update(Invoice invoice);

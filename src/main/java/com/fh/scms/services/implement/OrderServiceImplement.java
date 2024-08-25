@@ -81,7 +81,7 @@ public class OrderServiceImplement implements OrderService {
     public OrderDetailsReponse getOrderDetailsReponse(@NotNull OrderDetails orderDetails) {
         return OrderDetailsReponse.builder()
                 .id(orderDetails.getId())
-                .product(this.productService.getProductResponse(orderDetails.getProduct()))
+                .product(this.productService.getProductResponseForList(orderDetails.getProduct()))
                 .quantity(orderDetails.getQuantity())
                 .unitPrice(orderDetails.getUnitPrice())
                 .build();

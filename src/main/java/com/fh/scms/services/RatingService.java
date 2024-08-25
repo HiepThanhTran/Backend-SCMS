@@ -12,8 +12,6 @@ public interface RatingService {
 
     Rating findById(Long id);
 
-    Rating findByUserIdAndSupplierId(Long userId, Long supplierId);
-
     void save(Rating rating);
 
     void update(Rating rating);

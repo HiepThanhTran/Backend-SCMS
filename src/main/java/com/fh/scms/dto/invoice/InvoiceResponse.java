@@ -2,13 +2,11 @@ package com.fh.scms.dto.invoice;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.scms.dto.tax.TaxResponse;
-import com.fh.scms.enums.PaymentTermType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

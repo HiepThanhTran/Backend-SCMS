@@ -43,8 +43,8 @@ public class APIInvoiceController {
             this.invoiceService.payInvoice(invoiceId);
 
             return ResponseEntity.ok().build();
-        } catch(EntityNotFoundException | IllegalArgumentException e) {
-            if (e instanceof  EntityNotFoundException) {
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException) {
                 return ResponseEntity.notFound().build();
             }
 

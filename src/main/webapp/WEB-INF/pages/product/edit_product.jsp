@@ -24,29 +24,7 @@
         container.appendChild(row);
     }
 
-    function addUnitRow() {
-        const container = document.getElementById('unitsContainer');
-        const row = document.createElement('div');
-        row.className = 'unit-row';
-        row.style.display = 'flex';
-        row.style.alignItems = 'center';
-        row.style.justifyContent = 'center';
-        row.innerHTML = `
-            <select name="unitIds" class="form-control mt-3 mb-2 me-3">
-                <c:forEach var="unit" items="${units}">
-                    <option value="${unit.id}">${unit.name}</option>
-                </c:forEach>
-            </select>
-            <button type="button" class="btn btn-danger mt-2" onclick="removeUnitRow(this)">-</button>
-        `;
-        container.appendChild(row);
-    }
-
     function removeTagRow(button) {
-        button.parentElement.remove();
-    }
-
-    function removeUnitRow(button) {
         button.parentElement.remove();
     }
 </script>
@@ -100,6 +78,14 @@
     </div>
 
     <div class="form-group">
+        <form:label path="unit" cssClass="form-label mt-3">Đơn vị sản phẩm</form:label><br/>
+        <form:select path="unit" cssClass="w-100 mb-3">
+            <form:option value="" label="Chọn đơn vị sản phẩm"/>
+            <form:options items="${units}" itemValue="id" itemLabel="name"/>
+        </form:select>
+    </div>
+
+    <div class="form-group">
         <form:label path="category" cssClass="form-label mt-3">Danh mục</form:label><br/>
         <form:select path="category" cssClass="w-100 mt-1">
             <form:option value="" label="Chọn danh mục"/>
@@ -116,28 +102,6 @@
             <c:forEach var="unit" items="${productTags}">
                 <div style="display: flex; align-items: center; justify-content: center" class="tag-row">
                     <select name="tagIds" class="form-control mt-3 mb-2 me-3">
-                        <c:forEach var="optionUnit" items="${tags}">
-                            <option value="${optionUnit.id}"
-                                    <c:if test="${optionUnit.id == unit.id}">selected</c:if>>
-                                    ${optionUnit.name}
-                            </option>
-                        </c:forEach>
-                    </select>
-                    <button type="button" class="btn btn-danger mt-2" onclick="removeUnitRow(this)">-</button>
-                </div>
-            </c:forEach>
-        </div>
-    </div>
-
-    <div id="unitsSection" class="form-group">
-        <label class="form-label mt-3">Đơn vị sản phẩm</label><br/>
-        <div id="unitsContainer">
-            <div class="unit-row">
-                <button type="button" class="btn btn-success" onclick="addUnitRow()">+</button>
-            </div>
-            <c:forEach var="unit" items="${productUnits}">
-                <div style="display: flex; align-items: center; justify-content: center" class="unit-row">
-                    <select name="unitIds" class="form-control mt-3 mb-2 me-3">
                         <c:forEach var="optionUnit" items="${tags}">
                             <option value="${optionUnit.id}"
                                     <c:if test="${optionUnit.id == unit.id}">selected</c:if>>

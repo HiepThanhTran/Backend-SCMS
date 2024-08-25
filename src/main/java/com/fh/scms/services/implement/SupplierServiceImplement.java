@@ -11,6 +11,7 @@ import com.fh.scms.repository.SupplierRepository;
 import com.fh.scms.repository.UserRepository;
 import com.fh.scms.services.SupplierService;
 import com.fh.scms.util.Utils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,7 @@ public class SupplierServiceImplement implements SupplierService {
     private RatingRepository ratingRepository;
 
     @Override
-    public SupplierDTO getSupplierResponse(Supplier supplier) {
+    public SupplierDTO getSupplierResponse(@NotNull Supplier supplier) {
         return SupplierDTO.builder()
                 .name(supplier.getName())
                 .address(supplier.getAddress())

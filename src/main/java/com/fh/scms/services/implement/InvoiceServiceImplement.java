@@ -65,11 +65,6 @@ public class InvoiceServiceImplement implements InvoiceService {
     }
 
     @Override
-    public Invoice findByOrderId(Long orderId) {
-        return this.invoiceRepository.findByOrderId(orderId);
-    }
-
-    @Override
     public void save(Invoice invoice) {
         this.invoiceRepository.save(invoice);
     }

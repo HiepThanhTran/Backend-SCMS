@@ -18,6 +18,7 @@
             <th>ID</th>
             <th>Tên</th>
             <th>Giá</th>
+            <th>Đơn vị</th>
             <th>Danh mục</th>
             <th>Ngày hết hạn</th>
             <th>Ngày tạo</th>
@@ -30,7 +31,8 @@
             <tr id="item${product.id}">
                 <td>${product.id}</td>
                 <td>${product.name}</td>
-                <td>${product.price}</td>
+                <td>${String.format("%,.3f", product.price)} VNĐ</td>
+                <td>${product.unit.name}</td>
                 <td>${product.category.name}</td>
                 <td>
                     <fmt:parseDate value="${ product.expiryDate }" pattern="yyyy-MM-dd" var="parsedDateTime" type="date"/>
@@ -64,3 +66,14 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable({
+            columns: [null, null, {searchable: false}, null, null, {searchable: false}, {searchable: false}, {searchable: false}, {searchable: false}],
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+        });
+    });
+</script>

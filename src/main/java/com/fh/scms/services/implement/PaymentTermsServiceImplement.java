@@ -1,6 +1,5 @@
 package com.fh.scms.services.implement;
 
-import com.fh.scms.pojo.Invoice;
 import com.fh.scms.pojo.PaymentTerms;
 import com.fh.scms.repository.PaymentTermsRepository;
 import com.fh.scms.services.InvoiceService;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

@@ -6,6 +6,7 @@ import com.fh.scms.pojo.Tax;
 import com.fh.scms.repository.TaxRepository;
 import com.fh.scms.services.InvoiceService;
 import com.fh.scms.services.TaxService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class TaxServiceImplement implements TaxService {
     private InvoiceService invoiceService;
 
     @Override
-    public TaxResponse getTaxResponse(Tax tax) {
+    public TaxResponse getTaxResponse(@NotNull Tax tax) {
         return TaxResponse.builder()
                 .id(tax.getId())
                 .rate(tax.getRate())

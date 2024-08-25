@@ -25,8 +25,8 @@ public class ProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
-    private final UnitService unitService;
     private final TagService tagService;
+    private final UnitService unitService;
 
     @GetMapping
     public String listProducts(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
@@ -38,8 +38,8 @@ public class ProductController {
     @GetMapping(path = "/add")
     public String addProduct(Model model) {
         model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
-        model.addAttribute("units", this.unitService.findAllWithFilter(null));
         model.addAttribute("tags", this.tagService.findAllWithFilter(null));
+        model.addAttribute("units", this.unitService.findAllWithFilter(null));
         model.addAttribute("product", new Product());
 
         return "add_product";
@@ -48,12 +48,11 @@ public class ProductController {
     @PostMapping(path = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String addProduct(Model model,
                              @RequestParam(value = "tagIds", required = false, defaultValue = "") List<String> tagIds,
-                             @RequestParam(value = "unitIds", required = false, defaultValue = "") List<String> unitIds,
                              @ModelAttribute(value = "product") @Valid Product product,
                              BindingResult bindingResult) {
         model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
-        model.addAttribute("units", this.unitService.findAllWithFilter(null));
         model.addAttribute("tags", this.tagService.findAllWithFilter(null));
+        model.addAttribute("units", this.unitService.findAllWithFilter(null));
 
         if (bindingResult.hasErrors()) {
             List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
@@ -62,7 +61,7 @@ public class ProductController {
             return "add_product";
         }
 
-        this.productService.save(product, tagIds, unitIds);
+        this.productService.save(product, tagIds);
 
         return "redirect:/admin/products";
     }
@@ -70,11 +69,10 @@ public class ProductController {
     @GetMapping(path = "/edit/{productId}")
     public String editProduct(Model model, @PathVariable(value = "productId") Long id) {
         model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
-        model.addAttribute("units", this.unitService.findAllWithFilter(null));
         model.addAttribute("tags", this.tagService.findAllWithFilter(null));
+        model.addAttribute("units", this.unitService.findAllWithFilter(null));
         model.addAttribute("product", this.productService.findById(id));
         model.addAttribute("productTags", this.tagService.findByProductId(id));
-        model.addAttribute("productUnits", this.unitService.findByProductId(id));
 
         return "edit_product";
     }
@@ -82,12 +80,11 @@ public class ProductController {
     @PostMapping(path = "/edit/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String editProduct(Model model, @PathVariable(value = "productId") Long id,
                               @RequestParam(value = "tagIds", required = false, defaultValue = "") List<String> tagIds,
-                              @RequestParam(value = "unitIds", required = false, defaultValue = "") List<String> unitIds,
                               @ModelAttribute(value = "product") @Valid Product product,
                               BindingResult bindingResult) {
         model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
-        model.addAttribute("units", this.unitService.findAllWithFilter(null));
         model.addAttribute("tags", this.tagService.findAllWithFilter(null));
+        model.addAttribute("units", this.unitService.findAllWithFilter(null));
 
         if (bindingResult.hasErrors()) {
             List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
@@ -96,7 +93,7 @@ public class ProductController {
             return "edit_product";
         }
 
-        this.productService.update(product, tagIds, unitIds);
+        this.productService.update(product, tagIds);
 
         return "redirect:/admin/products";
     }

@@ -1,7 +1,7 @@
 package com.fh.scms.services;
 
-import com.fh.scms.dto.product.ProductResponse;
-import com.fh.scms.dto.product.ProductResponseWithTagUnit;
+import com.fh.scms.dto.product.ProductResponseForDetails;
+import com.fh.scms.dto.product.ProductResponseForList;
 import com.fh.scms.pojo.Product;
 
 import java.util.List;
@@ -9,21 +9,21 @@ import java.util.Map;
 
 public interface ProductService {
 
-    ProductResponse getProductResponse(Product product);
+    ProductResponseForList getProductResponseForList(Product product);
 
-    ProductResponseWithTagUnit getProductResponseWithTagUnit(Product product);
+    ProductResponseForDetails getProductResponseForDetails(Product product);
 
-    List<ProductResponseWithTagUnit> getAllProductResponseWithTagUnit(Map<String, String> params);
+    List<ProductResponseForList> getAllProductResponseForList(Map<String, String> params);
+
+    void save(Product product, List<String> tagIds);
+
+    void update(Product product, List<String> tagIds);
 
     Product findById(Long id);
 
     void save(Product Product);
 
-    void save(Product product, List<String> tagIds, List<String> unitIds);
-
     void update(Product Product);
-
-    void update(Product product, List<String> tagIds, List<String> unitIds);
 
     void delete(Long id);
 

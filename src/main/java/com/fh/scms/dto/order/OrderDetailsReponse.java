@@ -1,6 +1,6 @@
 package com.fh.scms.dto.order;
 
-import com.fh.scms.dto.product.ProductResponse;
+import com.fh.scms.dto.product.ProductResponseForList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +20,5 @@ public class OrderDetailsReponse {
 
     private BigDecimal unitPrice;
 
-    private ProductResponse product;
+    private ProductResponseForList product;
 }

@@ -16,6 +16,10 @@ a {
     text-decoration: none;
 }
 
+h2 {
+    color: var(--hover-color);
+}
+
 /* Root */
 :root {
     --background: #0e223e;
@@ -29,6 +33,11 @@ html, body {
     padding: 0;
     height: 100%;
     background: #cccccc;
+}
+
+.selected-item {
+    font-weight: bold;
+    background-color: #88a6c3 !important;
 }
 
 .wrapper {
@@ -85,7 +94,7 @@ html, body {
 }
 
 .sidebar-nav::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
     background: transparent;
 }
 
@@ -177,7 +186,7 @@ form input[type="tel"]:focus,
 form input[type="date"]:focus {
     border-color: var(--hover-color);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 125, 219, 0.2);
+    /*box-shadow: 0 0 0 2px rgba(59, 125, 219, 0.2);*/
 }
 
 /* Input Gender */

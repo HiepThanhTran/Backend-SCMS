@@ -15,13 +15,13 @@ public class WebInitializerConfigs {
     @PostConstruct
     public void initializer() {
         if (!this.globalService.isFirstRun()) {
-            this.globalService.createUser();
             this.globalService.createCategory();
             this.globalService.createTag();
             this.globalService.createUnit();
-            this.globalService.createProduct();
             this.globalService.createTax();
             this.globalService.createWarehouse();
+            this.globalService.createUser();
+            this.globalService.createProduct();
             this.globalService.createInventory();
             this.globalService.saveFirstRun();
         }

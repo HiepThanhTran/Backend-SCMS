@@ -25,9 +25,9 @@
     </div>
 
     <div class="form-group">
-        <form:label path="warehouse" cssClass="form-label mt-3">Tên hàng tồn kho</form:label>
+        <form:label path="warehouse" cssClass="form-label mt-3">Nhà kho</form:label>
         <form:select path="warehouse" cssClass="w-100 mb-3">
-            <form:option value="" label="Chọn kho"/>
+            <form:option value="" label="Chọn nhà kho"/>
             <form:options items="${warehouses}" itemValue="id" itemLabel="name"/>
         </form:select>
     </div>

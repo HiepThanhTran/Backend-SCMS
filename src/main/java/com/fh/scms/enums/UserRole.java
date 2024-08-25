@@ -21,12 +21,12 @@ public enum UserRole {
 
     private final String displayName;
 
-    public @NotNull String alias() {
-        return this.name().substring(5);
-    }
-
     public static Map<String, String> getAllDisplayNames() {
         return Arrays.stream(UserRole.values())
                 .collect(Collectors.toMap(UserRole::name, UserRole::getDisplayName));
+    }
+
+    public @NotNull String alias() {
+        return this.name().substring(5);
     }
 }

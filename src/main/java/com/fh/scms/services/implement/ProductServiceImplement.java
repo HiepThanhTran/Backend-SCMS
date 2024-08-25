@@ -1,14 +1,15 @@
 package com.fh.scms.services.implement;
 
 import com.fh.scms.components.GlobalService;
-import com.fh.scms.dto.product.ProductResponse;
-import com.fh.scms.dto.product.ProductResponseWithTagUnit;
-import com.fh.scms.dto.tag.TagResponse;
+import com.fh.scms.dto.product.ProductResponseForDetails;
+import com.fh.scms.dto.product.ProductResponseForList;
 import com.fh.scms.pojo.Product;
 import com.fh.scms.pojo.Tag;
-import com.fh.scms.pojo.Unit;
 import com.fh.scms.repository.ProductRepository;
-import com.fh.scms.services.*;
+import com.fh.scms.services.CategoryService;
+import com.fh.scms.services.ProductService;
+import com.fh.scms.services.TagService;
+import com.fh.scms.services.UnitService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,46 +37,43 @@ public class ProductServiceImplement implements ProductService {
     private UnitService unitService;
 
     @Override
-    public ProductResponse getProductResponse(@NotNull Product product) {
-        return ProductResponse.builder()
+    public ProductResponseForList getProductResponseForList(@NotNull Product product) {
+        return ProductResponseForList.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .image(product.getImage())
-                .expiryDate(product.getExpiryDate())
-                .category(this.categoryService.getCategoryResponse(product.getCategory()))
                 .build();
     }
 
     @Override
-    public ProductResponseWithTagUnit getProductResponseWithTagUnit(Product product) {
-            return ProductResponseWithTagUnit.builder()
+    public ProductResponseForDetails getProductResponseForDetails(@NotNull Product product) {
+        return ProductResponseForDetails.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .image(product.getImage())
                 .expiryDate(product.getExpiryDate())
+                .unit(this.unitService.getUnitResponse(product.getUnit()))
                 .category(this.categoryService.getCategoryResponse(product.getCategory()))
                 .tagSet(product.getTagSet().stream()
                         .map(tag -> this.tagService.getTagResponse(tag))
                         .collect(Collectors.toSet())
                 )
-                .unitSet(product.getUnitSet().stream()
-                        .map(unit -> this.unitService.getUnitResponse(unit))
-                        .collect(Collectors.toSet()))
-                .build(); }
+                .build();
+    }
 
     @Override
-    public List<ProductResponseWithTagUnit> getAllProductResponseWithTagUnit(Map<String, String> params) {
+    public List<ProductResponseForList> getAllProductResponseForList(Map<String, String> params) {
         return this.productRepository.findAllWithFilter(params)
-                .stream().map(this::getProductResponseWithTagUnit)
+                .stream().map(this::getProductResponseForList)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void save(Product product, @NotNull List<String> tagIds, List<String> unitIds) {
+    public void save(Product product, @NotNull List<String> tagIds) {
         Set<Tag> tags = new HashSet<>();
         for (String tagId : tagIds) {
             Tag tag = this.tagService.findById(Long.parseLong(tagId));
@@ -84,15 +82,6 @@ public class ProductServiceImplement implements ProductService {
             }
         }
         product.setTagSet(tags);
-
-        Set<Unit> units = new HashSet<>();
-        for (String unitId : unitIds) {
-            Unit unit = this.unitService.findById(Long.parseLong(unitId));
-            if (unit != null) {
-                units.add(unit);
-            }
-        }
-        product.setUnitSet(units);
 
         if (product.getFile() != null && !product.getFile().isEmpty()) {
             product.setImage(this.globalService.uploadImage(product.getFile()));
@@ -102,7 +91,7 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public void update(Product product, @NotNull List<String> tagIds, List<String> unitIds) {
+    public void update(Product product, @NotNull List<String> tagIds) {
         Set<Tag> tags = new HashSet<>();
         for (String tagId : tagIds) {
             Tag tag = this.tagService.findById(Long.parseLong(tagId));
@@ -111,15 +100,6 @@ public class ProductServiceImplement implements ProductService {
             }
         }
         product.setTagSet(tags);
-
-        Set<Unit> units = new HashSet<>();
-        for (String unitId : unitIds) {
-            Unit unit = this.unitService.findById(Long.parseLong(unitId));
-            if (unit != null) {
-                units.add(unit);
-            }
-        }
-        product.setUnitSet(units);
 
         this.productRepository.update(product);
     }

@@ -4,24 +4,21 @@
 
 <nav class="navbar navbar-expand-sm navbar-dark navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand navbar-custom__logo" href="<c:url value="/admin" />">SCMS Admin</a>
+        <a class="navbar-brand navbar-custom__logo" href="<c:url value="/" />">SCMS ADMIN</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav navbar-custome__menu w-100">
                 <li class="nav-item navbar-custome__menu--item">
-                    <a class="nav-link" href="<c:url value="/" />">Trang chủ</a>
-                </li>
-                <li class="nav-item navbar-custome__menu--item">
-                    <a class="nav-link" href="<c:url value="/admin" />">Dashboard</a>
+                    <a class="nav-link" href="<c:url value="/" />">Dashboard</a>
                 </li>
                 <s:authorize access="hasAnyRole('ADMIN')">
                     <li class="nav-item navbar-custome__menu--item">
                         <a class="nav-link" href="<c:url value="/admin/statistics" />">Thống kê</a>
                     </li>
                     <li class="nav-item navbar-custome__menu--item">
-                        <a class="nav-link" href="<c:url value="/admin/admin/analytics" />">Phân tích</a>
+                        <a class="nav-link" href="<c:url value="/admin/analytics" />">Phân tích & báo cáo</a>
                     </li>
                 </s:authorize>
                 <s:authorize access="!isAuthenticated()">

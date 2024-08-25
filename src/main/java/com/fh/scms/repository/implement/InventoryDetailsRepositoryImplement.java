@@ -65,7 +65,7 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
             Query<InventoryDetails> query = session.createQuery(criteria);
 
             return query.getSingleResult();
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return null;
         }
     }

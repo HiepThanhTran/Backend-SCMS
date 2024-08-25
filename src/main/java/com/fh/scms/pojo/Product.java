@@ -22,28 +22,28 @@ import java.util.Set;
 @Table(name = "product")
 public class Product extends _BaseEntity implements Serializable {
 
+    @Transient
+    MultipartFile file;
     @NotNull(message = "{product.name.notNull}")
     @NotBlank(message = "{product.name.notNull}")
     @Column(nullable = false, unique = true)
     private String name;
-
     private String description;
-
     @Builder.Default
     @NotNull(message = "{product.price.notNull}")
     @Column(nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
     private BigDecimal price = BigDecimal.ZERO;
-
     @Column(length = 300)
     private String image;
-
-    @Transient
-    MultipartFile file;
-
     @NotNull(message = "{product.expiryDate.notNull}")
     @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "expiry_date", nullable = false)
     private LocalDate expiryDate;
+
+    @NotNull(message = "{product.unit.notNull}")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "unit_id", nullable = false)
+    private Unit unit;
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -51,12 +51,6 @@ public class Product extends _BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<InventoryDetails> inventoryDetailsSet;
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "product_unit",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "unit_id"))
-    private Set<Unit> unitSet;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "product_tag",
@@ -82,7 +76,6 @@ public class Product extends _BaseEntity implements Serializable {
 
     @PreRemove
     public void preRemove() {
-        this.unitSet.clear();
         this.tagSet.clear();
         this.orderDetailsSet.clear();
         this.supplierCostingSet.clear();

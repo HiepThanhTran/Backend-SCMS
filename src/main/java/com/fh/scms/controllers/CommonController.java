@@ -1,6 +1,7 @@
 package com.fh.scms.controllers;
 
 import com.fh.scms.util.Utils;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 @Controller
 @ControllerAdvice
+@RequiredArgsConstructor
 public class CommonController {
 
     @ModelAttribute

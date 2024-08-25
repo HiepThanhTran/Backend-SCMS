@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 @Setter
@@ -31,4 +32,18 @@ public class InventoryDetails extends _BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "inventoryDetails", cascade = CascadeType.ALL)
     private Set<OrderDetails> orderDetailsSet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof InventoryDetails)) return false;
+        if (!super.equals(o)) return false;
+        InventoryDetails that = (InventoryDetails) o;
+        return Objects.equals(product, that.product) && Objects.equals(inventory, that.inventory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), product, inventory);
+    }
 }

@@ -4,6 +4,7 @@ import com.fh.scms.dto.tag.TagResponse;
 import com.fh.scms.pojo.Tag;
 import com.fh.scms.repository.TagRepository;
 import com.fh.scms.services.TagService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,7 @@ public class TagServiceImplement implements TagService {
     private TagRepository tagRepository;
 
     @Override
-    public TagResponse getTagResponse(Tag tag) {
+    public TagResponse getTagResponse(@NotNull Tag tag) {
         return TagResponse.builder()
                 .id(tag.getId())
                 .name(tag.getName())

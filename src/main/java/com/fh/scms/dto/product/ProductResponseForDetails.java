@@ -17,7 +17,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponseWithTagUnit {
+public class ProductResponseForDetails {
 
     private Long id;
 
@@ -32,9 +32,9 @@ public class ProductResponseWithTagUnit {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate expiryDate;
 
+    private UnitResponse unit;
+
     private CategoryResponse category;
 
     private Set<TagResponse> tagSet;
-
-    private Set<UnitResponse> unitSet;
 }

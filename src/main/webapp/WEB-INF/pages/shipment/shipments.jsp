@@ -28,7 +28,7 @@
         <c:forEach var="shipment" items="${shipments}">
             <tr id="item${shipment.id}">
                 <td>${shipment.id}</td>
-                <td>${shipment.cost}</td>
+                <td>${String.format("%,.3f", shipment.cost)} VNĐ</td>
                 <td>${shipment.currentLocation}</td>
                 <td>${shipment.status}</td>
                 <td>
@@ -59,3 +59,14 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable({
+            columns: [null, {searchable: false}, null, null, {searchable: false}, {searchable: false}, {searchable: false}],
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+            },
+        });
+    });
+</script>
