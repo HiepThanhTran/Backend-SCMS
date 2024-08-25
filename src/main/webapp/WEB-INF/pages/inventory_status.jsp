@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<h2 id="warehouseHeader" class="mb-4">Báo cáo về tình trạng hiện tại của các nhà kho</h2>
+<h2 id="warehouseHeader" class="mb-4 text-center text-primary">Báo cáo về tình trạng hiện tại của các nhà kho</h2>
 <hr>
 <table id="warehouseTable" class="table table-bordered table-hover display">
     <thead>
@@ -36,7 +36,7 @@
     </tbody>
 </table>
 
-<h2 id="inventoryHeader" class="mt-5 mb-4">Tình trạng chi tiết của các tồn kho</h2>
+<h2 id="inventoryHeader" class="mt-5 mb-4 text-center text-primary">Tình trạng chi tiết của các tồn kho</h2>
 <hr>
 <table id="inventoryTable" class="table table-bordered table-hover display">
     <thead>
@@ -51,7 +51,7 @@
     </tbody>
 </table>
 
-<h2 id="chartHeader" class="mt-5 mb-4">Biểu đồ thống kê sản phẩm theo hạn sử dụng</h2>
+<h2 id="chartHeader" class="mt-5 mb-4 text-center text-primary">Biểu đồ thống kê sản phẩm theo hạn sử dụng</h2>
 <hr>
 <div class="row justify-content-center">
     <div class="col-12 w-50">
@@ -61,7 +61,7 @@
 <hr>
 
 <div class="row">
-    <h1 class="text-primary">Các sản phẩm của <span id="productHeader"></span></h1>
+    <h1 class="text-center text-primary">Các sản phẩm của <span id="productHeader"></span></h1>
     <div class="col-md-6 col-12">
         <h2 id="productExpiringSoonHeader" class="mt-5 mb-4"><span class="text-warning bg-secondary p-3 rounded-pill">Sắp hết hạn</span></h2>
         <hr>
@@ -100,11 +100,13 @@
     </div>
 </div>
 
-<script src="<c:url value="/js/analytics.js"/>"></script>
+<script src="<c:url value="/js/inventory_status.js"/>"></script>
 <script>
-    const chartCanvas = document.getElementById('expiryDateChart').getContext('2d');
+    const warehouseLength = ${fn:length(warehouseCapacityReport)};
+    const contextPath = "${pageContext.request.contextPath}";
 
     // Khởi tạo biểu đồ với dữ liệu rỗng
+    const chartCanvas = document.getElementById('expiryDateChart').getContext('2d');
     const chartInstance = new Chart(chartCanvas, {
         type: 'polarArea',
         data: {
@@ -122,6 +124,7 @@
             }]
         },
         options: {
+            responsive: true,
             plugins: {
                 title: {
                     display: true,
@@ -157,7 +160,4 @@
             },
         },
     });
-
-    const warehouseData = ${fn:length(warehouseCapacityReport)};
-    const contextPath = "${pageContext.request.contextPath}";
 </script>

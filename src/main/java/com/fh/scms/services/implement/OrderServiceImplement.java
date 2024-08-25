@@ -54,9 +54,8 @@ public class OrderServiceImplement implements OrderService {
         }
 
         // Nếu không có tồn kho nào đủ số lượng sản phẩm thì thông báo lỗi
-        if (inventoryDetails == null) {
-            throw new IllegalArgumentException(String.format("Số lượng %s không đủ trong kho", product.getName()));
-        }
+        Optional.ofNullable(inventoryDetails)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Số lượng %s không đủ trong kho", product.getName())));
 
         return inventoryDetails;
     }
@@ -121,9 +120,7 @@ public class OrderServiceImplement implements OrderService {
         if (orderRequest.getType() == OrderType.INBOUND) {
             Inventory inventory = this.inventoryService.findById(orderRequest.getInventoryId());
 
-            if (inventory == null) {
-                throw new EntityNotFoundException("Không tìm thấy kho hàng");
-            }
+            Optional.ofNullable(inventory).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy kho hàng"));
 
             Order order = Order.builder()
                     .user(user)

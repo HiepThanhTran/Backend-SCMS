@@ -1,10 +1,12 @@
 package com.fh.scms.services.implement;
 
 import com.fh.scms.dto.rating.RatingRequestUpdate;
+import com.fh.scms.dto.rating.RatingResponse;
 import com.fh.scms.pojo.Rating;
 import com.fh.scms.repository.RatingRepository;
 import com.fh.scms.services.RatingService;
 import com.fh.scms.util.Utils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,6 +24,25 @@ public class RatingServiceImplement implements RatingService {
 
     @Autowired
     private RatingRepository ratingRepository;
+
+    @Override
+    public RatingResponse getRatingResponse(@NotNull Rating rating) {
+        return RatingResponse.builder()
+                .id(rating.getId())
+                .rating(rating.getRating())
+                .comment(rating.getComment())
+                .criteria(rating.getCriteria().getDisplayName())
+                .supplier(rating.getSupplier())
+                .user(rating.getUser())
+                .build();
+    }
+
+    @Override
+    public List<RatingResponse> getAllRatingResponse(Map<String, String> params) {
+        return this.ratingRepository.findAllWithFilter(params).stream()
+                .map(this::getRatingResponse)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public Rating update(Rating rating, RatingRequestUpdate ratingRequestUpdate) {

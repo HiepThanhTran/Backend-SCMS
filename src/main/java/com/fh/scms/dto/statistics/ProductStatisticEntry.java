@@ -1,4 +1,4 @@
-package com.fh.scms.dto.product;
+package com.fh.scms.dto.statistics;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class ProductStatisticEntry {
 
     private String label;
+
     private Long value;
 }

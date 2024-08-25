@@ -62,13 +62,9 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/cart/**").authenticated()
                 // Category
                 .antMatchers("/api/categories/**").permitAll()
-                // Delivery Schedule
-                .antMatchers("/api/schedules/**").hasAnyRole(
-                        UserRole.ROLE_ADMIN.alias(),
-                        UserRole.ROLE_SUPPLIER.alias(),
-                        UserRole.ROLE_DISTRIBUTOR.alias(),
-                        UserRole.ROLE_MANUFACTURER.alias()
-                )
+                // Customer
+                .antMatchers("/api/customers/profile/**").hasRole(UserRole.ROLE_CUSTOMER.alias())
+                .antMatchers("/api/customers/**").permitAll()
                 // Invoice
                 .antMatchers("/api/invoices/**").authenticated()
                 // Order
@@ -86,6 +82,13 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/ratings/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/api/ratings/**").authenticated()
                 .antMatchers("/api/ratings/**").permitAll()
+                // Delivery Schedule
+                .antMatchers("/api/schedules/**").hasAnyRole(
+                        UserRole.ROLE_ADMIN.alias(),
+                        UserRole.ROLE_SUPPLIER.alias(),
+                        UserRole.ROLE_DISTRIBUTOR.alias(),
+                        UserRole.ROLE_MANUFACTURER.alias()
+                )
                 // Supplier
                 .antMatchers("/api/suppliers/profile/**").hasRole(UserRole.ROLE_SUPPLIER.alias())
                 .antMatchers("/api/suppliers/**/rating/add").authenticated()
@@ -108,9 +111,9 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/**").permitAll()
-                .antMatchers(HttpMethod.PATCH, "/api/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/**").authenticated()
+                .antMatchers(HttpMethod.PATCH, "/api/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/**").authenticated()
                 .and()
                 .addFilterBefore(this.jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(this.customAccessDeniedHandler());

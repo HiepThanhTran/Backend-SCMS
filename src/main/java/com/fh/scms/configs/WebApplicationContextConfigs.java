@@ -86,11 +86,11 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(@NotNull FormatterRegistry registry) {
-        registry.addConverter(new StringToLocalDateTimeConverter());
-        registry.addConverter(new StringToDateConverter());
+        registry.addConverter(new LocalDateTimeConverter());
+        registry.addConverter(new LocalDateConverter());
 
         registry.addFormatter(new CategoryFormatter());
-        registry.addFormatter(new DeliveryScheduleFormatter());
+        registry.addFormatter(new ScheduleFormatter());
         registry.addFormatter(new ShipperFormatter());
         registry.addFormatter(new SupplierFormatter());
         registry.addFormatter(new TagFormatter());
@@ -101,10 +101,10 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/**").addResourceLocations("/resources/images/");
-        registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");
+        registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
         registry.addResourceHandler("/fonts/**").addResourceLocations("/resources/fonts/");
+        registry.addResourceHandler("/images/**").addResourceLocations("/resources/images/");
         registry.addResourceHandler("/vendor/**").addResourceLocations("/resources/vendor/");
     }
 }

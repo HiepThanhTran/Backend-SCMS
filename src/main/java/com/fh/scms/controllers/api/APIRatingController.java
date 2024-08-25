@@ -2,6 +2,7 @@ package com.fh.scms.controllers.api;
 
 import com.fh.scms.dto.MessageResponse;
 import com.fh.scms.dto.rating.RatingRequestUpdate;
+import com.fh.scms.dto.rating.RatingResponse;
 import com.fh.scms.pojo.Rating;
 import com.fh.scms.pojo.User;
 import com.fh.scms.services.RatingService;
@@ -16,6 +17,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -28,7 +30,7 @@ public class APIRatingController {
 
     @GetMapping
     public ResponseEntity<?> listRatings(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        List<Rating> ratingList = this.ratingService.findAllWithFilter(params);
+        List<RatingResponse> ratingList = this.ratingService.getAllRatingResponse(params);
 
         return ResponseEntity.ok(ratingList);
     }
@@ -36,12 +38,11 @@ public class APIRatingController {
     @GetMapping(path = "/{ratingId}")
     public ResponseEntity<?> getRating(@PathVariable(value = "ratingId") Long id) {
         Rating rating = this.ratingService.findById(id);
-
-        if (rating == null) {
+        if (Optional.ofNullable(rating).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(rating);
+        return ResponseEntity.ok(this.ratingService.getRatingResponse(rating));
     }
 
     @PostMapping(path = "/{ratingId}")
@@ -54,36 +55,32 @@ public class APIRatingController {
         }
 
         Rating rating = this.ratingService.findById(id);
-
-        if (rating == null) {
+        if (Optional.ofNullable(rating).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         User user = this.userService.findByUsername(principal.getName());
-        if (Objects.equals(user.getId(), rating.getUser().getId())) {
-            rating = this.ratingService.update(rating, ratingRequestUpdate);
-
-            return ResponseEntity.ok(rating);
+        if (!Objects.equals(user.getId(), rating.getUser().getId())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Bạn không có quyền sửa đánh giá này"));
         }
 
-        return ResponseEntity.badRequest().body(new MessageResponse("Bạn không có quyền sửa đánh giá này"));
+        rating = this.ratingService.update(rating, ratingRequestUpdate);
+        return ResponseEntity.ok(this.ratingService.getRatingResponse(rating));
     }
 
     @DeleteMapping(path = "/{ratingId}")
     public ResponseEntity<?> deleteRating(Principal principal, @PathVariable(value = "ratingId") Long id) {
         Rating rating = this.ratingService.findById(id);
-
-        if (rating == null) {
+        if (Optional.ofNullable(rating).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         User user = this.userService.findByUsername(principal.getName());
-        if (Objects.equals(user.getId(), rating.getUser().getId())) {
-            this.ratingService.delete(id);
-
-            return ResponseEntity.noContent().build();
+        if (!Objects.equals(user.getId(), rating.getUser().getId())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Bạn không có quyền xóa đánh giá này"));
         }
 
-        return ResponseEntity.badRequest().body(new MessageResponse("Bạn không có quyền xóa đánh giá này"));
+        this.ratingService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

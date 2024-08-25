@@ -1,17 +1,23 @@
 package com.fh.scms.repository;
 
+import com.fh.scms.dto.statistics.InventoryStatusReportEntry;
+import com.fh.scms.dto.statistics.ProductStatusReportEntry;
+import com.fh.scms.dto.statistics.SupplierPerformanceReport;
+import com.fh.scms.dto.statistics.WarehouseStatusReportEntry;
+
 import java.util.List;
-import java.util.Map;
 
 public interface _StatisticsRepository {
 
-    List<Object[]> getWarehouseReport();
+    List<Object[]> generateSupplierPerformanceReport(Long supplierId, Integer year);
 
-    List<Object[]> getInventoryReport(Long warehouseId);
+    List<WarehouseStatusReportEntry> generateWarehouseStatusReport();
 
-    List<Object[]> statisticsProductsByExpiryDate(Long inventoryId);
+    List<InventoryStatusReportEntry> generateInventoryStatusReport(Long warehouseId);
 
-    List<Object[]> findProductsExpiringSoon(Long inventoryId);
+    List<Object[]> generateStatisticsProductsByExpiryDate(Long inventoryId);
 
-    List<Object[]> findExpiredProducts(Long inventoryId);
+    List<ProductStatusReportEntry> findProductsExpiringSoon(Long inventoryId);
+
+    List<ProductStatusReportEntry> findExpiredProducts(Long inventoryId);
 }

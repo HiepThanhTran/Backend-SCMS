@@ -1,6 +1,8 @@
 package com.fh.scms.repository.implement;
 
 import com.fh.scms.pojo.Customer;
+import com.fh.scms.pojo.Supplier;
+import com.fh.scms.pojo.User;
 import com.fh.scms.repository.CustomerRepository;
 import com.fh.scms.util.Pagination;
 import org.hibernate.Session;
@@ -34,6 +36,24 @@ public class CustomerRepositoryImplement implements CustomerRepository {
         Session session = this.getCurrentSession();
 
         return session.get(Customer.class, id);
+    }
+
+    @Override
+    public Customer findByUser(User user) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Customer> criteria = builder.createQuery(Customer.class);
+        Root<Customer> root = criteria.from(Customer.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("user").get("id"), user.getId()));
+            Query<Customer> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting supplier by user", e);
+            return null;
+        }
     }
 
     @Override

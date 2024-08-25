@@ -17,13 +17,11 @@ public interface SupplierService {
 
     SupplierDTO updateProfileSupplier(String username, SupplierDTO supplierDTO);
 
+    List<Rating> getRatingsForSupplier(Long supplierId);
+
     Rating addRatingForSupplier(String username, Long supplierId, RatingRequestCreate ratingRequestCreate);
 
     Supplier findById(Long id);
-
-    Supplier findByUser(User user);
-
-    Supplier findByPhone(String phone);
 
     void save(Supplier supplier);
 

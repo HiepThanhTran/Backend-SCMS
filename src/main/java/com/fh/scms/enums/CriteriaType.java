@@ -13,7 +13,7 @@ public enum CriteriaType {
 
     COST("Giá cả"),
     QUALITY("Chất lượng"),
-    TIMELY_DELIVERY("Giao hàng đúng hạn");
+    TIMELINESS("Giao hàng đúng hạn");
 
     private final String displayName;
 

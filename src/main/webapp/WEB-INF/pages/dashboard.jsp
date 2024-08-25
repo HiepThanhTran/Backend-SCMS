@@ -9,7 +9,7 @@
 </div>
 
 <div class="row mt-5">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="card h-100 text-center">
             <div class="card-body">
                 <h5 class="card-title">Thống kê</h5>
@@ -18,16 +18,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card h-100 text-center">
-            <div class="card-body">
-                <h5 class="card-title">Phân tích</h5>
-                <p class="card-text">Phân tích các sự thay đổi trong hệ thống.</p>
-                <a href="<c:url value="admin/analytics"/>" class="btn btn-outline-primary">Xem chi tiết</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="card h-100 text-center">
             <div class="card-body">
                 <h5 class="card-title">Cấu hình hệ thống</h5>

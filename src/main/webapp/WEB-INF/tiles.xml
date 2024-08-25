@@ -35,14 +35,26 @@
 
     <!--Thống kê-->
     <definition name="statistics" extends="baseNonSidebar">
-        <put-attribute name="title" value="Thống kế"/>
+        <put-attribute name="title" value="Thống kê"/>
         <put-attribute name="content" value="/WEB-INF/pages/statistics.jsp"/>
     </definition>
 
-    <!--Phân tích-->
-    <definition name="analytics" extends="baseNonSidebar">
-        <put-attribute name="title" value="Phân tích và báo cáo"/>
-        <put-attribute name="content" value="/WEB-INF/pages/analytics.jsp"/>
+    <!--Thống kê hiệu suất nhà cung cấp-->
+    <definition name="supplier_performance" extends="baseNonSidebar">
+        <put-attribute name="title" value="Thống kê hiệu suất nhà cung cấp"/>
+        <put-attribute name="content" value="/WEB-INF/pages/supplier_performance.jsp"/>
+    </definition>
+
+    <!--Thống kê doanh thu-->
+    <definition name="statistics_revenue" extends="baseNonSidebar">
+        <put-attribute name="title" value="Thống kê doanh thu"/>
+        <put-attribute name="content" value="/WEB-INF/pages/statistics_revenue.jsp"/>
+    </definition>
+
+    <!--Báo cáo tồn kho-->
+    <definition name="inventory_status" extends="baseNonSidebar">
+        <put-attribute name="title" value="Báo cáo tồn kho"/>
+        <put-attribute name="content" value="/WEB-INF/pages/inventory_status.jsp"/>
     </definition>
 
     <!--Category-->

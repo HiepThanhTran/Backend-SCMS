@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -48,10 +49,7 @@ public class UserServiceImplement implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.userRepository.findByUsername(username);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("Invalid User!");
-        }
+        Optional.ofNullable(user).orElseThrow(() -> new UsernameNotFoundException("Invalid User!"));
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(user.getUserRole().name()));
@@ -89,14 +87,14 @@ public class UserServiceImplement implements UserService {
     @Override
     public UserResponse registerUser(@NotNull UserRequestRegister userRequestRegister) {
         User user = this.userRepository.findByUsername(userRequestRegister.getUsername());
-        if (user != null) {
+        Optional.ofNullable(user).ifPresent(u -> {
             throw new IllegalArgumentException("Tên đăng nhập đã tồn tại");
-        }
+        });
 
         user = this.userRepository.findByEmail(userRequestRegister.getEmail());
-        if (user != null) {
+        Optional.ofNullable(user).ifPresent(u -> {
             throw new IllegalArgumentException("Email đã được liên kết đến tài khoản khác");
-        }
+        });
 
         String avatarUrl = null;
         if (userRequestRegister.getAvatar() != null && !userRequestRegister.getAvatar().isEmpty()) {
@@ -118,9 +116,9 @@ public class UserServiceImplement implements UserService {
             case ROLE_CUSTOMER:
                 Customer customer;
                 customer = this.customerRepository.findByPhone(userRequestRegister.getPhone());
-                if (customer != null) {
+                Optional.ofNullable(customer).ifPresent(c -> {
                     throw new IllegalArgumentException("Số điện thoại đã được liên kết đến tài khoản khác");
-                }
+                });
 
                 customer = Customer.builder()
                         .firstName(userRequestRegister.getFirstName())
@@ -136,9 +134,9 @@ public class UserServiceImplement implements UserService {
                 break;
             case ROLE_SUPPLIER:
                 Supplier supplier = this.supplierRepository.findByPhone(userRequestRegister.getPhone());
-                if (supplier != null) {
+                Optional.ofNullable(supplier).ifPresent(s -> {
                     throw new IllegalArgumentException("Số điện thoại đã được liên kết đến tài khoản khác");
-                }
+                });
 
                 supplier = Supplier.builder()
                         .name(userRequestRegister.getName())

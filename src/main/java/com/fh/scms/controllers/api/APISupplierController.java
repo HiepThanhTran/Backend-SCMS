@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -35,13 +36,11 @@ public class APISupplierController {
     @GetMapping(path = "/{supplierId}")
     public ResponseEntity<?> getSupplier(@PathVariable(value = "supplierId") Long id) {
         Supplier supplier = this.supplierService.findById(id);
-
-        if (supplier == null) {
+        if (Optional.ofNullable(supplier).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         SupplierDTO supplierDTO = this.supplierService.getSupplierResponse(supplier);
-
         return ResponseEntity.ok(supplierDTO);
     }
 
@@ -67,6 +66,13 @@ public class APISupplierController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
+    }
+
+    @GetMapping(path = "/{supplierId}/ratings")
+    public ResponseEntity<?> getRatingsForSupplier(@PathVariable(value = "supplierId") Long supplierId) {
+        List<Rating> ratings = this.supplierService.getRatingsForSupplier(supplierId);
+
+        return ResponseEntity.ok(ratings);
     }
 
     @PostMapping(path = "/{supplierId}/rating/add")

@@ -2,60 +2,38 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<h1 class="text-center text-primary mt-1">THỐNG KÊ DOANH THU</h1>
+<%--<div class="jumbotron bg-light p-5 rounded">--%>
+<%--    <h1 class="display-4">Chào mừng đến với SCMS ADMIN</h1>--%>
+<%--    <p class="lead">Trang quản lý dành cho quản trị viên.</p>--%>
+<%--    <hr class="my-4">--%>
+<%--</div>--%>
 
-<div class="row">
-    <div class="col-md-5 col-12">
-        <table class="table">
-            <tr>
-                <th>Id</th>
-                <th>Tên sản phẩm</th>
-                <th>Tổng doanh thu</th>
-            </tr>
-            <c:forEach items="${revenues}" var="r">
-                <tr>
-                    <td>${r[0]}</td>
-                    <td>${r[1]}</td>
-                    <td>${String.format("%,d", r[2])} VNĐ</td>
-                </tr>
-            </c:forEach>
-        </table>
+<div class="row mt-4 justify-content-center">
+    <div class="col-md-6">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <h5 class="card-title">Thống kê hiệu suất các nhà cung cấp</h5>
+                <p class="card-text">Xem thống kê về hiệu suất của nhà cung cấp dựa trên các chỉ số như chất lượng, giao hàng đúng hạn và giá cả.</p>
+                <a href="<c:url value="/admin/statistics/supplier/performance"/>" class="btn btn-outline-primary">Xem chi tiết</a>
+            </div>
+        </div>
     </div>
-    <div class="col-md-7 col-12">
-        <canvas id="myChart"></canvas>
+    <div class="col-md-6">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <h5 class="card-title">Thống kê doanh thu các đơn hàng</h5>
+                <p class="card-text">Xem thống kê về doanh thu của các đơn hàng theo tháng, năm, hoặc quý</p>
+                <a href="<c:url value="/admin/statistics/revenue"/>" class="btn btn-outline-primary">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mt-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <h5 class="card-title">Báo cáo tình trạng tồn kho</h5>
+                <p class="card-text">Báo cáo chi tiết về tình trạng tồn kho, bao gồm mức tồn kho hiện tại, hàng hóa sắp hết hạn và hàng hóa hết hạn.</p>
+                <a href="<c:url value="/admin/report/inventory"/>" class="btn btn-outline-primary">Xem chi tiết</a>
+            </div>
+        </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    let labels = [];
-    let data = [];
-    <c:forEach items="${revenues}" var="r">
-    labels.push('${r[1]}');
-    data.push(${r[2]});
-    </c:forEach>
-
-    window.onload = function () {
-        const ctx = document.getElementById('myChart');
-
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '# Doanh thu',
-                    data: data,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-    }
-</script>

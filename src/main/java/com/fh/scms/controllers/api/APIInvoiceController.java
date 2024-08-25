@@ -13,6 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -26,8 +27,7 @@ public class APIInvoiceController {
     @GetMapping
     public ResponseEntity<?> listInvoices(Principal principal, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         User user = this.userService.findByUsername(principal.getName());
-
-        if (user == null) {
+        if (Optional.ofNullable(user).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 

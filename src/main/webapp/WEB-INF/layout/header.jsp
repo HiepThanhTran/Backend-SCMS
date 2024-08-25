@@ -17,9 +17,6 @@
                     <li class="nav-item navbar-custome__menu--item">
                         <a class="nav-link" href="<c:url value="/admin/statistics" />">Thống kê</a>
                     </li>
-                    <li class="nav-item navbar-custome__menu--item">
-                        <a class="nav-link" href="<c:url value="/admin/analytics" />">Phân tích & báo cáo</a>
-                    </li>
                 </s:authorize>
                 <s:authorize access="!isAuthenticated()">
                     <li class="nav-item ms-auto">

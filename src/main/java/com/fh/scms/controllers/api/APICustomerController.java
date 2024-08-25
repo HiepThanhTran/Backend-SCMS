@@ -1,9 +1,9 @@
 package com.fh.scms.controllers.api;
 
 import com.fh.scms.dto.MessageResponse;
-import com.fh.scms.dto.supplier.SupplierDTO;
-import com.fh.scms.pojo.Supplier;
-import com.fh.scms.services.SupplierService;
+import com.fh.scms.dto.customer.CustomerDTO;
+import com.fh.scms.pojo.Customer;
+import com.fh.scms.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -20,37 +21,35 @@ import java.util.Map;
 @RequestMapping(path = "/api/customers", produces = "application/json; charset=UTF-8")
 public class APICustomerController {
 
-    private final SupplierService supplierService;
+    private final CustomerService customerService;
 
     @GetMapping
-    public ResponseEntity<?> listSuppliers(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        List<Supplier> suppliers = this.supplierService.findAllWithFilter(params);
+    public ResponseEntity<?> listCustomer(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
+        List<Customer> customers = this.customerService.findAllWithFilter(params);
 
-        return ResponseEntity.ok(suppliers);
+        return ResponseEntity.ok(customers);
     }
 
-    @GetMapping(path = "/{supplierId}")
-    public ResponseEntity<?> getSupplier(@PathVariable(value = "supplierId") Long id) {
-        Supplier supplier = this.supplierService.findById(id);
-
-        if (supplier == null) {
+    @GetMapping(path = "/{customerId}")
+    public ResponseEntity<?> getCustomer(@PathVariable(value = "customerId") Long id) {
+        Customer customer = this.customerService.findById(id);
+        if (Optional.ofNullable(customer).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        SupplierDTO supplierDTO = this.supplierService.getSupplierResponse(supplier);
-
-        return ResponseEntity.ok(supplierDTO);
+        CustomerDTO customerDTO = this.customerService.getCustomerResponse(customer);
+        return ResponseEntity.ok(customerDTO);
     }
 
     @GetMapping(path = "/profile")
-    public ResponseEntity<?> getProfileSupplier(Principal principal) {
-        Supplier supplier = this.supplierService.getProfileSupplier(principal.getName());
+    public ResponseEntity<?> getProfileCustomer(Principal principal) {
+        Customer customer = this.customerService.getProfileCustomer(principal.getName());
 
-        return ResponseEntity.ok(supplier);
+        return ResponseEntity.ok(customer);
     }
 
     @PostMapping(path = "/profile/update")
-    public ResponseEntity<?> updateProfileSupplier(Principal principal, @ModelAttribute @Valid SupplierDTO supplierDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> updateProfileCustomer(Principal principal, @ModelAttribute @Valid CustomerDTO customerDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
 
@@ -58,9 +57,9 @@ public class APICustomerController {
         }
 
         try {
-            SupplierDTO updatedSupplierDTO = this.supplierService.updateProfileSupplier(principal.getName(), supplierDTO);
+            CustomerDTO updatedCustomerDTO = this.customerService.updateProfileCustomer(principal.getName(), customerDTO);
 
-            return ResponseEntity.ok(updatedSupplierDTO);
+            return ResponseEntity.ok(updatedCustomerDTO);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }

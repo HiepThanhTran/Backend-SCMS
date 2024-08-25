@@ -1,11 +1,14 @@
 package com.fh.scms.dto.rating;
 
 import com.fh.scms.enums.CriteriaType;
+import com.fh.scms.pojo.Supplier;
+import com.fh.scms.pojo.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -15,15 +18,17 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RatingRequestCreate {
+public class RatingResponse {
 
-    @NotNull(message = "{rating.notNull}")
-    @DecimalMin(value = "1.00", message = "{rating.min}")
-    @DecimalMax(value = "5.00", message = "{rating.max}")
-    private BigDecimal rating = BigDecimal.valueOf(5);
+    private Long id;
+
+    private BigDecimal rating;
 
     private String comment;
 
-    @NotNull(message = "{rating.criteria.notNull}")
-    private CriteriaType criteria;
+    private String criteria;
+
+    private Supplier supplier;
+
+    private User user;
 }

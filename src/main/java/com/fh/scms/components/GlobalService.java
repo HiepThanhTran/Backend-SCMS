@@ -4,10 +4,13 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fh.scms.dto.pt.PaymentTermsRequest;
 import com.fh.scms.dto.user.UserRequestRegister;
+import com.fh.scms.enums.CriteriaType;
 import com.fh.scms.enums.PaymentTermType;
 import com.fh.scms.enums.UserRole;
 import com.fh.scms.pojo.*;
 import com.fh.scms.repository.*;
+import com.fh.scms.services.RatingService;
+import com.fh.scms.services.SupplierService;
 import com.fh.scms.services.UserService;
 import org.hibernate.Session;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -49,6 +54,12 @@ public class GlobalService {
     private WarehouseRepository warehouseRepository;
     @Autowired
     private InventoryRepository inventoryRepository;
+    @Autowired
+    private SupplierService supplierService;
+    @Autowired
+    private RatingService ratingService;
+    @Autowired
+    private SupplierCostingRepository supplierCostingRepository;
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
@@ -65,7 +76,7 @@ public class GlobalService {
     }
 
     public Boolean isFirstRun() {
-        return this.getCurrentSession().get(_System.class, 1L) != null;
+        return this.getCurrentSession().get(_System.class, 1L) == null;
     }
 
     public void saveFirstRun() {
@@ -142,60 +153,18 @@ public class GlobalService {
     }
 
     public void createUser() {
-        List<User> users = this.userService.findAllWithFilter(null);
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("admin@scm.com")
+                .username("adminscm")
+                .password("admin@123")
+                .userRole(UserRole.ROLE_ADMIN)
+                .build());
 
-        if (users.isEmpty()) {
-            this.userService.registerUser(UserRequestRegister.builder()
-                    .email("admin@scm.com")
-                    .username("adminscm")
-                    .password("admin@123")
-                    .userRole(UserRole.ROLE_ADMIN)
-                    .build());
+        this.createCustomer();
 
-            this.userService.registerUser(UserRequestRegister.builder()
-                    .email("customer1@scm.com")
-                    .username("customer1")
-                    .password("user@123")
-                    .userRole(UserRole.ROLE_CUSTOMER)
-                    .firstName("CUSTOMER 1")
-                    .middleName("M")
-                    .lastName("L")
-                    .address("TPHCM")
-                    .phone("0123456789")
-                    .build());
+        this.createSupplier();
 
-            this.userService.registerUser(UserRequestRegister.builder()
-                    .email("supplier1@scm.com")
-                    .username("supplier1")
-                    .password("user@123")
-                    .userRole(UserRole.ROLE_SUPPLIER)
-                    .name("SUPPLIER 1")
-                    .address("TPHCM")
-                    .phone("1234567890")
-                    .contactInfo("1234567890")
-                    .paymentTermsSet(Set.of(
-                            PaymentTermsRequest.builder()
-                                    .discountDays(10)
-                                    .discountPercentage(BigDecimal.valueOf(0.03))
-                                    .type(PaymentTermType.COD)
-                                    .build(),
-                            PaymentTermsRequest.builder()
-                                    .discountDays(20)
-                                    .discountPercentage(BigDecimal.valueOf(0.05))
-                                    .type(PaymentTermType.PREPAID)
-                                    .build()
-                    ))
-                    .build());
-
-            this.userService.registerUser(UserRequestRegister.builder()
-                    .email("shipper1@scm.com")
-                    .username("shipper1")
-                    .password("user@123")
-                    .userRole(UserRole.ROLE_SHIPPER)
-                    .name("SHIPPER 1")
-                    .contactInfo("0987654321")
-                    .build());
-        }
+        this.createShipper();
     }
 
     public void createProduct() {
@@ -206,14 +175,17 @@ public class GlobalService {
         List<Category> categories = this.categoryRepository.findAllWithFilter(null);
         List<Tag> tags = this.tagRepository.findAllWithFilter(null);
 
-        // Tạo sản phẩm hết hạn
-        this.createProductsWithExpiryDates(count, random, -30, units, categories, tags);
 
-        // Tạo sản phẩm sắp hết hạn
-        this.createProductsWithExpiryDates(count, random, 15, units, categories, tags);
+        categories.forEach(category -> {
+            // Tạo sản phẩm hết hạn
+            this.createProductsWithExpiryDates(count, random, -30, category, units, tags);
 
-        // Tạo sản phẩm còn hạn
-        this.createProductsWithExpiryDates(count, random, 60, units, categories, tags);
+            // Tạo sản phẩm sắp hết hạn
+            this.createProductsWithExpiryDates(count, random, 15, category, units, tags);
+
+            // Tạo sản phẩm còn hạn
+            this.createProductsWithExpiryDates(count, random, 60, category, units, tags);
+        });
     }
 
     public void createInventory() {
@@ -223,8 +195,7 @@ public class GlobalService {
         AtomicInteger count = new AtomicInteger(1);
 
         warehouses.forEach(warehouse -> {
-            // Tạo nhiều Inventory cho từng Warehouse
-            IntStream.range(0, 10).forEach(index -> { // Ví dụ: tạo 10 Inventory cho mỗi warehouse
+            IntStream.range(0, 10).forEach(index -> {
                 Inventory inventory = Inventory.builder()
                         .name("Inventory " + count)
                         .warehouse(warehouse)
@@ -252,13 +223,191 @@ public class GlobalService {
         });
     }
 
-    private void createProductsWithExpiryDates(AtomicInteger count, Random random, int daysFromNow,
-                                               List<Unit> units, @NotNull List<Category> categories, List<Tag> tags) {
-        categories.forEach(category -> {
+    public void createRating() {
+        List<CriteriaType> criteriaTypes = new ArrayList<>(List.of(CriteriaType.values()));
+        List<Supplier> suppliers = this.supplierService.findAllWithFilter(null);
+        List<User> users = this.userService.findAllWithFilter(null);
+        Random random = new Random();
+        AtomicInteger count = new AtomicInteger(1);
+
+        suppliers.forEach(supplier -> {
+            IntStream.range(0, 100).forEach(index -> {
+                Collections.shuffle(criteriaTypes, random);
+                List<User> userList = users.stream()
+                        .filter(u -> u.getSupplier() == null || !u.getSupplier().getId().equals(supplier.getId()))
+                        .collect(Collectors.toList());
+                Collections.shuffle(userList, random);
+
+                Rating rating = Rating.builder()
+                        .rating(BigDecimal.valueOf(1 + (random.nextDouble() * (5 - 1))))
+                        .comment("Rating " + count + " for " + supplier.getName())
+                        .user(userList.get(0))
+                        .supplier(supplier)
+                        .criteria(criteriaTypes.get(0))
+                        .build();
+                rating.setCreatedAt(this.getRandomDateTimeInYear());
+
+                this.ratingService.save(rating);
+                count.getAndIncrement();
+            });
+        });
+    }
+
+    private void createCustomer() {
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("customer1@scm.com")
+                .username("customer1")
+                .password("user@123")
+                .userRole(UserRole.ROLE_CUSTOMER)
+                .firstName("CUSTOMER 1")
+                .middleName("M")
+                .lastName("L")
+                .address("TPHCM")
+                .phone("0123456789")
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("customer2@scm.com")
+                .username("customer2")
+                .password("user@123")
+                .userRole(UserRole.ROLE_CUSTOMER)
+                .firstName("CUSTOMER 2")
+                .middleName("M")
+                .lastName("L")
+                .address("TPHCM")
+                .phone("9872635196")
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("customer3@scm.com")
+                .username("customer3")
+                .password("user@123")
+                .userRole(UserRole.ROLE_CUSTOMER)
+                .firstName("CUSTOMER 3")
+                .middleName("M")
+                .lastName("L")
+                .address("TPHCM")
+                .phone("2781764019")
+                .build());
+    }
+
+    private void createSupplier() {
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("supplier1@scm.com")
+                .username("supplier1")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SUPPLIER)
+                .name("SUPPLIER 1")
+                .address("TPHCM")
+                .phone("1234567890")
+                .contactInfo("1234567890")
+                .paymentTermsSet(Set.of(
+                        PaymentTermsRequest.builder()
+                                .discountDays(10)
+                                .discountPercentage(BigDecimal.valueOf(0.03))
+                                .type(PaymentTermType.COD)
+                                .build(),
+                        PaymentTermsRequest.builder()
+                                .discountDays(20)
+                                .discountPercentage(BigDecimal.valueOf(0.05))
+                                .type(PaymentTermType.PREPAID)
+                                .build()
+                ))
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("supplier2@scm.com")
+                .username("supplier2")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SUPPLIER)
+                .name("SUPPLIER 2")
+                .address("TPHCM")
+                .phone("5982716231")
+                .contactInfo("5982716231")
+                .paymentTermsSet(Set.of(
+                        PaymentTermsRequest.builder()
+                                .discountDays(10)
+                                .discountPercentage(BigDecimal.valueOf(0.03))
+                                .type(PaymentTermType.COD)
+                                .build(),
+                        PaymentTermsRequest.builder()
+                                .discountDays(20)
+                                .discountPercentage(BigDecimal.valueOf(0.05))
+                                .type(PaymentTermType.PREPAID)
+                                .build()
+                ))
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("supplier3@scm.com")
+                .username("supplier3")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SUPPLIER)
+                .name("SUPPLIER 3")
+                .address("TPHCM")
+                .phone("6782910498")
+                .contactInfo("6782910498")
+                .paymentTermsSet(Set.of(
+                        PaymentTermsRequest.builder()
+                                .discountDays(10)
+                                .discountPercentage(BigDecimal.valueOf(0.03))
+                                .type(PaymentTermType.COD)
+                                .build(),
+                        PaymentTermsRequest.builder()
+                                .discountDays(20)
+                                .discountPercentage(BigDecimal.valueOf(0.05))
+                                .type(PaymentTermType.PREPAID)
+                                .build()
+                ))
+                .build());
+    }
+
+    private void createShipper() {
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("shipper1@scm.com")
+                .username("shipper1")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SHIPPER)
+                .name("SHIPPER 1")
+                .contactInfo("0987654321")
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("shipper2@scm.com")
+                .username("shipper2")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SHIPPER)
+                .name("SHIPPER 2")
+                .contactInfo("8239184751")
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("shipper3@scm.com")
+                .username("shipper3")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SHIPPER)
+                .name("SHIPPER 3")
+                .contactInfo("2617384928")
+                .build());
+    }
+
+    private @NotNull LocalDateTime getRandomDateTimeInYear() {
+        int randomMonth = ThreadLocalRandom.current().nextInt(1, 13);
+
+        LocalDate start = LocalDate.of(LocalDate.now().getYear(), randomMonth, 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+
+        long randomDay = ThreadLocalRandom.current().nextLong(start.toEpochDay(), end.toEpochDay() + 1);
+        LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
+
+        // Thêm thời gian ngẫu nhiên trong ngày
+        int randomHour = ThreadLocalRandom.current().nextInt(0, 24);
+        int randomMinute = ThreadLocalRandom.current().nextInt(0, 60);
+        int randomSecond = ThreadLocalRandom.current().nextInt(0, 60);
+
+        return randomDate.atTime(randomHour, randomMinute, randomSecond);
+    }
+
+    private void createProductsWithExpiryDates(AtomicInteger count, Random random, int daysFromNow, Category category, List<Unit> units, List<Tag> tags) {
+        List<Supplier> suppliers = this.supplierService.findAllWithFilter(null);
+
+        suppliers.forEach(supplier -> {
             for (int i = 0; i < 10; i++) {
                 BigDecimal price = BigDecimal.valueOf(50000 + (random.nextDouble() * (1000000 - 50000)));
-
-                String description = "Product " + count + " " + category.getName();
 
                 LocalDate expiryDate = LocalDate.now().plusDays(daysFromNow);
 
@@ -273,13 +422,21 @@ public class GlobalService {
                         .name("Product " + count)
                         .price(price)
                         .unit(unit)
-                        .description(description)
+                        .description("Product " + count)
                         .expiryDate(expiryDate)
                         .category(category)
                         .tagSet(randomTags)
                         .build();
-
                 this.productRepository.save(product);
+
+                SupplierCosting supplierCosting = SupplierCosting.builder()
+                        .unitPrice(price)
+                        .shippingCost(BigDecimal.valueOf(1000 + (random.nextDouble() * (5000 - 1000))))
+                        .product(product)
+                        .supplier(supplier)
+                        .build();
+                this.supplierCostingRepository.save(supplierCosting);
+
                 count.getAndIncrement();
             }
         });

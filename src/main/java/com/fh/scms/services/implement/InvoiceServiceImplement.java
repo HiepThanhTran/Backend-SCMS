@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,9 +48,7 @@ public class InvoiceServiceImplement implements InvoiceService {
     public void payInvoice(Long invoiceId) {
         Invoice invoice = this.invoiceRepository.findById(invoiceId);
 
-        if (invoice == null) {
-            throw new EntityNotFoundException("Không tìm thấy hóa đơn");
-        }
+        Optional.ofNullable(invoice).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy hóa đơn"));
 
         if (invoice.getPaid()) {
             throw new IllegalArgumentException("Hóa đơn đã được thanh toán");

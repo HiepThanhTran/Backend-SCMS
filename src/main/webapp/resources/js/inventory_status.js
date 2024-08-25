@@ -1,24 +1,13 @@
-$(document).ready(function () {
+let warehouseName = "";
+let inventoryName = "";
+
+$(document).ready(async () => {
     initializeDataTable('#warehouseTable', [null, null, {searchable: false}, {searchable: false}]);
     initializeDataTable('#inventoryTable', [null, null, {searchable: false}]);
     initializeDataTable('#productExpiringSoonTable', [null, null, {searchable: false}, {searchable: false}, {searchable: false}]);
     initializeDataTable('#productExpiredTable', [null, null, {searchable: false}, {searchable: false}, {searchable: false}]);
-});
 
-const initializeDataTable = (selector, columnSettings) => {
-    $(selector).DataTable({
-        columns: columnSettings,
-        language: {
-            url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
-        },
-    });
-};
-
-let warehouseName = "";
-let inventoryName = "";
-
-document.addEventListener('DOMContentLoaded', async () => {
-    if (warehouseData > 0) {
+    if (warehouseLength > 0) {
         setupTableClickEvent('#warehouseTable', selectWarehouse);
         setupTableClickEvent('#inventoryTable', selectInventory);
 
@@ -29,6 +18,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadInventoryData(warehouseId);
     }
 });
+
+const initializeDataTable = (selector, columnSettings) => {
+    $(selector).DataTable({
+        columns: columnSettings,
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
+        },
+    });
+};
 
 const setupTableClickEvent = (tableSelector, callback) => {
     const table = document.querySelector(tableSelector);
@@ -73,7 +71,7 @@ const scrollToElement = (selector) => {
 
 const loadInventoryData = async (warehouseId) => {
     try {
-        const inventories = await axios.get(`${contextPath}/api/statistics/inventory-report?warehouseId=${warehouseId}`);
+        const inventories = await axios.get(`${contextPath}/api/statistics/inventory/report?warehouseId=${warehouseId}`);
         await updateTable('#inventoryTable', inventories.data, ['inventoryId', 'inventoryName', 'totalQuantity'], true);
         handleProductHeaderDisplay(inventories.data.length > 0, warehouseName, inventoryName);
     } catch (error) {
@@ -89,7 +87,7 @@ const loadProductData = async (inventoryId) => {
 
 const loadProductExpiryDate = async (inventoryId) => {
     try {
-        const response = await axios.get(`${contextPath}/api/statistics/inventory/product/expiry-date?inventoryId=${inventoryId}`);
+        const response = await axios.get(`${contextPath}/api/statistics/inventory/${inventoryId}/report/product/expiry-date`);
         const labels = response.data.map(stat => stat.label);
         const data = response.data.map(stat => stat.value);
 
@@ -101,7 +99,7 @@ const loadProductExpiryDate = async (inventoryId) => {
 
 const loadProductTableData = async (inventoryId, endpoint, tableSelector) => {
     try {
-        const products = await axios.get(`${contextPath}/api/statistics/inventory/product${endpoint}?inventoryId=${inventoryId}`);
+        const products = await axios.get(`${contextPath}/api/statistics/inventory/${inventoryId}/report/product${endpoint}`);
         await updateTable(tableSelector, products.data, ['productId', 'productName', 'productUnit', 'productQuantity', 'expiryDate']);
     } catch (error) {
         console.error(`Error loading product data from ${endpoint}:`, error);

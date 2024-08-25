@@ -20,7 +20,7 @@ public class RatingRequestUpdate {
     @DecimalMax(value = "5.00", message = "{rating.max}")
     private BigDecimal rating;
 
-    private String content;
+    private String comment;
 
     private CriteriaType criteria;
 }

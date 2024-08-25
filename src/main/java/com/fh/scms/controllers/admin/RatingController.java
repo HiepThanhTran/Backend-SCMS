@@ -72,7 +72,7 @@ public class RatingController {
         return "edit_rating";
     }
 
-    @RequestMapping(path = "/edit/{ratingId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(path = "/edit/{ratingId}")
     public String editRating(Model model, @PathVariable(value = "ratingId") Long id,
                              @ModelAttribute(value = "rating") @Valid Rating rating, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

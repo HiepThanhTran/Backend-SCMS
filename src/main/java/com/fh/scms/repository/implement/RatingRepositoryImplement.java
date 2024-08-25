@@ -101,7 +101,7 @@ public class RatingRepositoryImplement implements RatingRepository {
         predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
-            Arrays.asList("fromRating", "toRating", "criteria", "supplierId").forEach(key -> {
+            Arrays.asList("fromRating", "toRating", "criteria", "supplierId", "userId", "year").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
                         case "fromRating":
@@ -111,6 +111,10 @@ public class RatingRepositoryImplement implements RatingRepository {
                         case "toRating":
                             Predicate p2 = builder.lessThanOrEqualTo(root.get("rating"), new BigDecimal(params.get(key)));
                             predicates.add(p2);
+                            break;
+                        case "year":
+                            Predicate p5 = builder.equal(builder.function("YEAR", Integer.class, root.get("createdAt")), Integer.parseInt(params.get(key)));
+                            predicates.add(p5);
                             break;
                         case "criteria":
                             try {
@@ -123,6 +127,10 @@ public class RatingRepositoryImplement implements RatingRepository {
                         case "supplierId":
                             Predicate p3 = builder.equal(root.get("supplier").get("id"), Long.parseLong(params.get(key)));
                             predicates.add(p3);
+                            break;
+                        case "userId":
+                            Predicate p4 = builder.equal(root.get("user").get("id"), Long.parseLong(params.get(key)));
+                            predicates.add(p4);
                             break;
                     }
                 }

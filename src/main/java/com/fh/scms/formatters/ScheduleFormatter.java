@@ -7,7 +7,7 @@ import org.springframework.format.Formatter;
 import java.text.ParseException;
 import java.util.Locale;
 
-public class DeliveryScheduleFormatter implements Formatter<DeliverySchedule> {
+public class ScheduleFormatter implements Formatter<DeliverySchedule> {
 
     @Override
     public @NotNull String print(@NotNull DeliverySchedule deliverySchedule, @NotNull Locale locale) {

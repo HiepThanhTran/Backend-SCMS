@@ -17,10 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import javax.swing.text.html.Option;
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,7 +50,7 @@ public class SupplierServiceImplement implements SupplierService {
     public Supplier getProfileSupplier(String username) {
         User user = this.userRepository.findByUsername(username);
 
-        return this.findByUser(user);
+        return this.supplierRepository.findByUser(user);
     }
 
     @Override
@@ -87,13 +86,18 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
+    public List<Rating> getRatingsForSupplier(Long supplierId) {
+        Supplier supplier = this.supplierRepository.findById(supplierId);
+
+        return new ArrayList<>(supplier.getRatingSet());
+    }
+
+    @Override
     public Rating addRatingForSupplier(String username, Long supplierId, RatingRequestCreate ratingRequestCreate) {
         User user = this.userRepository.findByUsername(username);
         Supplier supplier = this.supplierRepository.findById(supplierId);
 
-        if (supplier == null) {
-            throw new EntityNotFoundException("Nhà cung cấp không tồn tại");
-        }
+        Optional.ofNullable(supplier).orElseThrow(() -> new EntityNotFoundException("Nhà cung cấp không tồn tại"));
 
         if (user.getSupplier() != null && Objects.equals(user.getSupplier().getId(), supplierId)) {
             throw new IllegalArgumentException("Không thể đánh giá chính mình");
@@ -106,13 +110,13 @@ public class SupplierServiceImplement implements SupplierService {
                     .user(user)
                     .supplier(supplier)
                     .rating(ratingRequestCreate.getRating())
-                    .content(ratingRequestCreate.getContent())
+                    .comment(ratingRequestCreate.getComment())
                     .criteria(ratingRequestCreate.getCriteria())
                     .build();
             this.ratingRepository.save(rating);
         } else {
             rating.setRating(ratingRequestCreate.getRating());
-            rating.setContent(ratingRequestCreate.getContent());
+            rating.setComment(ratingRequestCreate.getComment());
             rating.setCriteria(ratingRequestCreate.getCriteria());
             this.ratingRepository.update(rating);
         }
@@ -123,16 +127,6 @@ public class SupplierServiceImplement implements SupplierService {
     @Override
     public Supplier findById(Long id) {
         return this.supplierRepository.findById(id);
-    }
-
-    @Override
-    public Supplier findByUser(User user) {
-        return this.supplierRepository.findByUser(user);
-    }
-
-    @Override
-    public Supplier findByPhone(String phone) {
-        return this.supplierRepository.findByPhone(phone);
     }
 
     @Override

@@ -25,8 +25,8 @@
     </div>
 
     <div class="form-group">
-        <form:label class="form-label" path="content">Nội dung</form:label>
-        <form:input type="text" name="content" path="content" cssClass="form-control"/><br/>
+        <form:label class="form-label" path="comment">Nội dung</form:label>
+        <form:input type="text" name="comment" path="comment" cssClass="form-control"/><br/>
     </div>
 
     <div class="form-group">

@@ -1,19 +1,24 @@
 package com.fh.scms.services;
 
-import com.fh.scms.dto.product.ProductStatisticEntry;
+import com.fh.scms.dto.statistics.InventoryStatusReportEntry;
+import com.fh.scms.dto.statistics.ProductStatusReportEntry;
+import com.fh.scms.dto.statistics.ProductStatisticEntry;
+import com.fh.scms.dto.statistics.SupplierPerformanceReport;
+import com.fh.scms.dto.statistics.WarehouseStatusReportEntry;
 
 import java.util.List;
-import java.util.Map;
 
 public interface _StatisticsService {
 
-    List<Map<String, Object>> getWarehouseReport();
+    SupplierPerformanceReport getSupplierPerformanceReport(Long supplierId, Integer year);
 
-    List<Map<String, Object>> getInventoryReport(Long warehouseId);
+    List<WarehouseStatusReportEntry> getWarehouseStatusReport();
 
-    List<ProductStatisticEntry> statisticsProductsByExpiryDate(Long inventoryId);
+    List<InventoryStatusReportEntry> getInventoryStatusReport(Long warehouseId);
 
-    List<Map<String, Object>> findProductsExpiringSoon(Long inventoryId);
+    List<ProductStatisticEntry> getStatisticsProductsByExpiryDate(Long inventoryId);
 
-    List<Map<String, Object>> findExpiredProducts(Long inventoryId);
+    List<ProductStatusReportEntry> findProductsExpiringSoon(Long inventoryId);
+
+    List<ProductStatusReportEntry> findExpiredProducts(Long inventoryId);
 }

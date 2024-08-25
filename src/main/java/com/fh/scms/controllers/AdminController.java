@@ -1,5 +1,6 @@
 package com.fh.scms.controllers;
 
+import com.fh.scms.services.SupplierService;
 import com.fh.scms.services._StatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -14,11 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AdminController {
 
     private final _StatisticsService statisticsService;
+    private final SupplierService supplierService;
 
     @GetMapping("/login")
     public String login(Model model) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return "login";
         }
@@ -32,14 +34,26 @@ public class AdminController {
     }
 
     @GetMapping(path = "/admin/statistics")
-    public String statisticsReport() {
+    public String statistics() {
         return "statistics";
     }
 
-    @GetMapping(path = "/admin/analytics")
-    public String analyticsReport(Model model) {
-        model.addAttribute("warehouseCapacityReport", this.statisticsService.getWarehouseReport());
+    @GetMapping(path = "/admin/statistics/supplier/performance")
+    public String supplierPerformanceReport(Model model) {
+        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
 
-        return "analytics";
+        return "supplier_performance";
+    }
+
+    @GetMapping(path = "/admin/statistics/revenue")
+    public String statisticsRevenue() {
+        return "statistics_revenue";
+    }
+
+    @GetMapping(path = "/admin/report/inventory")
+    public String inventoryStatusReport(Model model) {
+        model.addAttribute("warehouseCapacityReport", this.statisticsService.getWarehouseStatusReport());
+
+        return "inventory_status";
     }
 }

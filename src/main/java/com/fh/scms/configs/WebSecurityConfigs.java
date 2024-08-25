@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -48,9 +47,7 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(@NotNull HttpSecurity http) throws Exception {
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .and()
-                .authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers("/admin/**").hasRole(UserRole.ROLE_ADMIN.alias())
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().permitAll()
@@ -74,10 +71,13 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
 
     @Bean
     public Cloudinary cloudinary() {
-        return new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", "dtthwldgs",
-                "api_key", "295661242477252",
-                "api_secret", "xKPY2fG-4h1mtZl2_PRvxsSfgtA",
-                "secure", true));
+        return new Cloudinary(
+                ObjectUtils.asMap(
+                        "cloud_name", "dtthwldgs",
+                        "api_key", "295661242477252",
+                        "api_secret", "xKPY2fG-4h1mtZl2_PRvxsSfgtA",
+                        "secure", true
+                )
+        );
     }
 }

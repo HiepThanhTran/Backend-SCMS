@@ -87,7 +87,7 @@
                 </div>
             </form>
 
-            <div class="login100-more" style="background-image: url('<c:url value="/images/bg-02.jpeg"/>');"></div>
+            <div class="login100-more" style="background-image: url('<c:url value="/images/bg-02.png"/>');"></div>
         </div>
     </div>
 </div>

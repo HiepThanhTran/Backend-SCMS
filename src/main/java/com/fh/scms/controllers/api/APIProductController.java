@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin
 @Transactional
@@ -31,13 +32,11 @@ public class APIProductController {
     @GetMapping("/{productId}")
     public ResponseEntity<?> getProduct(@PathVariable(value = "productId") Long productId) {
         Product product = this.productService.findById(productId);
-
-        if (product == null) {
+        if (Optional.ofNullable(product).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         ProductResponseForDetails productResponseForDetails = this.productService.getProductResponseForDetails(product);
-
         return ResponseEntity.ok(productResponseForDetails);
     }
 }

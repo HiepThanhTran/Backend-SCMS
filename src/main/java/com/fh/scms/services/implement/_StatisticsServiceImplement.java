@@ -1,16 +1,15 @@
 package com.fh.scms.services.implement;
 
-import com.fh.scms.dto.product.ProductStatisticEntry;
+import com.fh.scms.dto.statistics.*;
+import com.fh.scms.enums.CriteriaType;
 import com.fh.scms.repository._StatisticsRepository;
 import com.fh.scms.services._StatisticsService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -19,33 +18,63 @@ public class _StatisticsServiceImplement implements _StatisticsService {
     @Autowired
     private _StatisticsRepository statisticsRepository;
 
-    @Override
-    public List<Map<String, Object>> getWarehouseReport() {
-        return this.statisticsRepository.getWarehouseReport().stream().map(result -> {
-            Map<String, Object> data = new LinkedHashMap<>();
-            data.put("warehouseId", result[0]);
-            data.put("warehouseName", result[1]);
-            data.put("warehouseCapacity", result[2]);
-            data.put("remainingCapacity", result[3]);
-            return data;
-        }).collect(Collectors.toList());
+    private static @NotNull List<SupplierPerformanceReport.RatingMonth> getRatingMonths(@NotNull SupplierPerformanceReport supplierReport, CriteriaType criteria) {
+        Map<CriteriaType, List<SupplierPerformanceReport.RatingMonth>> criteriaRatings = supplierReport.getCriteriaRatings();
+        // Nếu chưa có danh sách điểm mỗi tháng cho tiêu chí này thì tạo mới
+        // Có rồi thì trả về danh sách điểm đã có
+        return criteriaRatings.computeIfAbsent(criteria, k -> {
+            List<SupplierPerformanceReport.RatingMonth> list = new ArrayList<>();
+            for (int monthLoop = 1; monthLoop <= 12; monthLoop++) {
+                list.add(new SupplierPerformanceReport.RatingMonth(monthLoop, 0.0));
+            }
+            return list;
+        });
     }
 
     @Override
-    public List<Map<String, Object>> getInventoryReport(Long warehouseId) {
-        return this.statisticsRepository.getInventoryReport(warehouseId).stream().map(result -> {
-            Map<String, Object> data = new LinkedHashMap<>();
-            data.put("inventoryId", result[0]);
-            data.put("inventoryName", result[1]);
-            data.put("totalQuantity", result[2]);
-            return data;
-        }).collect(Collectors.toList());
+    public SupplierPerformanceReport getSupplierPerformanceReport(Long supplierId, Integer year) {
+        List<Object[]> results = this.statisticsRepository.generateSupplierPerformanceReport(supplierId, year);
+        Map<Long, SupplierPerformanceReport> supplierMap = new HashMap<>();
+
+        for (Object[] result : results) {
+            Long id = Long.parseLong(String.valueOf(result[0]));
+            String name = String.valueOf(result[1]);
+            CriteriaType criteria = CriteriaType.valueOf(String.valueOf(result[2]));
+            int month = Integer.parseInt(String.valueOf(result[3]));
+            Double averageRating = Double.parseDouble(String.valueOf(result[4]));
+
+            // Tạo hoặc cập nhật đối tượng SupplierPerformanceReport
+            SupplierPerformanceReport supplierReport = supplierMap.computeIfAbsent(id, k -> {
+                SupplierPerformanceReport report = new SupplierPerformanceReport();
+                report.setSupplierId(id);
+                report.setSupplierName(name);
+                report.setCriteriaRatings(new HashMap<>());
+                return report;
+            });
+
+            // Lấy hoặc tạo danh sách điểm đánh giá cho tiêu chí
+            List<SupplierPerformanceReport.RatingMonth> ratingList = getRatingMonths(supplierReport, criteria);
+
+            // Cập nhật điểm đánh giá cho tháng
+            ratingList.set(month - 1, new SupplierPerformanceReport.RatingMonth(month, averageRating));
+        }
+
+        return supplierMap.getOrDefault(supplierId, null);
     }
 
     @Override
-    public List<ProductStatisticEntry> statisticsProductsByExpiryDate(Long inventoryId) {
-        List<Object[]> results = this.statisticsRepository.statisticsProductsByExpiryDate(inventoryId);
+    public List<WarehouseStatusReportEntry> getWarehouseStatusReport() {
+        return this.statisticsRepository.generateWarehouseStatusReport();
+    }
 
+    @Override
+    public List<InventoryStatusReportEntry> getInventoryStatusReport(Long warehouseId) {
+        return this.statisticsRepository.generateInventoryStatusReport(warehouseId);
+    }
+
+    @Override
+    public List<ProductStatisticEntry> getStatisticsProductsByExpiryDate(Long inventoryId) {
+        List<Object[]> results = this.statisticsRepository.generateStatisticsProductsByExpiryDate(inventoryId);
         if (results.isEmpty()) {
             return Collections.emptyList();
         }
@@ -63,28 +92,12 @@ public class _StatisticsServiceImplement implements _StatisticsService {
     }
 
     @Override
-    public List<Map<String, Object>> findProductsExpiringSoon(Long inventoryId) {
-        return this.statisticsRepository.findProductsExpiringSoon(inventoryId).stream().map(result -> {
-            Map<String, Object> data = new LinkedHashMap<>();
-            data.put("productId", result[0]);
-            data.put("productName", result[1]);
-            data.put("productUnit", result[2]);
-            data.put("productQuantity", result[3]);
-            data.put("expiryDate", DateTimeFormatter.ofPattern("dd-MM-yyyy").format((TemporalAccessor) result[4]));
-            return data;
-        }).collect(Collectors.toList());
+    public List<ProductStatusReportEntry> findProductsExpiringSoon(Long inventoryId) {
+        return this.statisticsRepository.findProductsExpiringSoon(inventoryId);
     }
 
     @Override
-    public List<Map<String, Object>> findExpiredProducts(Long inventoryId) {
-        return this.statisticsRepository.findExpiredProducts(inventoryId).stream().map(result -> {
-            Map<String, Object> data = new LinkedHashMap<>();
-            data.put("productId", result[0]);
-            data.put("productName", result[1]);
-            data.put("productUnit", result[2]);
-            data.put("productQuantity", result[3]);
-            data.put("expiryDate", DateTimeFormatter.ofPattern("dd-MM-yyyy").format((TemporalAccessor) result[4]));
-            return data;
-        }).collect(Collectors.toList());
+    public List<ProductStatusReportEntry> findExpiredProducts(Long inventoryId) {
+        return this.statisticsRepository.findExpiredProducts(inventoryId);
     }
 }

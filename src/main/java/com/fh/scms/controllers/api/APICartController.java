@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -25,26 +26,22 @@ public class APICartController {
     @GetMapping
     public ResponseEntity<?> getCart(Principal principal) {
         User user = this.userService.findByUsername(principal.getName());
-
-        if (user == null) {
+        if (Optional.ofNullable(user).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         Cart cart = this.cartService.findCartByUser(user);
-
         return ResponseEntity.ok(this.cartService.getCartResponse(cart));
     }
 
     @PostMapping(path = "/product/add")
     public ResponseEntity<?> addProductToCart(Principal principal, @RequestBody ProductRequestAddToCart productRequestAddToCart) {
         User user = this.userService.findByUsername(principal.getName());
-
-        if (user == null) {
+        if (Optional.ofNullable(user).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         this.cartService.addProductToCart(this.cartService.findCartByUser(user), productRequestAddToCart);
-
         return ResponseEntity.ok().build();
     }
 
@@ -52,47 +49,43 @@ public class APICartController {
     public ResponseEntity<?> updateProductInCart(Principal principal, @PathVariable(value = "productId") Long productId,
                                                  @RequestBody Map<String, String> params) {
         User user = this.userService.findByUsername(principal.getName());
-
-        if (user == null) {
+        if (Optional.ofNullable(user).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         try {
             this.cartService.updateProductInCart(this.cartService.findCartByUser(user), productId, params);
+
+            return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
-
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(path = "/product/{productId}/delete")
     public ResponseEntity<?> deleteProductFromCart(Principal principal, @PathVariable(value = "productId") Long productId) {
         User user = this.userService.findByUsername(principal.getName());
-
-        if (user == null) {
+        if (Optional.ofNullable(user).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         try {
             this.cartService.deleteProductFromCart(this.cartService.findCartByUser(user), productId);
+
+            return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
-
-        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path = "/product/clear")
     public ResponseEntity<?> clearCart(Principal principal) {
         User user = this.userService.findByUsername(principal.getName());
-
-        if (user == null) {
+        if (Optional.ofNullable(user).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         this.cartService.clearCart(this.cartService.findCartByUser(user));
-
         return ResponseEntity.noContent().build();
     }
 }

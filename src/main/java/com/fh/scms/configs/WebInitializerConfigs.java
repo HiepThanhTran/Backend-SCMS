@@ -14,16 +14,21 @@ public class WebInitializerConfigs {
 
     @PostConstruct
     public void initializer() {
-        if (!this.globalService.isFirstRun()) {
-            this.globalService.createCategory();
-            this.globalService.createTag();
-            this.globalService.createUnit();
-            this.globalService.createTax();
-            this.globalService.createWarehouse();
-            this.globalService.createUser();
-            this.globalService.createProduct();
-            this.globalService.createInventory();
-            this.globalService.saveFirstRun();
-        }
+//        if (!this.globalService.isFirstRun()) {
+//            return;
+//        }
+
+        this.globalService.createCategory();
+        this.globalService.createTag();
+        this.globalService.createUnit();
+        this.globalService.createTax();
+        this.globalService.createWarehouse();
+        this.globalService.createUser();
+        this.globalService.createProduct();
+        this.globalService.createInventory();
+        this.globalService.createRating();
+//        this.globalService.updateRating();
+
+//        this.globalService.saveFirstRun();
     }
 }

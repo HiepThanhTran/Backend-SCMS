@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -36,9 +37,7 @@ public class APIUserController {
         }
 
         if (!this.userService.authenticateUser(userRequestLogin.getUsername(), userRequestLogin.getPassword())) {
-            MessageResponse messageResponse = new MessageResponse("Tài khoản hoặc mật khẩu không đúng");
-
-            return ResponseEntity.badRequest().body(messageResponse);
+            return ResponseEntity.badRequest().body(new MessageResponse("Tài khoản hoặc mật khẩu không đúng"));
         }
 
         String token = this.jwtService.generateTokenLogin(userRequestLogin.getUsername());
@@ -66,13 +65,11 @@ public class APIUserController {
 
     @PostMapping(path = "/confirm")
     public ResponseEntity<?> confirmUser(Principal principal) {
-        if (this.userService.confirmUser(principal.getName())) {
-            return ResponseEntity.ok().build();
+        if (!this.userService.confirmUser(principal.getName())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Xác nhận tài khoản không thành công"));
         }
 
-        MessageResponse messageResponse = new MessageResponse("Xác nhận tài khoản không thành công");
-
-        return ResponseEntity.badRequest().body(messageResponse);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = "/profile")
@@ -102,13 +99,11 @@ public class APIUserController {
     @DeleteMapping(path = "/profile/delete")
     public ResponseEntity<?> deleteUser(Principal principal) {
         User user = this.userService.findByUsername(principal.getName());
-
-        if (user == null) {
+        if (Optional.ofNullable(user).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         this.userService.delete(user.getId());
-
         return ResponseEntity.noContent().build();
     }
 }
