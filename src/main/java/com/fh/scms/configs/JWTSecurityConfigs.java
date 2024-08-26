@@ -17,6 +17,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Order(1)
 @Configuration
@@ -55,6 +58,15 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(@NotNull HttpSecurity http) throws Exception {
+        http.cors().configurationSource(request -> {
+            CorsConfiguration cors = new CorsConfiguration();
+            cors.setAllowedOrigins(List.of("http://localhost:3000"));
+            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+            cors.setAllowedHeaders(List.of("*"));
+            cors.setAllowCredentials(true);
+            return cors;
+        });
+
         http.csrf().ignoringAntMatchers("/api/**");
 
         http.authorizeRequests()
@@ -100,8 +112,8 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
                 // Unit
                 .antMatchers("/api/units/**").permitAll()
                 // User
-                .antMatchers("/api/users/confirm").authenticated()
                 .antMatchers("/api/users/profile/**").authenticated()
+                .antMatchers("/api/users/confirm").authenticated()
                 .antMatchers("/api/users/**").permitAll()
                 .and()
                 .antMatcher("/api/**").httpBasic().authenticationEntryPoint(this.restServicesEntryPoint())

@@ -5,6 +5,8 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -53,7 +55,7 @@ public class JWTService {
         return claims;
     }
 
-    private Date getExpirationDateFromToken(String token) {
+    private @Nullable Date getExpirationDateFromToken(String token) {
         JWTClaimsSet claims = getClaimsFromToken(token);
 
         if (claims == null) {
@@ -77,11 +79,11 @@ public class JWTService {
         return username;
     }
 
-    private Boolean isTokenExpired(String token) {
+    private @NotNull Boolean isTokenExpired(String token) {
         Date expiration = getExpirationDateFromToken(token);
 
         if (expiration == null) {
-            return null;
+            return true;
         }
 
         return expiration.before(new Date());
