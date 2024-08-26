@@ -385,6 +385,10 @@ public class GlobalService {
                 .build());
     }
 
+    private void createOrder() {
+
+    }
+
     private @NotNull LocalDateTime getRandomDateTimeInYear() {
         int randomMonth = ThreadLocalRandom.current().nextInt(1, 13);
 
@@ -394,7 +398,6 @@ public class GlobalService {
         long randomDay = ThreadLocalRandom.current().nextLong(start.toEpochDay(), end.toEpochDay() + 1);
         LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
 
-        // Thêm thời gian ngẫu nhiên trong ngày
         int randomHour = ThreadLocalRandom.current().nextInt(0, 24);
         int randomMinute = ThreadLocalRandom.current().nextInt(0, 60);
         int randomSecond = ThreadLocalRandom.current().nextInt(0, 60);

@@ -27,10 +27,6 @@ public class Order extends _BaseEntity implements Serializable {
     private String orderNumber = String.valueOf(UUID.randomUUID());
 
     @Builder.Default
-    @Column(name = "is_cancel", columnDefinition = "boolean default false")
-    private Boolean cancel = false;
-
-    @Builder.Default
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{order.type.notNull}")
     @Column(name = "order_type", nullable = false)

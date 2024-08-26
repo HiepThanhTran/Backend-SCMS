@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -58,7 +59,9 @@ public class APICartController {
 
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
+
+            return ResponseEntity.badRequest().body(errorMessages);
         }
     }
 
@@ -74,7 +77,9 @@ public class APICartController {
 
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
+
+            return ResponseEntity.badRequest().body(errorMessages);
         }
     }
 

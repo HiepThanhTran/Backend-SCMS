@@ -48,7 +48,9 @@ public class APIInvoiceController {
                 return ResponseEntity.notFound().build();
             }
 
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
+
+            return ResponseEntity.badRequest().body(errorMessages);
         }
     }
 }

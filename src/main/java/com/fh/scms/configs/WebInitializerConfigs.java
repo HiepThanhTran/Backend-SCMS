@@ -27,7 +27,7 @@ public class WebInitializerConfigs {
         this.globalService.createProduct();
         this.globalService.createInventory();
         this.globalService.createRating();
-//        this.globalService.updateRating();
+        this.globalService.createOrder();
 
 //        this.globalService.saveFirstRun();
     }

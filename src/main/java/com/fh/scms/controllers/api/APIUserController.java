@@ -37,7 +37,9 @@ public class APIUserController {
         }
 
         if (!this.userService.authenticateUser(userRequestLogin.getUsername(), userRequestLogin.getPassword())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Tài khoản hoặc mật khẩu không đúng"));
+            List<MessageResponse> errorMessages = List.of(new MessageResponse("Tài khoản hoặc mật khẩu không đúng"));
+
+            return ResponseEntity.badRequest().body(errorMessages);
         }
 
         String token = this.jwtService.generateTokenLogin(userRequestLogin.getUsername());
@@ -59,14 +61,18 @@ public class APIUserController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
+
+            return ResponseEntity.badRequest().body(errorMessages);
         }
     }
 
     @PostMapping(path = "/confirm")
     public ResponseEntity<?> confirmUser(Principal principal) {
         if (!this.userService.confirmUser(principal.getName())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Xác nhận tài khoản không thành công"));
+            List<MessageResponse> errorMessages = List.of(new MessageResponse("Xác nhận tài khoản không thành công"));
+
+            return ResponseEntity.badRequest().body(errorMessages);
         }
 
         return ResponseEntity.ok().build();
@@ -92,7 +98,9 @@ public class APIUserController {
 
             return ResponseEntity.ok(userResponse);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
+
+            return ResponseEntity.badRequest().body(errorMessages);
         }
     }
 

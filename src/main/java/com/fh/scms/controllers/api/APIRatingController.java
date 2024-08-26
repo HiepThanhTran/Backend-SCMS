@@ -61,7 +61,9 @@ public class APIRatingController {
 
         User user = this.userService.findByUsername(principal.getName());
         if (!Objects.equals(user.getId(), rating.getUser().getId())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Bạn không có quyền sửa đánh giá này"));
+            List<MessageResponse> errorMessages = List.of(new MessageResponse("Bạn không có quyền sửa đánh giá này"));
+
+            return ResponseEntity.badRequest().body(errorMessages);
         }
 
         rating = this.ratingService.update(rating, ratingRequestUpdate);
@@ -77,7 +79,9 @@ public class APIRatingController {
 
         User user = this.userService.findByUsername(principal.getName());
         if (!Objects.equals(user.getId(), rating.getUser().getId())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Bạn không có quyền xóa đánh giá này"));
+            List<MessageResponse> errorMessages = List.of(new MessageResponse("Bạn không có quyền xóa đánh giá này"));
+
+            return ResponseEntity.badRequest().body(errorMessages);
         }
 
         this.ratingService.delete(id);

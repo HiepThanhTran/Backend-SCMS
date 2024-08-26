@@ -61,7 +61,9 @@ public class APICustomerController {
 
             return ResponseEntity.ok(updatedCustomerDTO);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
+
+            return ResponseEntity.badRequest().body(errorMessages);
         }
     }
 }

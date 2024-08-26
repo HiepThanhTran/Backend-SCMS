@@ -176,7 +176,6 @@ public class OrderServiceImplement implements OrderService {
                 break;
         }
 
-        order.setCancel(true);
         order.setStatus(OrderStatus.CANCELLED);
         this.orderRepository.update(order);
 
