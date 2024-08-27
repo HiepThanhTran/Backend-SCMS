@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<h2 id="warehouseHeader" class="mb-4 text-center text-primary">Báo cáo về tình trạng hiện tại của các nhà kho</h2>
+<h2 id="warehouseHeader" class="mb-4 mt-5 text-center text-primary">Báo cáo về tình trạng hiện tại của các nhà kho</h2>
 <hr>
 <table id="warehouseTable" class="table table-bordered table-hover display nowrap">
     <thead>
@@ -16,7 +16,7 @@
     </thead>
     <tbody>
     <c:forEach items="${warehouseCapacityReport}" var="warehouse" varStatus="loop">
-        <tr data-index="${loop.index}" data-id="${warehouse.warehouseId}">
+        <tr style="cursor: pointer" data-index="${loop.index}" data-id="${warehouse.warehouseId}">
             <td>${warehouse.warehouseId}</td>
             <td>${warehouse.warehouseName}</td>
             <td>${String.format("%,.3f", warehouse.warehouseCapacity)}</td>

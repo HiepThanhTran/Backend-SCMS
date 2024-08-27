@@ -2,7 +2,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<header class="p-3 bg-dark text-white">
+<header class="p-3 bg-dark text-white sticky-top">
     <div class="container-fluid">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a class="navbar-brand navbar-custom__logo" href="<c:url value="/" />">SCMS ADMIN</a>
@@ -39,7 +39,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-danger" href="<c:url value="/logout" />">Đăng xuất</a>
+                        <a class="btn btn-outline-danger" href="<c:url value="/logout" />">Đăng xuất</a>
                     </li>
                 </s:authorize>
             </ul>

@@ -13,7 +13,7 @@
     </title>
 
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon.ico"/>"/>
+    <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon-02.ico"/>"/>
     <!--===============================================================================================-->
     <link href="<c:url value="/vendor/bootstrap/css/bootstrap.min.css"/>" rel="stylesheet">
     <!--===============================================================================================-->

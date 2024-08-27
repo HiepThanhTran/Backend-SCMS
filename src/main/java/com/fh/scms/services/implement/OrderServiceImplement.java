@@ -51,6 +51,8 @@ public class OrderServiceImplement implements OrderService {
 
         for (InventoryDetails details : inventoryDetailsSet) {
             if (details.getQuantity() >= odr.getQuantity()) {
+                System.out.println("details.getQuantity() = " + details.getQuantity());
+                System.out.println("odr.getQuantity() = " + odr.getQuantity());
                return details;
             }
         }
@@ -109,6 +111,7 @@ public class OrderServiceImplement implements OrderService {
                     .tax(tax)
                     .totalAmount(this.calculateTotalAmountWithTax(totalAmount[0], tax))
                     .build();
+            invoice.setCreatedAt(orderRequest.getCreatedAt());
             this.invoiceRepository.save(invoice);
         }
     }

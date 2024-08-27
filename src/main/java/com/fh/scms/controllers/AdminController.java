@@ -33,6 +33,8 @@ public class AdminController {
     @GetMapping(path = "/")
     public String dashBoard(Model model) {
         model.addAttribute("recentOrders", this.orderService.findRecentOrders());
+        model.addAttribute("revenueLast24Hours", this.statisticsService.getRevenueByLast24Hours());
+        model.addAttribute("revenueLastWeek", this.statisticsService.getRevenueByLastWeek());
 
         return "dashboard";
     }

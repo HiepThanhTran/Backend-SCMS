@@ -7,13 +7,25 @@
     <div class="col-md-4 col-12">
         <div style="background: #c37eff" class="card h-100">
             <div class="card-body d-flex justify-content-between align-items-center">
-                <div class="info">
-                    <h3 class="glow">Doanh thu</h3>
-                    <h1 class="glow">---</h1>
+                <div class="info d-flex flex-column justify-content-between h-100">
+                    <div>
+                        <h3 class="glow">Doanh thu</h3>
+                        <fmt:formatNumber value="${revenueLast24Hours.revenue}" type="currency" currencySymbol="₫" groupingUsed="true"
+                                          var="formattedRevenueLast24Hours"/>
+                        <p class="glow"><span class="totalRevenues">${formattedRevenueLast24Hours}</span></p>
+                    </div>
+                    <p style="margin-bottom: 0;" class="text-light">Trong 24 giờ qua</p>
                 </div>
 
                 <div class="progresss">
-                    <canvas style="background: #c37eff" width="120" height="120" id="chart1"></canvas>
+                    <canvas id="chart1"
+                            width="120"
+                            height="120"
+                            style="background: #c37eff"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Dựa trên tổng của tuần vừa qua">
+                    </canvas>
                 </div>
             </div>
         </div>
@@ -21,13 +33,23 @@
     <div class="col-md-4 col-12">
         <div style="background: #ff9d9c" class="card h-100">
             <div class="card-body d-flex justify-content-between align-items-center">
-                <div class="info">
-                    <h3 class="glow">---</h3>
-                    <h1 class="glow">---</h1>
+                <div class="info d-flex flex-column justify-content-between h-100">
+                    <div>
+                        <h3 class="glow">Đơn hàng</h3>
+                        <p class="glow"><span class="totalOrders">${revenueLast24Hours.orderCount}</span> đơn</p>
+                    </div>
+                    <p style="margin-bottom: 0;" class="text-light">Trong 24 giờ qua</p>
                 </div>
 
                 <div class="progresss">
-                    <canvas style="background: #ff9d9c" width="120" height="120" id="chart2"></canvas>
+                    <canvas id="chart2"
+                            width="120"
+                            height="120"
+                            style="background: #ff9d9c"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Dựa trên tổng của tuần vừa qua">
+                    </canvas>
                 </div>
             </div>
         </div>
@@ -35,13 +57,22 @@
     <div class="col-md-4 col-12">
         <div style="background: #ffc96c" class="card h-100">
             <div class="card-body d-flex justify-content-between align-items-center">
-                <div class="info">
-                    <h3 class="glow">---</h3>
-                    <h1 class="glow">---</h1>
+                <div class="info d-flex flex-column justify-content-between h-100">
+                    <div>
+                        <h3 class="glow">Coming soon</h3>
+                        <p class="glow">Coming soon</p>
+                    </div>
+                    <p style="margin-bottom: 0;" class="text-light">Trong 24 giờ qua</p>
                 </div>
 
                 <div class="progresss">
-                    <canvas style="background: #ffc96c" width="120" height="120" id="chart3"></canvas>
+                    <canvas id="chart3"
+                            width="120"
+                            height="120"
+                            style="background: #ffc96c"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Dựa trên tổng của tuần vừa qua"></canvas>
                 </div>
             </div>
         </div>
@@ -81,7 +112,7 @@
             <th>Ngày đặt</th>
             <th>Trạng thái</th>
             <th>Người đặt</th>
-            <th></th>
+            <th>Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -149,7 +180,7 @@
 <script>
     const centerTextInDoughnut = {
         beforeDraw: (chart) => {
-            const { ctx, data } = chart;
+            const {ctx, data} = chart;
             const xCenter = chart.getDatasetMeta(0).data[0].x;
             const yCenter = chart.getDatasetMeta(0).data[0].y;
 
@@ -165,14 +196,14 @@
             ctx.shadowOffsetY = 1;
 
             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.fillText(data.datasets[0].data[0] + "%", xCenter, yCenter);
+            ctx.fillText(Math.round(data.datasets[0].data[0]) + "%", xCenter, yCenter);
 
             ctx.restore();
         },
     };
 
     const generateChart = (ctx, type, data, color) => {
-        new Chart(ctx, {
+        return new Chart(ctx, {
             type: type,
             data: {
                 datasets: [{
@@ -196,11 +227,21 @@
     }
 
     const chart1 = document.getElementById('chart1').getContext('2d')
-    generateChart(ctx = chart1, type = 'doughnut', data = 14, color = "#a64db5")
+    const revenueLast24Hours = '${revenueLast24Hours.revenue}';
+    const revenueLastWeek = '${revenueLastWeek.revenue}';
+    let revenueLast24HoursNum = parseFloat(revenueLast24Hours);
+    const revenueLastWeekNum = parseFloat(revenueLastWeek);
+    let dataChart1 = revenueLast24HoursNum / revenueLastWeekNum * 100;
+    const chart1Instance = generateChart(ctx = chart1, type = 'doughnut', data = dataChart1, color = "#a64db5")
 
     const chart2 = document.getElementById('chart2').getContext('2d')
-    generateChart(ctx = chart2, type = 'doughnut', data = 29, color = "#e67c7b")
+    const orderCountLast24Hours = '${revenueLast24Hours.orderCount}';
+    const orderCountLastWeek = '${revenueLastWeek.orderCount}';
+    let orderCountLast24HoursNum = parseFloat(orderCountLast24Hours);
+    const orderCountLastWeekNum = parseFloat(orderCountLastWeek);
+    let dataChart2 = orderCountLast24HoursNum / orderCountLastWeekNum * 100;
+    const chart2Instance = generateChart(ctx = chart2, type = 'doughnut', data = dataChart2, color = "#e67c7b")
 
     const chart3 = document.getElementById('chart3').getContext('2d')
-    generateChart(ctx = chart3, type = 'doughnut', data = 67, color = "#f1a340")
+    const chart3Instance = generateChart(ctx = chart3, type = 'doughnut', data = 0, color = "#f1a340")
 </script>

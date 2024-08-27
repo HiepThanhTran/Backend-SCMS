@@ -13,6 +13,16 @@ public class _APIStatisticsController {
 
     private final _StatisticsService statisticsService;
 
+    @GetMapping("/revenue/last-24-hours")
+    public ResponseEntity<?> revenueLast24Hours() {
+        return ResponseEntity.ok(this.statisticsService.getRevenueByLast24Hours());
+    }
+
+    @GetMapping("/revenue/last-week")
+    public ResponseEntity<?> revenueLastWeek() {
+        return ResponseEntity.ok(this.statisticsService.getRevenueByLastWeek());
+    }
+
     @GetMapping("/supplier/{supplierId}/performance")
     public ResponseEntity<?> supplierReport(@PathVariable(value = "supplierId") Long supplierId, @RequestParam Integer year) {
         return ResponseEntity.ok(this.statisticsService.getSupplierPerformanceReport(supplierId, year));

@@ -1,6 +1,8 @@
 $(document).ready(async () => {
     $("#supplierPerformanceTable").DataTable({
         columns: [null, null],
+        "pageLength": 5,
+        "lengthMenu": [[5, 10, 15, 20, 25, -1], [5, 10, 15, 20, 25, "Tất cả"]],
         language: {
             url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
         },
@@ -8,6 +10,8 @@ $(document).ready(async () => {
 
     $("#ratingTable").DataTable({
         columns: [null, null, {searchable: false}, null, null],
+        "pageLength": 5,
+        "lengthMenu": [[5, 10, 15, 20, 25, -1], [5, 10, 15, 20, 25, "Tất cả"]],
         language: {
             url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
         },

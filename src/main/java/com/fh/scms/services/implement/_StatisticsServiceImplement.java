@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -29,6 +30,42 @@ public class _StatisticsServiceImplement implements _StatisticsService {
             }
             return list;
         });
+    }
+
+    @Override
+    public Map<String, Object> getRevenueByLast24Hours() {
+        List<Object[]> results = this.statisticsRepository.generateRevenueByLast24Hours();
+        if (results.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Object[] result = results.get(0);
+        BigDecimal revenue = (BigDecimal) result[0];
+        Long orderCount = ((Number) result[1]).longValue();
+
+        Map<String, Object> revenueMap = new HashMap<>();
+        revenueMap.put("revenue", revenue);
+        revenueMap.put("orderCount", orderCount);
+
+        return revenueMap;
+    }
+
+    @Override
+    public Map<String, Object> getRevenueByLastWeek() {
+        List<Object[]> results = this.statisticsRepository.generateRevenueByLastWeek();
+        if (results.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Object[] result = results.get(0);
+        BigDecimal revenue = (BigDecimal) result[0];
+        Long orderCount = ((Number) result[1]).longValue();
+
+        Map<String, Object> revenueMap = new HashMap<>();
+        revenueMap.put("revenue", revenue);
+        revenueMap.put("orderCount", orderCount);
+
+        return revenueMap;
     }
 
     @Override

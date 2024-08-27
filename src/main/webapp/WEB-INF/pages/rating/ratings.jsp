@@ -13,7 +13,7 @@
 
 
 <div class="container mt-4">
-    <table id="table" class="table table-striped">
+    <table id="table" class="table table-striped display nowrap">
         <thead>
         <tr>
             <th>ID</th>

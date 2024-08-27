@@ -251,7 +251,7 @@ public class GlobalService {
                         .supplier(supplier)
                         .criteria(criteriaTypes.get(0))
                         .build();
-                rating.setCreatedAt(this.getRandomDateTimeInYear());
+                rating.setCreatedAt(this.getRandomDateTimeInYear("rating"));
 
                 this.ratingRepository.save(rating);
                 count.getAndIncrement();
@@ -260,21 +260,22 @@ public class GlobalService {
     }
 
     public void createOrder() {
-        List<Product> products = this.productRepository.findAllWithFilter(null);
+        List<InventoryDetails> inventoryDetails = this.inventoryDetailsRepository.findAllWithFilter(null);
         List<User> users = this.userService.findAllWithFilter(null);
         Random random = new Random();
 
         users.forEach(user -> {
             IntStream.range(0, 5).forEach(index -> {
-                Collections.shuffle(products, random);
-                List<Product> randomProducts = products.stream()
+                Collections.shuffle(inventoryDetails, random);
+                List<Product> randomProducts = inventoryDetails.stream()
+                        .map(InventoryDetails::getProduct)
                         .limit(3)
                         .collect(Collectors.toList());
 
                 Set<OrderDetailsRequest> orderDetails = randomProducts.stream()
                         .map(product -> OrderDetailsRequest.builder()
                                 .productId(product.getId())
-                                .quantity(1F)
+                                .quantity(3F)
                                 .unitPrice(product.getPrice())
                                 .build())
                         .collect(Collectors.toSet());
@@ -282,6 +283,7 @@ public class GlobalService {
                 OrderRequest orderRequest = OrderRequest.builder()
                         .type(OrderType.OUTBOUND)
                         .orderDetails(orderDetails)
+                        .createdAt(this.getRandomDateTimeInYear())
                         .build();
 
                 this.orderService.checkout(user, orderRequest);
@@ -422,6 +424,30 @@ public class GlobalService {
     }
 
     private @NotNull LocalDateTime getRandomDateTimeInYear() {
+        // Ngày hiện tại
+        LocalDate today = LocalDate.now();
+
+        // Ngày bắt đầu là ngày một tháng trước
+        LocalDate start = today.minusMonths(1).withDayOfMonth(1);
+
+        // Chuyển đổi các ngày thành số ngày từ epoch để tạo ngày ngẫu nhiên
+        long startEpochDay = start.toEpochDay();
+        long endEpochDay = today.toEpochDay();
+
+        // Tạo một ngày ngẫu nhiên giữa start và end
+        long randomEpochDay = ThreadLocalRandom.current().nextLong(startEpochDay, endEpochDay + 1);
+        LocalDate randomDate = LocalDate.ofEpochDay(randomEpochDay);
+
+        // Tạo giờ, phút và giây ngẫu nhiên
+        int randomHour = ThreadLocalRandom.current().nextInt(0, 24);
+        int randomMinute = ThreadLocalRandom.current().nextInt(0, 60);
+        int randomSecond = ThreadLocalRandom.current().nextInt(0, 60);
+
+        // Trả về LocalDateTime với ngày và thời gian ngẫu nhiên
+        return randomDate.atTime(randomHour, randomMinute, randomSecond);
+    }
+
+    private @NotNull LocalDateTime getRandomDateTimeInYear(String rating) {
         int randomMonth = ThreadLocalRandom.current().nextInt(1, 13);
 
         LocalDate start = LocalDate.of(LocalDate.now().getYear(), randomMonth, 1);

@@ -10,7 +10,7 @@
     <title><tiles:insertAttribute name="title"/></title>
 
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon.ico"/>"/>
+    <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon-02.ico"/>"/>
     <!--===============================================================================================-->
     <%--Box Icons--%>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <tiles:insertAttribute name="footer"/>
+<%--    <tiles:insertAttribute name="footer"/>--%>
 </div>
 
 <tiles:insertAttribute name="preloading"/>

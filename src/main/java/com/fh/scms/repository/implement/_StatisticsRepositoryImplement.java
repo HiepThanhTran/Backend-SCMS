@@ -4,6 +4,7 @@ import com.fh.scms.dto.statistics.InventoryStatusReportEntry;
 import com.fh.scms.dto.statistics.ProductStatusReportEntry;
 import com.fh.scms.dto.statistics.WarehouseStatusReportEntry;
 import com.fh.scms.pojo.*;
+import com.fh.scms.pojo.Order;
 import com.fh.scms.repository._StatisticsRepository;
 import com.fh.scms.util.Constants;
 import org.hibernate.Session;
@@ -33,22 +34,48 @@ public class _StatisticsRepositoryImplement implements _StatisticsRepository {
     }
 
     @Override
-    public BigDecimal generateRevenueByLast24Hours() {
+    public List<Object[]> generateRevenueByLast24Hours() {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<BigDecimal> criteria = builder.createQuery(BigDecimal.class);
+        CriteriaQuery<Object[]> criteria = builder.createQuery(Object[].class);
+
         Root<Invoice> invoiceRoot = criteria.from(Invoice.class);
+        Join<Invoice, Order> invoiceJoin = invoiceRoot.join("order");
 
-        criteria.select(builder.sum(invoiceRoot.get("totalAmount")));
+        criteria.multiselect(
+                builder.coalesce(builder.sum(invoiceRoot.get("totalAmount")), 0),
+                builder.count(invoiceJoin.get("id"))
+        );
         // Lọc theo ngày tạo hóa đơn từ thời điểm 24 giờ trước đến thời điểm hiện tại
-        LocalDateTime twentyFourHoursAgo = LocalDateTime.now().minusHours(24);
-        criteria.where(builder.between(invoiceRoot.get("createdAt"), twentyFourHoursAgo, LocalDateTime.now()));
+        LocalDateTime dateTime24HoursAgo = LocalDateTime.now().minusDays(1);
+        criteria.where(builder.between(invoiceRoot.get("createdAt"), dateTime24HoursAgo, LocalDateTime.now()));
 
-        Query<BigDecimal> query = session.createQuery(criteria);
+        Query<Object[]> query = session.createQuery(criteria);
 
-        return Optional.ofNullable(query.getSingleResult()).orElse(BigDecimal.ZERO);
+        return query.getResultList();
     }
 
+    @Override
+    public List<Object[]> generateRevenueByLastWeek() {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> criteria = builder.createQuery(Object[].class);
+
+        Root<Invoice> invoiceRoot = criteria.from(Invoice.class);
+        Join<Invoice, Order> invoiceJoin = invoiceRoot.join("order");
+
+        criteria.multiselect(
+                builder.coalesce(builder.sum(invoiceRoot.get("totalAmount")), 0),
+                builder.count(invoiceJoin.get("id"))
+        );
+        // Lọc theo ngày tạo hóa đơn từ thời điểm 7 ngày trước đến thời điểm hiện tại
+        LocalDateTime dateTime7DaysAgo = LocalDateTime.now().minusDays(7);
+        criteria.where(builder.between(invoiceRoot.get("createdAt"), dateTime7DaysAgo, LocalDateTime.now()));
+
+        Query<Object[]> query = session.createQuery(criteria);
+
+        return query.getResultList();
+    }
 
     @Override
     public List<Object[]> generateSupplierPerformanceReport(Long supplierId, Integer year) {

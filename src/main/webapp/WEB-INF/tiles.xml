@@ -8,7 +8,7 @@
         <put-attribute name="title" value=""/>
         <put-attribute name="content" value=""/>
         <put-attribute name="header" value="/WEB-INF/layout/header.jsp"/>
-        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>
+<!--        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>-->
         <put-attribute name="preloading" value="/WEB-INF/layout/preloading.jsp"/>
     </definition>
 
@@ -18,7 +18,7 @@
         <put-attribute name="content" value=""/>
         <put-attribute name="sidebar" value="/WEB-INF/layout/sidebar.jsp"/>
         <put-attribute name="header" value="/WEB-INF/layout/header.jsp"/>
-        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>
+<!--        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>-->
         <put-attribute name="preloading" value="/WEB-INF/layout/preloading.jsp"/>
     </definition>
 
@@ -30,7 +30,6 @@
     <!--Dashboard-->
     <definition name="dashboard" extends="baseWithSidebar">
         <put-attribute name="title" value="Dashboard"/>
-        <put-attribute name="footer" value=""/>
         <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
     </definition>
 

@@ -22,6 +22,8 @@ $(document).ready(async () => {
 const initializeDataTable = (selector, columnSettings) => {
     $(selector).DataTable({
         columns: columnSettings,
+        "pageLength": 5,
+        "lengthMenu": [[5, 10, 15, 20, 25, -1], [5, 10, 15, 20, 25, "Tất cả"]],
         language: {
             url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Vietnamese.json"
         },
@@ -113,12 +115,13 @@ const updateTable = async (selector, data, fields, formatQuantity = false) => {
     data.forEach((item, index) => {
         const rowData = fields.map(field => {
             if (formatQuantity && field === 'totalQuantity') {
-                return item[field].toLocaleString('en-US', {minimumFractionDigits: 3, maximumFractionDigits: 3});
+                return item[field].toLocaleString('vi-VN', {minimumFractionDigits: 3, maximumFractionDigits: 3});
             }
             return item[field];
         });
 
         const rowNode = table.row.add(rowData).node();
+        rowNode.style.cursor = "pointer";
         rowNode.setAttribute('data-index', index);
         rowNode.setAttribute('data-id', item[fields[0]]);
     });

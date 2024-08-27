@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface _StatisticsRepository {
 
-    BigDecimal generateRevenueByLast24Hours();
+    List<Object[]> generateRevenueByLast24Hours();
+
+    List<Object[]> generateRevenueByLastWeek();
 
     List<Object[]> generateSupplierPerformanceReport(Long supplierId, Integer year);
 
