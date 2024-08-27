@@ -43,21 +43,19 @@ public class OrderServiceImplement implements OrderService {
     private TaxRepository taxRepository;
 
     private static @NotNull InventoryDetails checkAndGetInventoryDetails(OrderDetailsRequest odr, @NotNull Product product) {
-        InventoryDetails inventoryDetails = null;
-
         Set<InventoryDetails> inventoryDetailsSet = product.getInventoryDetailsSet();
+
+        if (inventoryDetailsSet.isEmpty()) {
+            throw new IllegalArgumentException("Không có hàng trong kho cho sản phẩm: " + product.getName());
+        }
+
         for (InventoryDetails details : inventoryDetailsSet) {
             if (details.getQuantity() >= odr.getQuantity()) {
-                inventoryDetails = details;
-                break;
+               return details;
             }
         }
 
-        // Nếu không có tồn kho nào đủ số lượng sản phẩm thì thông báo lỗi
-        Optional.ofNullable(inventoryDetails)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Số lượng %s không đủ trong kho", product.getName())));
-
-        return inventoryDetails;
+        throw new IllegalArgumentException("Không đủ hàng trong kho cho sản phẩm: " + product.getName());
     }
 
     @Override
@@ -246,6 +244,11 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
+    public List<Order> findRecentOrders() {
+        return this.orderRepository.findRecentOrders();
+    }
+
+    @Override
     public Order findById(Long id) {
         return this.orderRepository.findById(id);
     }
@@ -300,14 +303,16 @@ public class OrderServiceImplement implements OrderService {
             if (odr.getQuantity() > 0) {
                 Product product = this.productService.findById(odr.getProductId());
 
-                // Tìm kiếm và kiểm tra tồn kho nào còn hàng không
-                InventoryDetails inventoryDetails = checkAndGetInventoryDetails(odr, product);
+                Optional.ofNullable(product).ifPresent(p -> {
+                    // Tìm kiếm và kiểm tra tồn kho nào còn hàng không
+                    InventoryDetails inventoryDetails = checkAndGetInventoryDetails(odr, product);
 
-                // Cập nhật lại số lượng tồn kho
-                inventoryDetails.setQuantity(inventoryDetails.getQuantity() - odr.getQuantity());
-                this.inventoryDetailsRepository.update(inventoryDetails);
+                    // Cập nhật lại số lượng tồn kho
+                    inventoryDetails.setQuantity(inventoryDetails.getQuantity() - odr.getQuantity());
+                    this.inventoryDetailsRepository.update(inventoryDetails);
 
-                this.createOrderDetails(order, totalAmount, odr, product, inventoryDetails);
+                    this.createOrderDetails(order, totalAmount, odr, product, inventoryDetails);
+                });
             }
         });
 
@@ -334,7 +339,7 @@ public class OrderServiceImplement implements OrderService {
                     this.inventoryDetailsRepository.save(inventoryDetails);
                 }
 
-                // Có rồi thì cập nhật lại số lượng tồn kho
+                // Cập nhật lại số lượng tồn kho
                 inventoryDetails.setQuantity(inventoryDetails.getQuantity() + odr.getQuantity());
                 this.inventoryDetailsRepository.update(inventoryDetails);
 

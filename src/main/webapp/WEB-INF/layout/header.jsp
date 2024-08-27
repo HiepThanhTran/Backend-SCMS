@@ -2,30 +2,39 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<nav class="navbar navbar-expand-sm navbar-dark navbar-custom">
+<header class="p-3 bg-dark text-white">
     <div class="container-fluid">
-        <a class="navbar-brand navbar-custom__logo" href="<c:url value="/" />">SCMS ADMIN</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav navbar-custome__menu w-100">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a class="navbar-brand navbar-custom__logo" href="<c:url value="/" />">SCMS ADMIN</a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li class="nav-item navbar-custome__menu--item">
-                    <a class="nav-link" href="<c:url value="/" />">Dashboard</a>
+                    <a class="nav-link px-2 text-secondary" href="<c:url value="/" />">Trang chủ</a>
+                </li>
+                <li class="nav-item navbar-custome__menu--item">
+                    <a class="nav-link px-2 text-white" href="<c:url value="/" />">Dashboard</a>
                 </li>
                 <s:authorize access="hasAnyRole('ADMIN')">
                     <li class="nav-item navbar-custome__menu--item">
-                        <a class="nav-link" href="<c:url value="/admin/statistics" />">Thống kê</a>
+                        <a class="nav-link px-2 text-white" href="<c:url value="/admin/statistics" />">Thống kê</a>
                     </li>
                 </s:authorize>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <input id="search-input" type="search" class="form-control form-control-dark" placeholder="Tìm kiếm..." aria-label="Search">
+                <ul id="search-results" class="list-group mt-2" style="display: none;"></ul>
+            </form>
+
+            <ul style="margin-bottom: 0; padding-left: 0" class="text-end d-flex align-items-center">
                 <s:authorize access="!isAuthenticated()">
                     <li class="nav-item ms-auto">
-                        <a class="btn btn-info" href="<c:url value="/login" />">Đăng nhập</a>
+                        <a class="btn btn-outline-light me-2" href="<c:url value="/login" />">Đăng nhập</a>
                     </li>
                 </s:authorize>
                 <s:authorize access="isAuthenticated()">
                     <li class="nav-item me-2 ms-auto">
-                        <a class="nav-link" href="<c:url value="/" />">
+                        <a class="nav-link px-2 text-white" href="<c:url value="/" />">
                             Xin chào <s:authentication property="principal.username"/>!
                         </a>
                     </li>
@@ -36,4 +45,15 @@
             </ul>
         </div>
     </div>
-</nav>
+</header>
+
+<script src="<c:url value="/js/header.js"/>"></script>
+<script>
+    const items = [];
+    <c:forEach items="${entities}" var="entity">
+    items.push({
+        key: '${entity.key}',
+        value: '${entity.value}'
+    })
+    </c:forEach>
+</script>

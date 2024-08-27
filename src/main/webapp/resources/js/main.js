@@ -1,3 +1,9 @@
+$(document).ready(() => {
+    setTimeout(() => {
+        $('#loadingModal').fadeOut('slow');
+    });
+});
+
 const deleteItem = async (endpoint, itemId) => {
     Swal.fire({
         title: 'Bạn có chắc chắn muốn xóa không?',

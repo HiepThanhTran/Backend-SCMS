@@ -2,12 +2,14 @@ package com.fh.scms.repository;
 
 import com.fh.scms.dto.statistics.InventoryStatusReportEntry;
 import com.fh.scms.dto.statistics.ProductStatusReportEntry;
-import com.fh.scms.dto.statistics.SupplierPerformanceReport;
 import com.fh.scms.dto.statistics.WarehouseStatusReportEntry;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface _StatisticsRepository {
+
+    BigDecimal generateRevenueByLast24Hours();
 
     List<Object[]> generateSupplierPerformanceReport(Long supplierId, Integer year);
 

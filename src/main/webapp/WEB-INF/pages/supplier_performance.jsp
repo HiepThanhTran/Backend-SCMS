@@ -15,7 +15,7 @@
 
 <div class="row">
     <div class="col-md-4 col-12">
-        <table id="supplierPerformanceTable" class="table">
+        <table id="supplierPerformanceTable" class="table table-bordered table-hover display nowrap">
             <thead>
             <tr>
                 <th>Id</th>
@@ -41,7 +41,7 @@
 <h2 class="mt-5 text-center text-primary" style="display: none">Danh sách đánh giá của <span id="ratingHeader"></span></h2>
 <div class="row">
     <div class="col-md-12 col-12">
-        <table id="ratingTable" class="table">
+        <table id="ratingTable" class="table table-bordered table-hover display nowrap">
             <thead>
             <tr>
                 <th>Id</th>
@@ -57,10 +57,10 @@
     </div>
 </div>
 
-<script src="<c:url value="/js/supplier_performance.js"/>"></script>
+<script src="<c:url value="/js/yearpicker.js" />"></script>
+<script src="<c:url value="/js/supplier.js"/>"></script>
 <script>
     const supplierPerformanceLength = ${fn:length(suppliers)};
-    const contextPath = "${pageContext.request.contextPath}";
 
     // Khởi tạo biểu đồ với dữ liệu rỗng
     const chartCanvas = document.getElementById('supplierPerformanceChart').getContext('2d');

@@ -26,6 +26,8 @@ public interface OrderService {
 
     void updateOrderStatus(Long orderId, String status);
 
+    List<Order> findRecentOrders();
+
     Order findById(Long id);
 
     void save(Order order);

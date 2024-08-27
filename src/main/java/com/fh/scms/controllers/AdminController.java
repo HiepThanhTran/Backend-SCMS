@@ -1,5 +1,6 @@
 package com.fh.scms.controllers;
 
+import com.fh.scms.services.OrderService;
 import com.fh.scms.services.SupplierService;
 import com.fh.scms.services._StatisticsService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class AdminController {
 
     private final _StatisticsService statisticsService;
     private final SupplierService supplierService;
+    private final OrderService orderService;
 
     @GetMapping("/login")
     public String login(Model model) {
@@ -29,7 +31,9 @@ public class AdminController {
     }
 
     @GetMapping(path = "/")
-    public String dashBoard() {
+    public String dashBoard(Model model) {
+        model.addAttribute("recentOrders", this.orderService.findRecentOrders());
+
         return "dashboard";
     }
 

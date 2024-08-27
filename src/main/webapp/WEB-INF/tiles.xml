@@ -30,6 +30,7 @@
     <!--Dashboard-->
     <definition name="dashboard" extends="baseWithSidebar">
         <put-attribute name="title" value="Dashboard"/>
+        <put-attribute name="footer" value=""/>
         <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
     </definition>
 

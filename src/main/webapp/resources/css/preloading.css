@@ -1,5 +1,5 @@
 .loadingModal {
-    display: none;
+    display: flex;
     position: fixed;
     z-index: 9999;
     left: 0;

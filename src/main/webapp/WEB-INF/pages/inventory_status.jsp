@@ -5,7 +5,7 @@
 
 <h2 id="warehouseHeader" class="mb-4 text-center text-primary">Báo cáo về tình trạng hiện tại của các nhà kho</h2>
 <hr>
-<table id="warehouseTable" class="table table-bordered table-hover display">
+<table id="warehouseTable" class="table table-bordered table-hover display nowrap">
     <thead>
     <tr>
         <th>ID</th>
@@ -38,7 +38,7 @@
 
 <h2 id="inventoryHeader" class="mt-5 mb-4 text-center text-primary">Tình trạng chi tiết của các tồn kho</h2>
 <hr>
-<table id="inventoryTable" class="table table-bordered table-hover display">
+<table id="inventoryTable" class="table table-bordered table-hover display nowrap">
     <thead>
     <tr>
         <th>ID</th>
@@ -61,11 +61,11 @@
 <hr>
 
 <div class="row">
-    <h1 class="text-center text-primary">Các sản phẩm của <span id="productHeader"></span></h1>
+    <h1 class="text-center text-primary">Các sản phẩm của nhà kho <span id="productHeader"></span></h1>
     <div class="col-md-6 col-12">
-        <h2 id="productExpiringSoonHeader" class="mt-5 mb-4"><span class="text-warning bg-secondary p-3 rounded-pill">Sắp hết hạn</span></h2>
+        <h2 id="productExpiringSoonHeader" class="mt-5 mb-4"><span class="text-warning">Sắp hết hạn</span></h2>
         <hr>
-        <table id="productExpiringSoonTable" class="table table-bordered table-hover compact">
+        <table id="productExpiringSoonTable" class="table table-bordered table-hover display compact">
             <thead>
             <tr>
                 <th>ID</th>
@@ -81,9 +81,9 @@
         </table>
     </div>
     <div class="col-md-6 col-12">
-        <h2 id="productExpiredHeader" class="mt-5 mb-4"><span class="text-danger bg-secondary p-3 rounded-pill">Đã hết hạn</span></h2>
+        <h2 id="productExpiredHeader" class="mt-5 mb-4"><span class="text-danger">Đã hết hạn</span></h2>
         <hr>
-        <table id="productExpiredTable" class="table table-bordered table-hover compact">
+        <table id="productExpiredTable" class="table table-bordered table-hover display compact nowrap">
             <thead>
             <tr>
                 <th>ID</th>
@@ -100,10 +100,9 @@
     </div>
 </div>
 
-<script src="<c:url value="/js/inventory_status.js"/>"></script>
+<script src="<c:url value="/js/inventory.js"/>"></script>
 <script>
     const warehouseLength = ${fn:length(warehouseCapacityReport)};
-    const contextPath = "${pageContext.request.contextPath}";
 
     // Khởi tạo biểu đồ với dữ liệu rỗng
     const chartCanvas = document.getElementById('expiryDateChart').getContext('2d');

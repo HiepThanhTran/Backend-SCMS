@@ -2,15 +2,17 @@ package com.fh.scms.components;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.fh.scms.dto.order.OrderDetailsRequest;
+import com.fh.scms.dto.order.OrderRequest;
 import com.fh.scms.dto.pt.PaymentTermsRequest;
 import com.fh.scms.dto.user.UserRequestRegister;
 import com.fh.scms.enums.CriteriaType;
+import com.fh.scms.enums.OrderType;
 import com.fh.scms.enums.PaymentTermType;
 import com.fh.scms.enums.UserRole;
 import com.fh.scms.pojo.*;
 import com.fh.scms.repository.*;
-import com.fh.scms.services.RatingService;
-import com.fh.scms.services.SupplierService;
+import com.fh.scms.services.OrderService;
 import com.fh.scms.services.UserService;
 import org.hibernate.Session;
 import org.jetbrains.annotations.NotNull;
@@ -55,11 +57,15 @@ public class GlobalService {
     @Autowired
     private InventoryRepository inventoryRepository;
     @Autowired
-    private SupplierService supplierService;
+    private InventoryDetailsRepository inventoryDetailsRepository;
     @Autowired
-    private RatingService ratingService;
+    private SupplierRepository supplierRepository;
+    @Autowired
+    private RatingRepository ratingRepository;
     @Autowired
     private SupplierCostingRepository supplierCostingRepository;
+    @Autowired
+    private OrderService orderService;
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
@@ -209,7 +215,7 @@ public class GlobalService {
 
                 Set<InventoryDetails> inventoryDetailsSet = randomProducts.stream()
                         .map(product -> InventoryDetails.builder()
-                                .quantity(100 + (random.nextFloat() * (1000 - 100)))
+                                .quantity(5000 + (random.nextFloat() * (10000 - 100)))
                                 .product(product)
                                 .inventory(inventory)
                                 .build())
@@ -225,7 +231,7 @@ public class GlobalService {
 
     public void createRating() {
         List<CriteriaType> criteriaTypes = new ArrayList<>(List.of(CriteriaType.values()));
-        List<Supplier> suppliers = this.supplierService.findAllWithFilter(null);
+        List<Supplier> suppliers = this.supplierRepository.findAllWithFilter(null);
         List<User> users = this.userService.findAllWithFilter(null);
         Random random = new Random();
         AtomicInteger count = new AtomicInteger(1);
@@ -247,8 +253,38 @@ public class GlobalService {
                         .build();
                 rating.setCreatedAt(this.getRandomDateTimeInYear());
 
-                this.ratingService.save(rating);
+                this.ratingRepository.save(rating);
                 count.getAndIncrement();
+            });
+        });
+    }
+
+    public void createOrder() {
+        List<Product> products = this.productRepository.findAllWithFilter(null);
+        List<User> users = this.userService.findAllWithFilter(null);
+        Random random = new Random();
+
+        users.forEach(user -> {
+            IntStream.range(0, 5).forEach(index -> {
+                Collections.shuffle(products, random);
+                List<Product> randomProducts = products.stream()
+                        .limit(3)
+                        .collect(Collectors.toList());
+
+                Set<OrderDetailsRequest> orderDetails = randomProducts.stream()
+                        .map(product -> OrderDetailsRequest.builder()
+                                .productId(product.getId())
+                                .quantity(1F)
+                                .unitPrice(product.getPrice())
+                                .build())
+                        .collect(Collectors.toSet());
+
+                OrderRequest orderRequest = OrderRequest.builder()
+                        .type(OrderType.OUTBOUND)
+                        .orderDetails(orderDetails)
+                        .build();
+
+                this.orderService.checkout(user, orderRequest);
             });
         });
     }
@@ -385,10 +421,6 @@ public class GlobalService {
                 .build());
     }
 
-    private void createOrder() {
-
-    }
-
     private @NotNull LocalDateTime getRandomDateTimeInYear() {
         int randomMonth = ThreadLocalRandom.current().nextInt(1, 13);
 
@@ -405,8 +437,9 @@ public class GlobalService {
         return randomDate.atTime(randomHour, randomMinute, randomSecond);
     }
 
-    private void createProductsWithExpiryDates(AtomicInteger count, Random random, int daysFromNow, Category category, List<Unit> units, List<Tag> tags) {
-        List<Supplier> suppliers = this.supplierService.findAllWithFilter(null);
+    private void createProductsWithExpiryDates(AtomicInteger count, Random random, int daysFromNow, Category
+            category, List<Unit> units, List<Tag> tags) {
+        List<Supplier> suppliers = this.supplierRepository.findAllWithFilter(null);
 
         suppliers.forEach(supplier -> {
             for (int i = 0; i < 10; i++) {

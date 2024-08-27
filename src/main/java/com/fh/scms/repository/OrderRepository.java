@@ -7,6 +7,8 @@ import java.util.Map;
 
 public interface OrderRepository {
 
+    List<Order> findRecentOrders();
+
     Order findById(Long id);
 
     void save(Order order);

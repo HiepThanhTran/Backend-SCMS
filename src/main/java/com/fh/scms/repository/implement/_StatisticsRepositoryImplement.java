@@ -14,9 +14,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -28,6 +31,24 @@ public class _StatisticsRepositoryImplement implements _StatisticsRepository {
     private Session getCurrentSession() {
         return Objects.requireNonNull(factory.getObject()).getCurrentSession();
     }
+
+    @Override
+    public BigDecimal generateRevenueByLast24Hours() {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<BigDecimal> criteria = builder.createQuery(BigDecimal.class);
+        Root<Invoice> invoiceRoot = criteria.from(Invoice.class);
+
+        criteria.select(builder.sum(invoiceRoot.get("totalAmount")));
+        // Lọc theo ngày tạo hóa đơn từ thời điểm 24 giờ trước đến thời điểm hiện tại
+        LocalDateTime twentyFourHoursAgo = LocalDateTime.now().minusHours(24);
+        criteria.where(builder.between(invoiceRoot.get("createdAt"), twentyFourHoursAgo, LocalDateTime.now()));
+
+        Query<BigDecimal> query = session.createQuery(criteria);
+
+        return Optional.ofNullable(query.getSingleResult()).orElse(BigDecimal.ZERO);
+    }
+
 
     @Override
     public List<Object[]> generateSupplierPerformanceReport(Long supplierId, Integer year) {

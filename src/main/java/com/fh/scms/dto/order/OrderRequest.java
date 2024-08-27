@@ -19,8 +19,8 @@ public class OrderRequest {
     @NotNull(message = "{order.type.notNull}")
     private OrderType type;
 
-    private Long inventoryId;
-
     @Valid
     private Set<OrderDetailsRequest> orderDetails;
+
+    private Long inventoryId; // Cho đơn hàng nhập
 }

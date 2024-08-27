@@ -42,10 +42,14 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <!--===============================================================================================-->
+    <link href="<c:url value="/css/header.css" />" rel="stylesheet"/>
+    <link href="<c:url value="/css/footer.css" />" rel="stylesheet"/>
+    <link href="<c:url value="/css/sidebar.css" />" rel="stylesheet"/>
     <link href="<c:url value="/css/preloading.css" />" rel="stylesheet"/>
     <link href="<c:url value="/css/yearpicker.css" />" rel="stylesheet"/>
+    <link href="<c:url value="/css/dashboard.css" />" rel="stylesheet"/>
     <link href="<c:url value="/css/main.css" />" rel="stylesheet"/>
-    <script src="<c:url value="/js/yearpicker.js" />"></script>
+    <!--===============================================================================================-->
     <script src="<c:url value="/js/main.js" />"></script>
 </head>
 
@@ -70,6 +74,10 @@
 </div>
 
 <tiles:insertAttribute name="preloading"/>
+
+<script>
+    const contextPath = "${pageContext.request.contextPath}";
+</script>
 
 </body>
 

@@ -29,6 +29,20 @@ public class OrderRepositoryImplement implements OrderRepository {
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
     }
+    
+    @Override
+    public List<Order> findRecentOrders() {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
+        Root<Order> root = criteria.from(Order.class);
+
+        criteria.select(root).orderBy(builder.desc(root.get("id")));
+        Query<Order> query = session.createQuery(criteria);
+        query.setMaxResults(10);
+
+        return query.getResultList();
+    }
 
     @Override
     public Order findById(Long id) {
