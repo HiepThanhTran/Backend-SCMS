@@ -9,16 +9,6 @@ import java.util.Map;
 
 public interface ProductService {
 
-    ProductResponseForList getProductResponseForList(Product product);
-
-    ProductResponseForDetails getProductResponseForDetails(Product product);
-
-    List<ProductResponseForList> getAllProductResponseForList(Map<String, String> params);
-
-    void save(Product product, List<String> tagIds);
-
-    void update(Product product, List<String> tagIds);
-
     Product findById(Long id);
 
     void save(Product Product);
@@ -30,4 +20,14 @@ public interface ProductService {
     Long count();
 
     List<Product> findAllWithFilter(Map<String, String> params);
+
+    ProductResponseForList getProductResponseForList(Product product);
+
+    List<ProductResponseForList> getAllProductResponseForList(Map<String, String> params);
+
+    ProductResponseForDetails getProductResponseForDetails(Product product);
+
+    void save(Product product, List<Long> tagIds);
+
+    void update(Product product, List<Long> tagIds);
 }

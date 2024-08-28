@@ -40,7 +40,7 @@ public class CartServiceImplement implements CartService {
     public CartResponse getCartResponse(@NotNull Cart cart) {
         return CartResponse.builder().cartDetails(Optional.ofNullable(cart.getCartDetailsSet())
                 .orElseGet(Set::of)
-                .stream()
+                .parallelStream()
                 .map(this::getCartDetailsResponse)
                 .collect(Collectors.toSet())).build();
     }
@@ -68,7 +68,7 @@ public class CartServiceImplement implements CartService {
     @Override
     public void addProductToCart(@NotNull Cart cart, @NotNull ProductRequestAddToCart productRequestAddToCart) {
         Product product = this.productService.findById(productRequestAddToCart.getProductId());
-        CartDetails existingCartDetails = Optional.ofNullable(cart.getCartDetailsSet()).orElseGet(Set::of).stream()
+        CartDetails existingCartDetails = Optional.ofNullable(cart.getCartDetailsSet()).orElseGet(Set::of).parallelStream()
                 .filter(cd -> cd.getProduct().getId().equals(product.getId()))
                 .findFirst()
                 .orElse(null);
@@ -89,7 +89,7 @@ public class CartServiceImplement implements CartService {
 
     @Override
     public void updateProductInCart(@NotNull Cart cart, Long productId, @NotNull Map<String, String> params) {
-        CartDetails cartDetails = Optional.ofNullable(cart.getCartDetailsSet()).orElseGet(Set::of).stream()
+        CartDetails cartDetails = Optional.ofNullable(cart.getCartDetailsSet()).orElseGet(Set::of).parallelStream()
                 .filter(cd -> cd.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Sản phẩm không tồn tại trong giỏ hàng."));
@@ -110,7 +110,7 @@ public class CartServiceImplement implements CartService {
 
     @Override
     public void deleteProductFromCart(@NotNull Cart cart, Long productId) {
-        CartDetails cartDetails = Optional.ofNullable(cart.getCartDetailsSet()).orElseGet(Set::of).stream()
+        CartDetails cartDetails = Optional.ofNullable(cart.getCartDetailsSet()).orElseGet(Set::of).parallelStream()
                 .filter(cd -> cd.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Sản phẩm không tồn tại trong giỏ hàng."));

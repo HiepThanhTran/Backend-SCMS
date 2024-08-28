@@ -41,12 +41,13 @@ public class Order extends _BaseEntity implements Serializable {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate expectedDelivery;
 
+    @NotNull(message = "{order.user.notNull}")
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Invoice invoice;
 
     @JsonIgnore

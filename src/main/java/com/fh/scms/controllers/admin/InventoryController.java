@@ -5,6 +5,7 @@ import com.fh.scms.pojo.Inventory;
 import com.fh.scms.services.InventoryService;
 import com.fh.scms.services.WarehouseService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,11 @@ public class InventoryController {
     private final InventoryService inventoryService;
     private final WarehouseService warehouseService;
 
+    @ModelAttribute
+    public void addAttributes(@NotNull Model model) {
+        model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
+    }
+
     @GetMapping
     public String listInventory(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("inventories", this.inventoryService.findAllWithFilter(params));
@@ -32,19 +38,15 @@ public class InventoryController {
 
     @GetMapping(path = "/add")
     public String addInventory(Model model) {
-        model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
         model.addAttribute("inventory", new Inventory());
 
         return "add_inventory";
     }
 
     @PostMapping(path = "/add")
-    public String addInventory(Model model, @ModelAttribute(value = "inventory") @Valid Inventory inventory,
-                               BindingResult bindingResult) {
+    public String addInventory(Model model, @ModelAttribute(value = "inventory") @Valid Inventory inventory, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_inventory";
         }
@@ -56,7 +58,6 @@ public class InventoryController {
 
     @GetMapping(path = "/edit/{inventoryId}")
     public String editInventory(Model model, @PathVariable(value = "inventoryId") Long id) {
-        model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
         model.addAttribute("inventory", this.inventoryService.findById(id));
 
         return "edit_inventory";
@@ -66,9 +67,7 @@ public class InventoryController {
     public String editInventory(Model model, @PathVariable(value = "inventoryId") Long id,
                                 @ModelAttribute(value = "inventory") @Valid Inventory inventory, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("warehouse", warehouseService.findAllWithFilter(null));
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_inventory";
         }
@@ -80,9 +79,7 @@ public class InventoryController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{inventoryId}")
-    public String deleteInventory(@PathVariable(value = "inventoryId") Long id) {
+    public void deleteInventory(@PathVariable(value = "inventoryId") Long id) {
         this.inventoryService.delete(id);
-
-        return "redirect:/admin/inventories";
     }
 }

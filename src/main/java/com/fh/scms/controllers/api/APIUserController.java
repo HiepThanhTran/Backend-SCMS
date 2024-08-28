@@ -10,6 +10,7 @@ import com.fh.scms.pojo.User;
 import com.fh.scms.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -31,15 +32,11 @@ public class APIUserController {
     @PostMapping(path = "/login")
     public ResponseEntity<?> authenticateUser(@RequestBody @Valid UserRequestLogin userRequestLogin, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
         if (!this.userService.authenticateUser(userRequestLogin.getUsername(), userRequestLogin.getPassword())) {
-            List<MessageResponse> errorMessages = List.of(new MessageResponse("Tài khoản hoặc mật khẩu không đúng"));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse("Tài khoản hoặc mật khẩu không đúng")));
         }
 
         String token = this.jwtService.generateTokenLogin(userRequestLogin.getUsername());
@@ -51,28 +48,22 @@ public class APIUserController {
     @PostMapping(path = "/register")
     public ResponseEntity<?> register(@RequestBody @Valid UserRequestRegister userRequestRegister, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
         try {
             UserResponse userResponse = this.userService.registerUser(userRequestRegister);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
-        } catch (IllegalArgumentException e) {
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 
     @PostMapping(path = "/confirm")
     public ResponseEntity<?> confirmUser(Principal principal) {
         if (!this.userService.confirmUser(principal.getName())) {
-            List<MessageResponse> errorMessages = List.of(new MessageResponse("Xác nhận tài khoản không thành công"));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse("Xác nhận tài khoản không thành công")));
         }
 
         return ResponseEntity.ok().build();
@@ -85,33 +76,26 @@ public class APIUserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @PostMapping(path = "/profile/update")
+    @PostMapping(path = "/profile/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateProfileUser(Principal principal, @ModelAttribute @Valid UserRequestUpdate userRequestUpdate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
         try {
             UserResponse userResponse = this.userService.updateProfileUser(principal.getName(), userRequestUpdate);
 
             return ResponseEntity.ok(userResponse);
-        } catch (IllegalArgumentException e) {
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 
     @DeleteMapping(path = "/profile/delete")
     public ResponseEntity<?> deleteUser(Principal principal) {
         User user = this.userService.findByUsername(principal.getName());
-        if (Optional.ofNullable(user).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
         this.userService.delete(user.getId());
+
         return ResponseEntity.noContent().build();
     }
 }

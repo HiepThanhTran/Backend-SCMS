@@ -8,13 +8,9 @@ import java.util.Map;
 
 public interface TagService {
 
-    TagResponse getTagResponse(Tag tag);
-
-    List<TagResponse> getAllTagResponse(Map<String, String> params);
+    List<Tag> findByProductId(Long productId);
 
     Tag findById(Long id);
-
-    List<Tag> findByProductId(Long productId);
 
     void save(Tag tag);
 
@@ -25,4 +21,8 @@ public interface TagService {
     Long count();
 
     List<Tag> findAllWithFilter(Map<String, String> params);
+
+    TagResponse getTagResponse(Tag tag);
+
+    List<TagResponse> getAllTagResponse(Map<String, String> params);
 }

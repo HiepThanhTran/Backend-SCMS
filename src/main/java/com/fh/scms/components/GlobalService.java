@@ -209,11 +209,11 @@ public class GlobalService {
 
                 Collections.shuffle(products, new Random());
                 int numberOfProductsToReturn = 50 + new Random().nextInt(100 - 50 + 1);
-                List<Product> randomProducts = products.stream()
+                List<Product> randomProducts = products.parallelStream()
                         .limit(numberOfProductsToReturn)
                         .collect(Collectors.toList());
 
-                Set<InventoryDetails> inventoryDetailsSet = randomProducts.stream()
+                Set<InventoryDetails> inventoryDetailsSet = randomProducts.parallelStream()
                         .map(product -> InventoryDetails.builder()
                                 .quantity(5000 + (random.nextFloat() * (10000 - 100)))
                                 .product(product)
@@ -239,7 +239,7 @@ public class GlobalService {
         suppliers.forEach(supplier -> {
             IntStream.range(0, 100).forEach(index -> {
                 Collections.shuffle(criteriaTypes, random);
-                List<User> userList = users.stream()
+                List<User> userList = users.parallelStream()
                         .filter(u -> u.getSupplier() == null || !u.getSupplier().getId().equals(supplier.getId()))
                         .collect(Collectors.toList());
                 Collections.shuffle(userList, random);
@@ -267,12 +267,12 @@ public class GlobalService {
         users.forEach(user -> {
             IntStream.range(0, 5).forEach(index -> {
                 Collections.shuffle(inventoryDetails, random);
-                List<Product> randomProducts = inventoryDetails.stream()
+                List<Product> randomProducts = inventoryDetails.parallelStream()
                         .map(InventoryDetails::getProduct)
                         .limit(3)
                         .collect(Collectors.toList());
 
-                Set<OrderDetailsRequest> orderDetails = randomProducts.stream()
+                Set<OrderDetailsRequest> orderDetails = randomProducts.parallelStream()
                         .map(product -> OrderDetailsRequest.builder()
                                 .productId(product.getId())
                                 .quantity(3F)
@@ -474,7 +474,7 @@ public class GlobalService {
                 LocalDate expiryDate = LocalDate.now().plusDays(daysFromNow);
 
                 Collections.shuffle(tags, random);
-                Set<Tag> randomTags = tags.stream()
+                Set<Tag> randomTags = tags.parallelStream()
                         .limit(2)
                         .collect(Collectors.toSet());
 

@@ -29,13 +29,6 @@ public class TagRepositoryImplement implements TagRepository {
     }
 
     @Override
-    public Tag findById(Long id) {
-        Session session = this.getCurrentSession();
-
-        return session.get(Tag.class, id);
-    }
-
-    @Override
     public List<Tag> findByProductId(Long productId) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -49,6 +42,13 @@ public class TagRepositoryImplement implements TagRepository {
         Query<Tag> query = session.createQuery(criteria);
 
         return query.getResultList();
+    }
+
+    @Override
+    public Tag findById(Long id) {
+        Session session = this.getCurrentSession();
+
+        return session.get(Tag.class, id);
     }
 
     @Override

@@ -53,14 +53,12 @@ public class APIOrderController {
             this.orderService.checkout(user, orderRequest);
 
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (IllegalStateException | IllegalArgumentException | EntityNotFoundException e) {
+        } catch (Exception e) {
             if (e instanceof EntityNotFoundException) {
                 return ResponseEntity.notFound().build();
             }
 
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 
@@ -75,14 +73,12 @@ public class APIOrderController {
             this.orderService.checkin(user, orderRequest);
 
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (IllegalStateException | IllegalArgumentException | EntityNotFoundException e) {
+        } catch (Exception e) {
             if (e instanceof EntityNotFoundException) {
                 return ResponseEntity.notFound().build();
             }
 
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 
@@ -97,14 +93,12 @@ public class APIOrderController {
             this.orderService.cancelOrder(user, orderId);
 
             return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException | IllegalStateException e) {
+        } catch (Exception e) {
             if (e instanceof EntityNotFoundException) {
                 return ResponseEntity.notFound().build();
             }
 
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 
@@ -114,14 +108,12 @@ public class APIOrderController {
             this.orderService.updateOrderStatus(orderId, params.get("status"));
 
             return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException | IllegalStateException | IllegalArgumentException e) {
+        } catch (Exception e) {
             if (e instanceof EntityNotFoundException) {
                 return ResponseEntity.notFound().build();
             }
 
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 }

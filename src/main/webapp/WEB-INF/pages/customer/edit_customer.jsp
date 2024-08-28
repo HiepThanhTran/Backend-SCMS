@@ -59,7 +59,7 @@
         <form:input type="date" name="dateOfBirth" path="dateOfBirth" cssClass="form-control"/>
     </div>
 
-    <div class="form-group d-flex align-items-center">
+    <div class="form-group d-flex align-items-center mt-3">
         <form:label path="active" cssClass="form-label">Active:</form:label>
         <form:checkbox path="active" checked="${active}" class="ms-2"/>
     </div>

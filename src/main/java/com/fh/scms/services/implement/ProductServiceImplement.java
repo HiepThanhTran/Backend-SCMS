@@ -37,74 +37,6 @@ public class ProductServiceImplement implements ProductService {
     private UnitService unitService;
 
     @Override
-    public ProductResponseForList getProductResponseForList(@NotNull Product product) {
-        return ProductResponseForList.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .image(product.getImage())
-                .build();
-    }
-
-    @Override
-    public ProductResponseForDetails getProductResponseForDetails(@NotNull Product product) {
-        return ProductResponseForDetails.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .image(product.getImage())
-                .expiryDate(product.getExpiryDate())
-                .unit(this.unitService.getUnitResponse(product.getUnit()))
-                .category(this.categoryService.getCategoryResponse(product.getCategory()))
-                .tagSet(product.getTagSet().stream()
-                        .map(tag -> this.tagService.getTagResponse(tag))
-                        .collect(Collectors.toSet())
-                )
-                .build();
-    }
-
-    @Override
-    public List<ProductResponseForList> getAllProductResponseForList(Map<String, String> params) {
-        return this.productRepository.findAllWithFilter(params)
-                .stream().map(this::getProductResponseForList)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void save(Product product, @NotNull List<String> tagIds) {
-        Set<Tag> tags = new HashSet<>();
-        for (String tagId : tagIds) {
-            Tag tag = this.tagService.findById(Long.parseLong(tagId));
-            if (tag != null) {
-                tags.add(tag);
-            }
-        }
-        product.setTagSet(tags);
-
-        if (product.getFile() != null && !product.getFile().isEmpty()) {
-            product.setImage(this.globalService.uploadImage(product.getFile()));
-        }
-
-        this.productRepository.save(product);
-    }
-
-    @Override
-    public void update(Product product, @NotNull List<String> tagIds) {
-        Set<Tag> tags = new HashSet<>();
-        for (String tagId : tagIds) {
-            Tag tag = this.tagService.findById(Long.parseLong(tagId));
-            if (tag != null) {
-                tags.add(tag);
-            }
-        }
-        product.setTagSet(tags);
-
-        this.productRepository.update(product);
-    }
-
-    @Override
     public Product findById(Long id) {
         return this.productRepository.findById(id);
     }
@@ -132,5 +64,70 @@ public class ProductServiceImplement implements ProductService {
     @Override
     public List<Product> findAllWithFilter(Map<String, String> params) {
         return this.productRepository.findAllWithFilter(params);
+    }
+
+    @Override
+    public ProductResponseForList getProductResponseForList(@NotNull Product product) {
+        return ProductResponseForList.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .image(product.getImage())
+                .build();
+    }
+
+    @Override
+    public List<ProductResponseForList> getAllProductResponseForList(Map<String, String> params) {
+        return this.productRepository.findAllWithFilter(params)
+                .parallelStream().map(this::getProductResponseForList)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductResponseForDetails getProductResponseForDetails(@NotNull Product product) {
+        return ProductResponseForDetails.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .image(product.getImage())
+                .expiryDate(product.getExpiryDate())
+                .unit(this.unitService.getUnitResponse(product.getUnit()))
+                .category(this.categoryService.getCategoryResponse(product.getCategory()))
+                .tagSet(product.getTagSet().parallelStream()
+                        .map(tag -> this.tagService.getTagResponse(tag))
+                        .collect(Collectors.toSet())
+                )
+                .build();
+    }
+
+    @Override
+    public void save(Product product, @NotNull List<Long> tagIds) {
+        processProduct(product, tagIds);
+
+        this.productRepository.save(product);
+    }
+
+    @Override
+    public void update(Product product, @NotNull List<Long> tagIds) {
+        processProduct(product, tagIds);
+
+        this.productRepository.update(product);
+    }
+
+    private void processProduct(Product product, @NotNull List<Long> tagIds) {
+        Set<Tag> tags = new HashSet<>();
+        for (Long tagId : tagIds) {
+            Tag tag = this.tagService.findById(tagId);
+            if (tag != null) {
+                tags.add(tag);
+            }
+        }
+        product.setTagSet(tags);
+
+        if (product.getFile() != null && !product.getFile().isEmpty()) {
+            product.setImage(this.globalService.uploadImage(product.getFile()));
+        }
     }
 }

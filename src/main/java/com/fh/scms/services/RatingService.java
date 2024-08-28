@@ -9,12 +9,6 @@ import java.util.Map;
 
 public interface RatingService {
 
-    RatingResponse getRatingResponse(Rating rating);
-
-    List<RatingResponse> getAllRatingResponse(Map<String, String> params);
-
-    Rating update(Rating rating, RatingRequestUpdate ratingRequestUpdate);
-
     Rating findById(Long id);
 
     void save(Rating rating);
@@ -26,4 +20,10 @@ public interface RatingService {
     Long count();
 
     List<Rating> findAllWithFilter(Map<String, String> params);
+
+    RatingResponse getRatingResponse(Rating rating);
+
+    List<RatingResponse> getAllRatingResponse(Map<String, String> params);
+
+    Rating update(Rating rating, RatingRequestUpdate ratingRequestUpdate);
 }

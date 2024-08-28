@@ -1,6 +1,8 @@
 package com.fh.scms.controllers.api;
 
+import com.fh.scms.enums.ProductStatus;
 import com.fh.scms.services._StatisticsService;
+import com.fh.scms.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +17,12 @@ public class _APIStatisticsController {
 
     @GetMapping("/revenue/last-24-hours")
     public ResponseEntity<?> revenueLast24Hours() {
-        return ResponseEntity.ok(this.statisticsService.getRevenueByLast24Hours());
+        return ResponseEntity.ok(this.statisticsService.getRevenueByLastDays(Constants.LAST_24_HOURS));
     }
 
     @GetMapping("/revenue/last-week")
     public ResponseEntity<?> revenueLastWeek() {
-        return ResponseEntity.ok(this.statisticsService.getRevenueByLastWeek());
+        return ResponseEntity.ok(this.statisticsService.getRevenueByLastDays(Constants.LAST_WEEK));
     }
 
     @GetMapping("/supplier/{supplierId}/performance")
@@ -45,11 +47,11 @@ public class _APIStatisticsController {
 
     @GetMapping(path = "/inventory/{inventoryId}/report/product/expiring-soon")
     public ResponseEntity<?> productExpiringSoon(@PathVariable(value = "inventoryId") Long inventoryId) {
-        return ResponseEntity.ok(this.statisticsService.findProductsExpiringSoon(inventoryId));
+        return ResponseEntity.ok(this.statisticsService.findProductsByStatus(inventoryId, ProductStatus.EXPIRING_SOON.name()));
     }
 
     @GetMapping(path = "/inventory/{inventoryId}/report/product/expired")
     public ResponseEntity<?> expiredProduct(@PathVariable(value = "inventoryId") Long inventoryId) {
-        return ResponseEntity.ok(this.statisticsService.findExpiredProducts(inventoryId));
+        return ResponseEntity.ok(this.statisticsService.findProductsByStatus(inventoryId, ProductStatus.EXPIRED.name()));
     }
 }

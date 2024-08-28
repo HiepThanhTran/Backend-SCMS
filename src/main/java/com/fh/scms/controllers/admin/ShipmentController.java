@@ -7,6 +7,7 @@ import com.fh.scms.services.ShipmentService;
 import com.fh.scms.services.ShipperService;
 import com.fh.scms.services.WarehouseService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,13 @@ public class ShipmentController {
     private final WarehouseService warehouseService;
     private final DeliveryScheduleService deliveryScheduleService;
 
+    @ModelAttribute
+    public void addAttributes(@NotNull Model model) {
+        model.addAttribute("deliverySchedules", this.deliveryScheduleService.findAllWithFilter(null));
+        model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
+        model.addAttribute("shippers", this.shipperService.findAllWithFilter(null));
+    }
+
     @GetMapping
     public String listShipment(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("shipments", this.shipmentService.findAllWithFilter(params));
@@ -36,9 +44,7 @@ public class ShipmentController {
 
     @GetMapping(path = "/add")
     public String addShipment(Model model) {
-        model.addAttribute("shippers", this.shipperService.findAllWithFilter(null));
-        model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
-        model.addAttribute("deliverySchedules", this.deliveryScheduleService.findAllWithFilter(null));
+        model.addAttribute("shipment", new Shipment());
 
         return "add_shipment";
     }
@@ -46,11 +52,7 @@ public class ShipmentController {
     @PostMapping(path = "/add")
     public String addShipment(Model model, @ModelAttribute(value = "shipment") @Valid Shipment shipment, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("shippers", this.shipperService.findAllWithFilter(null));
-            model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
-            model.addAttribute("deliverySchedules", this.deliveryScheduleService.findAllWithFilter(null));
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_shipment";
         }
@@ -62,9 +64,6 @@ public class ShipmentController {
 
     @GetMapping(path = "/edit/{shipmentId}")
     public String editShipment(Model model, @PathVariable(value = "shipmentId") Long id) {
-        model.addAttribute("shippers", this.shipperService.findAllWithFilter(null));
-        model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
-        model.addAttribute("deliverySchedules", this.deliveryScheduleService.findAllWithFilter(null));
         model.addAttribute("shipment", this.shipmentService.findById(id));
 
         return "edit_shipment";
@@ -74,11 +73,7 @@ public class ShipmentController {
     public String editShipment(Model model, @PathVariable(value = "shipmentId") Long id,
                                @ModelAttribute(value = "shipment") @Valid Shipment shipment, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("shippers", this.shipperService.findAllWithFilter(null));
-            model.addAttribute("warehouses", this.warehouseService.findAllWithFilter(null));
-            model.addAttribute("deliverySchedules", this.deliveryScheduleService.findAllWithFilter(null));
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_shipment";
         }
@@ -90,9 +85,7 @@ public class ShipmentController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{shipmentId}")
-    public String deleteShipment(@PathVariable(value = "shipmentId") Long id) {
+    public void deleteShipment(@PathVariable(value = "shipmentId") Long id) {
         this.shipmentService.delete(id);
-
-        return "redirect:/admin/shipments";
     }
 }

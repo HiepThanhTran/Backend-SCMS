@@ -41,8 +41,7 @@ public class CustomerController {
     @PostMapping(path = "/add")
     public String addCustomer(Model model, @ModelAttribute(value = "customer") @Valid UserRequestRegister customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_customer";
         }
@@ -69,8 +68,7 @@ public class CustomerController {
     public String editCustomer(Model model, @PathVariable(value = "customerId") Long id,
                                @ModelAttribute(value = "customer") @Valid Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_customer";
         }
@@ -82,9 +80,7 @@ public class CustomerController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{customerId}")
-    public String deleteCustomer(@PathVariable(value = "customerId") Long id) {
+    public void deleteCustomer(@PathVariable(value = "customerId") Long id) {
         this.customerService.delete(id);
-
-        return "redirect:/admin/customers";
     }
 }

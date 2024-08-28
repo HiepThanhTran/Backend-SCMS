@@ -38,6 +38,7 @@ public class APICustomerController {
         }
 
         CustomerDTO customerDTO = this.customerService.getCustomerResponse(customer);
+
         return ResponseEntity.ok(customerDTO);
     }
 
@@ -51,19 +52,15 @@ public class APICustomerController {
     @PostMapping(path = "/profile/update")
     public ResponseEntity<?> updateProfileCustomer(Principal principal, @ModelAttribute @Valid CustomerDTO customerDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
         try {
             CustomerDTO updatedCustomerDTO = this.customerService.updateProfileCustomer(principal.getName(), customerDTO);
 
             return ResponseEntity.ok(updatedCustomerDTO);
-        } catch (IllegalArgumentException e) {
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 }

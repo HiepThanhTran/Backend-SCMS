@@ -41,6 +41,7 @@ public class APISupplierController {
         }
 
         SupplierDTO supplierDTO = this.supplierService.getSupplierResponse(supplier);
+
         return ResponseEntity.ok(supplierDTO);
     }
 
@@ -54,19 +55,15 @@ public class APISupplierController {
     @PostMapping(path = "/profile/update")
     public ResponseEntity<?> updateProfileSupplier(Principal principal, @ModelAttribute @Valid SupplierDTO supplierDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
         try {
             SupplierDTO updatedSupplierDTO = this.supplierService.updateProfileSupplier(principal.getName(), supplierDTO);
 
             return ResponseEntity.ok(updatedSupplierDTO);
-        } catch (IllegalArgumentException e) {
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 
@@ -81,23 +78,19 @@ public class APISupplierController {
     public ResponseEntity<?> addRatingForSupplier(Principal principal, @PathVariable(value = "supplierId") Long supplierId,
                                                   @ModelAttribute @Valid RatingRequestCreate ratingRequestCreate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errorMessages = MessageResponse.fromBindingResult(bindingResult);
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
         try {
             Rating rating = this.supplierService.addRatingForSupplier(principal.getName(), supplierId, ratingRequestCreate);
 
             return ResponseEntity.ok(rating);
-        } catch (EntityNotFoundException | IllegalArgumentException e) {
+        } catch (Exception e) {
             if (e instanceof EntityNotFoundException) {
                 return ResponseEntity.notFound().build();
             }
 
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 }

@@ -24,17 +24,22 @@ public class Product extends _BaseEntity implements Serializable {
 
     @Transient
     MultipartFile file;
+
     @NotNull(message = "{product.name.notNull}")
     @NotBlank(message = "{product.name.notNull}")
     @Column(nullable = false, unique = true)
     private String name;
+
     private String description;
+
     @Builder.Default
     @NotNull(message = "{product.price.notNull}")
     @Column(nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
     private BigDecimal price = BigDecimal.ZERO;
+
     @Column(length = 300)
     private String image;
+
     @NotNull(message = "{product.expiryDate.notNull}")
     @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "expiry_date", nullable = false)
@@ -77,7 +82,5 @@ public class Product extends _BaseEntity implements Serializable {
     @PreRemove
     public void preRemove() {
         this.tagSet.clear();
-        this.orderDetailsSet.clear();
-        this.supplierCostingSet.clear();
     }
 }

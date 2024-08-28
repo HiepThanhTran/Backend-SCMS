@@ -1,11 +1,7 @@
 package com.fh.scms.util;
 
-import com.fh.scms.dto.MessageResponse;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 
 import java.text.Collator;
 import java.time.LocalDateTime;
@@ -89,11 +85,11 @@ public final class Utils {
         mapping.put("products", "Sản phẩm");
         mapping.put("ratings", "Đánh giá");
         mapping.put("shipments", "Đơn vận chuyển");
-        mapping.put("shippers", "Nhà vận chuyển");
+        mapping.put("shippers", "Đối tác vận chuyển");
         mapping.put("suppliers", "Nhà cung cấp");
-        mapping.put("tags", "Nhãn");
-        mapping.put("taxs", "Thuế");
-        mapping.put("units", "Đơn vị");
+        mapping.put("tags", "Nhãn sản phẩm");
+        mapping.put("taxes", "Thuế");
+        mapping.put("units", "Đơn vị sản phẩm");
         mapping.put("users", "Người dùng");
         mapping.put("warehouses", "Nhà kho");
 

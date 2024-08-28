@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -55,6 +54,45 @@ public class UserServiceImplement implements UserService {
         authorities.add(new SimpleGrantedAuthority(user.getUserRole().name()));
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+    }
+
+    @Override
+    public User findById(Long id) {
+        return this.userRepository.findById(id);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return this.userRepository.findByUsername(username);
+    }
+
+    @Override
+    public void save(User user) {
+        this.userRepository.save(user);
+    }
+
+    @Override
+    public void update(@NotNull User user) {
+        if (user.getFile() != null && !user.getFile().isEmpty()) {
+            user.setAvatar(this.globalService.uploadImage(user.getFile()));
+        }
+
+        this.userRepository.update(user);
+    }
+
+    @Override
+    public void delete(Long id) {
+        this.userRepository.delete(id);
+    }
+
+    @Override
+    public Long count() {
+        return this.userRepository.count();
+    }
+
+    @Override
+    public List<User> findAllWithFilter(Map<String, String> params) {
+        return this.userRepository.findAllWithFilter(params);
     }
 
     @Override
@@ -149,7 +187,7 @@ public class UserServiceImplement implements UserService {
                 final Supplier finalSupplier = supplier;
                 Set<PaymentTerms> paymentTermsSet = Optional.ofNullable(userRequestRegister.getPaymentTermsSet())
                         .orElse(new HashSet<>())
-                        .stream()
+                        .parallelStream()
                         .map(termsRequest -> PaymentTerms.builder()
                                 .discountDays(termsRequest.getDiscountDays())
                                 .discountPercentage(termsRequest.getDiscountPercentage())
@@ -237,44 +275,5 @@ public class UserServiceImplement implements UserService {
         this.userRepository.update(user);
 
         return this.getUserResponse(user);
-    }
-
-    @Override
-    public User findById(Long id) {
-        return this.userRepository.findById(id);
-    }
-
-    @Override
-    public User findByUsername(String username) {
-        return this.userRepository.findByUsername(username);
-    }
-
-    @Override
-    public void save(User user) {
-        this.userRepository.save(user);
-    }
-
-    @Override
-    public void update(@NotNull User user) {
-        if (user.getFile() != null && !user.getFile().isEmpty()) {
-            user.setAvatar(this.globalService.uploadImage(user.getFile()));
-        }
-
-        this.userRepository.update(user);
-    }
-
-    @Override
-    public void delete(Long id) {
-        this.userRepository.delete(id);
-    }
-
-    @Override
-    public Long count() {
-        return this.userRepository.count();
-    }
-
-    @Override
-    public List<User> findAllWithFilter(Map<String, String> params) {
-        return this.userRepository.findAllWithFilter(params);
     }
 }

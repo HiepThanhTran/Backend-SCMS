@@ -1,7 +1,6 @@
 package com.fh.scms.repository.implement;
 
 import com.fh.scms.pojo.Customer;
-import com.fh.scms.pojo.Supplier;
 import com.fh.scms.pojo.User;
 import com.fh.scms.repository.CustomerRepository;
 import com.fh.scms.util.Pagination;

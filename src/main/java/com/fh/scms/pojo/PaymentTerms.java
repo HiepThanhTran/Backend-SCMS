@@ -39,7 +39,7 @@ public class PaymentTerms extends _BaseEntity implements Serializable {
     private PaymentTermType type = PaymentTermType.COD;
 
     @JsonIgnore
-    @ManyToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(optional = false)
     @NotNull(message = "{paymentTerms.supplier.notNull}")
     @JoinColumn(name = "supplier_id", referencedColumnName = "id", nullable = false)
     private Supplier supplier;

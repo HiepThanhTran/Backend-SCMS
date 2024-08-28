@@ -8,9 +8,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <title>
-        <tiles:insertAttribute name="title"/>
-    </title>
+    <title>Đăng nhập</title>
 
     <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon-02.ico"/>"/>
@@ -62,28 +60,13 @@
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Password is required">
-                    <input required class="input100" type="password" name="password"/>
+                    <input autofocus required class="input100" type="password" name="password"/>
                     <span class="focus-input100"></span>
                     <span class="label-input100">Mật khẩu</span>
                 </div>
 
-                <%--                <div class="flex-sb-m w-full p-t-3 p-b-32">--%>
-                <%--                    <div class="contact100-form-checkbox">--%>
-                <%--                        <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">--%>
-                <%--                        <label class="label-checkbox100" for="ckb1">--%>
-                <%--                            Remember me--%>
-                <%--                        </label>--%>
-                <%--                    </div>--%>
-
-                <%--                    <div>--%>
-                <%--                        <a href="#" class="txt1">--%>
-                <%--                            Forgot Password?--%>
-                <%--                        </a>--%>
-                <%--                    </div>--%>
-                <%--                </div>--%>
-
                 <div class="container-login100-form-btn">
-                    <button class="login100-form-btn">Đăng nhập</button>
+                    <button class="login100-form-btn bg-dark">Đăng nhập</button>
                 </div>
             </form>
 

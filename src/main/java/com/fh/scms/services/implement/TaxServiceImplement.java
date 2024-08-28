@@ -26,22 +26,6 @@ public class TaxServiceImplement implements TaxService {
     private InvoiceService invoiceService;
 
     @Override
-    public TaxResponse getTaxResponse(@NotNull Tax tax) {
-        return TaxResponse.builder()
-                .id(tax.getId())
-                .rate(tax.getRate())
-                .region(tax.getRegion())
-                .build();
-    }
-
-    @Override
-    public List<TaxResponse> getAllTaxResponse(Map<String, String> params) {
-        return this.taxRepository.findAllWithFilter(params).stream()
-                .map(this::getTaxResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public Tax findById(Long id) {
         return this.taxRepository.findById(id);
     }
@@ -77,5 +61,21 @@ public class TaxServiceImplement implements TaxService {
     @Override
     public List<Tax> findAllWithFilter(Map<String, String> params) {
         return this.taxRepository.findAllWithFilter(params);
+    }
+
+    @Override
+    public TaxResponse getTaxResponse(@NotNull Tax tax) {
+        return TaxResponse.builder()
+                .id(tax.getId())
+                .rate(tax.getRate())
+                .region(tax.getRegion())
+                .build();
+    }
+
+    @Override
+    public List<TaxResponse> getAllTaxResponse(Map<String, String> params) {
+        return this.taxRepository.findAllWithFilter(params).parallelStream()
+                .map(this::getTaxResponse)
+                .collect(Collectors.toList());
     }
 }

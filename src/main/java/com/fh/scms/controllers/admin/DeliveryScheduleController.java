@@ -1,10 +1,11 @@
 package com.fh.scms.controllers.admin;
 
 import com.fh.scms.dto.MessageResponse;
-import com.fh.scms.enums.DeliveryMethodType;
 import com.fh.scms.pojo.DeliverySchedule;
 import com.fh.scms.services.DeliveryScheduleService;
+import com.fh.scms.services.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,12 @@ import java.util.Map;
 public class DeliveryScheduleController {
 
     private final DeliveryScheduleService deliveryScheduleService;
+    private final OrderService orderService;
+
+    @ModelAttribute
+    public void addAttributes(@NotNull Model model) {
+        model.addAttribute("orders", this.orderService.findAllWithFilter(null));
+    }
 
     @GetMapping
     public String listDeliverySchedule(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
@@ -31,31 +38,29 @@ public class DeliveryScheduleController {
 
     @GetMapping(path = "/add")
     public String addDeliverySchedule(Model model) {
-        model.addAttribute("deliveryMethods", DeliveryMethodType.getAllDisplayNames());
         model.addAttribute("deliverySchedule", new DeliverySchedule());
 
         return "add_delivery_schedule";
     }
 
     @PostMapping(path = "/add")
-    public String addDeliverySchedule(Model model, @ModelAttribute(value = "deliverySchedule") @Valid DeliverySchedule deliverySchedule,
-                                      BindingResult bindingResult) {
+    public String addDeliverySchedule(Model model,
+                                      @ModelAttribute(value = "deliverySchedule") @Valid DeliverySchedule deliverySchedule,
+                                      BindingResult bindingResult, @RequestParam(value = "orderIds", required = false) List<String> orderIds) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("deliveryMethods", DeliveryMethodType.getAllDisplayNames());
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_delivery_schedule";
         }
 
-        this.deliveryScheduleService.save(deliverySchedule);
+        this.deliveryScheduleService.save(deliverySchedule, orderIds);
 
-        return "redirect:/admin/delivery-schedules";
+        return "redirect:/admin/schedules";
     }
 
     @GetMapping(path = "/edit/{deliveryScheduleId}")
     public String editDeliverySchedule(Model model, @PathVariable(value = "deliveryScheduleId") Long id) {
-        model.addAttribute("deliveryMethods", DeliveryMethodType.getAllDisplayNames());
+        model.addAttribute("scheduleOrders", this.orderService.findByDeliveryScheduleId(id));
         model.addAttribute("deliverySchedule", this.deliveryScheduleService.findById(id));
 
         return "edit_delivery_schedule";
@@ -63,25 +68,24 @@ public class DeliveryScheduleController {
 
     @PostMapping(path = "/edit/{deliveryScheduleId}")
     public String editDeliverySchedule(Model model, @PathVariable(value = "deliveryScheduleId") Long id,
-                                       @ModelAttribute(value = "deliverySchedule") @Valid DeliverySchedule deliverySchedule, BindingResult bindingResult) {
+                                       @ModelAttribute(value = "deliverySchedule") @Valid DeliverySchedule deliverySchedule,
+                                       BindingResult bindingResult,
+                                       @RequestParam(value = "orderIds", required = false) List<String> orderIds) {
+        model.addAttribute("scheduleOrders", this.orderService.findByDeliveryScheduleId(id));
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("deliveryMethods", DeliveryMethodType.getAllDisplayNames());
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_delivery_schedule";
         }
 
-        this.deliveryScheduleService.update(deliverySchedule);
+        this.deliveryScheduleService.update(deliverySchedule, orderIds);
 
-        return "redirect:/admin/delivery-schedules";
+        return "redirect:/admin/schedules";
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{deliveryScheduleId}")
-    public String deleteDeliverySchedule(@PathVariable(value = "deliveryScheduleId") Long id) {
+    public void deleteDeliverySchedule(@PathVariable(value = "deliveryScheduleId") Long id) {
         this.deliveryScheduleService.delete(id);
-
-        return "redirect:/admin/delivery-schedules";
     }
 }

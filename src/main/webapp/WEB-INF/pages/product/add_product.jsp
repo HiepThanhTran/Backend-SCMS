@@ -4,30 +4,6 @@
 
 <c:url value="/admin/products/add" var="editProduct"/>
 
-<script>
-    function addTagRow() {
-        const container = document.getElementById('tagsContainer');
-        const row = document.createElement('div');
-        row.className = 'tag-row';
-        row.style.display = 'flex';
-        row.style.alignItems = 'center';
-        row.style.justifyContent = 'center';
-        row.innerHTML = `
-            <select name="tagIds" class="form-control mt-3 mb-2 me-3">
-                <c:forEach var="unit" items="${tags}">
-                    <option value="${unit.id}">${unit.name}</option>
-                </c:forEach>
-            </select>
-            <button type="button" class="btn btn-danger mt-2" onclick="removeTagRow(this)">-</button>
-        `;
-        container.appendChild(row);
-    }
-
-    function removeTagRow(button) {
-        button.parentElement.remove();
-    }
-</script>
-
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-center list__title">Thêm sản phẩm</h1>
@@ -95,3 +71,27 @@
 
     <input class="mt-3" type="submit" value="Thêm mới"/>
 </form:form>
+
+<script>
+    function addTagRow() {
+        const container = document.getElementById('tagsContainer');
+        const row = document.createElement('div');
+        row.className = 'tag-row';
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.justifyContent = 'center';
+        row.innerHTML = `
+            <select name="tagIds" class="form-control mt-3 mb-2 me-3">
+                <c:forEach var="unit" items="${tags}">
+                    <option value="${unit.id}">${unit.name}</option>
+                </c:forEach>
+            </select>
+            <button type="button" class="btn btn-danger mt-2" onclick="removeTagRow(this)">-</button>
+        `;
+        container.appendChild(row);
+    }
+
+    function removeTagRow(button) {
+        button.parentElement.remove();
+    }
+</script>

@@ -42,7 +42,7 @@ public class Shipper extends _BaseEntity implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "shipper")
+    @OneToMany(mappedBy = "shipper", cascade = CascadeType.ALL)
     private Set<Shipment> shipmentSet;
 
     @Override

@@ -14,9 +14,9 @@ public class WebInitializerConfigs {
 
     @PostConstruct
     public void initializer() {
-//        if (!this.globalService.isFirstRun()) {
-//            return;
-//        }
+        if (!this.globalService.isFirstRun()) {
+            return;
+        }
 
         this.globalService.createCategory();
         this.globalService.createTag();
@@ -29,6 +29,6 @@ public class WebInitializerConfigs {
         this.globalService.createRating();
         this.globalService.createOrder();
 
-//        this.globalService.saveFirstRun();
+        this.globalService.saveFirstRun();
     }
 }

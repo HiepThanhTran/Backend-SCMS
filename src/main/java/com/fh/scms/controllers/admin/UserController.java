@@ -32,7 +32,6 @@ public class UserController {
     @GetMapping(path = "/edit/{userId}")
     public String editUser(Model model, @PathVariable(value = "userId") Long id) {
         model.addAttribute("user", this.userService.findById(id));
-        model.addAttribute("userRoles", UserRole.getAllDisplayNames());
 
         return "edit_user";
     }
@@ -41,9 +40,7 @@ public class UserController {
     public String editUser(Model model, @PathVariable(value = "userId") Long id,
                            @ModelAttribute(value = "user") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("userRoles", UserRole.getAllDisplayNames());
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_user";
         }
@@ -55,9 +52,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{userId}")
-    public String deleteUser(@PathVariable(value = "userId") Long id) {
+    public void deleteUser(@PathVariable(value = "userId") Long id) {
         this.userService.delete(id);
-
-        return "redirect:/admin/users";
     }
 }

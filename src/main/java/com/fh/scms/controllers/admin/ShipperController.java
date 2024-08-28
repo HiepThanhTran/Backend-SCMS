@@ -39,11 +39,9 @@ public class ShipperController {
     }
 
     @PostMapping(path = "/add")
-    public String addShipper(Model model, @ModelAttribute(value = "shipper") @Valid UserRequestRegister shipper,
-                             BindingResult bindingResult) {
+    public String addShipper(Model model, @ModelAttribute(value = "shipper") @Valid UserRequestRegister shipper, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_shipper";
         }
@@ -70,8 +68,7 @@ public class ShipperController {
     public String editShipper(Model model, @PathVariable(value = "shipperId") Long id,
                               @ModelAttribute(value = "shipper") @Valid Shipper shipper, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_shipper";
         }
@@ -83,9 +80,7 @@ public class ShipperController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{shipperId}")
-    public String deleteShipper(@PathVariable(value = "shipperId") Long id) {
+    public void deleteShipper(@PathVariable(value = "shipperId") Long id) {
         this.shipperService.delete(id);
-
-        return "redirect:/admin/shippers";
     }
 }

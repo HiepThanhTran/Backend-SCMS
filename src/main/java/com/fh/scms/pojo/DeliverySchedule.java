@@ -30,7 +30,7 @@ public class DeliverySchedule extends _BaseEntity implements Serializable {
     @Column(nullable = false)
     private DeliveryMethodType method = DeliveryMethodType.EXPRESS;
 
-    @OneToMany(mappedBy = "deliverySchedule")
+    @OneToMany(mappedBy = "deliverySchedule", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Order> orderSet;
 
     @OneToMany(mappedBy = "deliverySchedule", cascade = {CascadeType.PERSIST, CascadeType.MERGE})

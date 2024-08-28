@@ -6,6 +6,7 @@ import com.fh.scms.pojo.PaymentTerms;
 import com.fh.scms.services.PaymentTermsService;
 import com.fh.scms.services.SupplierService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,11 @@ public class PaymentTermsController {
     private final PaymentTermsService paymentTermsService;
     private final SupplierService supplierService;
 
+    @ModelAttribute
+    public void addAttributes(@NotNull Model model) {
+        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
+    }
+
     @GetMapping
     public String listPaymentTerms(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("paymentTerms", this.paymentTermsService.findAllWithFilter(params));
@@ -33,8 +39,6 @@ public class PaymentTermsController {
 
     @GetMapping(path = "/add")
     public String addPaymentTerms(Model model) {
-        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
-        model.addAttribute("paymentTermTypes", PaymentTermType.getAllDisplayNames());
         model.addAttribute("paymentTerms", new PaymentTerms());
 
         return "add_payment_terms";
@@ -43,10 +47,7 @@ public class PaymentTermsController {
     @PostMapping(path = "/add")
     public String addPaymentTerms(Model model, @ModelAttribute(value = "paymentTerms") @Valid PaymentTerms paymentTerms, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
-            model.addAttribute("paymentTermTypes", PaymentTermType.getAllDisplayNames());
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_payment_terms";
         }
@@ -58,8 +59,6 @@ public class PaymentTermsController {
 
     @GetMapping(path = "/edit/{paymentTermsId}")
     public String editPaymentTerms(Model model, @PathVariable(value = "paymentTermsId") Long id) {
-        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
-        model.addAttribute("paymentTermTypes", PaymentTermType.getAllDisplayNames());
         model.addAttribute("paymentTerms", this.paymentTermsService.findById(id));
 
         return "edit_payment_terms";
@@ -69,10 +68,7 @@ public class PaymentTermsController {
     public String editPaymentTerms(Model model, @PathVariable(value = "paymentTermsId") Long id,
                                    @ModelAttribute(value = "paymentTerms") @Valid PaymentTerms paymentTerms, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
-            model.addAttribute("paymentTermTypes", PaymentTermType.getAllDisplayNames());
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_payment_terms";
         }
@@ -84,9 +80,7 @@ public class PaymentTermsController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{paymentTermsId}")
-    public String deletePaymentTerms(@PathVariable(value = "paymentTermsId") Long id) {
+    public void deletePaymentTerms(@PathVariable(value = "paymentTermsId") Long id) {
         this.paymentTermsService.delete(id);
-
-        return "redirect:/admin/payment-terms";
     }
 }

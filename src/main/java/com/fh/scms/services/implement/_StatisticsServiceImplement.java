@@ -33,39 +33,8 @@ public class _StatisticsServiceImplement implements _StatisticsService {
     }
 
     @Override
-    public Map<String, Object> getRevenueByLast24Hours() {
-        List<Object[]> results = this.statisticsRepository.generateRevenueByLast24Hours();
-        if (results.isEmpty()) {
-            return Collections.emptyMap();
-        }
-
-        Object[] result = results.get(0);
-        BigDecimal revenue = (BigDecimal) result[0];
-        Long orderCount = ((Number) result[1]).longValue();
-
-        Map<String, Object> revenueMap = new HashMap<>();
-        revenueMap.put("revenue", revenue);
-        revenueMap.put("orderCount", orderCount);
-
-        return revenueMap;
-    }
-
-    @Override
-    public Map<String, Object> getRevenueByLastWeek() {
-        List<Object[]> results = this.statisticsRepository.generateRevenueByLastWeek();
-        if (results.isEmpty()) {
-            return Collections.emptyMap();
-        }
-
-        Object[] result = results.get(0);
-        BigDecimal revenue = (BigDecimal) result[0];
-        Long orderCount = ((Number) result[1]).longValue();
-
-        Map<String, Object> revenueMap = new HashMap<>();
-        revenueMap.put("revenue", revenue);
-        revenueMap.put("orderCount", orderCount);
-
-        return revenueMap;
+    public RevenueStatisticsEntry getRevenueByLastDays(int days) {
+        return this.statisticsRepository.generateRevenueByLastDays(days);
     }
 
     @Override
@@ -129,12 +98,7 @@ public class _StatisticsServiceImplement implements _StatisticsService {
     }
 
     @Override
-    public List<ProductStatusReportEntry> findProductsExpiringSoon(Long inventoryId) {
-        return this.statisticsRepository.findProductsExpiringSoon(inventoryId);
-    }
-
-    @Override
-    public List<ProductStatusReportEntry> findExpiredProducts(Long inventoryId) {
-        return this.statisticsRepository.findExpiredProducts(inventoryId);
+    public List<ProductStatusReportEntry> findProductsByStatus(Long inventoryId, String status) {
+        return this.statisticsRepository.findProductsByStatus(inventoryId, status);
     }
 }

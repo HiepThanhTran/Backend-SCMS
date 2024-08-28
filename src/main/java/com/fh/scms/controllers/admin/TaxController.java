@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/taxs", produces = "application/json; charset=UTF-8")
+@RequestMapping(path = "/admin/taxes", produces = "application/json; charset=UTF-8")
 public class TaxController {
 
     private final TaxService taxService;
@@ -38,15 +38,14 @@ public class TaxController {
     @PostMapping(path = "/add")
     public String addTax(Model model, @ModelAttribute(value = "tax") @Valid Tax tax, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_tax";
         }
 
         this.taxService.save(tax);
 
-        return "redirect:/admin/taxs";
+        return "redirect:/admin/taxes";
     }
 
     @GetMapping(path = "/edit/{taxId}")
@@ -60,22 +59,19 @@ public class TaxController {
     public String editTax(Model model, @PathVariable(value = "taxId") Long id,
                           @ModelAttribute(value = "tax") @Valid Tax tax, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_tax";
         }
 
         this.taxService.update(tax);
 
-        return "redirect:/admin/taxs";
+        return "redirect:/admin/taxes";
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{taxId}")
-    public String deleteTax(@PathVariable(value = "taxId") Long id) {
+    public void deleteTax(@PathVariable(value = "taxId") Long id) {
         this.taxService.delete(id);
-
-        return "redirect:/admin/taxs";
     }
 }

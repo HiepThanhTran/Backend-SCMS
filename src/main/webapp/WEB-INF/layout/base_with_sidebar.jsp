@@ -70,7 +70,7 @@
         </div>
     </div>
 
-<%--    <tiles:insertAttribute name="footer"/>--%>
+    <%--    <tiles:insertAttribute name="footer"/>--%>
 </div>
 
 <tiles:insertAttribute name="preloading"/>

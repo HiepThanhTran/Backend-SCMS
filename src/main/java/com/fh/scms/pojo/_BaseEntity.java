@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -28,9 +27,9 @@ public class _BaseEntity implements Serializable {
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     protected boolean active = true;
 
-//    @CreationTimestamp
+    //    @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     protected LocalDateTime createdAt;
 
     @UpdateTimestamp

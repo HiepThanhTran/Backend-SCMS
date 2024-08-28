@@ -50,7 +50,7 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/", "/admin").hasRole(UserRole.ROLE_ADMIN.alias())
+                .antMatchers("/", "/admin/**").hasRole(UserRole.ROLE_ADMIN.alias())
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
@@ -59,7 +59,15 @@ public class WebSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username").passwordParameter("password")
                 .successHandler((httpServletRequest, httpServletResponse, authentication) -> {
                     userService.updateLastLogin(authentication.getName());
-                    httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/");
+
+                    boolean isAdmin = authentication.getAuthorities().parallelStream()
+                            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(UserRole.ROLE_ADMIN.name()));
+
+                    if (isAdmin) {
+                        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/");
+                    } else {
+                        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/logout");
+                    }
                 }).failureUrl("/login?error=true").permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/login").permitAll()

@@ -45,5 +45,51 @@
         <form:checkbox path="active" checked="${active}" class="ms-2"/>
     </div>
 
-    <input type="submit" value="Cập nhật"/>
+    <div id="ordersSection" class="form-group">
+        <label class="form-label mt-3">Nhãn</label><br/>
+        <div id="ordersContainer">
+            <div class="order-row">
+                <button type="button" class="btn btn-success" onclick="addOrderRow()">+</button>
+            </div>
+            <c:forEach var="unit" items="${scheduleOrders}">
+                <div style="display: flex; align-items: center; justify-content: center" class="order-row">
+                    <select name="orderIds" class="form-control mt-3 mb-2 me-3">
+                        <c:forEach var="optionOrder" items="${orders}">
+                            <option value="${optionOrder.id}"
+                                    <c:if test="${optionOrder.id == unit.id}">selected</c:if>>
+                                    ${optionOrder.orderNumber}
+                            </option>
+                        </c:forEach>
+                    </select>
+                    <button type="button" class="btn btn-danger mt-2" onclick="removeOrderRow(this)">-</button>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
+    <input type="submit" class="mt-3" value="Cập nhật"/>
 </form:form>
+
+<script>
+    function addOrderRow() {
+        const container = document.getElementById('ordersContainer');
+        const row = document.createElement('div');
+        row.className = 'order-row';
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.justifyContent = 'center';
+        row.innerHTML = `
+            <select name="orderIds" class="form-control mt-3 mb-2 me-3">
+                <c:forEach var="order" items="${orders}">
+                    <option value="${order.id}">${order.orderNumber}</option>
+                </c:forEach>
+            </select>
+            <button type="button" class="btn btn-danger mt-2" onclick="removeOrderRow(this)">-</button>
+        `;
+        container.appendChild(row);
+    }
+
+    function removeOrderRow(button) {
+        button.parentElement.remove();
+    }
+</script>

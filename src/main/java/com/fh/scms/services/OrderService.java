@@ -12,22 +12,6 @@ import java.util.Map;
 
 public interface OrderService {
 
-    OrderResponse getOrderResponse(Order order);
-
-    OrderDetailsReponse getOrderDetailsReponse(OrderDetails orderDetails);
-
-    List<OrderResponse> getAllOrderResponse(Map<String, String> params);
-
-    void checkout(User user, OrderRequest orderRequest);
-
-    void checkin(User user, OrderRequest orderRequest);
-
-    void cancelOrder(User user, Long orderId);
-
-    void updateOrderStatus(Long orderId, String status);
-
-    List<Order> findRecentOrders();
-
     Order findById(Long id);
 
     void save(Order order);
@@ -39,4 +23,28 @@ public interface OrderService {
     Long count();
 
     List<Order> findAllWithFilter(Map<String, String> params);
+
+    OrderResponse getOrderResponse(Order order);
+
+    List<OrderResponse> getAllOrderResponse(Map<String, String> params);
+
+    OrderDetailsReponse getOrderDetailsReponse(OrderDetails orderDetails);
+
+    List<OrderDetails> getOrderDetailsById(Long orderId);
+
+    void checkout(User user, OrderRequest orderRequest);
+
+    void checkin(User user, OrderRequest orderRequest);
+
+    void cancelOrder(User user, Long orderId);
+
+    void updateOrderStatus(Long orderId, String status);
+
+    List<Order> findRecentlyOrders();
+
+    List<Order> findByDeliveryScheduleId(Long deliveryScheduleId);
+
+    void save(Order order, List<Long> productIds, List<Float> quantities, Long inventoryId);
+
+    void update(Order order, List<Long> productIds, List<Float> quantities, Long inventoryId);
 }

@@ -4,22 +4,11 @@ import com.fh.scms.dto.rating.RatingRequestCreate;
 import com.fh.scms.dto.supplier.SupplierDTO;
 import com.fh.scms.pojo.Rating;
 import com.fh.scms.pojo.Supplier;
-import com.fh.scms.pojo.User;
 
 import java.util.List;
 import java.util.Map;
 
 public interface SupplierService {
-
-    SupplierDTO getSupplierResponse(Supplier supplier);
-
-    Supplier getProfileSupplier(String username);
-
-    SupplierDTO updateProfileSupplier(String username, SupplierDTO supplierDTO);
-
-    List<Rating> getRatingsForSupplier(Long supplierId);
-
-    Rating addRatingForSupplier(String username, Long supplierId, RatingRequestCreate ratingRequestCreate);
 
     Supplier findById(Long id);
 
@@ -32,4 +21,14 @@ public interface SupplierService {
     Long count();
 
     List<Supplier> findAllWithFilter(Map<String, String> params);
+
+    SupplierDTO getSupplierResponse(Supplier supplier);
+
+    Supplier getProfileSupplier(String username);
+
+    SupplierDTO updateProfileSupplier(String username, SupplierDTO supplierDTO);
+
+    List<Rating> getRatingsForSupplier(Long supplierId);
+
+    Rating addRatingForSupplier(String username, Long supplierId, RatingRequestCreate ratingRequestCreate);
 }

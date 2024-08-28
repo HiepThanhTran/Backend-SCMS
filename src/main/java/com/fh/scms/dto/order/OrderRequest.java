@@ -1,5 +1,6 @@
 package com.fh.scms.dto.order;
 
+import com.fh.scms.enums.OrderStatus;
 import com.fh.scms.enums.OrderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,8 @@ public class OrderRequest {
 
     @NotNull(message = "{order.type.notNull}")
     private OrderType type;
+
+    private OrderStatus status;
 
     @Valid
     private Set<OrderDetailsRequest> orderDetails;

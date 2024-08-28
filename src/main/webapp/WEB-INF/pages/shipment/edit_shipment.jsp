@@ -60,5 +60,5 @@
         <form:checkbox path="active" checked="${active}" class="ms-2"/>
     </div>
 
-    <input type="submit" value="Cập nhật"/>
+    <input type="submit" class="mt-3" value="Cập nhật"/>
 </form:form>

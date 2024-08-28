@@ -8,12 +8,6 @@ import java.util.Map;
 
 public interface CustomerService {
 
-    CustomerDTO getCustomerResponse(Customer customer);
-
-    Customer getProfileCustomer(String username);
-
-    CustomerDTO updateProfileCustomer(String username, CustomerDTO customerDTO);
-
     Customer findById(Long id);
 
     void save(Customer customer);
@@ -25,4 +19,10 @@ public interface CustomerService {
     Long count();
 
     List<Customer> findAllWithFilter(Map<String, String> params);
+
+    CustomerDTO getCustomerResponse(Customer customer);
+
+    Customer getProfileCustomer(String username);
+
+    CustomerDTO updateProfileCustomer(String username, CustomerDTO customerDTO);
 }

@@ -26,22 +26,6 @@ public class CategoryServiceImplement implements CategoryService {
     private ProductRepository productRepository;
 
     @Override
-    public CategoryResponse getCategoryResponse(@NotNull Category category) {
-        return CategoryResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .description(category.getDescription())
-                .build();
-    }
-
-    @Override
-    public List<CategoryResponse> getAllCategoryResponse(Map<String, String> params) {
-        return this.categoryRepository.findAllWithFilter(params).stream()
-                .map(this::getCategoryResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public Category findById(Long id) {
         return this.categoryRepository.findById(id);
     }
@@ -77,5 +61,21 @@ public class CategoryServiceImplement implements CategoryService {
     @Override
     public List<Category> findAllWithFilter(Map<String, String> params) {
         return this.categoryRepository.findAllWithFilter(params);
+    }
+
+    @Override
+    public CategoryResponse getCategoryResponse(@NotNull Category category) {
+        return CategoryResponse.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .description(category.getDescription())
+                .build();
+    }
+
+    @Override
+    public List<CategoryResponse> getAllCategoryResponse(Map<String, String> params) {
+        return this.categoryRepository.findAllWithFilter(params).parallelStream()
+                .map(this::getCategoryResponse)
+                .collect(Collectors.toList());
     }
 }

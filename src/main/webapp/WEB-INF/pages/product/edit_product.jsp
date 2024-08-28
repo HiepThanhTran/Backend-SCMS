@@ -5,30 +5,6 @@
 
 <c:url value="/admin/products/edit/${product.id}" var="editProduct"/>
 
-<script>
-    function addTagRow() {
-        const container = document.getElementById('tagsContainer');
-        const row = document.createElement('div');
-        row.className = 'tag-row';
-        row.style.display = 'flex';
-        row.style.alignItems = 'center';
-        row.style.justifyContent = 'center';
-        row.innerHTML = `
-            <select name="tagIds" class="form-control mt-3 mb-2 me-3">
-                <c:forEach var="unit" items="${tags}">
-                    <option value="${unit.id}">${unit.name}</option>
-                </c:forEach>
-            </select>
-            <button type="button" class="btn btn-danger mt-2" onclick="removeTagRow(this)">-</button>
-        `;
-        container.appendChild(row);
-    }
-
-    function removeTagRow(button) {
-        button.parentElement.remove();
-    }
-</script>
-
 <div class="container list">
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-center list__title">Chỉnh sửa sản phẩm</h1>
@@ -99,17 +75,17 @@
             <div class="tag-row">
                 <button type="button" class="btn btn-success" onclick="addTagRow()">+</button>
             </div>
-            <c:forEach var="unit" items="${productTags}">
+            <c:forEach var="tag" items="${productTags}">
                 <div style="display: flex; align-items: center; justify-content: center" class="tag-row">
                     <select name="tagIds" class="form-control mt-3 mb-2 me-3">
-                        <c:forEach var="optionUnit" items="${tags}">
-                            <option value="${optionUnit.id}"
-                                    <c:if test="${optionUnit.id == unit.id}">selected</c:if>>
-                                    ${optionUnit.name}
+                        <c:forEach var="optionTag" items="${tags}">
+                            <option value="${optionTag.id}"
+                                    <c:if test="${optionTag.id == tag.id}">selected</c:if>>
+                                    ${optionTag.name}
                             </option>
                         </c:forEach>
                     </select>
-                    <button type="button" class="btn btn-danger mt-2" onclick="removeUnitRow(this)">-</button>
+                    <button type="button" class="btn btn-danger mt-2" onclick="removeTagRow(this)">-</button>
                 </div>
             </c:forEach>
         </div>
@@ -117,3 +93,27 @@
 
     <input class="mt-3" type="submit" value="Cập nhật"/>
 </form:form>
+
+<script>
+    function addTagRow() {
+        const container = document.getElementById('tagsContainer');
+        const row = document.createElement('div');
+        row.className = 'tag-row';
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.justifyContent = 'center';
+        row.innerHTML = `
+            <select name="tagIds" class="form-control mt-3 mb-2 me-3">
+                <c:forEach var="unit" items="${tags}">
+                    <option value="${unit.id}">${unit.name}</option>
+                </c:forEach>
+            </select>
+            <button type="button" class="btn btn-danger mt-2" onclick="removeTagRow(this)">-</button>
+        `;
+        container.appendChild(row);
+    }
+
+    function removeTagRow(button) {
+        button.parentElement.remove();
+    }
+</script>

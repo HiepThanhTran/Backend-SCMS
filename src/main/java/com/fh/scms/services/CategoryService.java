@@ -8,10 +8,6 @@ import java.util.Map;
 
 public interface CategoryService {
 
-    CategoryResponse getCategoryResponse(Category category);
-
-    List<CategoryResponse> getAllCategoryResponse(Map<String, String> params);
-
     Category findById(Long id);
 
     void save(Category category);
@@ -23,4 +19,8 @@ public interface CategoryService {
     Long count();
 
     List<Category> findAllWithFilter(Map<String, String> params);
+
+    CategoryResponse getCategoryResponse(Category category);
+
+    List<CategoryResponse> getAllCategoryResponse(Map<String, String> params);
 }

@@ -42,16 +42,16 @@ public class APIRatingController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(this.ratingService.getRatingResponse(rating));
+        RatingResponse ratingResponse = this.ratingService.getRatingResponse(rating);
+
+        return ResponseEntity.ok(ratingResponse);
     }
 
     @PostMapping(path = "/{ratingId}")
     public ResponseEntity<?> updateRating(Principal principal, @PathVariable(value = "ratingId") Long id,
                                           @ModelAttribute @Valid RatingRequestUpdate ratingRequestUpdate, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> messageResponses = MessageResponse.fromBindingResult(bindingResult);
-
-            return ResponseEntity.badRequest().body(messageResponses);
+            return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
         Rating rating = this.ratingService.findById(id);
@@ -61,12 +61,11 @@ public class APIRatingController {
 
         User user = this.userService.findByUsername(principal.getName());
         if (!Objects.equals(user.getId(), rating.getUser().getId())) {
-            List<MessageResponse> errorMessages = List.of(new MessageResponse("Bạn không có quyền sửa đánh giá này"));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse("Bạn không có quyền sửa đánh giá này")));
         }
 
         rating = this.ratingService.update(rating, ratingRequestUpdate);
+
         return ResponseEntity.ok(this.ratingService.getRatingResponse(rating));
     }
 
@@ -79,12 +78,11 @@ public class APIRatingController {
 
         User user = this.userService.findByUsername(principal.getName());
         if (!Objects.equals(user.getId(), rating.getUser().getId())) {
-            List<MessageResponse> errorMessages = List.of(new MessageResponse("Bạn không có quyền xóa đánh giá này"));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse("Bạn không có quyền xóa đánh giá này")));
         }
 
         this.ratingService.delete(id);
+
         return ResponseEntity.noContent().build();
     }
 }

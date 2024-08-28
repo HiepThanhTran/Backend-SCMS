@@ -20,29 +20,13 @@ public class TagServiceImplement implements TagService {
     private TagRepository tagRepository;
 
     @Override
-    public TagResponse getTagResponse(@NotNull Tag tag) {
-        return TagResponse.builder()
-                .id(tag.getId())
-                .name(tag.getName())
-                .description(tag.getDescription())
-                .build();
-    }
-
-    @Override
-    public List<TagResponse> getAllTagResponse(Map<String, String> params) {
-        return this.tagRepository.findAllWithFilter(params).stream()
-                .map(this::getTagResponse)
-                .collect(java.util.stream.Collectors.toList());
+    public List<Tag> findByProductId(Long productId) {
+        return this.tagRepository.findByProductId(productId);
     }
 
     @Override
     public Tag findById(Long id) {
         return this.tagRepository.findById(id);
-    }
-
-    @Override
-    public List<Tag> findByProductId(Long productId) {
-        return this.tagRepository.findByProductId(productId);
     }
 
     @Override
@@ -68,5 +52,21 @@ public class TagServiceImplement implements TagService {
     @Override
     public List<Tag> findAllWithFilter(Map<String, String> params) {
         return this.tagRepository.findAllWithFilter(params);
+    }
+
+    @Override
+    public TagResponse getTagResponse(@NotNull Tag tag) {
+        return TagResponse.builder()
+                .id(tag.getId())
+                .name(tag.getName())
+                .description(tag.getDescription())
+                .build();
+    }
+
+    @Override
+    public List<TagResponse> getAllTagResponse(Map<String, String> params) {
+        return this.tagRepository.findAllWithFilter(params).parallelStream()
+                .map(this::getTagResponse)
+                .collect(java.util.stream.Collectors.toList());
     }
 }

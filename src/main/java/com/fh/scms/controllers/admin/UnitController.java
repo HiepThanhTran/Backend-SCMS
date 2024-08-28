@@ -38,8 +38,7 @@ public class UnitController {
     @PostMapping(path = "/add")
     public String addUnit(Model model, @ModelAttribute(value = "unit") @Valid Unit unit, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_unit";
         }
@@ -61,8 +60,7 @@ public class UnitController {
     public String editUnit(Model model, @PathVariable(value = "unitId") Long id,
                            @ModelAttribute(value = "unit") @Valid Unit unit, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_unit";
         }
@@ -74,9 +72,7 @@ public class UnitController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{unitId}")
-    public String deleteUnit(@PathVariable(value = "unitId") Long id) {
+    public void deleteUnit(@PathVariable(value = "unitId") Long id) {
         this.unitService.delete(id);
-
-        return "redirect:/admin/units";
     }
 }

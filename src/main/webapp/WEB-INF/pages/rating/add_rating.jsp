@@ -33,8 +33,8 @@
         <form:label path="criteria" cssClass="form-label">Tiêu chí đánh giá</form:label><br/>
         <form:select path="criteria" cssClass="w-100 mb-3">
             <form:option value="" label="Chọn tiêu chí đánh giá"/>
-            <c:forEach items="${criterias}" var="paymentTermsType">
-                <form:option value="${paymentTermsType['key']}" label="${paymentTermsType.value}"/>
+            <c:forEach items="${criteriaTypes}" var="criteriaType">
+                <form:option value="${criteriaType['key']}" label="${criteriaType.value}"/>
             </c:forEach>
         </form:select>
     </div>

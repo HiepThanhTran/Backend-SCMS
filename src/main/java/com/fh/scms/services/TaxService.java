@@ -8,10 +8,6 @@ import java.util.Map;
 
 public interface TaxService {
 
-    TaxResponse getTaxResponse(Tax tax);
-
-    List<TaxResponse> getAllTaxResponse(Map<String, String> params);
-
     Tax findById(Long id);
 
     void save(Tax tax);
@@ -23,4 +19,8 @@ public interface TaxService {
     Long count();
 
     List<Tax> findAllWithFilter(Map<String, String> params);
+
+    TaxResponse getTaxResponse(Tax tax);
+
+    List<TaxResponse> getAllTaxResponse(Map<String, String> params);
 }

@@ -2,13 +2,8 @@ package com.fh.scms.services.implement;
 
 import com.fh.scms.dto.rating.RatingRequestCreate;
 import com.fh.scms.dto.supplier.SupplierDTO;
-import com.fh.scms.pojo.Rating;
-import com.fh.scms.pojo.Supplier;
-import com.fh.scms.pojo.User;
-import com.fh.scms.repository.PaymentTermsRepository;
-import com.fh.scms.repository.RatingRepository;
-import com.fh.scms.repository.SupplierRepository;
-import com.fh.scms.repository.UserRepository;
+import com.fh.scms.pojo.*;
+import com.fh.scms.repository.*;
 import com.fh.scms.services.SupplierService;
 import com.fh.scms.util.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import javax.swing.text.html.Option;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
@@ -32,9 +26,47 @@ public class SupplierServiceImplement implements SupplierService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private PaymentTermsRepository paymentTermsRepository;
-    @Autowired
     private RatingRepository ratingRepository;
+    @Autowired
+    private InvoiceRepository invoiceRepository;
+
+    @Override
+    public Supplier findById(Long id) {
+        return this.supplierRepository.findById(id);
+    }
+
+    @Override
+    public void save(Supplier supplier) {
+        this.supplierRepository.save(supplier);
+    }
+
+    @Override
+    public void update(Supplier supplier) {
+        this.supplierRepository.update(supplier);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Supplier supplier = this.supplierRepository.findById(id);
+        User user = supplier.getUser();
+        List<Invoice> invoices = new ArrayList<>(user.getInvoiceSet());
+        invoices.forEach(invoice -> {
+            invoice.setUser(null);
+            this.invoiceRepository.update(invoice);
+        });
+
+        this.supplierRepository.delete(id);
+    }
+
+    @Override
+    public Long count() {
+        return this.supplierRepository.count();
+    }
+
+    @Override
+    public List<Supplier> findAllWithFilter(Map<String, String> params) {
+        return this.supplierRepository.findAllWithFilter(params);
+    }
 
     @Override
     public SupplierDTO getSupplierResponse(@NotNull Supplier supplier) {
@@ -122,35 +154,5 @@ public class SupplierServiceImplement implements SupplierService {
         }
 
         return rating;
-    }
-
-    @Override
-    public Supplier findById(Long id) {
-        return this.supplierRepository.findById(id);
-    }
-
-    @Override
-    public void save(Supplier supplier) {
-        this.supplierRepository.save(supplier);
-    }
-
-    @Override
-    public void update(Supplier supplier) {
-        this.supplierRepository.update(supplier);
-    }
-
-    @Override
-    public void delete(Long id) {
-        this.supplierRepository.delete(id);
-    }
-
-    @Override
-    public Long count() {
-        return this.supplierRepository.count();
-    }
-
-    @Override
-    public List<Supplier> findAllWithFilter(Map<String, String> params) {
-        return this.supplierRepository.findAllWithFilter(params);
     }
 }

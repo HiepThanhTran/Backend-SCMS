@@ -26,7 +26,15 @@ const deleteItem = async (endpoint, itemId) => {
                         'Dữ liệu đã được xóa thành công.',
                         'success'
                     )
-                }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    Swal.fire(
+                        'Xóa dữ liệu thất bại!',
+                        'Dữ liệu đang được liên kết với thực thể khác.',
+                        'error'
+                    );
+                },
             });
         }
     });

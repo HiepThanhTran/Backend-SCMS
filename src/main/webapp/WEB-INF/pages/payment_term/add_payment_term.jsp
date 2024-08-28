@@ -33,8 +33,8 @@
         <form:label path="type" cssClass="form-label">Loại thanh toán</form:label><br/>
         <form:select path="type" cssClass="w-100 mb-3">
             <form:option value="" label="Chọn loại thanh toán"/>
-            <c:forEach items="${paymentTermTypes}" var="paymentTermsType">
-                <form:option value="${paymentTermsType['key']}" label="${paymentTermsType.value}"/>
+            <c:forEach items="${paymentTermTypes}" var="paymentTermType">
+                <form:option value="${paymentTermType['key']}" label="${paymentTermType.value}"/>
             </c:forEach>
         </form:select>
     </div>

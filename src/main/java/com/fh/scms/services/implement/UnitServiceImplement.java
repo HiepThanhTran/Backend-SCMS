@@ -22,33 +22,10 @@ public class UnitServiceImplement implements UnitService {
 
     @Autowired
     private UnitRepository unitRepository;
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Override
-    public UnitResponse getUnitResponse(@NotNull Unit unit) {
-        return UnitResponse.builder()
-                .id(unit.getId())
-                .name(unit.getName())
-                .abbreviation(unit.getAbbreviation())
-                .build();
-    }
-
-    @Override
-    public List<UnitResponse> getAllUnitResponse(Map<String, String> params) {
-        return this.unitRepository.findAllWithFilter(params).stream()
-                .map(this::getUnitResponse)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public Unit findById(Long id) {
         return this.unitRepository.findById(id);
-    }
-
-    @Override
-    public List<Unit> findByProductId(Long productId) {
-        return this.unitRepository.findByProductId(productId);
     }
 
     @Override
@@ -63,14 +40,6 @@ public class UnitServiceImplement implements UnitService {
 
     @Override
     public void delete(Long id) {
-        Unit unit = this.unitRepository.findById(id);
-        Set<Product> products = unit.getProductSet();
-
-        for (Product product : products) {
-            product.setUnit(null);
-            this.productRepository.update(product);
-        }
-
         this.unitRepository.delete(id);
     }
 
@@ -82,5 +51,21 @@ public class UnitServiceImplement implements UnitService {
     @Override
     public List<Unit> findAllWithFilter(Map<String, String> params) {
         return this.unitRepository.findAllWithFilter(params);
+    }
+
+    @Override
+    public UnitResponse getUnitResponse(@NotNull Unit unit) {
+        return UnitResponse.builder()
+                .id(unit.getId())
+                .name(unit.getName())
+                .abbreviation(unit.getAbbreviation())
+                .build();
+    }
+
+    @Override
+    public List<UnitResponse> getAllUnitResponse(Map<String, String> params) {
+        return this.unitRepository.findAllWithFilter(params).parallelStream()
+                .map(this::getUnitResponse)
+                .collect(Collectors.toList());
     }
 }

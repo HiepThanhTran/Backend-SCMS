@@ -10,7 +10,7 @@
                 <div class="info d-flex flex-column justify-content-between h-100">
                     <div>
                         <h3 class="glow">Doanh thu</h3>
-                        <fmt:formatNumber value="${revenueLast24Hours.revenue}" type="currency" currencySymbol="₫" groupingUsed="true"
+                        <fmt:formatNumber value="${revenueLast24Hours.totalRevenue}" type="currency" currencySymbol="₫" groupingUsed="true"
                                           var="formattedRevenueLast24Hours"/>
                         <p class="glow"><span class="totalRevenues">${formattedRevenueLast24Hours}</span></p>
                     </div>
@@ -36,7 +36,7 @@
                 <div class="info d-flex flex-column justify-content-between h-100">
                     <div>
                         <h3 class="glow">Đơn hàng</h3>
-                        <p class="glow"><span class="totalOrders">${revenueLast24Hours.orderCount}</span> đơn</p>
+                        <p class="glow"><span class="totalOrders">${revenueLast24Hours.totalOrder}</span> đơn</p>
                     </div>
                     <p style="margin-bottom: 0;" class="text-light">Trong 24 giờ qua</p>
                 </div>
@@ -59,8 +59,8 @@
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div class="info d-flex flex-column justify-content-between h-100">
                     <div>
-                        <h3 class="glow">Coming soon</h3>
-                        <p class="glow">Coming soon</p>
+                        <h3 class="glow">Tồn kho</h3>
+                        <p class="glow">---</p>
                     </div>
                     <p style="margin-bottom: 0;" class="text-light">Trong 24 giờ qua</p>
                 </div>
@@ -103,7 +103,7 @@
 <div class="row mt-4">
     <h2 class="mb-4">Đơn hàng gần đây</h2>
     <hr>
-    <table id="recentlyOrderTable" class="table table-striped">
+    <table id="recentlyOrderTable" class="table table-striped nowrap">
         <thead>
         <tr>
             <th>ID</th>
@@ -149,31 +149,12 @@
                 </td>
                 <td>${order.user.username}</td>
                 <td>
-                    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Xem chi tiết</button>
+                    <a href="<c:url value="/admin/orders/edit/${order.id}"/>" type="button" class="btn btn-info">Xem chi tiết</a>
                 </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Chi tiết đơn hàng</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script src="<c:url value="/js/dashboard.js"/>"></script>
@@ -226,20 +207,20 @@
         })
     }
 
-    const chart1 = document.getElementById('chart1').getContext('2d')
-    const revenueLast24Hours = '${revenueLast24Hours.revenue}';
-    const revenueLastWeek = '${revenueLastWeek.revenue}';
-    let revenueLast24HoursNum = parseFloat(revenueLast24Hours);
+    const revenueLast24Hours = '${revenueLast24Hours.totalRevenue}';
+    const revenueLastWeek = '${revenueLastWeek.totalRevenue}';
+    const revenueLast24HoursNum = parseFloat(revenueLast24Hours);
     const revenueLastWeekNum = parseFloat(revenueLastWeek);
-    let dataChart1 = revenueLast24HoursNum / revenueLastWeekNum * 100;
+    const dataChart1 = revenueLast24HoursNum / revenueLastWeekNum * 100;
+    const chart1 = document.getElementById('chart1').getContext('2d')
     const chart1Instance = generateChart(ctx = chart1, type = 'doughnut', data = dataChart1, color = "#a64db5")
 
-    const chart2 = document.getElementById('chart2').getContext('2d')
-    const orderCountLast24Hours = '${revenueLast24Hours.orderCount}';
-    const orderCountLastWeek = '${revenueLastWeek.orderCount}';
-    let orderCountLast24HoursNum = parseFloat(orderCountLast24Hours);
+    const orderCountLast24Hours = '${revenueLast24Hours.totalOrder}';
+    const orderCountLastWeek = '${revenueLastWeek.totalOrder}';
+    const orderCountLast24HoursNum = parseFloat(orderCountLast24Hours);
     const orderCountLastWeekNum = parseFloat(orderCountLastWeek);
-    let dataChart2 = orderCountLast24HoursNum / orderCountLastWeekNum * 100;
+    const dataChart2 = orderCountLast24HoursNum / orderCountLastWeekNum * 100;
+    const chart2 = document.getElementById('chart2').getContext('2d')
     const chart2Instance = generateChart(ctx = chart2, type = 'doughnut', data = dataChart2, color = "#e67c7b")
 
     const chart3 = document.getElementById('chart3').getContext('2d')

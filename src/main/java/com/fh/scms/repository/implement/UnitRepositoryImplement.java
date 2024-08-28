@@ -29,13 +29,6 @@ public class UnitRepositoryImplement implements UnitRepository {
     }
 
     @Override
-    public Unit findById(Long id) {
-        Session session = this.getCurrentSession();
-
-        return session.get(Unit.class, id);
-    }
-
-    @Override
     public List<Unit> findByProductId(Long productId) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -49,6 +42,13 @@ public class UnitRepositoryImplement implements UnitRepository {
         Query<Unit> query = session.createQuery(criteria);
 
         return query.getResultList();
+    }
+
+    @Override
+    public Unit findById(Long id) {
+        Session session = this.getCurrentSession();
+
+        return session.get(Unit.class, id);
     }
 
     @Override

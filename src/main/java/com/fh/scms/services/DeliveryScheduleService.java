@@ -18,4 +18,8 @@ public interface DeliveryScheduleService {
     Long count();
 
     List<DeliverySchedule> findAllWithFilter(Map<String, String> params);
+
+    void save(DeliverySchedule deliverySchedule, List<String> orderIds);
+
+    void update(DeliverySchedule deliverySchedule, List<String> orderIds);
 }

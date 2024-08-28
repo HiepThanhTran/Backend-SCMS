@@ -7,9 +7,9 @@ import java.util.Map;
 
 public interface TagRepository {
 
-    Tag findById(Long id);
-
     List<Tag> findByProductId(Long productId);
+
+    Tag findById(Long id);
 
     void save(Tag tag);
 

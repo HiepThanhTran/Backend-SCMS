@@ -32,6 +32,7 @@ public class APICartController {
         }
 
         Cart cart = this.cartService.findCartByUser(user);
+
         return ResponseEntity.ok(this.cartService.getCartResponse(cart));
     }
 
@@ -43,6 +44,7 @@ public class APICartController {
         }
 
         this.cartService.addProductToCart(this.cartService.findCartByUser(user), productRequestAddToCart);
+
         return ResponseEntity.ok().build();
     }
 
@@ -58,10 +60,8 @@ public class APICartController {
             this.cartService.updateProductInCart(this.cartService.findCartByUser(user), productId, params);
 
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 
@@ -76,10 +76,8 @@ public class APICartController {
             this.cartService.deleteProductFromCart(this.cartService.findCartByUser(user), productId);
 
             return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            List<MessageResponse> errorMessages = List.of(new MessageResponse(e.getMessage()));
-
-            return ResponseEntity.badRequest().body(errorMessages);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
         }
     }
 
@@ -91,6 +89,7 @@ public class APICartController {
         }
 
         this.cartService.clearCart(this.cartService.findCartByUser(user));
+
         return ResponseEntity.noContent().build();
     }
 }

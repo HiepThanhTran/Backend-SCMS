@@ -38,8 +38,7 @@ public class WarehouseController {
     @PostMapping(path = "/add")
     public String addWarehouse(Model model, @ModelAttribute(value = "warehouse") @Valid Warehouse warehouse, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_warehouse";
         }
@@ -60,8 +59,7 @@ public class WarehouseController {
     public String editWarehouse(Model model, @PathVariable(value = "warehouseId") Long id,
                                 @ModelAttribute(value = "warehouse") @Valid Warehouse warehouse, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_warehouse";
         }
@@ -73,9 +71,7 @@ public class WarehouseController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{warehouseId}")
-    public String deleteWarehouse(@PathVariable(value = "warehouseId") Long id) {
+    public void deleteWarehouse(@PathVariable(value = "warehouseId") Long id) {
         this.warehouseService.delete(id);
-
-        return "redirect:/admin/warehouses";
     }
 }

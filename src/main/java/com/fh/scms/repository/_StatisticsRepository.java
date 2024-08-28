@@ -2,16 +2,14 @@ package com.fh.scms.repository;
 
 import com.fh.scms.dto.statistics.InventoryStatusReportEntry;
 import com.fh.scms.dto.statistics.ProductStatusReportEntry;
+import com.fh.scms.dto.statistics.RevenueStatisticsEntry;
 import com.fh.scms.dto.statistics.WarehouseStatusReportEntry;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface _StatisticsRepository {
 
-    List<Object[]> generateRevenueByLast24Hours();
-
-    List<Object[]> generateRevenueByLastWeek();
+    RevenueStatisticsEntry generateRevenueByLastDays(int days);
 
     List<Object[]> generateSupplierPerformanceReport(Long supplierId, Integer year);
 
@@ -21,7 +19,5 @@ public interface _StatisticsRepository {
 
     List<Object[]> generateStatisticsProductsByExpiryDate(Long inventoryId);
 
-    List<ProductStatusReportEntry> findProductsExpiringSoon(Long inventoryId);
-
-    List<ProductStatusReportEntry> findExpiredProducts(Long inventoryId);
+    List<ProductStatusReportEntry> findProductsByStatus(Long inventoryId, String status);
 }

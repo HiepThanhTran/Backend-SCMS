@@ -3,6 +3,7 @@ package com.fh.scms.controllers;
 import com.fh.scms.services.OrderService;
 import com.fh.scms.services.SupplierService;
 import com.fh.scms.services._StatisticsService;
+import com.fh.scms.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,9 +33,9 @@ public class AdminController {
 
     @GetMapping(path = "/")
     public String dashBoard(Model model) {
-        model.addAttribute("recentOrders", this.orderService.findRecentOrders());
-        model.addAttribute("revenueLast24Hours", this.statisticsService.getRevenueByLast24Hours());
-        model.addAttribute("revenueLastWeek", this.statisticsService.getRevenueByLastWeek());
+        model.addAttribute("revenueLast24Hours", this.statisticsService.getRevenueByLastDays(Constants.LAST_24_HOURS));
+        model.addAttribute("revenueLastWeek", this.statisticsService.getRevenueByLastDays(Constants.LAST_WEEK));
+        model.addAttribute("recentOrders", this.orderService.findRecentlyOrders());
 
         return "dashboard";
     }

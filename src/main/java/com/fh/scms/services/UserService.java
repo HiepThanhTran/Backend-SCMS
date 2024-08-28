@@ -11,20 +11,6 @@ import java.util.Map;
 
 public interface UserService extends UserDetailsService {
 
-    UserResponse getUserResponse(User user);
-
-    boolean authenticateUser(String username, String password);
-
-    void updateLastLogin(String username);
-
-    UserResponse registerUser(UserRequestRegister userRequestRegister);
-
-    Boolean confirmUser(String username);
-
-    UserResponse getProfileUser(String username);
-
-    UserResponse updateProfileUser(String username, UserRequestUpdate userRequestUpdate);
-
     User findById(Long id);
 
     User findByUsername(String username);
@@ -38,4 +24,18 @@ public interface UserService extends UserDetailsService {
     Long count();
 
     List<User> findAllWithFilter(Map<String, String> params);
+
+    UserResponse getUserResponse(User user);
+
+    boolean authenticateUser(String username, String password);
+
+    void updateLastLogin(String username);
+
+    UserResponse registerUser(UserRequestRegister userRequestRegister);
+
+    Boolean confirmUser(String username);
+
+    UserResponse getProfileUser(String username);
+
+    UserResponse updateProfileUser(String username, UserRequestUpdate userRequestUpdate);
 }

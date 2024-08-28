@@ -8,7 +8,7 @@
         <put-attribute name="title" value=""/>
         <put-attribute name="content" value=""/>
         <put-attribute name="header" value="/WEB-INF/layout/header.jsp"/>
-<!--        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>-->
+        <!--        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>-->
         <put-attribute name="preloading" value="/WEB-INF/layout/preloading.jsp"/>
     </definition>
 
@@ -18,14 +18,12 @@
         <put-attribute name="content" value=""/>
         <put-attribute name="sidebar" value="/WEB-INF/layout/sidebar.jsp"/>
         <put-attribute name="header" value="/WEB-INF/layout/header.jsp"/>
-<!--        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>-->
+        <!--        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>-->
         <put-attribute name="preloading" value="/WEB-INF/layout/preloading.jsp"/>
     </definition>
 
     <!--Đăng nhập-->
-    <definition name="login" template="/WEB-INF/pages/login.jsp">
-        <put-attribute name="title" value="Đăng nhập"/>
-    </definition>
+    <definition name="login" template="/WEB-INF/pages/login.jsp"/>
 
     <!--Dashboard-->
     <definition name="dashboard" extends="baseWithSidebar">

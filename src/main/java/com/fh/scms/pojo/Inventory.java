@@ -23,6 +23,7 @@ public class Inventory extends _BaseEntity implements Serializable {
     private String name;
 
     @ManyToOne(optional = false)
+    @NotNull(message = "{inventory.warehouse.notNull}")
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", nullable = false)
     private Warehouse warehouse;
 

@@ -37,6 +37,7 @@ public class APIProductController {
         }
 
         ProductResponseForDetails productResponseForDetails = this.productService.getProductResponseForDetails(product);
+
         return ResponseEntity.ok(productResponseForDetails);
     }
 }

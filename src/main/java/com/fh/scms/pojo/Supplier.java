@@ -53,7 +53,7 @@ public class Supplier extends _BaseEntity implements Serializable {
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
     private Set<SupplierCosting> supplierCostingSet;
 
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
     private Set<PaymentTerms> paymentTermsSet;
 
     @Override

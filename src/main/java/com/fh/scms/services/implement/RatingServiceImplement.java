@@ -26,49 +26,6 @@ public class RatingServiceImplement implements RatingService {
     private RatingRepository ratingRepository;
 
     @Override
-    public RatingResponse getRatingResponse(@NotNull Rating rating) {
-        return RatingResponse.builder()
-                .id(rating.getId())
-                .rating(rating.getRating())
-                .comment(rating.getComment())
-                .criteria(rating.getCriteria().getDisplayName())
-                .supplier(rating.getSupplier())
-                .user(rating.getUser())
-                .build();
-    }
-
-    @Override
-    public List<RatingResponse> getAllRatingResponse(Map<String, String> params) {
-        return this.ratingRepository.findAllWithFilter(params).stream()
-                .map(this::getRatingResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Rating update(Rating rating, RatingRequestUpdate ratingRequestUpdate) {
-        Field[] fields = RatingRequestUpdate.class.getDeclaredFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            try {
-                Object value = field.get(ratingRequestUpdate);
-
-                if (value != null && !value.toString().isEmpty()) {
-                    Field ratingField = Rating.class.getDeclaredField(field.getName());
-                    ratingField.setAccessible(true);
-                    Object convertedValue = Utils.convertValue(ratingField.getType(), value.toString());
-                    ratingField.set(rating, convertedValue);
-                }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                Logger.getLogger(UserServiceImplement.class.getName()).log(Level.SEVERE, null, e);
-            }
-        }
-
-        this.ratingRepository.update(rating);
-
-        return rating;
-    }
-
-    @Override
     public Rating findById(Long id) {
         return this.ratingRepository.findById(id);
     }
@@ -96,5 +53,48 @@ public class RatingServiceImplement implements RatingService {
     @Override
     public List<Rating> findAllWithFilter(Map<String, String> params) {
         return this.ratingRepository.findAllWithFilter(params);
+    }
+
+    @Override
+    public RatingResponse getRatingResponse(@NotNull Rating rating) {
+        return RatingResponse.builder()
+                .id(rating.getId())
+                .rating(rating.getRating())
+                .comment(rating.getComment())
+                .criteria(rating.getCriteria().getDisplayName())
+                .supplier(rating.getSupplier())
+                .user(rating.getUser())
+                .build();
+    }
+
+    @Override
+    public List<RatingResponse> getAllRatingResponse(Map<String, String> params) {
+        return this.ratingRepository.findAllWithFilter(params).parallelStream()
+                .map(this::getRatingResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Rating update(Rating rating, RatingRequestUpdate ratingRequestUpdate) {
+        Field[] fields = RatingRequestUpdate.class.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object value = field.get(ratingRequestUpdate);
+
+                if (value != null && !value.toString().isEmpty()) {
+                    Field ratingField = Rating.class.getDeclaredField(field.getName());
+                    ratingField.setAccessible(true);
+                    Object convertedValue = Utils.convertValue(ratingField.getType(), value.toString());
+                    ratingField.set(rating, convertedValue);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                Logger.getLogger(UserServiceImplement.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+
+        this.ratingRepository.update(rating);
+
+        return rating;
     }
 }

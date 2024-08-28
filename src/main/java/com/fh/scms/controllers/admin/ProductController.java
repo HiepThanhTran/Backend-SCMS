@@ -28,6 +28,13 @@ public class ProductController {
     private final TagService tagService;
     private final UnitService unitService;
 
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
+        model.addAttribute("units", this.unitService.findAllWithFilter(null));
+        model.addAttribute("tags", this.tagService.findAllWithFilter(null));
+    }
+
     @GetMapping
     public String listProducts(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("products", this.productService.findAllWithFilter(params));
@@ -37,9 +44,6 @@ public class ProductController {
 
     @GetMapping(path = "/add")
     public String addProduct(Model model) {
-        model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
-        model.addAttribute("tags", this.tagService.findAllWithFilter(null));
-        model.addAttribute("units", this.unitService.findAllWithFilter(null));
         model.addAttribute("product", new Product());
 
         return "add_product";
@@ -47,16 +51,10 @@ public class ProductController {
 
     @PostMapping(path = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String addProduct(Model model,
-                             @RequestParam(value = "tagIds", required = false, defaultValue = "") List<String> tagIds,
-                             @ModelAttribute(value = "product") @Valid Product product,
-                             BindingResult bindingResult) {
-        model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
-        model.addAttribute("tags", this.tagService.findAllWithFilter(null));
-        model.addAttribute("units", this.unitService.findAllWithFilter(null));
-
+                             @ModelAttribute(value = "product") @Valid Product product, BindingResult bindingResult,
+                             @RequestParam(value = "tagIds", required = false) List<Long> tagIds) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_product";
         }
@@ -68,27 +66,19 @@ public class ProductController {
 
     @GetMapping(path = "/edit/{productId}")
     public String editProduct(Model model, @PathVariable(value = "productId") Long id) {
-        model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
-        model.addAttribute("tags", this.tagService.findAllWithFilter(null));
-        model.addAttribute("units", this.unitService.findAllWithFilter(null));
-        model.addAttribute("product", this.productService.findById(id));
         model.addAttribute("productTags", this.tagService.findByProductId(id));
+        model.addAttribute("product", this.productService.findById(id));
 
         return "edit_product";
     }
 
     @PostMapping(path = "/edit/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String editProduct(Model model, @PathVariable(value = "productId") Long id,
-                              @RequestParam(value = "tagIds", required = false, defaultValue = "") List<String> tagIds,
-                              @ModelAttribute(value = "product") @Valid Product product,
-                              BindingResult bindingResult) {
-        model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
-        model.addAttribute("tags", this.tagService.findAllWithFilter(null));
-        model.addAttribute("units", this.unitService.findAllWithFilter(null));
-
+                              @ModelAttribute(value = "product") @Valid Product product, BindingResult bindingResult,
+                              @RequestParam(value = "tagIds", required = false) List<Long> tagIds) {
+        model.addAttribute("productTags", this.tagService.findByProductId(id));
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_product";
         }
@@ -100,9 +90,7 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{productId}")
-    public String deleteProduct(@PathVariable(value = "productId") Long id) {
+    public void deleteProduct(@PathVariable(value = "productId") Long id) {
         this.productService.delete(id);
-
-        return "redirect:/admin/products";
     }
 }

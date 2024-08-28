@@ -26,39 +26,6 @@ public class InvoiceServiceImplement implements InvoiceService {
     private TaxService taxService;
 
     @Override
-    public InvoiceResponse getInvoiceResponse(@NotNull Invoice invoice) {
-        return InvoiceResponse.builder()
-                .id(invoice.getId())
-                .invoiceNumber(invoice.getInvoiceNumber())
-                .isPaid(invoice.getPaid())
-                .totalAmount(invoice.getTotalAmount())
-                .invoiceDate(invoice.getCreatedAt())
-                .tax(this.taxService.getTaxResponse(invoice.getTax()))
-                .build();
-    }
-
-    @Override
-    public List<InvoiceResponse> getAllInvoiceResponse(Map<String, String> params) {
-        return this.invoiceRepository.findAllWithFilter(params).stream()
-                .map(this::getInvoiceResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void payInvoice(Long invoiceId) {
-        Invoice invoice = this.invoiceRepository.findById(invoiceId);
-
-        Optional.ofNullable(invoice).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy hóa đơn"));
-
-        if (invoice.getPaid()) {
-            throw new IllegalArgumentException("Hóa đơn đã được thanh toán");
-        }
-
-        invoice.setPaid(true);
-        this.invoiceRepository.update(invoice);
-    }
-
-    @Override
     public Invoice findById(Long id) {
         return this.invoiceRepository.findById(id);
     }
@@ -86,5 +53,38 @@ public class InvoiceServiceImplement implements InvoiceService {
     @Override
     public List<Invoice> findAllWithFilter(Map<String, String> params) {
         return this.invoiceRepository.findAllWithFilter(params);
+    }
+
+    @Override
+    public InvoiceResponse getInvoiceResponse(@NotNull Invoice invoice) {
+        return InvoiceResponse.builder()
+                .id(invoice.getId())
+                .invoiceNumber(invoice.getInvoiceNumber())
+                .isPaid(invoice.getPaid())
+                .totalAmount(invoice.getTotalAmount())
+                .invoiceDate(invoice.getCreatedAt())
+                .tax(this.taxService.getTaxResponse(invoice.getTax()))
+                .build();
+    }
+
+    @Override
+    public List<InvoiceResponse> getAllInvoiceResponse(Map<String, String> params) {
+        return this.invoiceRepository.findAllWithFilter(params).parallelStream()
+                .map(this::getInvoiceResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void payInvoice(Long invoiceId) {
+        Invoice invoice = this.invoiceRepository.findById(invoiceId);
+
+        Optional.ofNullable(invoice).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy hóa đơn"));
+
+        if (invoice.getPaid()) {
+            throw new IllegalArgumentException("Hóa đơn đã được thanh toán");
+        }
+
+        invoice.setPaid(true);
+        this.invoiceRepository.update(invoice);
     }
 }

@@ -38,8 +38,7 @@ public class CategoryController {
     @PostMapping(path = "/add")
     public String addCategory(Model model, @ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_category";
         }
@@ -60,8 +59,7 @@ public class CategoryController {
     public String editCategory(Model model, @PathVariable(value = "categoryId") Long id,
                                @ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_category";
         }
@@ -73,9 +71,7 @@ public class CategoryController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{categoryId}")
-    public String deleteCategory(@PathVariable(value = "categoryId") Long id) {
+    public void deleteCategory(@PathVariable(value = "categoryId") Long id) {
         categoryService.delete(id);
-
-        return "redirect:/admin/categories";
     }
 }

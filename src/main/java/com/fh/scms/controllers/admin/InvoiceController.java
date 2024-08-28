@@ -38,8 +38,7 @@ public class InvoiceController {
     @PostMapping(path = "/add")
     public String addInvoice(Model model, @ModelAttribute(value = "invoice") @Valid Invoice invoice, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_invoice";
         }
@@ -60,8 +59,7 @@ public class InvoiceController {
     public String editInvoice(Model model, @PathVariable(value = "invoiceId") Long id,
                               @ModelAttribute(value = "invoice") @Valid Invoice invoice, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_invoice";
         }
@@ -73,9 +71,7 @@ public class InvoiceController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{invoiceId}")
-    public String deleteInvoice(@PathVariable(value = "invoiceId") Long id) {
+    public void deleteInvoice(@PathVariable(value = "invoiceId") Long id) {
         this.invoiceService.delete(id);
-
-        return "redirect:/admin/invoices";
     }
 }

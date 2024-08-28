@@ -9,6 +9,8 @@ public interface OrderRepository {
 
     List<Order> findRecentOrders();
 
+    List<Order> findByDeliveryScheduleId(Long deliveryScheduleId);
+
     Order findById(Long id);
 
     void save(Order order);

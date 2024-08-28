@@ -34,5 +34,38 @@
         </form:select>
     </div>
 
-    <input type="submit" value="Thêm mới"/>
+    <div id="ordersSection" class="form-group">
+        <label class="form-label mt-3">Đơn hàng</label><br/>
+        <div id="ordersContainer">
+            <div class="order-row">
+                <button type="button" class="btn btn-success" onclick="addOrderRow()">+</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="submit" class="mt-3" value="Thêm mới"/>
 </form:form>
+
+<script>
+    function addOrderRow() {
+        const container = document.getElementById('ordersContainer');
+        const row = document.createElement('div');
+        row.className = 'order-row';
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.justifyContent = 'center';
+        row.innerHTML = `
+            <select name="orderIds" class="form-control mt-3 mb-2 me-3">
+                <c:forEach var="order" items="${orders}">
+                    <option value="${order.id}">${order.orderNumber}</option>
+                </c:forEach>
+            </select>
+            <button type="button" class="btn btn-danger mt-2" onclick="removeOrderRow(this)">-</button>
+        `;
+        container.appendChild(row);
+    }
+
+    function removeOrderRow(button) {
+        button.parentElement.remove();
+    }
+</script>

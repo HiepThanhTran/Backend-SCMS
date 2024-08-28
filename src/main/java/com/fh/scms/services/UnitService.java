@@ -8,13 +8,7 @@ import java.util.Map;
 
 public interface UnitService {
 
-    UnitResponse getUnitResponse(Unit unit);
-
-    List<UnitResponse> getAllUnitResponse(Map<String, String> params);
-
     Unit findById(Long id);
-
-    List<Unit> findByProductId(Long productId);
 
     void save(Unit unit);
 
@@ -25,4 +19,8 @@ public interface UnitService {
     Long count();
 
     List<Unit> findAllWithFilter(Map<String, String> params);
+
+    UnitResponse getUnitResponse(Unit unit);
+
+    List<UnitResponse> getAllUnitResponse(Map<String, String> params);
 }

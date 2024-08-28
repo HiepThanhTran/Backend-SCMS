@@ -29,8 +29,8 @@
         <c:forEach var="paymentTerms" items="${paymentTerms}">
             <tr id="item${paymentTerms.id}">
                 <td>${paymentTerms.id}</td>
-                <td>${paymentTerms.discountDays}</td>
-                <td>${paymentTerms.discountPercentage}</td>
+                <td>${paymentTerms.discountDays} ngày</td>
+                <td>${paymentTerms.discountPercentage * 100}%</td>
                 <td>${paymentTerms.type.getDisplayName()}</td>
                 <td>${paymentTerms.supplier.name}</td>
                 <td>

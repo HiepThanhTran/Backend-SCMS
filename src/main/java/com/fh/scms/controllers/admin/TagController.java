@@ -38,8 +38,7 @@ public class TagController {
     @PostMapping(path = "/add")
     public String addTag(Model model, @ModelAttribute(value = "tag") @Valid Tag tag, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_tag";
         }
@@ -60,8 +59,7 @@ public class TagController {
     public String editTag(Model model, @PathVariable(value = "tagId") Long id,
                           @ModelAttribute(value = "tag") @Valid Tag tag, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_tag";
         }
@@ -73,9 +71,7 @@ public class TagController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{tagId}")
-    public String deleteTag(@PathVariable(value = "tagId") Long id) {
+    public void deleteTag(@PathVariable(value = "tagId") Long id) {
         this.tagService.delete(id);
-
-        return "redirect:/admin/tags";
     }
 }

@@ -41,8 +41,7 @@ public class SupplierController {
     @PostMapping(path = "/add")
     public String addSupplier(Model model, @ModelAttribute(value = "supplier") @Valid UserRequestRegister supplier, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_supplier";
         }
@@ -69,8 +68,7 @@ public class SupplierController {
     public String editSupplier(Model model, @PathVariable(value = "supplierId") Long id,
                                @ModelAttribute(value = "supplier") @Valid Supplier supplier, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_supplier";
         }
@@ -82,9 +80,7 @@ public class SupplierController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{supplierId}")
-    public String deleteSupplier(@PathVariable(value = "supplierId") Long id) {
+    public void deleteSupplier(@PathVariable(value = "supplierId") Long id) {
         this.supplierService.delete(id);
-
-        return "redirect:/admin/suppliers";
     }
 }

@@ -53,5 +53,5 @@
         </form:select>
     </div>
 
-    <input type="submit" value="Thêm mới"/>
+    <input type="submit" class="mt-3" value="Thêm mới"/>
 </form:form>

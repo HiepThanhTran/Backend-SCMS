@@ -7,6 +7,7 @@ import com.fh.scms.services.RatingService;
 import com.fh.scms.services.SupplierService;
 import com.fh.scms.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,12 @@ public class RatingController {
     private final UserService userService;
     private final SupplierService supplierService;
 
+    @ModelAttribute
+    public void addAttributes(@NotNull Model model) {
+        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
+        model.addAttribute("users", this.userService.findAllWithFilter(null));
+    }
+
     @GetMapping
     public String listRating(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("ratings", this.ratingService.findAllWithFilter(params));
@@ -37,9 +44,6 @@ public class RatingController {
 
     @GetMapping(path = "/add")
     public String addRating(Model model) {
-        model.addAttribute("criterias", CriteriaType.getAllDisplayNames());
-        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
-        model.addAttribute("users", this.userService.findAllWithFilter(null));
         model.addAttribute("rating", new Rating());
 
         return "add_rating";
@@ -48,11 +52,7 @@ public class RatingController {
     @PostMapping(path = "/add")
     public String addRating(Model model, @ModelAttribute(value = "rating") @Valid Rating rating, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("criterias", CriteriaType.getAllDisplayNames());
-            model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
-            model.addAttribute("users", this.userService.findAllWithFilter(null));
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "add_rating";
         }
@@ -64,9 +64,6 @@ public class RatingController {
 
     @GetMapping(path = "/edit/{ratingId}")
     public String editRating(Model model, @PathVariable(value = "ratingId") Long id) {
-        model.addAttribute("criterias", CriteriaType.getAllDisplayNames());
-        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
-        model.addAttribute("users", this.userService.findAllWithFilter(null));
         model.addAttribute("rating", this.ratingService.findById(id));
 
         return "edit_rating";
@@ -76,11 +73,7 @@ public class RatingController {
     public String editRating(Model model, @PathVariable(value = "ratingId") Long id,
                              @ModelAttribute(value = "rating") @Valid Rating rating, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<MessageResponse> errors = MessageResponse.fromBindingResult(bindingResult);
-            model.addAttribute("errors", errors);
-            model.addAttribute("criterias", CriteriaType.getAllDisplayNames());
-            model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
-            model.addAttribute("users", this.userService.findAllWithFilter(null));
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_rating";
         }
@@ -92,9 +85,7 @@ public class RatingController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/delete/{ratingId}")
-    public String deleteRating(@PathVariable(value = "ratingId") Long id) {
+    public void deleteRating(@PathVariable(value = "ratingId") Long id) {
         this.ratingService.delete(id);
-
-        return "redirect:/admin/ratings";
     }
 }
