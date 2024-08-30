@@ -7,12 +7,13 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 @Setter
@@ -62,9 +63,10 @@ public class User extends _BaseEntity implements Serializable {
     @Column(name = "is_confirm", nullable = false, columnDefinition = "boolean default false")
     private Boolean confirm = false;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "last_login")
-    private LocalDateTime lastLogin;
+    private Date lastLogin;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

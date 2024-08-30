@@ -30,12 +30,12 @@
                 <td>${product.name}</td>
                 <td>${product.description}</td>
                 <td>
-                    <fmt:parseDate value="${ product.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:parseDate value="${ product.createdAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDateTime" type="both"/>
                     <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
                     <c:if test="${ product.updatedAt != null }">
-                        <fmt:parseDate value="${ product.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:parseDate value="${ product.updatedAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedUpdatedDateTime" type="both"/>
                         <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
                     <c:if test="${ product.updatedAt == null }">

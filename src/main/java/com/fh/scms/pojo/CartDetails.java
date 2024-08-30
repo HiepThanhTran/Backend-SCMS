@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -19,10 +21,12 @@ import java.math.BigDecimal;
 public class CartDetails extends _BaseEntity implements Serializable {
 
     @Builder.Default
+    @NotNull(message = "Quantity is required")
     @Column(nullable = false, columnDefinition = "float default 0")
     private Float quantity = 0.0f;
 
     @Builder.Default
+    @NotNull(message = "Unit price is required")
     @Column(name = "unit_price", nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
     private BigDecimal unitPrice = BigDecimal.ZERO;
 

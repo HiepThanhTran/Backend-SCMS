@@ -3,6 +3,7 @@ package com.fh.scms.controllers.admin;
 import com.fh.scms.dto.MessageResponse;
 import com.fh.scms.pojo.Invoice;
 import com.fh.scms.services.InvoiceService;
+import com.fh.scms.services.TaxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -20,32 +20,18 @@ import java.util.Map;
 public class InvoiceController {
 
     private final InvoiceService invoiceService;
+    private final TaxService taxService;
+
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        model.addAttribute("taxes", this.taxService.findAllWithFilter(null));
+    }
 
     @GetMapping
     public String listInvoice(Model model, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         model.addAttribute("invoices", this.invoiceService.findAllWithFilter(params));
 
         return "invoices";
-    }
-
-    @GetMapping(path = "/add")
-    public String addInvoice(Model model) {
-        model.addAttribute("invoice", new Invoice());
-
-        return "add_invoice";
-    }
-
-    @PostMapping(path = "/add")
-    public String addInvoice(Model model, @ModelAttribute(value = "invoice") @Valid Invoice invoice, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
-
-            return "add_invoice";
-        }
-
-        this.invoiceService.save(invoice);
-
-        return "redirect:/admin/invoices";
     }
 
     @GetMapping(path = "/edit/{invoiceId}")

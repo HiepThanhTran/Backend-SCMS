@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -118,7 +119,7 @@ public class UserServiceImplement implements UserService {
     @Override
     public void updateLastLogin(String username) {
         User user = this.userRepository.findByUsername(username);
-        user.setLastLogin(LocalDateTime.now());
+        user.setLastLogin(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         this.userRepository.update(user);
     }
 

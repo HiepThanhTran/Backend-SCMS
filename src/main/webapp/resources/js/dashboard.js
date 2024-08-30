@@ -10,18 +10,25 @@ $(document).ready(async () => {
         },
     });
 
-    setInterval(async () => {
-        try {
-            const response = await axios.get(`${contextPath}/api/statistics/revenue/last-24-hours`);
-            updateUI(response.data);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    }, 60000);
+    totalAmountChart();
+    totalOrdersChart();
+    totalProductsChart();
+    dashboardChart();
 
+    // Cập nhật dữ liệu mỗi 1 phút
+    // setInterval(async () => {
+    //     try {
+    //         const response = await axios.get(`${contextPath}/api/statistics/revenue/last-week`);
+    //         updateUI(response.data);
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error);
+    //     }
+    // }, 60000);
+
+    // Cập nhật dữ liệu mỗi 5 giây
     // const fetchLatestData = async () => {
     //     try {
-    //         const response = await axios.get(`${contextPath}/api/statistics/revenue/last-24-hours`);
+    //         const response = await axios.get(`${contextPath}/api/statistics/revenue/last-week`);
     //         updateUI(response.data);
     //
     //         await fetchLatestData();
@@ -33,23 +40,142 @@ $(document).ready(async () => {
     // await fetchLatestData();
 });
 
-const updateUI = (data) => {
-    const newRevenue = data.totalRevenue;
-    const newOrderCount = data.totalOrder;
-
-    console.info("New revenue:", newRevenue);
-    console.info("New order count:", newOrderCount);
-
-    $(".totalRevenues").text("₫" + newRevenue.toLocaleString("vi-VN"));
-    $(".totalOrders").text(newOrderCount);
-
-    const revenueLast24HoursNum = parseFloat(newRevenue);
-    const dataChart1 = revenueLast24HoursNum / revenueLastWeekNum * 100;
-    chart1Instance.data.datasets[0].data = [dataChart1, 100 - dataChart1];
-    chart1Instance.update();
-
-    const orderCountLast24HoursNum = parseFloat(newOrderCount);
-    const dataChart2 = orderCountLast24HoursNum / orderCountLastWeekNum * 100;
-    chart2Instance.data.datasets[0].data = [dataChart2, 100 - dataChart2];
-    chart2Instance.update();
+const generateChart = (ctx, type, data, color) => {
+    return new Chart(ctx, {
+        type: type,
+        data: {
+            datasets: [{
+                data: [data, 100 - data],
+                borderWidth: 0,
+                backgroundColor: ["#f6f6f9", color],
+                borderRadius: 20,
+                cutout: "80%",
+            }]
+        },
+        plugins: [centerTextInDoughnut],
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    enabled: false,
+                },
+            },
+        },
+    })
 }
+
+const centerTextInDoughnut = {
+    beforeDraw: (chart) => {
+        const {ctx, data} = chart;
+        const xCenter = chart.getDatasetMeta(0).data[0].x;
+        const yCenter = chart.getDatasetMeta(0).data[0].y;
+
+        ctx.save();
+
+        ctx.font = "bold 20px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+        ctx.shadowBlur = 20;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+
+        ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        ctx.fillText(data.datasets[0].data[0].toFixed(2) + "%", xCenter, yCenter);
+
+        ctx.restore();
+    },
+};
+
+const totalAmountChart = () => {
+    const totalAmountCurrentWeekNum = parseFloat(totalAmountCurrentWeek);
+    const totalAmountLastWeekNum = parseFloat(totalAmountLastWeek);
+    const dataTotalAmountChart = totalAmountCurrentWeekNum / totalAmountLastWeekNum * 100;
+    const totalAmountChart = document.getElementById("totalAmountChart").getContext("2d")
+    return generateChart(totalAmountChart, "doughnut", dataTotalAmountChart, "#a64db5")
+}
+
+const totalOrdersChart = () => {
+    const totalOrdersCurrentWeekNum = parseFloat(totalOrdersCurrentWeek);
+    const totalOrdersLastWeekNum = parseFloat(totalOrdersLastWeek);
+    const dataTotalOrdersChart = totalOrdersCurrentWeekNum / totalOrdersLastWeekNum * 100;
+    const totalOrdersChart = document.getElementById("totalOrdersChart").getContext("2d")
+    return generateChart(totalOrdersChart, "doughnut", dataTotalOrdersChart, "#e67c7b")
+}
+
+const totalProductsChart = () => {
+    const totalProductsCurrentWeekNum = parseFloat(totalProductsCurrentWeek);
+    const totalProductsLastWeekNum = parseFloat(totalProductsLastWeek);
+    const dataTotalProductsChart = totalProductsCurrentWeekNum / totalProductsLastWeekNum * 100;
+    const totalProductsChart = document.getElementById("totalProductsChart").getContext("2d")
+    return generateChart(totalProductsChart, "doughnut", dataTotalProductsChart, "#28a745")
+}
+
+const dashboardChart = () => {
+    const dashboardChart = document.getElementById("dashboardChart").getContext("2d");
+    const formatter = new Intl.DateTimeFormat('vi', {day: '2-digit', month: '2-digit', year: 'numeric'});
+    const {monday, sunday} = getMondayAndSunday(new Date());
+    const formattedMonday = formatter.format(monday);
+    const formattedSunday = formatter.format(sunday);
+
+    return new Chart(dashboardChart, {
+        type: "line",
+        data: {
+            labels: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"],
+            datasets: [{
+                label: "Doanh thu",
+                data: dataDashboardChart,
+                borderColor: "#007bff",
+                yAxisID: "y",
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                pointStyle: "star",
+                pointRadius: 6,
+            },]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                intersect: false,
+                mode: "index",
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: `Doanh thu các ngày trong tuần này (${formattedMonday} - ${formattedSunday})`,
+                    font: {
+                        size: 24,
+                    }
+                },
+                legend: {
+                    display: false,
+                },
+                tooltip: {
+                    usePointStyle: true,
+                    callbacks: {
+                        title: (tooltipItem) => {
+                            const day = tooltipItem[0].dataIndex + 2 === 8 ? "chủ nhật" : "thứ " + (tooltipItem[0].dataIndex + 2);
+                            return "Doanh thu " + day;
+                        },
+                        label: (tooltipItem) => {
+                            let label = tooltipItem.dataset.label || "";
+
+                            if (label) {
+                                label += ": ";
+                            }
+
+                            if (tooltipItem.parsed.y !== null) {
+                                label += tooltipItem.parsed.y.toLocaleString('vi-VN') + " VNĐ";
+                            }
+
+                            return label;
+                        }
+                    }
+                },
+            },
+        },
+    });
+}
+

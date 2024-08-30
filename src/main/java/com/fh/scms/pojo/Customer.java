@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -50,8 +51,9 @@ public class Customer extends _BaseEntity implements Serializable {
     @Column(columnDefinition = "TINYINT(1) default 1")
     private Boolean gender = true; // true (1): Nữ - false (0): Nam
 
+    @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate dateOfBirth;
+    private Date dateOfBirth;
 
     @JsonFormat
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE}, optional = false)

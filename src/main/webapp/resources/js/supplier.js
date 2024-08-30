@@ -56,12 +56,13 @@ const selectSupplier = async (row) => {
     ratingHeader.textContent = supplierName;
 
     const supplierId = row.getAttribute("data-id");
+    showPreLoading();
     await loadSupplierPerformanceData(supplierId);
     await loadRatingData(supplierId);
+    hidePreLoading();
 }
 
 const loadSupplierPerformanceData = async (supplierId) => {
-    showPreLoading();
     const year = document.querySelector("#yearpicker").value;
     try {
         const response = await axios.get(`${contextPath}/api/statistics/supplier/${supplierId}/performance?year=${year}`);
@@ -69,7 +70,6 @@ const loadSupplierPerformanceData = async (supplierId) => {
     } catch (error) {
         console.error('Error loading supplier statistics performance data:', error);
     }
-    hidePreLoading();
 }
 
 const loadRatingData = async (supplierId) => {
@@ -89,9 +89,9 @@ const updateChart = (data) => {
     }
 
     if (chartInstance) {
-        const datasetsCost = data.criteriaRatings.COST.map(item => item.averageRating)
-        const datasetsQuality = data.criteriaRatings.QUALITY.map(item => item.averageRating)
-        const datasetsDelivery = data.criteriaRatings.TIMELINESS.map(item => item.averageRating)
+        const datasetsCost = data.cost.sort((a, b) => a.month - b.month).map(item => item.averageRating)
+        const datasetsQuality = data.quality.sort((a, b) => a.month - b.month).map(item => item.averageRating)
+        const datasetsDelivery = data.timelyDelivery.sort((a, b) => a.month - b.month).map(item => item.averageRating)
 
         chartInstance.data.datasets[0].data = datasetsQuality;
         chartInstance.data.datasets[1].data = datasetsDelivery;

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -28,5 +29,7 @@ public class OrderRequest {
 
     private Long inventoryId; // Cho đơn hàng nhập
 
-    private LocalDateTime createdAt;
+    private Date createdAt;
+
+    private Boolean paid;
 }

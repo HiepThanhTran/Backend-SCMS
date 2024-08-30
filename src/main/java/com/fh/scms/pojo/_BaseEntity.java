@@ -8,8 +8,11 @@ import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Objects;
 
 @Setter
@@ -28,14 +31,16 @@ public class _BaseEntity implements Serializable {
     protected boolean active = true;
 
     //    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "created_at", updatable = false)
-    protected LocalDateTime createdAt;
+    protected Date createdAt;
 
     @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "updated_at")
-    protected LocalDateTime updatedAt;
+    protected Date updatedAt;
 
     @Override
     public boolean equals(Object o) {
@@ -53,7 +58,7 @@ public class _BaseEntity implements Serializable {
     @PrePersist
     public void prePersist() {
         if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
+            this.createdAt = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         }
     }
 }

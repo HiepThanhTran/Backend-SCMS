@@ -1,7 +1,29 @@
 .navbar-custom__logo {
-    font-size: 1.25rem;
-    color: var(--text-color-white);
+    position: relative;
+    font-size: 1.2rem;
     font-weight: 600;
+    padding-right: 1rem;
+    color: var(--text-color-white) !important;
+}
+
+.navbar-custom__logo::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60%;
+    border-right: 2px solid var(--color-dark-variant);
+}
+
+a.nav-link {
+    font-weight: 600;
+    color: #949fa8 !important;
+}
+
+a.nav-link:hover,
+a.navbar-brand:hover {
+    color: var(--hover-color) !important;
 }
 
 header form {

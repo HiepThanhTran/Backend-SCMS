@@ -20,6 +20,7 @@ import java.util.UUID;
 public class Shipment extends _BaseEntity implements Serializable {
 
     @Builder.Default
+    @NotNull(message = "{shipment.cost.notNull}")
     @Column(nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
     private BigDecimal cost = new BigDecimal(0);
 
@@ -29,7 +30,8 @@ public class Shipment extends _BaseEntity implements Serializable {
     private String currentLocation;
 
     @Builder.Default
-    @Column(name = "tracking_number", nullable = false, unique = true, length = 36)
+    @NotNull(message = "{shipment.trackingNumber.notNull}")
+    @Column(name = "tracking_number", nullable = false, unique = true, length = 36, updatable = false)
     private String trackingNumber = String.valueOf(UUID.randomUUID());
 
     @Builder.Default
@@ -40,18 +42,15 @@ public class Shipment extends _BaseEntity implements Serializable {
 
     @JsonIgnore
     @ManyToOne(optional = false)
-    @NotNull(message = "{shipment.shipper.notNull}")
     @JoinColumn(name = "shipper_id", referencedColumnName = "id", nullable = false)
     private Shipper shipper;
 
     @ManyToOne(optional = false)
-    @NotNull(message = "{shipment.warehouse.notNull}")
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", nullable = false)
     private Warehouse warehouse;
 
     @JsonIgnore
     @ManyToOne(optional = false)
-    @NotNull(message = "{shipment.deliverySchedule.notNull}")
     @JoinColumn(name = "delivery_schedule_id", referencedColumnName = "id", nullable = false)
     private DeliverySchedule deliverySchedule;
 

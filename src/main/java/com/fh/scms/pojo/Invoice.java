@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -18,23 +21,26 @@ import java.util.UUID;
 public class Invoice extends _BaseEntity implements Serializable {
 
     @Builder.Default
-    @Column(name = "invoice_number", nullable = false, unique = true, length = 36)
+    @NotBlank(message = "{invoice.invoiceNumber.notNull}")
+    @NotNull(message = "{invoice.invoiceNumber.notNull}")
+    @Column(name = "invoice_number", nullable = false, unique = true, length = 36, updatable = false)
     private String invoiceNumber = String.valueOf(UUID.randomUUID());
 
     @Builder.Default
+    @NotNull(message = "{invoice.isPaid.notNull}")
     @Column(name = "is_paid", nullable = false, columnDefinition = "boolean default false")
     private Boolean paid = false;
 
     @Builder.Default
+    @NotNull(message = "{invoice.totalAmount.notNull}")
     @Column(name = "total_amount", nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
     private BigDecimal totalAmount = BigDecimal.ZERO;
 
-    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
     private Order order;
 

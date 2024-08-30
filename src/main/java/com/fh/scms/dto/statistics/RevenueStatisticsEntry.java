@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Builder
@@ -13,7 +14,28 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class RevenueStatisticsEntry {
 
-    private BigDecimal totalRevenue;
+    private BigDecimal totalAmount;
 
-    private Long totalOrder;
+    private Long totalOrders;
+
+    private Long totalProducts;
+
+    private List<DailyDetail> details;
+
+    public RevenueStatisticsEntry(BigDecimal totalAmount, Long totalOrders, Long totalProducts) {
+        this.totalAmount = totalAmount;
+        this.totalOrders = totalOrders;
+        this.totalProducts = totalProducts;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DailyDetail {
+
+        private int day;
+
+        private BigDecimal amount;
+    }
 }

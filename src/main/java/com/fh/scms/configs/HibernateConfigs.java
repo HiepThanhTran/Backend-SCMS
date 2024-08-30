@@ -60,6 +60,7 @@ public class HibernateConfigs {
         properties.put(DIALECT, environment.getProperty("hibernate.dialect"));
         properties.put(SHOW_SQL, environment.getProperty("hibernate.showSql"));
         properties.put(HBM2DDL_AUTO, environment.getProperty("hibernate.hbm2ddl.auto"));
+        properties.put(JDBC_TIME_ZONE, environment.getProperty("hibernate.jdbc.time_zone"));
 
         return properties;
     }

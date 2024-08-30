@@ -6,10 +6,7 @@ import com.fh.scms.dto.order.OrderDetailsRequest;
 import com.fh.scms.dto.order.OrderRequest;
 import com.fh.scms.dto.pt.PaymentTermsRequest;
 import com.fh.scms.dto.user.UserRequestRegister;
-import com.fh.scms.enums.CriteriaType;
-import com.fh.scms.enums.OrderType;
-import com.fh.scms.enums.PaymentTermType;
-import com.fh.scms.enums.UserRole;
+import com.fh.scms.enums.*;
 import com.fh.scms.pojo.*;
 import com.fh.scms.repository.*;
 import com.fh.scms.services.OrderService;
@@ -26,6 +23,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -151,7 +149,7 @@ public class GlobalService {
     public void createWarehouse() {
         List.of(
                 Warehouse.builder().name("Warehouse 1").location("TPHCM").capacity(50000000.0F).cost(new BigDecimal(100000)).build(),
-                Warehouse.builder().name("Warehouse 2").location("Hà Nội").capacity(500000.0F).cost(new BigDecimal(200000)).build(),
+                Warehouse.builder().name("Warehouse 2").location("Hà Nội").capacity(100000000.0F).cost(new BigDecimal(200000)).build(),
                 Warehouse.builder().name("Warehouse 3").location("Đà Nẵng").capacity(150000000.0F).cost(new BigDecimal(300000)).build(),
                 Warehouse.builder().name("Warehouse 4").location("Cần Thơ").capacity(200000000.0F).cost(new BigDecimal(400000)).build(),
                 Warehouse.builder().name("Warehouse 5").location("Hải Phòng").capacity(250000000.0F).cost(new BigDecimal(500000)).build()
@@ -200,33 +198,31 @@ public class GlobalService {
         Random random = new Random();
         AtomicInteger count = new AtomicInteger(1);
 
-        warehouses.forEach(warehouse -> {
-            IntStream.range(0, 10).forEach(index -> {
-                Inventory inventory = Inventory.builder()
-                        .name("Inventory " + count)
-                        .warehouse(warehouse)
-                        .build();
+        warehouses.forEach(warehouse -> IntStream.range(0, 10).forEach(index -> {
+            Inventory inventory = Inventory.builder()
+                    .name("Inventory " + count)
+                    .warehouse(warehouse)
+                    .build();
 
-                Collections.shuffle(products, new Random());
-                int numberOfProductsToReturn = 50 + new Random().nextInt(100 - 50 + 1);
-                List<Product> randomProducts = products.parallelStream()
-                        .limit(numberOfProductsToReturn)
-                        .collect(Collectors.toList());
+            Collections.shuffle(products, new Random());
+            int numberOfProductsToReturn = 50 + new Random().nextInt(100 - 50 + 1);
+            List<Product> randomProducts = products.parallelStream()
+                    .limit(numberOfProductsToReturn)
+                    .collect(Collectors.toList());
 
-                Set<InventoryDetails> inventoryDetailsSet = randomProducts.parallelStream()
-                        .map(product -> InventoryDetails.builder()
-                                .quantity(5000 + (random.nextFloat() * (10000 - 100)))
-                                .product(product)
-                                .inventory(inventory)
-                                .build())
-                        .collect(Collectors.toSet());
+            Set<InventoryDetails> inventoryDetailsSet = randomProducts.parallelStream()
+                    .map(product -> InventoryDetails.builder()
+                            .quantity(5000 + (random.nextFloat() * (10000 - 100)))
+                            .product(product)
+                            .inventory(inventory)
+                            .build())
+                    .collect(Collectors.toSet());
 
-                inventory.setInventoryDetailsSet(inventoryDetailsSet);
-                this.inventoryRepository.save(inventory);
+            inventory.setInventoryDetailsSet(inventoryDetailsSet);
+            this.inventoryRepository.save(inventory);
 
-                count.getAndIncrement();
-            });
-        });
+            count.getAndIncrement();
+        }));
     }
 
     public void createRating() {
@@ -236,27 +232,25 @@ public class GlobalService {
         Random random = new Random();
         AtomicInteger count = new AtomicInteger(1);
 
-        suppliers.forEach(supplier -> {
-            IntStream.range(0, 100).forEach(index -> {
-                Collections.shuffle(criteriaTypes, random);
-                List<User> userList = users.parallelStream()
-                        .filter(u -> u.getSupplier() == null || !u.getSupplier().getId().equals(supplier.getId()))
-                        .collect(Collectors.toList());
-                Collections.shuffle(userList, random);
+        suppliers.forEach(supplier -> IntStream.range(0, 100).forEach(index -> {
+            Collections.shuffle(criteriaTypes, random);
+            List<User> userList = users.parallelStream()
+                    .filter(u -> u.getSupplier() == null || !u.getSupplier().getId().equals(supplier.getId()))
+                    .collect(Collectors.toList());
+            Collections.shuffle(userList, random);
 
-                Rating rating = Rating.builder()
-                        .rating(BigDecimal.valueOf(1 + (random.nextDouble() * (5 - 1))))
-                        .comment("Rating " + count + " for " + supplier.getName())
-                        .user(userList.get(0))
-                        .supplier(supplier)
-                        .criteria(criteriaTypes.get(0))
-                        .build();
-                rating.setCreatedAt(this.getRandomDateTimeInYear("rating"));
+            Rating rating = Rating.builder()
+                    .rating(BigDecimal.valueOf(1 + (random.nextDouble() * (5 - 1))))
+                    .comment("Rating " + count + " for " + supplier.getName())
+                    .user(userList.get(0))
+                    .supplier(supplier)
+                    .criteria(criteriaTypes.get(0))
+                    .build();
+            rating.setCreatedAt(this.getRandomDateTimeInYear("rating"));
 
-                this.ratingRepository.save(rating);
-                count.getAndIncrement();
-            });
-        });
+            this.ratingRepository.save(rating);
+            count.getAndIncrement();
+        }));
     }
 
     public void createOrder() {
@@ -264,31 +258,36 @@ public class GlobalService {
         List<User> users = this.userService.findAllWithFilter(null);
         Random random = new Random();
 
-        users.forEach(user -> {
-            IntStream.range(0, 5).forEach(index -> {
-                Collections.shuffle(inventoryDetails, random);
-                List<Product> randomProducts = inventoryDetails.parallelStream()
-                        .map(InventoryDetails::getProduct)
-                        .limit(3)
-                        .collect(Collectors.toList());
+        users.forEach(user -> IntStream.range(0, 5).forEach(index -> {
+            Collections.shuffle(inventoryDetails, random);
+            List<Product> randomProducts = inventoryDetails.parallelStream()
+                    .map(InventoryDetails::getProduct)
+                    .limit(3)
+                    .collect(Collectors.toList());
 
-                Set<OrderDetailsRequest> orderDetails = randomProducts.parallelStream()
-                        .map(product -> OrderDetailsRequest.builder()
-                                .productId(product.getId())
-                                .quantity(3F)
-                                .unitPrice(product.getPrice())
-                                .build())
-                        .collect(Collectors.toSet());
+            Set<OrderDetailsRequest> orderDetails = randomProducts.parallelStream()
+                    .map(product -> OrderDetailsRequest.builder()
+                            .productId(product.getId())
+                            .quantity(3F)
+                            .unitPrice(product.getPrice())
+                            .build())
+                    .collect(Collectors.toSet());
 
-                OrderRequest orderRequest = OrderRequest.builder()
-                        .type(OrderType.OUTBOUND)
-                        .orderDetails(orderDetails)
-                        .createdAt(this.getRandomDateTimeInYear())
-                        .build();
+            OrderRequest orderRequest = OrderRequest.builder()
+                    .type(random.nextBoolean() ? OrderType.OUTBOUND : OrderType.INBOUND)
+                    .status(OrderStatus.DELIVERED)
+                    .paid(true)
+                    .inventoryId(inventoryDetails.get(0).getInventory().getId())
+                    .orderDetails(orderDetails)
+                    .createdAt(this.getRandomDateTimeInYear())
+                    .build();
 
+            if (orderRequest.getType() == OrderType.OUTBOUND) {
                 this.orderService.checkout(user, orderRequest);
-            });
-        });
+            } else if (orderRequest.getType() == OrderType.INBOUND) {
+                this.orderService.checkin(user, orderRequest);
+            }
+        }));
     }
 
     private void createCustomer() {
@@ -423,44 +422,45 @@ public class GlobalService {
                 .build());
     }
 
-    private @NotNull LocalDateTime getRandomDateTimeInYear() {
-        // Ngày hiện tại
-        LocalDate today = LocalDate.now();
+    private @NotNull Date getRandomDateTimeInYear() {
+        LocalDateTime now = LocalDateTime.now();
+        Date today = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
 
         // Ngày bắt đầu là ngày một tháng trước
-        LocalDate start = today.minusMonths(1).withDayOfMonth(1);
+        LocalDate start = LocalDate.from(now.minusMonths(1).withDayOfMonth(1));
 
         // Chuyển đổi các ngày thành số ngày từ epoch để tạo ngày ngẫu nhiên
         long startEpochDay = start.toEpochDay();
-        long endEpochDay = today.toEpochDay();
+        long endEpochDay = now.toLocalDate().toEpochDay();
 
         // Tạo một ngày ngẫu nhiên giữa start và end
         long randomEpochDay = ThreadLocalRandom.current().nextLong(startEpochDay, endEpochDay + 1);
-        LocalDate randomDate = LocalDate.ofEpochDay(randomEpochDay);
 
-        // Tạo giờ, phút và giây ngẫu nhiên
-        int randomHour = ThreadLocalRandom.current().nextInt(0, 24);
-        int randomMinute = ThreadLocalRandom.current().nextInt(0, 60);
-        int randomSecond = ThreadLocalRandom.current().nextInt(0, 60);
-
-        // Trả về LocalDateTime với ngày và thời gian ngẫu nhiên
-        return randomDate.atTime(randomHour, randomMinute, randomSecond);
+        return getDate(randomEpochDay);
     }
 
-    private @NotNull LocalDateTime getRandomDateTimeInYear(String rating) {
+    private @NotNull Date getRandomDateTimeInYear(String rating) {
         int randomMonth = ThreadLocalRandom.current().nextInt(1, 13);
 
         LocalDate start = LocalDate.of(LocalDate.now().getYear(), randomMonth, 1);
         LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
 
         long randomDay = ThreadLocalRandom.current().nextLong(start.toEpochDay(), end.toEpochDay() + 1);
+
+        return getDate(randomDay);
+    }
+
+    @NotNull
+    private Date getDate(long randomDay) {
         LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
 
         int randomHour = ThreadLocalRandom.current().nextInt(0, 24);
         int randomMinute = ThreadLocalRandom.current().nextInt(0, 60);
         int randomSecond = ThreadLocalRandom.current().nextInt(0, 60);
 
-        return randomDate.atTime(randomHour, randomMinute, randomSecond);
+        LocalDateTime randomDateTime = randomDate.atTime(randomHour, randomMinute, randomSecond);
+
+        return Date.from(randomDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
     private void createProductsWithExpiryDates(AtomicInteger count, Random random, int daysFromNow, Category
@@ -471,7 +471,7 @@ public class GlobalService {
             for (int i = 0; i < 10; i++) {
                 BigDecimal price = BigDecimal.valueOf(50000 + (random.nextDouble() * (1000000 - 50000)));
 
-                LocalDate expiryDate = LocalDate.now().plusDays(daysFromNow);
+                Date expiryDate = Date.from(LocalDateTime.now().plusDays(daysFromNow).atZone(ZoneId.systemDefault()).toInstant());
 
                 Collections.shuffle(tags, random);
                 Set<Tag> randomTags = tags.parallelStream()

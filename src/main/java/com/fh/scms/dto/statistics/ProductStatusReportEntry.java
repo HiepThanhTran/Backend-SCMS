@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Builder
@@ -23,5 +24,5 @@ public class ProductStatusReportEntry {
     private Float productQuantity;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate expiryDate;
+    private Date expiryDate;
 }

@@ -5,18 +5,19 @@
 <header class="p-3 bg-dark text-white sticky-top">
     <div class="container-fluid">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a class="navbar-brand navbar-custom__logo" href="<c:url value="/" />">SCMS ADMIN</a>
+            <a class="navbar-brand navbar-custom__logo d-flex align-items-center" href="<c:url value="/" />">
+                <img src="<c:url value="/images/logo.png" />" alt="Logo" width="30" height="30" style="margin-right: 12px"
+                     class="d-inline-block align-text-top">
+                HARMONY ADMIN
+            </a>
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li class="nav-item navbar-custome__menu--item">
                     <a class="nav-link px-2 text-secondary" href="<c:url value="/" />">Trang chủ</a>
                 </li>
-                <li class="nav-item navbar-custome__menu--item">
-                    <a class="nav-link px-2 text-white" href="<c:url value="/" />">Dashboard</a>
-                </li>
                 <s:authorize access="hasAnyRole('ADMIN')">
                     <li class="nav-item navbar-custome__menu--item">
-                        <a class="nav-link px-2 text-white" href="<c:url value="/admin/statistics" />">Thống kê</a>
+                        <a class="nav-link px-2" href="<c:url value="/admin/statistics" />">Thống kê</a>
                     </li>
                 </s:authorize>
             </ul>
@@ -34,7 +35,7 @@
                 </s:authorize>
                 <s:authorize access="isAuthenticated()">
                     <li class="nav-item me-2 ms-auto">
-                        <a class="nav-link px-2 text-white" href="<c:url value="/" />">
+                        <a class="nav-link px-2 text-white" href="javascript:void(0)">
                             Xin chào <s:authentication property="principal.username"/>!
                         </a>
                     </li>

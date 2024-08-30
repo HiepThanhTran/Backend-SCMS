@@ -481,6 +481,10 @@ public class OrderServiceImplement implements OrderService {
     }
 
     private void createInvoice(User user, Order order, @NotNull OrderRequest orderRequest, BigDecimal @NotNull [] totalAmount) {
+        if (totalAmount[0].compareTo(BigDecimal.ZERO) < 1) {
+            throw new IllegalArgumentException("Không có sản phẩm nào trong đơn hàng");
+        }
+
         Tax tax = this.taxRepository.findByRegion("VN");
         Invoice invoice = Invoice.builder()
                 .user(user)
@@ -489,6 +493,9 @@ public class OrderServiceImplement implements OrderService {
                 .totalAmount(totalAmount[0].add(totalAmount[0].multiply(tax.getRate())))
                 .build();
         invoice.setCreatedAt(orderRequest.getCreatedAt());
+        if (orderRequest.getPaid() != null) {
+            invoice.setPaid(orderRequest.getPaid());
+        }
         this.invoiceRepository.save(invoice);
     }
 }

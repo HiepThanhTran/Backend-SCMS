@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -53,6 +54,7 @@ public class Supplier extends _BaseEntity implements Serializable {
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
     private Set<SupplierCosting> supplierCostingSet;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
     private Set<PaymentTerms> paymentTermsSet;
 

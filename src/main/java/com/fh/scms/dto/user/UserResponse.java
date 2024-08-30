@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -26,6 +27,6 @@ public class UserResponse {
 
     private Boolean isConfirm;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastLogin;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date lastLogin;
 }

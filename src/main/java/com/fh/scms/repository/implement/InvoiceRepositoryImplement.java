@@ -6,6 +6,7 @@ import com.fh.scms.util.Pagination;
 import com.fh.scms.util.Utils;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -33,14 +34,14 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
 
     @Override
     public Invoice findById(Long id) {
-        Session session = getCurrentSession();
+        Session session = this.getCurrentSession();
 
         return session.get(Invoice.class, id);
     }
 
     @Override
     public Invoice findByOrderId(Long orderId) {
-        Session session = getCurrentSession();
+        Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Invoice> criteria = builder.createQuery(Invoice.class);
         Root<Invoice> root = criteria.from(Invoice.class);
@@ -58,19 +59,19 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
 
     @Override
     public void save(Invoice invoice) {
-        Session session = getCurrentSession();
+        Session session = this.getCurrentSession();
         session.persist(invoice);
     }
 
     @Override
     public void update(Invoice invoice) {
-        Session session = getCurrentSession();
+        Session session = this.getCurrentSession();
         session.merge(invoice);
     }
 
     @Override
     public void delete(Long id) {
-        Session session = getCurrentSession();
+        Session session = this.getCurrentSession();
         Invoice invoice = session.get(Invoice.class, id);
         session.delete(invoice);
     }
@@ -90,7 +91,7 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
 
     @Override
     public List<Invoice> findAllWithFilter(Map<String, String> params) {
-        Session session = getCurrentSession();
+        Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Invoice> criteria = builder.createQuery(Invoice.class);
         Root<Invoice> root = criteria.from(Invoice.class);
@@ -118,11 +119,11 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
                             predicates.add(builder.equal(root.get("paymentTerms").get("id"), Long.parseLong(params.get(key))));
                             break;
                         case "fromCreatedAt":
-                            LocalDateTime fromCreatedAt = Utils.parseLocalDateTime(params.get(key));
+                            Date fromCreatedAt = Utils.parseDate(params.get(key));
                             predicates.add(builder.greaterThanOrEqualTo(root.get("createdAt"), fromCreatedAt));
                             break;
                         case "toCreatedAt":
-                            LocalDateTime toCreatedAt = Utils.parseLocalDateTime(params.get(key));
+                            Date toCreatedAt = Utils.parseDate(params.get(key));
                             predicates.add(builder.lessThanOrEqualTo(root.get("createdAt"), toCreatedAt));
                             break;
                     }

@@ -33,9 +33,9 @@ public class AdminController {
 
     @GetMapping(path = "/")
     public String dashBoard(Model model) {
-        model.addAttribute("revenueLast24Hours", this.statisticsService.getRevenueByLastDays(Constants.LAST_24_HOURS));
-        model.addAttribute("revenueLastWeek", this.statisticsService.getRevenueByLastDays(Constants.LAST_WEEK));
-        model.addAttribute("recentOrders", this.orderService.findRecentlyOrders());
+        model.addAttribute("revenueCurrentWeek", this.statisticsService.getStatisticsRevenueByWeeks(Constants.CURRENT_WEEK));
+        model.addAttribute("revenueLastWeek", this.statisticsService.getStatisticsRevenueByWeeks(Constants.LAST_WEEK));
+        model.addAttribute("recentlyOrders", this.orderService.findRecentlyOrders());
 
         return "dashboard";
     }

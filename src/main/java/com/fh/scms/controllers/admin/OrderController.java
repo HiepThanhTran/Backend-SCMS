@@ -86,13 +86,13 @@ public class OrderController {
 
     @PostMapping(path = "/edit/{orderId}")
     public String editOrder(Model model, @PathVariable(value = "orderId") Long id,
-                            @ModelAttribute(value = "order") @Valid Order order, BindingResult bindingResultOrder,
+                            @ModelAttribute(value = "order") @Valid Order order, BindingResult bindingResult,
                             @RequestParam(value = "productIds", required = false) List<Long> productIds,
                             @RequestParam(value = "quantities", required = false) List<Float> quantities,
                             @RequestParam(value = "inventoryId", required = false) Long inventoryId) {
         model.addAttribute("orderDetails", this.orderService.getOrderDetailsById(id));
-        if (bindingResultOrder.hasErrors()) {
-            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResultOrder));
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", MessageResponse.fromBindingResult(bindingResult));
 
             return "edit_order";
         }

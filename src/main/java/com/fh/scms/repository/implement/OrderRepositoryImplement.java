@@ -4,6 +4,7 @@ import com.fh.scms.enums.OrderStatus;
 import com.fh.scms.enums.OrderType;
 import com.fh.scms.pojo.Order;
 import com.fh.scms.repository.OrderRepository;
+import com.fh.scms.util.Constants;
 import com.fh.scms.util.Pagination;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -39,7 +40,7 @@ public class OrderRepositoryImplement implements OrderRepository {
 
         criteria.select(root).orderBy(builder.desc(root.get("id")));
         Query<Order> query = session.createQuery(criteria);
-        query.setMaxResults(10);
+        query.setMaxResults(Constants.RECENTLY_ORDERS_NUMBER);
 
         return query.getResultList();
     }

@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 
 @Setter
@@ -20,9 +21,10 @@ import java.util.Set;
 public class DeliverySchedule extends _BaseEntity implements Serializable {
 
     @NotNull(message = "{deliverySchedule.scheduledDate.notNull}")
+    @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "schedule_date", nullable = false)
-    private LocalDate scheduledDate;
+    private Date scheduledDate;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)

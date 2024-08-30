@@ -7,10 +7,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <title><tiles:insertAttribute name="title"/></title>
+    <title><tiles:insertAttribute name="title"/> | Harmony</title>
 
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon-02.ico"/>"/>
+    <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon.ico"/>"/>
     <!--===============================================================================================-->
     <%--Box Icons--%>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>

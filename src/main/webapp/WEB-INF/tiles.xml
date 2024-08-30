@@ -125,11 +125,6 @@
         <put-attribute name="content" value="/WEB-INF/pages/invoice/invoices.jsp"/>
     </definition>
 
-    <definition name="add_invoice" extends="baseWithSidebar">
-        <put-attribute name="title" value="Thêm hóa đơn"/>
-        <put-attribute name="content" value="/WEB-INF/pages/invoice/add_invoice.jsp"/>
-    </definition>
-
     <definition name="edit_invoice" extends="baseWithSidebar">
         <put-attribute name="title" value="Chỉnh sửa hóa đơn"/>
         <put-attribute name="content" value="/WEB-INF/pages/invoice/edit_invoice.jsp"/>

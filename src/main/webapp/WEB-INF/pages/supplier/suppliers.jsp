@@ -32,12 +32,12 @@
                 <td>${shipper.address}</td>
                 <td>${shipper.phone}</td>
                 <td>
-                    <fmt:parseDate value="${ shipper.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:parseDate value="${ shipper.createdAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDateTime" type="both"/>
                     <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
                     <c:if test="${ shipper.updatedAt != null }">
-                        <fmt:parseDate value="${ shipper.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:parseDate value="${ shipper.updatedAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedUpdatedDateTime" type="both"/>
                         <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
                     <c:if test="${ shipper.updatedAt == null }">

@@ -15,11 +15,11 @@ import java.util.Map;
 @AllArgsConstructor
 public class SupplierPerformanceReport {
 
-    private Long supplierId;
+    private List<RatingMonth> cost;
 
-    private String supplierName;
+    private List<RatingMonth> quality;
 
-    private Map<CriteriaType, List<RatingMonth>> criteriaRatings;
+    private List<RatingMonth> timelyDelivery;
 
     @Data
     @Builder

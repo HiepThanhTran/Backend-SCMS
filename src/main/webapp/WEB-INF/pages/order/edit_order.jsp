@@ -72,6 +72,11 @@
         </form:select>
     </div>
 
+    <div class="form-group d-flex align-items-center">
+        <form:label path="active" cssClass="form-label">Active:</form:label>
+        <form:checkbox path="active" checked="${active}" class="ms-2"/>
+    </div>
+
     <div class="form-group">
         <label class="form-label mt-3 mb-1">Sản phẩm</label><br/>
         <button type="button" onclick="addProductRow()" id="addProductBtn" class="btn btn-success mb-3">Thêm sản phẩm</button>

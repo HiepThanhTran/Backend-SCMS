@@ -30,12 +30,12 @@
                 <td>${tax.rate}</td>
                 <td>${tax.region}</td>
                 <td>
-                    <fmt:parseDate value="${ tax.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:parseDate value="${ tax.createdAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDateTime" type="both"/>
                     <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
                     <c:if test="${ tax.updatedAt != null }">
-                        <fmt:parseDate value="${ tax.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:parseDate value="${ tax.updatedAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedUpdatedDateTime" type="both"/>
                         <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
                     <c:if test="${ tax.updatedAt == null }">

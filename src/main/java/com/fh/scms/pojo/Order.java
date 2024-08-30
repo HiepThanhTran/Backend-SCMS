@@ -7,9 +7,10 @@ import com.fh.scms.enums.OrderType;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,7 +24,8 @@ import java.util.UUID;
 public class Order extends _BaseEntity implements Serializable {
 
     @Builder.Default
-    @Column(name = "order_number", nullable = false, unique = true, length = 36)
+    @NotNull(message = "{order.orderNumber.notNull}")
+    @Column(name = "order_number", nullable = false, unique = true, length = 36, updatable = false)
     private String orderNumber = String.valueOf(UUID.randomUUID());
 
     @Builder.Default
@@ -34,14 +36,15 @@ public class Order extends _BaseEntity implements Serializable {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "{order.status.notNull}")
     @Column(name = "order_status", nullable = false)
     private OrderStatus status = OrderStatus.PENDING;
 
-    @Column(name = "expected_delivery")
+    @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate expectedDelivery;
+    @Column(name = "expected_delivery")
+    private Date expectedDelivery;
 
-    @NotNull(message = "{order.user.notNull}")
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;

@@ -5,6 +5,7 @@ import com.fh.scms.enums.PaymentTermType;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -40,7 +41,6 @@ public class PaymentTerms extends _BaseEntity implements Serializable {
 
     @JsonIgnore
     @ManyToOne(optional = false)
-    @NotNull(message = "{paymentTerms.supplier.notNull}")
     @JoinColumn(name = "supplier_id", referencedColumnName = "id", nullable = false)
     private Supplier supplier;
 

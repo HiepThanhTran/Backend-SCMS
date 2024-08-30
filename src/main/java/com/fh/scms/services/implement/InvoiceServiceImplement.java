@@ -2,6 +2,7 @@ package com.fh.scms.services.implement;
 
 import com.fh.scms.dto.invoice.InvoiceResponse;
 import com.fh.scms.pojo.Invoice;
+import com.fh.scms.pojo.Tax;
 import com.fh.scms.repository.InvoiceRepository;
 import com.fh.scms.services.InvoiceService;
 import com.fh.scms.services.TaxService;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,7 +38,11 @@ public class InvoiceServiceImplement implements InvoiceService {
     }
 
     @Override
-    public void update(Invoice invoice) {
+    public void update(@NotNull Invoice invoice) {
+        if (invoice.getTax() != null) {
+            invoice.setTotalAmount(invoice.getTotalAmount().add(invoice.getTotalAmount().multiply(invoice.getTax().getRate())));
+        }
+
         this.invoiceRepository.update(invoice);
     }
 

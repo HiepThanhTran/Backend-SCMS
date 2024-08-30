@@ -38,7 +38,7 @@
                 </td>
                 <td>
                     <c:if test="${ user.lastLogin != null }">
-                        <fmt:parseDate value="${ user.lastLogin }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedLastLoginDateTime" type="both"/>
+                        <fmt:parseDate value="${ user.lastLogin }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedLastLoginDateTime" type="both"/>
                         <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedLastLoginDateTime }"/>
                     </c:if>
                     <c:if test="${ user.lastLogin == null }">
@@ -46,12 +46,12 @@
                     </c:if>
                 </td>
                 <td>
-                    <fmt:parseDate value="${ user.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:parseDate value="${ user.createdAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDateTime" type="both"/>
                     <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
                     <c:if test="${ user.updatedAt != null }">
-                        <fmt:parseDate value="${ user.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:parseDate value="${ user.updatedAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedUpdatedDateTime" type="both"/>
                         <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
                     <c:if test="${ user.updatedAt == null }">

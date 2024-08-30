@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -30,7 +31,7 @@ public class ProductResponseForDetails {
     private String image;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate expiryDate;
+    private Date expiryDate;
 
     private UnitResponse unit;
 

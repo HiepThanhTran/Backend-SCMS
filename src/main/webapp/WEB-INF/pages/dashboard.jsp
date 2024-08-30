@@ -5,105 +5,98 @@
 
 <div class="row mt-4">
     <div class="col-md-4 col-12">
-        <div style="background: #c37eff" class="card h-100">
+        <fmt:formatNumber value="${revenueLastWeek.totalAmount}" type="currency" currencySymbol="₫" groupingUsed="true"
+                          var="formattedTotalAmountLastWeek"/>
+        <div style="background: var(--color-chart1)" class="card h-100" id="popoverTotalAmount"
+             data-bs-toggle="popover"
+             title="Tổng doanh thu"
+             data-bs-placement="bottom"
+             data-bs-trigger="hover"
+             data-bs-content="Tổng doanh thu của tuần trước: ${formattedTotalAmountLastWeek}.">
             <div class="card-body d-flex justify-content-between align-items-center">
+                <fmt:formatNumber value="${revenueCurrentWeek.totalAmount}" type="currency" currencySymbol="₫" groupingUsed="true"
+                                  var="formattedTotalAmountCurrentWeek"/>
                 <div class="info d-flex flex-column justify-content-between h-100">
                     <div>
-                        <h3 class="glow">Doanh thu</h3>
-                        <fmt:formatNumber value="${revenueLast24Hours.totalRevenue}" type="currency" currencySymbol="₫" groupingUsed="true"
-                                          var="formattedRevenueLast24Hours"/>
-                        <p class="glow"><span class="totalRevenues">${formattedRevenueLast24Hours}</span></p>
+                        <h3 class="glow d-flex align-items-center">
+                            <i class='bx bx-coin' style="margin-right: 8px"></i>
+                            Doanh thu
+                        </h3>
+                        <p class="glow"><span class="totalRevenues">${formattedTotalAmountCurrentWeek}</span></p>
                     </div>
-                    <p style="margin-bottom: 0;" class="text-light">Trong 24 giờ qua</p>
+                    <p style="margin-bottom: 0;" class="text-light">Trong tuần này</p>
                 </div>
 
                 <div class="progresss">
-                    <canvas id="chart1"
-                            width="120"
-                            height="120"
-                            style="background: #c37eff"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Dựa trên tổng của tuần vừa qua">
+                    <canvas id="totalAmountChart" style="background: var(--color-chart1)" width="120" height="120">
                     </canvas>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-md-4 col-12">
-        <div style="background: #ff9d9c" class="card h-100">
+        <div style="background: var(--color-chart2)" class="card h-100" id="popoverOrders"
+             data-bs-toggle="popover"
+             title="Tổng đơn hàng"
+             data-bs-placement="bottom"
+             data-bs-trigger="hover"
+             data-bs-content="Tổng đơn hàng của tuần trước: ${revenueLastWeek.totalOrders} đơn.">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div class="info d-flex flex-column justify-content-between h-100">
                     <div>
-                        <h3 class="glow">Đơn hàng</h3>
-                        <p class="glow"><span class="totalOrders">${revenueLast24Hours.totalOrder}</span> đơn</p>
+                        <h3 class="glow d-flex align-items-center">
+                            <i class='bx bx-package' style="margin-right: 8px"></i>
+                            Đơn hàng
+                        </h3>
+                        <p class="glow"><span class="totalOrders">${revenueCurrentWeek.totalOrders}</span></p>
                     </div>
-                    <p style="margin-bottom: 0;" class="text-light">Trong 24 giờ qua</p>
+                    <p style="margin-bottom: 0;" class="text-light">Trong tuần này</p>
                 </div>
 
                 <div class="progresss">
-                    <canvas id="chart2"
-                            width="120"
-                            height="120"
-                            style="background: #ff9d9c"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Dựa trên tổng của tuần vừa qua">
+                    <canvas id="totalOrdersChart" style="background: var(--color-chart2)" width="120" height="120">
                     </canvas>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-md-4 col-12">
-        <div style="background: #ffc96c" class="card h-100">
+        <div style="background: var(--color-chart3)" class="card h-100" id="popoverProducts"
+             data-bs-toggle="popover"
+             title="Tổng sản phẩm bán được"
+             data-bs-placement="bottom"
+             data-bs-trigger="hover"
+             data-bs-content="Tổng sản phẩm bán được của tuần trước: ${revenueLastWeek.totalProducts} sản phẩm.">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div class="info d-flex flex-column justify-content-between h-100">
                     <div>
-                        <h3 class="glow">Tồn kho</h3>
-                        <p class="glow">---</p>
+                        <h3 class="glow d-flex align-items-center">
+                            <i class='bx bx-spa' style="margin-right: 8px"></i>
+                            Sản phẩm
+                        </h3>
+                        <p class="glow"><span class="totalOrders">${revenueCurrentWeek.totalProducts}</span></p>
                     </div>
-                    <p style="margin-bottom: 0;" class="text-light">Trong 24 giờ qua</p>
+                    <p style="margin-bottom: 0;" class="text-light">Trong tuần này</p>
                 </div>
 
                 <div class="progresss">
-                    <canvas id="chart3"
-                            width="120"
-                            height="120"
-                            style="background: #ffc96c"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Dựa trên tổng của tuần vừa qua"></canvas>
+                    <canvas id="totalProductsChart" style="background: var(--color-chart3)" width="120" height="120">
+                    </canvas>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row mt-5">
-    <div class="col-md-6 col-12">
-        <div class="card h-100 text-center">
-            <div class="card-body">
-                <h5 class="card-title">Thống kê</h5>
-                <p class="card-text">Xem thống kê về hoạt động hệ thống.</p>
-                <a href="<c:url value="admin/statistics"/>" class="btn btn-outline-primary">Xem chi tiết</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-12">
-        <div class="card h-100 text-center">
-            <div class="card-body">
-                <h5 class="card-title">Cấu hình hệ thống</h5>
-                <p class="card-text">Thiết lập và quản lý cấu hình hệ thống một cách dễ dàng.</p>
-                <a href="#" class="btn btn-outline-primary">Xem chi tiết</a>
-            </div>
-        </div>
-    </div>
-</div>
+<canvas class="my-4 w-100" id="dashboardChart" width="900" height="380"></canvas>
 
 <div class="row mt-4">
-    <h2 class="mb-4">Đơn hàng gần đây</h2>
+    <h2 class="mb-4 text-primary text-uppercase h4 d-flex align-items-center">
+        <i class='bx bx-box' style="font-size: 3rem; margin-right: 12px"></i>
+        Đơn hàng gần đây
+    </h2>
     <hr>
-    <table id="recentlyOrderTable" class="table table-striped nowrap">
+    <table id="recentlyOrderTable" class="table table-striped display nowrap">
         <thead>
         <tr>
             <th>ID</th>
@@ -116,13 +109,22 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${recentOrders}" var="order" varStatus="loop">
+        <c:forEach items="${recentlyOrders}" var="order" varStatus="loop">
             <tr data-id="${order.id}" data-index="${loop.index}">
                 <td>${order.id}</td>
                 <td>${order.orderNumber}</td>
-                <td>${order.type.getDisplayName()}</td>
                 <td>
-                    <fmt:parseDate value="${ order.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <c:choose>
+                        <c:when test="${ order.type == 'INBOUND' }">
+                            <span class="badge bg-info">${order.type.getDisplayName()}</span>
+                        </c:when>
+                        <c:when test="${ order.type == 'OUTBOUND' }">
+                            <span class="badge bg-primary">${order.type.getDisplayName()}</span>
+                        </c:when>
+                    </c:choose>
+                </td>
+                <td>
+                    <fmt:parseDate value="${ order.createdAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDateTime" type="both"/>
                     <fmt:formatDate pattern="dd-MM-yyyy HH:mm:ss" value="${ parsedDateTime }"/>
                 </td>
                 <td>
@@ -149,7 +151,7 @@
                 </td>
                 <td>${order.user.username}</td>
                 <td>
-                    <a href="<c:url value="/admin/orders/edit/${order.id}"/>" type="button" class="btn btn-info">Xem chi tiết</a>
+                    <a href="<c:url value="/admin/orders/edit/${order.id}"/>" type="button" class="btn btn-outline-primary">Xem chi tiết</a>
                 </td>
             </tr>
         </c:forEach>
@@ -159,70 +161,14 @@
 
 <script src="<c:url value="/js/dashboard.js"/>"></script>
 <script>
-    const centerTextInDoughnut = {
-        beforeDraw: (chart) => {
-            const {ctx, data} = chart;
-            const xCenter = chart.getDatasetMeta(0).data[0].x;
-            const yCenter = chart.getDatasetMeta(0).data[0].y;
+    const totalAmountCurrentWeek = '${revenueCurrentWeek.totalAmount}';
+    const totalAmountLastWeek = '${revenueLastWeek.totalAmount}';
 
-            ctx.save();
+    const totalOrdersCurrentWeek = '${revenueCurrentWeek.totalOrders}';
+    const totalOrdersLastWeek = '${revenueLastWeek.totalOrders}';
 
-            ctx.font = "bold 20px Arial";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
+    const totalProductsCurrentWeek = '${revenueCurrentWeek.totalProducts}';
+    const totalProductsLastWeek = '${revenueLastWeek.totalProducts}';
 
-            ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
-            ctx.shadowBlur = 20;
-            ctx.shadowOffsetX = 1;
-            ctx.shadowOffsetY = 1;
-
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.fillText(Math.round(data.datasets[0].data[0]) + "%", xCenter, yCenter);
-
-            ctx.restore();
-        },
-    };
-
-    const generateChart = (ctx, type, data, color) => {
-        return new Chart(ctx, {
-            type: type,
-            data: {
-                datasets: [{
-                    data: [data, 100 - data],
-                    borderWidth: 0,
-                    backgroundColor: ["#f6f6f9", color],
-                    borderRadius: 20,
-                    cutout: "80%",
-                }]
-            },
-            plugins: [centerTextInDoughnut],
-            options: {
-                responsive: true,
-                plugins: {
-                    tooltip: {
-                        enabled: false,
-                    },
-                },
-            },
-        })
-    }
-
-    const revenueLast24Hours = '${revenueLast24Hours.totalRevenue}';
-    const revenueLastWeek = '${revenueLastWeek.totalRevenue}';
-    const revenueLast24HoursNum = parseFloat(revenueLast24Hours);
-    const revenueLastWeekNum = parseFloat(revenueLastWeek);
-    const dataChart1 = revenueLast24HoursNum / revenueLastWeekNum * 100;
-    const chart1 = document.getElementById('chart1').getContext('2d')
-    const chart1Instance = generateChart(ctx = chart1, type = 'doughnut', data = dataChart1, color = "#a64db5")
-
-    const orderCountLast24Hours = '${revenueLast24Hours.totalOrder}';
-    const orderCountLastWeek = '${revenueLastWeek.totalOrder}';
-    const orderCountLast24HoursNum = parseFloat(orderCountLast24Hours);
-    const orderCountLastWeekNum = parseFloat(orderCountLastWeek);
-    const dataChart2 = orderCountLast24HoursNum / orderCountLastWeekNum * 100;
-    const chart2 = document.getElementById('chart2').getContext('2d')
-    const chart2Instance = generateChart(ctx = chart2, type = 'doughnut', data = dataChart2, color = "#e67c7b")
-
-    const chart3 = document.getElementById('chart3').getContext('2d')
-    const chart3Instance = generateChart(ctx = chart3, type = 'doughnut', data = 0, color = "#f1a340")
+    const dataDashboardChart = [<c:forEach items="${revenueCurrentWeek.details}" var="detail">'${detail.amount}', </c:forEach>]
 </script>

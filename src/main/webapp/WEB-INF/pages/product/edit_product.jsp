@@ -69,6 +69,11 @@
         </form:select>
     </div>
 
+    <div class="form-group d-flex align-items-center">
+        <form:label path="active" cssClass="form-label">Active:</form:label>
+        <form:checkbox path="active" checked="${active}" class="ms-2"/>
+    </div>
+
     <div id="tagsSection" class="form-group">
         <label class="form-label mt-3">Nhãn</label><br/>
         <div id="tagsContainer">

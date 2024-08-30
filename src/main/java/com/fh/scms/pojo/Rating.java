@@ -4,6 +4,7 @@ import com.fh.scms.enums.CriteriaType;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -35,12 +36,10 @@ public class Rating extends _BaseEntity implements Serializable {
     private CriteriaType criteria = CriteriaType.QUALITY;
 
     @ManyToOne(optional = false)
-    @NotNull(message = "{rating.supplier.notNull}")
     @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
 
     @ManyToOne(optional = false)
-    @NotNull(message = "{rating.user.notNull}")
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -19,10 +21,12 @@ import java.math.BigDecimal;
 public class SupplierCosting extends _BaseEntity implements Serializable {
 
     @Builder.Default
+    @NotNull(message = "{supplier.costing.unitPrice.notNull}")
     @Column(name = "unit_price", nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
     private BigDecimal unitPrice = BigDecimal.ZERO;
 
     @Builder.Default
+    @NotNull(message = "{supplier.costing.shippingCost.notNull}")
     @Column(name = "shipping_cost", nullable = false, precision = 11, scale = 2, columnDefinition = "decimal default 0.0")
     private BigDecimal shippingCost = BigDecimal.ZERO;
 

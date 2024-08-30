@@ -35,9 +35,8 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
         CriteriaQuery<Float> criteria = builder.createQuery(Float.class);
         Root<InventoryDetails> root = criteria.from(InventoryDetails.class);
 
-        criteria.select(builder.sum(root.get("quantity"))).where(
-                builder.equal(root.get("inventory").get("warehouse").get("id"), warehouseId)
-        );
+        criteria.select(builder.sum(root.get("quantity")));
+        criteria.where(builder.equal(root.get("inventory").get("warehouse").get("id"), warehouseId));
         Query<Float> query = session.createQuery(criteria);
 
         return query.getSingleResult();

@@ -9,6 +9,8 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.fh.scms.util.Constants.DATE_TIME_FORMAT;
+
 public final class Utils {
 
     public static Object convertValue(Class<?> fieldType, String value) {
@@ -24,8 +26,8 @@ public final class Utils {
             return Double.parseDouble(value);
         } else if (fieldType == boolean.class || fieldType == Boolean.class) {
             return Boolean.parseBoolean(value);
-        } else if (fieldType == LocalDateTime.class) {
-            return parseLocalDateTime(value);
+        } else if (fieldType == Date.class) {
+            return parseDate(value);
         } else {
             throw new IllegalArgumentException("Không hỗ trợ kiểu dữ liệu: " + fieldType.getName());
         }
@@ -46,26 +48,13 @@ public final class Utils {
         return null;
     }
 
-    public static LocalDateTime parseLocalDateTime(String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-
-        try {
-            return LocalDateTime.parse(value, Constants.DATE_TIME_FORMATTER);
-        } catch (Exception e) {
-            LoggerFactory.getLogger(Utils.class).error("An error parse LocalDateTime", e);
-            return null;
-        }
-    }
-
     public static Date parseDate(String value) {
         if (value == null || value.isEmpty()) {
             return null;
         }
 
         try {
-            return Date.from(LocalDateTime.parse(value, Constants.DATE_TIME_FORMATTER).atZone(ZoneId.systemDefault()).toInstant());
+            return new Date(DATE_TIME_FORMAT.parse(value).getTime());
         } catch (Exception e) {
             LoggerFactory.getLogger(Utils.class).error("An error parse Date", e);
             return null;

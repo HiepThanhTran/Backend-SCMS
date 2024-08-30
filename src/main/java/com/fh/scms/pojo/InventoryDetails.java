@@ -3,6 +3,8 @@ package com.fh.scms.pojo;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -19,6 +21,7 @@ import java.util.Set;
 public class InventoryDetails extends _BaseEntity implements Serializable {
 
     @Builder.Default
+    @NotNull(message = "{inventoryDetails.quantity.notNull}")
     @Column(nullable = false, columnDefinition = "float default 0")
     private Float quantity = 0.0f;
 

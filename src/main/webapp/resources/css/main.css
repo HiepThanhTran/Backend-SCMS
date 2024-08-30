@@ -26,6 +26,14 @@
     --padding-1: 1.2rem;
 
     --box-shadow: 0 2rem 3rem var(--color-light);
+
+    --color-chart1: #c37eff;
+    --color-chart2: #ff9d9c;
+    --color-chart3: #46c461;
+
+    --color-chart1-bold: #a64db5;
+    --color-chart2-bold: #e67c7b;
+    --color-chart3-bold: #28a745;
 }
 
 /* Reset CSS */
@@ -53,7 +61,8 @@ li {
 }
 
 h2 {
-    color: var(--hover-color);
+    text-transform: uppercase;
+    color: var(--color-primary);
 }
 
 tbody, td, tfoot, th, thead, tr {
@@ -72,6 +81,56 @@ tbody, td, tfoot, th, thead, tr {
 
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(-45deg, #4a99d2 0%, #8a5fe5 100%);
+}
+
+.bx {
+    line-height: 0 !important;
+}
+
+/* Popover */
+.popover {
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.popover-header {
+    font-size: 1.1rem !important;
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(255, 255, 255, 0.6),
+    0 0 30px rgba(255, 255, 255, 0.4),
+    0 0 40px rgba(255, 255, 255, 0.2);
+    border-bottom: 0 none transparent;
+}
+
+#popoverTotalAmount .popover-header {
+    background-color: var(--color-chart1-bold);
+}
+
+#popoverOrders .popover-header {
+    background-color: var(--color-chart2-bold);
+}
+
+#popoverProducts .popover-header {
+    background-color: var(--color-chart3-bold);
+}
+
+.popover-body {
+    color: #ffffff;
+    font-size: 1.2rem !important;
+}
+
+#popoverTotalAmount .popover {
+    background-color: var(--color-chart1);
+}
+
+#popoverOrders .popover {
+    background-color: var(--color-chart2);
+}
+
+#popoverProducts .popover {
+    background-color: var(--color-chart3);
 }
 
 .wrapper {
@@ -127,6 +186,7 @@ table.dataTable td {
 
 /* Glow */
 .glow {
+    font-size: larger;
     color: #ffffff;
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.8),
     0 0 20px rgba(255, 255, 255, 0.6),

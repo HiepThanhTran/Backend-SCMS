@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -25,7 +26,7 @@ public class InvoiceResponse {
     private BigDecimal totalAmount;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime invoiceDate;
+    private Date invoiceDate;
 
     private TaxResponse tax;
 }

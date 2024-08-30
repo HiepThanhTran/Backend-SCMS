@@ -29,7 +29,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         "com.fh.scms.controllers",
         "com.fh.scms.enums",
         "com.fh.scms.repository",
-        "com.fh.scms.services"
+        "com.fh.scms.services",
 })
 public class WebApplicationContextConfigs implements WebMvcConfigurer {
 
@@ -86,17 +86,18 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(@NotNull FormatterRegistry registry) {
-        registry.addConverter(new LocalDateTimeConverter());
-        registry.addConverter(new LocalDateConverter());
+        registry.addConverter(new DateConverter());
 
         registry.addFormatter(new CategoryFormatter());
+        registry.addFormatter(new OrderFormatter());
         registry.addFormatter(new ScheduleFormatter());
         registry.addFormatter(new ShipperFormatter());
         registry.addFormatter(new SupplierFormatter());
         registry.addFormatter(new TagFormatter());
+        registry.addFormatter(new TaxFormatter());
         registry.addFormatter(new UnitFormatter());
-        registry.addFormatter(new WarehouseFormatter());
         registry.addFormatter(new UserFormatter());
+        registry.addFormatter(new WarehouseFormatter());
     }
 
     @Override

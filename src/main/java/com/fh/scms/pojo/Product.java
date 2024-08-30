@@ -6,11 +6,12 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 
 @Setter
@@ -41,11 +42,11 @@ public class Product extends _BaseEntity implements Serializable {
     private String image;
 
     @NotNull(message = "{product.expiryDate.notNull}")
+    @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "expiry_date", nullable = false)
-    private LocalDate expiryDate;
+    private Date expiryDate;
 
-    @NotNull(message = "{product.unit.notNull}")
     @ManyToOne(optional = false)
     @JoinColumn(name = "unit_id", nullable = false)
     private Unit unit;

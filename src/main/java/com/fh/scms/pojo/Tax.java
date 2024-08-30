@@ -19,6 +19,7 @@ import java.util.Set;
 public class Tax extends _BaseEntity implements Serializable {
 
     @Builder.Default
+    @NotNull(message = "{tax.rate.notNull}")
     @DecimalMin(value = "0.01", message = "{tax.rate.min}")
     @DecimalMax(value = "1.00", message = "{tax.rate.max}")
     @Column(nullable = false, precision = 5, scale = 2, columnDefinition = "float default 0.01")
@@ -31,7 +32,7 @@ public class Tax extends _BaseEntity implements Serializable {
     private String region;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "tax", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "tax")
     private Set<Invoice> invoiceSet;
 
     @Override

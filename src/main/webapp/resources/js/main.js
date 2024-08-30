@@ -2,6 +2,21 @@ $(document).ready(() => {
     setTimeout(() => {
         $('#loadingModal').fadeOut('slow');
     });
+
+    // Popover
+    const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    const popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    });
+    const ids = ['#popoverTotalAmount', '#popoverOrders', '#popoverProducts'];
+    ids.forEach(id => {
+        const element = document.querySelector(id);
+        if (element) {
+            new bootstrap.Popover(element, {
+                container: element.closest('.card'),
+            });
+        }
+    });
 });
 
 const deleteItem = async (endpoint, itemId) => {
@@ -57,3 +72,21 @@ const generateRandomColor = () => {
         borderColor: `rgba(${r}, ${g}, ${b}, 1)`,
     };
 };
+
+const getMondayAndSunday = (date) => {
+    const dayOfWeek = date.getDay(); // Lấy ngày trong tuần (0 = Chủ Nhật, 1 = Thứ Hai, ..., 6 = Thứ Bảy)
+
+    const monday = new Date(date);
+    // Ngày thứ Hai là ngày trong tháng - (dayOfWeek + 6) % 7 (Chênh lệch ngày trong tuần với ngày trong tháng)
+    monday.setDate(date.getDate() - (dayOfWeek + 6) % 7);
+
+    const sunday = new Date(date);
+    // Chủ Nhật là ngày thứ Hai + 6
+    sunday.setDate(monday.getDate() + 6);
+
+    // Trả về ngày thứ Hai và Chủ Nhật
+    return {
+        monday: monday,
+        sunday: sunday
+    };
+}

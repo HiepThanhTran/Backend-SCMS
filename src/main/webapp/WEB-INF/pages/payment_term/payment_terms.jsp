@@ -34,12 +34,12 @@
                 <td>${paymentTerms.type.getDisplayName()}</td>
                 <td>${paymentTerms.supplier.name}</td>
                 <td>
-                    <fmt:parseDate value="${ paymentTerms.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:parseDate value="${ paymentTerms.createdAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDateTime" type="both"/>
                     <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
                     <c:if test="${ paymentTerms.updatedAt != null }">
-                        <fmt:parseDate value="${ paymentTerms.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:parseDate value="${ paymentTerms.updatedAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedUpdatedDateTime" type="both"/>
                         <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
                     <c:if test="${ paymentTerms.updatedAt == null }">

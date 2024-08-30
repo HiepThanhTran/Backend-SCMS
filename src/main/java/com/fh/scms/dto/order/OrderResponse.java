@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -27,10 +28,10 @@ public class OrderResponse {
     private OrderStatus status;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime orderDate;
+    private Date orderDate;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate expectedDelivery;
+    private Date expectedDelivery;
 
     private Set<OrderDetailsReponse> orderDetailsSet;
 }

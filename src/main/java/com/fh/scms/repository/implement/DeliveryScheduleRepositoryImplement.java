@@ -86,7 +86,7 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
                     switch (key) {
                         case "fromDate":
                             try {
-                                LocalDateTime fromDate = Utils.parseLocalDateTime(params.get(key));
+                                Date fromDate = Utils.parseDate(params.get(key));
                                 predicates.add(builder.greaterThanOrEqualTo(root.get("scheduledDate"), fromDate));
                             } catch (Exception e) {
                                 LoggerFactory.getLogger(DeliveryScheduleRepositoryImplement.class).error("An error parse LocalDateTime", e);
@@ -94,7 +94,7 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
                             break;
                         case "toDate":
                             try {
-                                LocalDateTime toDate = Utils.parseLocalDateTime(params.get(key));
+                                Date toDate = Utils.parseDate(params.get(key));
                                 predicates.add(builder.lessThanOrEqualTo(root.get("scheduledDate"), toDate));
                             } catch (Exception e) {
                                 LoggerFactory.getLogger(DeliveryScheduleRepositoryImplement.class).error("An error parse LocalDateTime", e);

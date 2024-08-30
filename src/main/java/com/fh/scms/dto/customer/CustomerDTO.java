@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Builder
@@ -41,5 +42,5 @@ public class CustomerDTO {
     private Boolean gender;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate dateOfBirth;
+    private Date dateOfBirth;
 }

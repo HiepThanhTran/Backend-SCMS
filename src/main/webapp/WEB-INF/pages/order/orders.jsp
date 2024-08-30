@@ -28,7 +28,16 @@
         <c:forEach items="${orders}" var="order">
             <tr id="item${order.id}">
                 <td>${order.id}</td>
-                <td>${order.type.getDisplayName()}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${ order.type == 'INBOUND' }">
+                            <span class="badge bg-info">${order.type.getDisplayName()}</span>
+                        </c:when>
+                        <c:when test="${ order.type == 'OUTBOUND' }">
+                            <span class="badge bg-primary">${order.type.getDisplayName()}</span>
+                        </c:when>
+                    </c:choose>
+                </td>
                 <td>
                     <c:choose>
                         <c:when test="${ order.status == 'PENDING' }">
@@ -53,12 +62,12 @@
                 </td>
                 <td>${order.user.username}</td>
                 <td>
-                    <fmt:parseDate value="${ order.createdAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:parseDate value="${ order.createdAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDateTime" type="both"/>
                     <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedDateTime }"/>
                 </td>
                 <td>
                     <c:if test="${ order.updatedAt != null }">
-                        <fmt:parseDate value="${ order.updatedAt }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedUpdatedDateTime" type="both"/>
+                        <fmt:parseDate value="${ order.updatedAt }" pattern="yyyy-MM-dd HH:mm:ss" var="parsedUpdatedDateTime" type="both"/>
                         <fmt:formatDate pattern="dd-MM-yyyy" value="${ parsedUpdatedDateTime }"/>
                     </c:if>
                     <c:if test="${ order.updatedAt == null }">

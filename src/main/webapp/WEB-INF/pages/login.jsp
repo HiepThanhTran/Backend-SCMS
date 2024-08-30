@@ -11,7 +11,7 @@
     <title>Đăng nhập</title>
 
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon-02.ico"/>"/>
+    <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon.ico"/>"/>
     <!--===============================================================================================-->
     <link href="<c:url value="/vendor/bootstrap/css/bootstrap.min.css"/>" rel="stylesheet">
     <!--===============================================================================================-->
@@ -70,7 +70,7 @@
                 </div>
             </form>
 
-            <div class="login100-more" style="background-image: url('<c:url value="/images/bg-02.png"/>');"></div>
+            <div class="login100-more" style="background-image: url('<c:url value="/images/login_bg.png"/>');"></div>
         </div>
     </div>
 </div>
