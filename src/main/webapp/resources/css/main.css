@@ -5,7 +5,7 @@
     --background: #0e223e;
     --text-color: #414656;
     --text-color-white: #fff;
-    --hover-color: #3b7ddd;
+    --hover-color: #a45eff;
 
     --color-primary: #6C9BCF;
     --color-danger: #FF0060;
@@ -27,13 +27,13 @@
 
     --box-shadow: 0 2rem 3rem var(--color-light);
 
-    --color-chart1: #c37eff;
-    --color-chart2: #ff9d9c;
-    --color-chart3: #46c461;
+    --color-chart1: #fe8f96;
+    --color-chart2: #3699e9;
+    --color-chart3: #38d2bc;
 
-    --color-chart1-bold: #a64db5;
-    --color-chart2-bold: #e67c7b;
-    --color-chart3-bold: #28a745;
+    --color-chart1-bold: #d35f67;
+    --color-chart2-bold: #277fc4;
+    --color-chart3-bold: #24b4a1;
 }
 
 /* Reset CSS */
@@ -61,8 +61,9 @@ li {
 }
 
 h2 {
+    font-weight: bolder;
     text-transform: uppercase;
-    color: var(--color-primary);
+    color: var(--color-dark);
 }
 
 tbody, td, tfoot, th, thead, tr {
@@ -81,6 +82,10 @@ tbody, td, tfoot, th, thead, tr {
 
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(-45deg, #4a99d2 0%, #8a5fe5 100%);
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
 }
 
 .bx {

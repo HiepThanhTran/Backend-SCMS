@@ -45,7 +45,7 @@ const generateChart = (ctx, type, data, color) => {
         type: type,
         data: {
             datasets: [{
-                data: [data, 100 - data],
+                data: [data, 100 - data < 0 ? 0 : 100 - data],
                 borderWidth: 0,
                 backgroundColor: ["#f6f6f9", color],
                 borderRadius: 20,
@@ -93,7 +93,15 @@ const totalAmountChart = () => {
     const totalAmountLastWeekNum = parseFloat(totalAmountLastWeek);
     const dataTotalAmountChart = totalAmountCurrentWeekNum / totalAmountLastWeekNum * 100;
     const totalAmountChart = document.getElementById("totalAmountChart").getContext("2d")
-    return generateChart(totalAmountChart, "doughnut", dataTotalAmountChart, "#a64db5")
+
+    const infoPercentageRevenue = document.getElementById("info-per-revenue");
+    if (dataTotalAmountChart > 100) {
+        infoPercentageRevenue.innerText = "Tăng " + (dataTotalAmountChart - 100).toFixed(2) + "% so với tuần trước";
+    } else {
+        infoPercentageRevenue.innerText = "Giảm " + (100 - dataTotalAmountChart).toFixed(2) + "% so với tuần trước";
+    }
+
+    return generateChart(totalAmountChart, "doughnut", dataTotalAmountChart, "#d35f67")
 }
 
 const totalOrdersChart = () => {
@@ -101,7 +109,15 @@ const totalOrdersChart = () => {
     const totalOrdersLastWeekNum = parseFloat(totalOrdersLastWeek);
     const dataTotalOrdersChart = totalOrdersCurrentWeekNum / totalOrdersLastWeekNum * 100;
     const totalOrdersChart = document.getElementById("totalOrdersChart").getContext("2d")
-    return generateChart(totalOrdersChart, "doughnut", dataTotalOrdersChart, "#e67c7b")
+
+    const infoPercentageOrders = document.getElementById("info-per-orders");
+    if (dataTotalOrdersChart > 100) {
+        infoPercentageOrders.innerText = "Tăng " + (dataTotalOrdersChart - 100).toFixed(2) + "% so với tuần trước";
+    } else {
+        infoPercentageOrders.innerText = "Giảm " + (100 - dataTotalOrdersChart).toFixed(2) + "% so với tuần trước";
+    }
+
+    return generateChart(totalOrdersChart, "doughnut", dataTotalOrdersChart, "#277fc4")
 }
 
 const totalProductsChart = () => {
@@ -109,7 +125,16 @@ const totalProductsChart = () => {
     const totalProductsLastWeekNum = parseFloat(totalProductsLastWeek);
     const dataTotalProductsChart = totalProductsCurrentWeekNum / totalProductsLastWeekNum * 100;
     const totalProductsChart = document.getElementById("totalProductsChart").getContext("2d")
-    return generateChart(totalProductsChart, "doughnut", dataTotalProductsChart, "#28a745")
+
+    const infoPercentageProducts = document.getElementById("info-per-products");
+    if (dataTotalProductsChart > 100) {
+        infoPercentageProducts.innerText = "Tăng " + (dataTotalProductsChart - 100).toFixed(2) + "% so với tuần trước";
+    } else {
+        infoPercentageProducts.innerText = "Giảm " + (100 - dataTotalProductsChart).toFixed(2) + "% so với tuần trước";
+    }
+
+
+    return generateChart(totalProductsChart, "doughnut", dataTotalProductsChart, "#24b4a1")
 }
 
 const dashboardChart = () => {

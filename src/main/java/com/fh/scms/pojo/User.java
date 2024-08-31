@@ -7,7 +7,6 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -26,7 +25,7 @@ import java.util.Set;
         @Index(name = "idx_user_email", columnList = "email"),
         @Index(name = "idx_user_username", columnList = "username"),
 })
-public class User extends _BaseEntity implements Serializable {
+public class User extends BaseEntity implements Serializable {
 
     @NotNull(message = "{user.email.notNull}")
     @NotBlank(message = "{user.email.notNull}")

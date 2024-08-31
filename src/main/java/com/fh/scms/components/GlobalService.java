@@ -8,6 +8,7 @@ import com.fh.scms.dto.pt.PaymentTermsRequest;
 import com.fh.scms.dto.user.UserRequestRegister;
 import com.fh.scms.enums.*;
 import com.fh.scms.pojo.*;
+import com.fh.scms.pojo.System;
 import com.fh.scms.repository.*;
 import com.fh.scms.services.OrderService;
 import com.fh.scms.services.UserService;
@@ -80,12 +81,12 @@ public class GlobalService {
     }
 
     public Boolean isFirstRun() {
-        return this.getCurrentSession().get(_System.class, 1L) == null;
+        return this.getCurrentSession().get(System.class, 1L) == null;
     }
 
     public void saveFirstRun() {
         Session session = this.getCurrentSession();
-        _System system = _System.builder().name("isFirstRun").build();
+        System system = System.builder().name("isFirstRun").build();
         session.persist(system);
     }
 

@@ -7,11 +7,16 @@ import com.fh.scms.pojo.Rating;
 import com.fh.scms.pojo.Supplier;
 import com.fh.scms.services.SupplierService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -36,9 +41,7 @@ public class APISupplierController {
     @GetMapping(path = "/{supplierId}")
     public ResponseEntity<?> getSupplier(@PathVariable(value = "supplierId") Long id) {
         Supplier supplier = this.supplierService.findById(id);
-        if (Optional.ofNullable(supplier).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        Optional.ofNullable(supplier).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy nhà cung cấp"));
 
         SupplierDTO supplierDTO = this.supplierService.getSupplierResponse(supplier);
 
@@ -58,18 +61,14 @@ public class APISupplierController {
             return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
-        try {
-            SupplierDTO updatedSupplierDTO = this.supplierService.updateProfileSupplier(principal.getName(), supplierDTO);
+        SupplierDTO updatedSupplierDTO = this.supplierService.updateProfileSupplier(principal.getName(), supplierDTO);
 
-            return ResponseEntity.ok(updatedSupplierDTO);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
-        }
+        return ResponseEntity.ok(updatedSupplierDTO);
     }
 
     @GetMapping(path = "/{supplierId}/ratings")
-    public ResponseEntity<?> getRatingsForSupplier(@PathVariable(value = "supplierId") Long supplierId) {
-        List<Rating> ratings = this.supplierService.getRatingsForSupplier(supplierId);
+    public ResponseEntity<?> getRatingsOfSupplier(@PathVariable(value = "supplierId") Long supplierId) {
+        List<Rating> ratings = this.supplierService.getRatingsOfSupplier(supplierId);
 
         return ResponseEntity.ok(ratings);
     }
@@ -81,16 +80,36 @@ public class APISupplierController {
             return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
-        try {
-            Rating rating = this.supplierService.addRatingForSupplier(principal.getName(), supplierId, ratingRequestCreate);
+        Rating rating = this.supplierService.addRatingForSupplier(principal.getName(), supplierId, ratingRequestCreate);
 
-            return ResponseEntity.ok(rating);
-        } catch (Exception e) {
-            if (e instanceof EntityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            }
+        return ResponseEntity.ok(rating);
+    }
 
-            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
-        }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFoundException(@NotNull HttpServletRequest req, EntityNotFoundException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    public ResponseEntity<?> handleIllegalArgumentException(@NotNull HttpServletRequest req, IllegalArgumentException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDenied(@NotNull HttpServletRequest req, AccessDeniedException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(@NotNull HttpServletRequest req, Exception e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
     }
 }

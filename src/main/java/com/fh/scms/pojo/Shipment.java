@@ -17,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "shipment")
-public class Shipment extends _BaseEntity implements Serializable {
+public class Shipment extends BaseEntity implements Serializable {
 
     @Builder.Default
     @NotNull(message = "{shipment.cost.notNull}")

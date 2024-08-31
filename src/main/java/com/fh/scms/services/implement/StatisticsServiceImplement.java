@@ -2,8 +2,8 @@ package com.fh.scms.services.implement;
 
 import com.fh.scms.dto.statistics.*;
 import com.fh.scms.enums.CriteriaType;
-import com.fh.scms.repository._StatisticsRepository;
-import com.fh.scms.services._StatisticsService;
+import com.fh.scms.repository.StatisticsRepository;
+import com.fh.scms.services.StatisticsService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ import java.util.*;
 
 @Service
 @Transactional
-public class _StatisticsServiceImplement implements _StatisticsService {
+public class StatisticsServiceImplement implements StatisticsService {
 
     @Autowired
-    private _StatisticsRepository statisticsRepository;
+    private StatisticsRepository statisticsRepository;
 
     @Override
     public RevenueStatisticsEntry getStatisticsRevenueByWeeks(int days) {

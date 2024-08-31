@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<h2 class="mb-4 mt-5 text-center text-primary">Thống kê hiệu suất của nhà cung cấp</h2>
+<h2 class="mb-4 mt-5 text-center">Thống kê hiệu suất của nhà cung cấp</h2>
 <hr>
 <label class="text-dark h5 mb-4" for="yearpicker">Chọn năm:</label>
 <input style="padding: 4px 12px 4px 12px; border-radius: 12px; max-width: 66px;"
@@ -14,7 +14,7 @@
        readonly>
 
 <div class="row">
-    <div class="col-md-4 col-12">
+    <div style="margin-top: 12px;" class="col-md-4 col-12">
         <table id="supplierPerformanceTable" class="table table-bordered table-hover display nowrap">
             <thead>
             <tr>
@@ -38,7 +38,7 @@
 </div>
 <hr>
 
-<h2 class="mt-5 text-center text-primary" style="display: none">Danh sách đánh giá của <span id="ratingHeader"></span></h2>
+<h2 class="mt-5 text-center" style="display: none">Danh sách đánh giá của <span id="ratingHeader"></span></h2>
 <div class="row">
     <div class="col-md-12 col-12">
         <table id="ratingTable" class="table table-bordered table-hover display nowrap">
@@ -57,8 +57,7 @@
     </div>
 </div>
 
-<script src="<c:url value="/js/yearpicker.js" />"></script>
-<script src="<c:url value="/js/supplier.js"/>"></script>
+<script src="<c:url value="/js/supplierperformance.js"/>"></script>
 <script>
     const supplierPerformanceLength = ${fn:length(suppliers)};
 

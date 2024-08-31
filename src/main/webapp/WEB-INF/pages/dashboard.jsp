@@ -24,7 +24,7 @@
                         </h3>
                         <p class="glow"><span class="totalRevenues">${formattedTotalAmountCurrentWeek}</span></p>
                     </div>
-                    <p style="margin-bottom: 0;" class="text-light">Trong tuần này</p>
+                    <p style="margin-bottom: 0;" class="text-light" id="info-per-revenue"></p>
                 </div>
 
                 <div class="progresss">
@@ -50,7 +50,7 @@
                         </h3>
                         <p class="glow"><span class="totalOrders">${revenueCurrentWeek.totalOrders}</span></p>
                     </div>
-                    <p style="margin-bottom: 0;" class="text-light">Trong tuần này</p>
+                    <p style="margin-bottom: 0;" class="text-light" id="info-per-orders"></p>
                 </div>
 
                 <div class="progresss">
@@ -76,7 +76,7 @@
                         </h3>
                         <p class="glow"><span class="totalOrders">${revenueCurrentWeek.totalProducts}</span></p>
                     </div>
-                    <p style="margin-bottom: 0;" class="text-light">Trong tuần này</p>
+                    <p style="margin-bottom: 0;" class="text-light" id="info-per-products"></p>
                 </div>
 
                 <div class="progresss">
@@ -88,10 +88,12 @@
     </div>
 </div>
 
-<canvas class="my-4 w-100" id="dashboardChart" width="900" height="380"></canvas>
+<div style="margin-top: 32px; padding: 0 20px;" class="card">
+    <canvas class="my-4 w-100" id="dashboardChart" width="900" height="380"></canvas>
+</div>
 
 <div class="row mt-4">
-    <h2 class="mb-4 text-primary text-uppercase h4 d-flex align-items-center">
+    <h2 class="mb-4 d-flex align-items-center">
         <i class='bx bx-box' style="font-size: 3rem; margin-right: 12px"></i>
         Đơn hàng gần đây
     </h2>

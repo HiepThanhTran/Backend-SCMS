@@ -23,6 +23,4 @@ public interface InvoiceService {
     InvoiceResponse getInvoiceResponse(Invoice invoice);
 
     List<InvoiceResponse> getAllInvoiceResponse(Map<String, String> params);
-
-    void payInvoice(Long invoiceId);
 }

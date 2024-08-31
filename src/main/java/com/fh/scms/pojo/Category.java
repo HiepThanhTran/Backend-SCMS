@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "category")
-public class Category extends _BaseEntity implements Serializable {
+public class Category extends BaseEntity implements Serializable {
 
     @NotNull(message = "{category.name.notNull}")
     @NotBlank(message = "{category.name.notNull}")

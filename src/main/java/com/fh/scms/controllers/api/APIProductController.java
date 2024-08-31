@@ -1,14 +1,21 @@
 package com.fh.scms.controllers.api;
 
+import com.fh.scms.dto.MessageResponse;
 import com.fh.scms.dto.product.ProductResponseForDetails;
 import com.fh.scms.dto.product.ProductResponseForList;
 import com.fh.scms.pojo.Product;
 import com.fh.scms.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,12 +39,38 @@ public class APIProductController {
     @GetMapping("/{productId}")
     public ResponseEntity<?> getProduct(@PathVariable(value = "productId") Long productId) {
         Product product = this.productService.findById(productId);
-        if (Optional.ofNullable(product).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        Optional.ofNullable(product).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy sản phẩm"));
 
         ProductResponseForDetails productResponseForDetails = this.productService.getProductResponseForDetails(product);
 
         return ResponseEntity.ok(productResponseForDetails);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFoundException(@NotNull HttpServletRequest req, EntityNotFoundException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    public ResponseEntity<?> handleIllegalArgumentException(@NotNull HttpServletRequest req, IllegalArgumentException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDenied(@NotNull HttpServletRequest req, AccessDeniedException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(@NotNull HttpServletRequest req, Exception e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
     }
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,7 +17,7 @@ import java.math.BigDecimal;
 @Table(name = "supplier_costing", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"product_id", "supplier_id"})
 })
-public class SupplierCosting extends _BaseEntity implements Serializable {
+public class SupplierCosting extends BaseEntity implements Serializable {
 
     @Builder.Default
     @NotNull(message = "{supplier.costing.unitPrice.notNull}")

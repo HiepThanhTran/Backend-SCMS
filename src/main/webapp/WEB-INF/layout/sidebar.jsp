@@ -10,9 +10,7 @@
     <ul class="sidebar-nav">
         <c:forEach var="entity" items="${entities}">
             <c:url value="/admin/${entity['key']}" var="url"/>
-            <li class="sidebar-item ${pageContext.request.requestURI == url ? 'active' : ''}">
-                <a href="${url}" class="sidebar-link">${entity.value}</a>
-            </li>
+            <li class="sidebar-item"><a href="${url}" class="sidebar-link">${entity.value}</a></li>
         </c:forEach>
     </ul>
 </aside>

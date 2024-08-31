@@ -26,7 +26,7 @@
     <definition name="login" template="/WEB-INF/pages/login.jsp"/>
 
     <!--Dashboard-->
-    <definition name="dashboard" extends="baseWithSidebar">
+    <definition name="dashboard" extends="baseNonSidebar">
         <put-attribute name="title" value="Dashboard"/>
         <put-attribute name="content" value="/WEB-INF/pages/dashboard.jsp"/>
     </definition>

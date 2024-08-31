@@ -5,7 +5,6 @@ import com.fh.scms.enums.PaymentTermType;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -20,7 +19,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "payment_terms")
-public class PaymentTerms extends _BaseEntity implements Serializable {
+public class PaymentTerms extends BaseEntity implements Serializable {
 
     @Builder.Default
     @NotNull(message = "{paymentTerms.discountDays.notNull}")

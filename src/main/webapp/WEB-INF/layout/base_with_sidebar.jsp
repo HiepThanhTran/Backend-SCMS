@@ -15,6 +15,11 @@
     <%--Box Icons--%>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!--===============================================================================================-->
+    <%--FontAwesome--%>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <!--===============================================================================================-->
     <%--Bootstrap 5--%>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -26,6 +31,10 @@
     <!--===============================================================================================-->
     <%--ChartJS--%>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--===============================================================================================-->
+    <%--Moment.js--%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment-with-locales.min.js"></script>
     <!--===============================================================================================-->
     <%--Axios--%>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -42,14 +51,17 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <!--===============================================================================================-->
+    <link href="<c:url value="/css/yearpicker.css" />" rel="stylesheet"/>
+    <link href="<c:url value="/css/preloading.css" />" rel="stylesheet"/>
+    <link href="<c:url value="/css/backtotop.css" />" rel="stylesheet"/>
     <link href="<c:url value="/css/header.css" />" rel="stylesheet"/>
     <link href="<c:url value="/css/footer.css" />" rel="stylesheet"/>
     <link href="<c:url value="/css/sidebar.css" />" rel="stylesheet"/>
-    <link href="<c:url value="/css/preloading.css" />" rel="stylesheet"/>
-    <link href="<c:url value="/css/yearpicker.css" />" rel="stylesheet"/>
     <link href="<c:url value="/css/dashboard.css" />" rel="stylesheet"/>
     <link href="<c:url value="/css/main.css" />" rel="stylesheet"/>
     <!--===============================================================================================-->
+    <script src="<c:url value="/js/yearpicker.js" />"></script>
+    <script src="<c:url value="/js/backtotop.js" />"></script>
     <script src="<c:url value="/js/main.js" />"></script>
 </head>
 
@@ -58,7 +70,7 @@
 <div class="wrapper">
     <tiles:insertAttribute name="header"/>
 
-    <div class="container-fluid container__content pb-5">
+    <div class="container-fluid pb-5">
         <div class="row">
             <div class="col-3">
                 <tiles:insertAttribute name="sidebar"/>
@@ -72,6 +84,8 @@
 
     <%--    <tiles:insertAttribute name="footer"/>--%>
 </div>
+
+<button id="back-to-top"><i class="fa-solid fa-angle-up"></i></button>
 
 <tiles:insertAttribute name="preloading"/>
 

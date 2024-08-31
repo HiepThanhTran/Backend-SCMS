@@ -8,11 +8,15 @@ import com.fh.scms.services.CartService;
 import com.fh.scms.services.OrderService;
 import com.fh.scms.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -32,9 +36,7 @@ public class APIOrderController {
     @GetMapping
     public ResponseEntity<?> listOrders(Principal principal, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         User user = this.userService.findByUsername(principal.getName());
-        if (Optional.ofNullable(user).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
 
         params.put("userId", user.getId().toString());
         List<OrderResponse> orderList = this.orderService.getAllOrderResponse(params);
@@ -45,75 +47,65 @@ public class APIOrderController {
     @PostMapping(path = "/checkout")
     public ResponseEntity<?> checkout(Principal principal, @RequestBody @Valid OrderRequest orderRequest) {
         User user = this.userService.findByUsername(principal.getName());
-        if (Optional.ofNullable(user).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
 
-        try {
-            this.orderService.checkout(user, orderRequest);
+        this.orderService.checkout(user, orderRequest);
 
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (Exception e) {
-            if (e instanceof EntityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            }
-
-            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping(path = "/checkin")
     public ResponseEntity<?> checkin(Principal principal, @RequestBody @Valid OrderRequest orderRequest) {
         User user = this.userService.findByUsername(principal.getName());
-        if (Optional.ofNullable(user).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
 
-        try {
-            this.orderService.checkin(user, orderRequest);
+        this.orderService.checkin(user, orderRequest);
 
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (Exception e) {
-            if (e instanceof EntityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            }
-
-            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping(path = "/{orderId}/cancel")
     public ResponseEntity<?> cancelOrder(Principal principal, @PathVariable(value = "orderId") Long orderId) {
         User user = this.userService.findByUsername(principal.getName());
-        if (Optional.ofNullable(user).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
 
-        try {
-            this.orderService.cancelOrder(user, orderId);
+        this.orderService.cancelOrder(user, orderId);
 
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            if (e instanceof EntityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            }
-
-            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
-        }
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping(path = "/{orderId}/status")
     public ResponseEntity<?> updateOrderStatus(@PathVariable Long orderId, @RequestBody Map<String, String> params) {
-        try {
-            this.orderService.updateOrderStatus(orderId, params.get("status"));
+        this.orderService.updateOrderStatus(orderId, params.get("status"));
 
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            if (e instanceof EntityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            }
+        return ResponseEntity.ok().build();
+    }
 
-            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
-        }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFoundException(@NotNull HttpServletRequest req, EntityNotFoundException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    public ResponseEntity<?> handleIllegalArgumentException(@NotNull HttpServletRequest req, IllegalArgumentException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDenied(@NotNull HttpServletRequest req, AccessDeniedException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(@NotNull HttpServletRequest req, Exception e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
     }
 }

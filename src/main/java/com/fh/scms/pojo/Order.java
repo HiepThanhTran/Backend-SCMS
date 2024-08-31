@@ -7,7 +7,6 @@ import com.fh.scms.enums.OrderType;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -21,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "\"order\"")
-public class Order extends _BaseEntity implements Serializable {
+public class Order extends BaseEntity implements Serializable {
 
     @Builder.Default
     @NotNull(message = "{order.orderNumber.notNull}")

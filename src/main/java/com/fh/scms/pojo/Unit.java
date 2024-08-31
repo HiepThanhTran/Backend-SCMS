@@ -19,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "unit")
-public class Unit extends _BaseEntity implements Serializable {
+public class Unit extends BaseEntity implements Serializable {
 
     @NotNull(message = "{unit.name.notNull}")
     @NotBlank(message = "{unit.name.notNull}")

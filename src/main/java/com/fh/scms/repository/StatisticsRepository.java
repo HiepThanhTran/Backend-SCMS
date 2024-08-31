@@ -7,7 +7,7 @@ import com.fh.scms.dto.statistics.WarehouseStatusReportEntry;
 
 import java.util.List;
 
-public interface _StatisticsRepository {
+public interface StatisticsRepository {
 
     RevenueStatisticsEntry generateStatisticsRevenueByWeeks(int days);
 

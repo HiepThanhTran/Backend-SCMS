@@ -4,7 +4,7 @@ import com.fh.scms.dto.statistics.*;
 
 import java.util.List;
 
-public interface _StatisticsService {
+public interface StatisticsService {
 
     RevenueStatisticsEntry getStatisticsRevenueByWeeks(int days);
 

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -18,7 +16,7 @@ import java.math.BigDecimal;
 @Table(name = "order_details", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"order_id", "product_id"})
 })
-public class OrderDetails extends _BaseEntity implements Serializable {
+public class OrderDetails extends BaseEntity implements Serializable {
 
     @Builder.Default
     @Column(nullable = false, columnDefinition = "float default 0")

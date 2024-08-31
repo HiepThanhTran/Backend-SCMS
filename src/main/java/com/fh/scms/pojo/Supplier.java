@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -18,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "supplier")
-public class Supplier extends _BaseEntity implements Serializable {
+public class Supplier extends BaseEntity implements Serializable {
 
     @NotNull(message = "{supplier.name.notNull}")
     @NotBlank(message = "{supplier.name.notNull}")

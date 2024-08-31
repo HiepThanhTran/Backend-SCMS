@@ -79,18 +79,4 @@ public class InvoiceServiceImplement implements InvoiceService {
                 .map(this::getInvoiceResponse)
                 .collect(Collectors.toList());
     }
-
-    @Override
-    public void payInvoice(Long invoiceId) {
-        Invoice invoice = this.invoiceRepository.findById(invoiceId);
-
-        Optional.ofNullable(invoice).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy hóa đơn"));
-
-        if (invoice.getPaid()) {
-            throw new IllegalArgumentException("Hóa đơn đã được thanh toán");
-        }
-
-        invoice.setPaid(true);
-        this.invoiceRepository.update(invoice);
-    }
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,7 +17,7 @@ import java.math.BigDecimal;
 @Table(name = "cart_details", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"cart_id", "product_id"})
 })
-public class CartDetails extends _BaseEntity implements Serializable {
+public class CartDetails extends BaseEntity implements Serializable {
 
     @Builder.Default
     @NotNull(message = "Quantity is required")

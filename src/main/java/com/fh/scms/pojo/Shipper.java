@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
@@ -20,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "shipper")
-public class Shipper extends _BaseEntity implements Serializable {
+public class Shipper extends BaseEntity implements Serializable {
 
     @NotNull(message = "{shipper.name.notnull}")
     @NotBlank(message = "{shipper.name.notnull}")

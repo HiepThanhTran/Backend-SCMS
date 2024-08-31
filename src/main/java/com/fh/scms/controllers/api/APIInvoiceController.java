@@ -6,10 +6,15 @@ import com.fh.scms.pojo.User;
 import com.fh.scms.services.InvoiceService;
 import com.fh.scms.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +32,7 @@ public class APIInvoiceController {
     @GetMapping
     public ResponseEntity<?> listInvoices(Principal principal, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         User user = this.userService.findByUsername(principal.getName());
-        if (Optional.ofNullable(user).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
 
         params.put("userId", user.getId().toString());
         List<InvoiceResponse> invoiceList = this.invoiceService.getAllInvoiceResponse(params);
@@ -37,18 +40,31 @@ public class APIInvoiceController {
         return ResponseEntity.ok(invoiceList);
     }
 
-    @PostMapping(path = "/{invoiceId}/pay")
-    public ResponseEntity<?> payInvoice(@PathVariable(value = "invoiceId") Long invoiceId) {
-        try {
-            this.invoiceService.payInvoice(invoiceId);
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFoundException(@NotNull HttpServletRequest req, EntityNotFoundException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
 
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            if (e instanceof EntityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of(new MessageResponse(e.getMessage())));
+    }
 
-            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
-        }
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    public ResponseEntity<?> handleIllegalArgumentException(@NotNull HttpServletRequest req, IllegalArgumentException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDenied(@NotNull HttpServletRequest req, AccessDeniedException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(@NotNull HttpServletRequest req, Exception e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
     }
 }

@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-center list__title">Danh sách khách hàng</h1>
         <a href="<c:url value="/admin/customers/add"/>" class="list__icon-add">
-            <i class='bx bxs-user-plus'></i>
+            <i class='bx bxs-plus-circle'></i>
         </a>
     </div>
 </div>

@@ -9,12 +9,18 @@ import com.fh.scms.dto.user.UserResponse;
 import com.fh.scms.pojo.User;
 import com.fh.scms.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -51,13 +57,9 @@ public class APIUserController {
             return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
-        try {
-            UserResponse userResponse = this.userService.registerUser(userRequestRegister);
+        UserResponse userResponse = this.userService.registerUser(userRequestRegister);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
     @PostMapping(path = "/confirm")
@@ -82,13 +84,9 @@ public class APIUserController {
             return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
-        try {
-            UserResponse userResponse = this.userService.updateProfileUser(principal.getName(), userRequestUpdate);
+        UserResponse userResponse = this.userService.updateProfileUser(principal.getName(), userRequestUpdate);
 
-            return ResponseEntity.ok(userResponse);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
-        }
+        return ResponseEntity.ok(userResponse);
     }
 
     @DeleteMapping(path = "/profile/delete")
@@ -97,5 +95,33 @@ public class APIUserController {
         this.userService.delete(user.getId());
 
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFoundException(@NotNull HttpServletRequest req, EntityNotFoundException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    public ResponseEntity<?> handleIllegalArgumentException(@NotNull HttpServletRequest req, IllegalArgumentException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDenied(@NotNull HttpServletRequest req, AccessDeniedException e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(List.of(new MessageResponse(e.getMessage())));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(@NotNull HttpServletRequest req, Exception e) {
+        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
+
+        return ResponseEntity.badRequest().body(List.of(new MessageResponse(e.getMessage())));
     }
 }

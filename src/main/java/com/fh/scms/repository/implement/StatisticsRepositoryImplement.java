@@ -8,7 +8,7 @@ import com.fh.scms.enums.OrderType;
 import com.fh.scms.enums.ProductStatus;
 import com.fh.scms.pojo.Order;
 import com.fh.scms.pojo.*;
-import com.fh.scms.repository._StatisticsRepository;
+import com.fh.scms.repository.StatisticsRepository;
 import com.fh.scms.util.Constants;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -18,7 +18,6 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Tuple;
 import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,7 +27,7 @@ import java.util.*;
 
 @Repository
 @Transactional
-public class _StatisticsRepositoryImplement implements _StatisticsRepository {
+public class StatisticsRepositoryImplement implements StatisticsRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
@@ -174,15 +173,14 @@ public class _StatisticsRepositoryImplement implements _StatisticsRepository {
         Join<Warehouse, Inventory> inventoryJoin = warehouseRoot.join("inventorySet", JoinType.LEFT);
         Join<Inventory, InventoryDetails> inventoryDetailsJoin = inventoryJoin.join("inventoryDetailsSet", JoinType.LEFT);
 
-        // Tính tổng số lượng hàng tồn kho và dung lượng còn lại
-        // Nếu tổng số lượng hàng tồn kho rỗng (Tức là kho chưa có hàng tồn kho nào) thì trả về dung lượng của kho
-        // Ngược lại trả về dung lượng còn lại của kho (Dung lượng - Tổng số lượng hàng tồn kho)
+        // Tính tổng số lượng hàng tồn kho và sức chứa còn lại
+        // Nếu tổng số lượng hàng tồn kho rỗng (Tức là kho chưa có hàng tồn kho nào) thì trả về sức chứa của kho
+        // Ngược lại trả về sức chứa còn lại của kho (Sức chứa hiện tại - Tổng số lượng hàng tồn kho)
         Expression<Number> totalQuantity = builder.sum(inventoryDetailsJoin.get("quantity"));
         Expression<Number> remainingCapacity = builder.<Number>selectCase()
                 .when(totalQuantity.isNotNull(), builder.diff(warehouseRoot.get("capacity"), totalQuantity))
                 .otherwise(warehouseRoot.get("capacity"));
 
-        // Chọn các trường cần thiết
         // Parse kết quả trả về thành WarehouseReportEntry
         criteria.select(builder.construct(
                 WarehouseStatusReportEntry.class,
@@ -191,7 +189,6 @@ public class _StatisticsRepositoryImplement implements _StatisticsRepository {
                 warehouseRoot.get("capacity"),
                 remainingCapacity
         ));
-        // Group by theo id, tên và dung lượng của kho
         criteria.groupBy(warehouseRoot.get("id"), warehouseRoot.get("name"), warehouseRoot.get("capacity"));
 
         Query<WarehouseStatusReportEntry> query = session.createQuery(criteria);
@@ -236,26 +233,25 @@ public class _StatisticsRepositoryImplement implements _StatisticsRepository {
         LocalDate today = LocalDate.now();
         LocalDate plusDays = today.plusDays(Constants.EXPIRING_SOON_DAYS);
 
-        Date currentDate = Date.from(plusDays.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date expiryDate = Date.from(today.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant());
+        Date startDateTime = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endDateTime = Date.from(plusDays.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant());
 
-        // Tính số lượng sản phẩm còn hạn, đã hết hạn và sắp hết hạn
         // Sản phẩm còn hạn: ExpiryDate >= Ngày hiện tại + Constants.EXPIRING_SOON_DAYS (30 ngày)
         Expression<Number> validCount = builder.sum(
                 builder.<Number>selectCase()
-                        .when(builder.greaterThanOrEqualTo(productRoot.get("expiryDate"), expiryDate), 1L).otherwise(0L)
+                        .when(builder.greaterThanOrEqualTo(productRoot.get("expiryDate"), endDateTime), 1L).otherwise(0L)
         );
 
         // Sản phẩm đã hết hạn: ExpiryDate < Ngày hiện tại
         Expression<Number> expiredCount = builder.sum(
                 builder.<Number>selectCase()
-                        .when(builder.lessThan(productRoot.get("expiryDate"), currentDate), 1L).otherwise(0L)
+                        .when(builder.lessThan(productRoot.get("expiryDate"), startDateTime), 1L).otherwise(0L)
         );
 
         // Sản phẩm sắp hết hạn: ExpiryDate >= Ngày hiện tại và ExpiryDate <= Ngày hiện tại + Constants.EXPIRING_SOON_DAYS (30 ngày)
         Expression<Number> expiringSoonCount = builder.sum(
                 builder.<Number>selectCase()
-                        .when(builder.between(productRoot.get("expiryDate"), currentDate, expiryDate), 1L).otherwise(0L)
+                        .when(builder.between(productRoot.get("expiryDate"), startDateTime, endDateTime), 1L).otherwise(0L)
         );
 
         criteria.multiselect(validCount, expiredCount, expiringSoonCount);
@@ -294,20 +290,20 @@ public class _StatisticsRepositoryImplement implements _StatisticsRepository {
         LocalDate today = LocalDate.now();
         LocalDate plusDays = today.plusDays(Constants.EXPIRING_SOON_DAYS);
 
-        Date currentDate = Date.from(plusDays.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date expiryDate = Date.from(today.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant());
+        Date startDateTime = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endDateTime = Date.from(plusDays.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant());
 
         switch (productStatus) {
             case EXPIRING_SOON:
                 // Lọc theo ExpiryDate >= Ngày hiện tại và ExpiryDate <= Ngày hiện tại + Constants.EXPIRING_SOON_DAYS (30 ngày)
-                criteria.where(builder.between(productRoot.get("expiryDate"), currentDate, expiryDate),
+                criteria.where(builder.between(productRoot.get("expiryDate"), startDateTime, endDateTime),
                         builder.equal(inventoryDetailsJoin.get("inventory").get("id"), inventoryId)
                 );
                 break;
             case EXPIRED:
                 // Lọc theo ExpiryDate < Ngày hiện tại
                 criteria.where(
-                        builder.lessThanOrEqualTo(productRoot.get("expiryDate"), currentDate),
+                        builder.lessThanOrEqualTo(productRoot.get("expiryDate"), startDateTime),
                         builder.equal(inventoryDetailsJoin.get("inventory").get("id"), inventoryId)
                 );
                 break;

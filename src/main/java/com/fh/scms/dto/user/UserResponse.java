@@ -1,6 +1,7 @@
 package com.fh.scms.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fh.scms.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class UserResponse {
 
     private String avatar;
 
-    private String role;
+    private UserRole role;
 
     private Boolean isConfirm;
 

@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -21,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "product")
-public class Product extends _BaseEntity implements Serializable {
+public class Product extends BaseEntity implements Serializable {
 
     @Transient
     MultipartFile file;

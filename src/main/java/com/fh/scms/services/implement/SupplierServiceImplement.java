@@ -118,7 +118,7 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
-    public List<Rating> getRatingsForSupplier(Long supplierId) {
+    public List<Rating> getRatingsOfSupplier(Long supplierId) {
         Supplier supplier = this.supplierRepository.findById(supplierId);
 
         return new ArrayList<>(supplier.getRatingSet());

@@ -103,7 +103,7 @@ public class UserServiceImplement implements UserService {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .avatar(user.getAvatar())
-                .role(user.getUserRole().getDisplayName())
+                .role(user.getUserRole())
                 .isConfirm(user.getConfirm())
                 .lastLogin(user.getLastLogin())
                 .build();
@@ -195,7 +195,7 @@ public class UserServiceImplement implements UserService {
                                 .type(termsRequest.getType())
                                 .supplier(finalSupplier)
                                 .build()).collect(Collectors.toSet());
-                supplier.setPaymentTermsSet(new HashSet<>(paymentTermsSet));
+                supplier.setPaymentTermsSet(paymentTermsSet);
 
                 user.setSupplier(supplier);
                 break;

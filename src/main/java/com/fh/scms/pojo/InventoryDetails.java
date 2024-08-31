@@ -3,7 +3,6 @@ package com.fh.scms.pojo;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,7 +17,7 @@ import java.util.Set;
 @Table(name = "inventory_details", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"inventory_id", "product_id"})
 })
-public class InventoryDetails extends _BaseEntity implements Serializable {
+public class InventoryDetails extends BaseEntity implements Serializable {
 
     @Builder.Default
     @NotNull(message = "{inventoryDetails.quantity.notNull}")

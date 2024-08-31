@@ -7,7 +7,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -18,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "delivery_schedule")
-public class DeliverySchedule extends _BaseEntity implements Serializable {
+public class DeliverySchedule extends BaseEntity implements Serializable {
 
     @NotNull(message = "{deliverySchedule.scheduledDate.notNull}")
     @Temporal(TemporalType.DATE)

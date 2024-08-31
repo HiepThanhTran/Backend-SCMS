@@ -3,7 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div class="container px-4 py-5" id="hanging-icons">
-    <h2 class="pb-2 border-bottom text-center text-uppercase text-primary">Báo cáo, phân tích và thống kê</h2>
     <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
         <div class="col d-flex align-items-start">
             <div class="d-flex flex-column justify-content-between h-100">
@@ -19,11 +18,11 @@
         </div>
         <div class="col d-flex align-items-start">
             <div class="d-flex flex-column justify-content-between h-100">
-                <h2 class="h4" style="display: flex; align-items: center">
+                <h2 class="h4 d-flex align-items-center">
                     <i class="bx bx-stats" style="font-size: 3rem; margin-right: 12px;"></i>
                     Thống kê doanh thu
                 </h2>
-                <p>Xem thống kê về doanh thu của các đơn hàng theo tháng, năm, hoặc quý.</p>
+                <p>Xem thống kê về doanh thu theo các điều kiện khác nhau (tháng, năm, quý, sản phẩm, loại, ...)</p>
                 <a href="<c:url value="/admin/statistics/revenue"/>" class="btn btn-outline-primary">
                     Xem chi tiết
                 </a>
@@ -31,7 +30,7 @@
         </div>
         <div class="col d-flex align-items-start">
             <div class="d-flex flex-column justify-content-between h-100">
-                <h2 class="h4" style="display: flex; align-items: center">
+                <h2 class="h4 d-flex align-items-center">
                     <i class="bx bx-pie-chart" style="font-size: 3rem; margin-right: 12px;"></i>
                     Báo cáo tình trạng tồn kho
                 </h2>

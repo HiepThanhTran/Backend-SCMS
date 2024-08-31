@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "tag")
-public class Tag extends _BaseEntity implements Serializable {
+public class Tag extends BaseEntity implements Serializable {
 
     @NotNull(message = "{tag.name.notNull}")
     @NotBlank(message = "{tag.name.notNull}")

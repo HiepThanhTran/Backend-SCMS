@@ -19,6 +19,19 @@
                     <li class="nav-item navbar-custome__menu--item">
                         <a class="nav-link px-2" href="<c:url value="/admin/statistics" />">Thống kê</a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Quản lý
+                        </a>
+                        <ul style="padding: 0; max-height: 500px; overflow-y: auto" class="dropdown-menu dropdown-menu-dark"
+                            aria-labelledby="navbarDarkDropdownMenuLink">
+                            <c:forEach var="entity" items="${entities}">
+                                <c:url value="/admin/${entity['key']}" var="url"/>
+                                <li style="padding: 4px;"><a href="${url}" class="dropdown-item">${entity.value}</a></li>
+                            </c:forEach>
+                        </ul>
+                    </li>
                 </s:authorize>
             </ul>
 

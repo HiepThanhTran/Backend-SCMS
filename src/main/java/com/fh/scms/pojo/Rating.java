@@ -4,7 +4,6 @@ import com.fh.scms.enums.CriteriaType;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -18,7 +17,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "rating")
-public class Rating extends _BaseEntity implements Serializable {
+public class Rating extends BaseEntity implements Serializable {
 
     @Builder.Default
     @NotNull(message = "{rating.notNull}")

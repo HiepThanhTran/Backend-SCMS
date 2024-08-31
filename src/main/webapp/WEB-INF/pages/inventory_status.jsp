@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<h2 id="warehouseHeader" class="mb-4 mt-5 text-center text-primary">Báo cáo về tình trạng hiện tại của các nhà kho</h2>
+<h2 id="warehouseHeader" class="mb-4 mt-5 text-center">Báo cáo về tình trạng hiện tại của các nhà kho</h2>
 <hr>
 <table id="warehouseTable" class="table table-bordered table-hover display nowrap">
     <thead>
@@ -36,7 +36,7 @@
     </tbody>
 </table>
 
-<h2 id="inventoryHeader" class="mt-5 mb-4 text-center text-primary">Tình trạng chi tiết của các tồn kho</h2>
+<h2 id="inventoryHeader" class="mt-5 mb-4 text-center">Tình trạng chi tiết của các tồn kho</h2>
 <hr>
 <table id="inventoryTable" class="table table-bordered table-hover display nowrap">
     <thead>
@@ -51,7 +51,7 @@
     </tbody>
 </table>
 
-<h2 id="chartHeader" class="mt-5 mb-4 text-center text-primary">Biểu đồ thống kê sản phẩm theo hạn sử dụng</h2>
+<h2 id="chartHeader" class="mt-5 mb-4 text-center">Biểu đồ thống kê sản phẩm theo hạn sử dụng</h2>
 <hr>
 <div class="row justify-content-center">
     <div class="col-12 w-50">
@@ -61,7 +61,7 @@
 <hr>
 
 <div class="row">
-    <h1 class="text-center text-primary">Các sản phẩm của nhà kho <span id="productHeader"></span></h1>
+    <h2 class="text-center">Các sản phẩm của <span id="productHeader"></span></h2>
     <div class="col-md-6 col-12">
         <h2 id="productExpiringSoonHeader" class="mt-5 mb-4"><span class="text-warning">Sắp hết hạn</span></h2>
         <hr>
@@ -100,7 +100,7 @@
     </div>
 </div>
 
-<script src="<c:url value="/js/inventory.js"/>"></script>
+<script src="<c:url value="/js/inventorystatus.js"/>"></script>
 <script>
     const warehouseLength = ${fn:length(warehouseCapacityReport)};
 
@@ -129,7 +129,7 @@
                     display: true,
                     text: 'Thống kê sản phẩm theo hạn sử dụng',
                     font: {
-                        size: 20
+                        size: 24
                     }
                 },
                 legend: {
@@ -146,7 +146,7 @@
                         display: true,
                         text: 'Thống kê sản phẩm theo hạn sử dụng',
                         font: {
-                            size: 20
+                            size: 24
                         }
                     },
                     ticks: {

@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "tax", indexes = {@Index(name = "idx_tax_region", columnList = "region")})
-public class Tax extends _BaseEntity implements Serializable {
+public class Tax extends BaseEntity implements Serializable {
 
     @Builder.Default
     @NotNull(message = "{tax.rate.notNull}")

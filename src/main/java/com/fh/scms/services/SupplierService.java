@@ -28,7 +28,7 @@ public interface SupplierService {
 
     SupplierDTO updateProfileSupplier(String username, SupplierDTO supplierDTO);
 
-    List<Rating> getRatingsForSupplier(Long supplierId);
+    List<Rating> getRatingsOfSupplier(Long supplierId);
 
     Rating addRatingForSupplier(String username, Long supplierId, RatingRequestCreate ratingRequestCreate);
 }
