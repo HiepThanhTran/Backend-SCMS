@@ -1,12 +1,18 @@
 package com.fh.scms.services;
 
+import com.fh.scms.dto.order.OrderResponse;
+import com.fh.scms.dto.product.ProductRequestPublish;
+import com.fh.scms.dto.product.ProductResponseForDetails;
+import com.fh.scms.dto.product.ProductResponseForList;
 import com.fh.scms.dto.rating.RatingRequestCreate;
 import com.fh.scms.dto.supplier.SupplierDTO;
+import com.fh.scms.pojo.Product;
 import com.fh.scms.pojo.Rating;
 import com.fh.scms.pojo.Supplier;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface SupplierService {
 
@@ -27,6 +33,14 @@ public interface SupplierService {
     Supplier getProfileSupplier(String username);
 
     SupplierDTO updateProfileSupplier(String username, SupplierDTO supplierDTO);
+
+    List<ProductResponseForList> getProductsOfSupplier(Long supplierId);
+
+    ProductResponseForDetails publishProduct(String username, ProductRequestPublish productRequestPublish);
+
+    void unpublishProduct(String username, Long productId);
+
+    List<OrderResponse> getOrdersOfSupplier(Long supplierId);
 
     List<Rating> getRatingsOfSupplier(Long supplierId);
 

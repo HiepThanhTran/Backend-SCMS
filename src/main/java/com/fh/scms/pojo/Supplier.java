@@ -47,11 +47,11 @@ public class Supplier extends BaseEntity implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
-    private Set<Rating> ratingSet;
+    private Set<Product> productSet;
 
     @JsonIgnore
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
-    private Set<SupplierCosting> supplierCostingSet;
+    private Set<Rating> ratingSet;
 
     @JsonIgnore
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)

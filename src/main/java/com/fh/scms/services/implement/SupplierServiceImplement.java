@@ -1,13 +1,20 @@
 package com.fh.scms.services.implement;
 
+import com.fh.scms.dto.order.OrderResponse;
+import com.fh.scms.dto.product.ProductRequestPublish;
+import com.fh.scms.dto.product.ProductResponseForDetails;
+import com.fh.scms.dto.product.ProductResponseForList;
 import com.fh.scms.dto.rating.RatingRequestCreate;
 import com.fh.scms.dto.supplier.SupplierDTO;
 import com.fh.scms.pojo.*;
 import com.fh.scms.repository.*;
+import com.fh.scms.services.OrderService;
+import com.fh.scms.services.ProductService;
 import com.fh.scms.services.SupplierService;
 import com.fh.scms.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +23,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,6 +37,16 @@ public class SupplierServiceImplement implements SupplierService {
     private RatingRepository ratingRepository;
     @Autowired
     private InvoiceRepository invoiceRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private TagRepository tagRepository;
+    @Autowired
+    private UnitRepository unitRepository;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private OrderService orderService;
 
     @Override
     public Supplier findById(Long id) {
@@ -118,8 +136,60 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
+    public List<ProductResponseForList> getProductsOfSupplier(Long supplierId) {
+        Supplier supplier = this.supplierRepository.findById(supplierId);
+        Optional.ofNullable(supplier).orElseThrow(() -> new EntityNotFoundException("Nhà cung cấp không tồn tại"));
+
+        return this.productService.getAllProductResponseForList(new ArrayList<>(supplier.getProductSet()));
+    }
+
+    @Override
+    public ProductResponseForDetails publishProduct(String username, @NotNull ProductRequestPublish productRequestPublish) {
+        Supplier supplier = this.getProfileSupplier(username);
+        Optional.ofNullable(supplier).orElseThrow(() -> new EntityNotFoundException("Nhà cung cấp không tồn tại"));
+
+        Product product = Product.builder()
+                .name(productRequestPublish.getName())
+                .description(productRequestPublish.getDescription())
+                .price(productRequestPublish.getPrice())
+                .expiryDate(productRequestPublish.getExpiryDate())
+                .supplier(supplier)
+                .unit(this.unitRepository.findById(productRequestPublish.getUnit()))
+                .category(this.categoryRepository.findById(productRequestPublish.getCategory()))
+                .tagSet(productRequestPublish.getTags().stream().map(this.tagRepository::findById).collect(Collectors.toSet()))
+                .build();
+
+        this.productService.save(product);
+
+        return this.productService.getProductResponseForDetails(product);
+    }
+
+    @Override
+    public void unpublishProduct(String username, Long productId) {
+        Supplier supplier = this.getProfileSupplier(username);
+        Optional.ofNullable(supplier).orElseThrow(() -> new EntityNotFoundException("Nhà cung cấp không tồn tại"));
+
+        Product product = this.productService.findById(productId);
+        Optional.ofNullable(product).orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại"));
+
+        if (!Objects.equals(product.getSupplier().getId(), supplier.getId())) {
+            throw new AccessDeniedException("Không thể thực hiện hành động này");
+        }
+
+        this.productService.delete(productId);
+    }
+
+    @Override
+    public List<OrderResponse> getOrdersOfSupplier(@NotNull Long supplierId) {
+        List<Order> orders = this.orderService.findAllBySupplierId(supplierId);
+
+        return this.orderService.getAllOrderResponse(orders);
+    }
+
+    @Override
     public List<Rating> getRatingsOfSupplier(Long supplierId) {
         Supplier supplier = this.supplierRepository.findById(supplierId);
+        Optional.ofNullable(supplier).orElseThrow(() -> new EntityNotFoundException("Nhà cung cấp không tồn tại"));
 
         return new ArrayList<>(supplier.getRatingSet());
     }

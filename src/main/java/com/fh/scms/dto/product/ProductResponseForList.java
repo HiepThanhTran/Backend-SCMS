@@ -1,5 +1,6 @@
 package com.fh.scms.dto.product;
 
+import com.fh.scms.dto.supplier.SupplierDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,6 @@ public class ProductResponseForList {
     private BigDecimal price;
 
     private String image;
+
+    private SupplierDTO supplier;
 }

@@ -45,7 +45,9 @@ public class APICartController {
         User user = this.userService.findByUsername(principal.getName());
         Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
 
-        this.cartService.addProductToCart(this.cartService.findCartByUser(user), productRequestAddToCart);
+        Cart cart = this.cartService.findCartByUser(user);
+
+        this.cartService.addProductToCart(cart, productRequestAddToCart);
 
         return ResponseEntity.ok().build();
     }
@@ -56,7 +58,9 @@ public class APICartController {
         User user = this.userService.findByUsername(principal.getName());
         Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
 
-        this.cartService.updateProductInCart(this.cartService.findCartByUser(user), productId, params);
+        Cart cart = this.cartService.findCartByUser(user);
+
+        this.cartService.updateProductInCart(cart, productId, params);
 
         return ResponseEntity.ok().build();
     }
@@ -66,17 +70,9 @@ public class APICartController {
         User user = this.userService.findByUsername(principal.getName());
         Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
 
-        this.cartService.deleteProductFromCart(this.cartService.findCartByUser(user), productId);
+        Cart cart = this.cartService.findCartByUser(user);
 
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping(path = "/product/clear")
-    public ResponseEntity<?> clearCart(Principal principal) {
-        User user = this.userService.findByUsername(principal.getName());
-        Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
-
-        this.cartService.clearCart(this.cartService.findCartByUser(user));
+        this.cartService.deleteProductFromCart(cart, productId);
 
         return ResponseEntity.noContent().build();
     }

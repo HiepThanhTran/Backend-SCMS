@@ -1,9 +1,9 @@
 package com.fh.scms.controllers.api;
 
 import com.fh.scms.dto.MessageResponse;
+import com.fh.scms.dto.product.ProductRequestPublish;
 import com.fh.scms.dto.rating.RatingRequestCreate;
 import com.fh.scms.dto.supplier.SupplierDTO;
-import com.fh.scms.pojo.Rating;
 import com.fh.scms.pojo.Supplier;
 import com.fh.scms.services.SupplierService;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +33,7 @@ public class APISupplierController {
 
     @GetMapping
     public ResponseEntity<?> listSuppliers(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        List<Supplier> suppliers = this.supplierService.findAllWithFilter(params);
-
-        return ResponseEntity.ok(suppliers);
+        return ResponseEntity.ok(this.supplierService.findAllWithFilter(params));
     }
 
     @GetMapping(path = "/{supplierId}")
@@ -43,16 +41,12 @@ public class APISupplierController {
         Supplier supplier = this.supplierService.findById(id);
         Optional.ofNullable(supplier).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy nhà cung cấp"));
 
-        SupplierDTO supplierDTO = this.supplierService.getSupplierResponse(supplier);
-
-        return ResponseEntity.ok(supplierDTO);
+        return ResponseEntity.ok(this.supplierService.getSupplierResponse(supplier));
     }
 
     @GetMapping(path = "/profile")
     public ResponseEntity<?> getProfileSupplier(Principal principal) {
-        Supplier supplier = this.supplierService.getProfileSupplier(principal.getName());
-
-        return ResponseEntity.ok(supplier);
+        return ResponseEntity.ok(this.supplierService.getProfileSupplier(principal.getName()));
     }
 
     @PostMapping(path = "/profile/update")
@@ -61,28 +55,47 @@ public class APISupplierController {
             return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
-        SupplierDTO updatedSupplierDTO = this.supplierService.updateProfileSupplier(principal.getName(), supplierDTO);
-
-        return ResponseEntity.ok(updatedSupplierDTO);
+        return ResponseEntity.ok(this.supplierService.updateProfileSupplier(principal.getName(), supplierDTO));
     }
 
-    @GetMapping(path = "/{supplierId}/ratings")
-    public ResponseEntity<?> getRatingsOfSupplier(@PathVariable(value = "supplierId") Long supplierId) {
-        List<Rating> ratings = this.supplierService.getRatingsOfSupplier(supplierId);
-
-        return ResponseEntity.ok(ratings);
+    @GetMapping(path = "/{supplierId}/products")
+    public ResponseEntity<?> getProductsOfSupplier(@PathVariable(value = "supplierId") Long supplierId) {
+        return ResponseEntity.ok(this.supplierService.getProductsOfSupplier(supplierId));
     }
 
-    @PostMapping(path = "/{supplierId}/rating/add")
-    public ResponseEntity<?> addRatingForSupplier(Principal principal, @PathVariable(value = "supplierId") Long supplierId,
-                                                  @ModelAttribute @Valid RatingRequestCreate ratingRequestCreate, BindingResult bindingResult) {
+    @PostMapping(path = "/product/publish")
+    public ResponseEntity<?> publishProduct(Principal principal, @ModelAttribute @Valid ProductRequestPublish productRequestPublish, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
         }
 
-        Rating rating = this.supplierService.addRatingForSupplier(principal.getName(), supplierId, ratingRequestCreate);
+        return ResponseEntity.ok().body(this.supplierService.publishProduct(principal.getName(), productRequestPublish));
+    }
 
-        return ResponseEntity.ok(rating);
+    @DeleteMapping(path = "/product/{productId}/unpublish")
+    public ResponseEntity<?> unpublishProduct(Principal principal, @PathVariable(value = "productId") Long productId) {
+        this.supplierService.unpublishProduct(principal.getName(), productId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(path = "/{supplierId}/orders")
+    public ResponseEntity<?> getOrdersOfSupplier(@PathVariable(value = "supplierId") Long supplierId) {
+        return ResponseEntity.ok(this.supplierService.getOrdersOfSupplier(supplierId));
+    }
+
+    @GetMapping(path = "/{supplierId}/ratings")
+    public ResponseEntity<?> getRatingsOfSupplier(@PathVariable(value = "supplierId") Long supplierId) {
+        return ResponseEntity.ok(this.supplierService.getRatingsOfSupplier(supplierId));
+    }
+
+    @PostMapping(path = "/{supplierId}/rating/add")
+    public ResponseEntity<?> addRatingForSupplier(Principal principal, @PathVariable(value = "supplierId") Long supplierId, @ModelAttribute @Valid RatingRequestCreate ratingRequestCreate, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(MessageResponse.fromBindingResult(bindingResult));
+        }
+
+        return ResponseEntity.ok(this.supplierService.addRatingForSupplier(principal.getName(), supplierId, ratingRequestCreate));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

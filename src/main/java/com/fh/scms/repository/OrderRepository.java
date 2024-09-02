@@ -22,4 +22,6 @@ public interface OrderRepository {
     Long count();
 
     List<Order> findAllWithFilter(Map<String, String> params);
+
+    List<Order> findAllBySupplierId(Long supplierId);
 }

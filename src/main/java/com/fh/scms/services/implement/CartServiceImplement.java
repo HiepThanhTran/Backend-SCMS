@@ -112,9 +112,4 @@ public class CartServiceImplement implements CartService {
 
         this.cartDetailsRepository.delete(cartDetails.getId());
     }
-
-    @Override
-    public void clearCart(@NotNull Cart cart) {
-        cart.getCartDetailsSet().forEach(cd -> this.cartDetailsRepository.delete(cd.getId()));
-    }
 }

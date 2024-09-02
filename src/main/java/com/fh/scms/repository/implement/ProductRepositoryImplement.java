@@ -71,13 +71,14 @@ public class ProductRepositoryImplement implements ProductRepository {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Product> criteria = builder.createQuery(Product.class);
+
         Root<Product> root = criteria.from(Product.class);
 
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
-            Arrays.asList("name", "fromPrice", "toPrice", "category", "unit", "tags").forEach(key -> {
+            Arrays.asList("name", "fromPrice", "toPrice", "category", "unit", "tags", "supplier").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
                         case "name":
@@ -97,24 +98,27 @@ public class ProductRepositoryImplement implements ProductRepository {
                             predicates.add(p4);
                             break;
                         case "unit":
-                            Predicate p5= builder.equal(root.get("unit").get("id"), Long.parseLong(params.get("unit")));
+                            Predicate p5 = builder.equal(root.get("unit").get("id"), Long.parseLong(params.get("unit")));
                             predicates.add(p5);
                             break;
                         case "tags":
                             List<Long> tagIdList = Arrays.stream(params.get("tags").split(","))
-                                    .map(Long::parseLong)
-                                    .collect(Collectors.toList());
+                                    .map(Long::parseLong).collect(Collectors.toList());
 
                             Join<Product, Tag> tagJoin = root.join("tagSet");
                             Predicate tagPredicate = tagJoin.get("id").in(tagIdList);
                             predicates.add(tagPredicate);
+                            break;
+                        case "supplier":
+                            Predicate p6 = builder.equal(root.get("supplier").get("id"), Long.parseLong(params.get("supplier")));
+                            predicates.add(p6);
                             break;
                     }
                 }
             });
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).distinct(true);
         Query<Product> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

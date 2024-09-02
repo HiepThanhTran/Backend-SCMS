@@ -23,7 +23,7 @@ public interface ProductService {
 
     ProductResponseForList getProductResponseForList(Product product);
 
-    List<ProductResponseForList> getAllProductResponseForList(Map<String, String> params);
+    List<ProductResponseForList> getAllProductResponseForList(List<Product> products);
 
     ProductResponseForDetails getProductResponseForDetails(Product product);
 

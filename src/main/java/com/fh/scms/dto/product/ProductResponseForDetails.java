@@ -2,6 +2,7 @@ package com.fh.scms.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.scms.dto.category.CategoryResponse;
+import com.fh.scms.dto.supplier.SupplierDTO;
 import com.fh.scms.dto.tag.TagResponse;
 import com.fh.scms.dto.unit.UnitResponse;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,8 @@ public class ProductResponseForDetails {
     private BigDecimal price;
 
     private String image;
+
+    private SupplierDTO supplier;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date expiryDate;

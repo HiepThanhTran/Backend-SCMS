@@ -3,6 +3,7 @@ package com.fh.scms.controllers.api;
 import com.fh.scms.dto.MessageResponse;
 import com.fh.scms.dto.order.OrderRequest;
 import com.fh.scms.dto.order.OrderResponse;
+import com.fh.scms.pojo.Order;
 import com.fh.scms.pojo.User;
 import com.fh.scms.services.CartService;
 import com.fh.scms.services.OrderService;
@@ -39,9 +40,9 @@ public class APIOrderController {
         Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
 
         params.put("user", user.getId().toString());
-        List<OrderResponse> orderList = this.orderService.getAllOrderResponse(params);
+        List<Order> orderList = this.orderService.findAllWithFilter(params);
 
-        return ResponseEntity.ok(orderList);
+        return ResponseEntity.ok(this.orderService.getAllOrderResponse(orderList));
     }
 
     @PostMapping(path = "/checkout")

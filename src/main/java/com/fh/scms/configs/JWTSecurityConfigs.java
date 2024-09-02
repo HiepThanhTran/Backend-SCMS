@@ -103,6 +103,7 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
                 )
                 // Supplier
                 .antMatchers("/api/suppliers/profile/**").hasRole(UserRole.ROLE_SUPPLIER.alias())
+                .antMatchers("/api/suppliers/product/**").hasRole(UserRole.ROLE_SUPPLIER.alias())
                 .antMatchers("/api/suppliers/**/rating/add").authenticated()
                 .antMatchers("/api/suppliers/**").permitAll()
                 // Tag

@@ -54,6 +54,10 @@ public class Product extends BaseEntity implements Serializable {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
+    private Supplier supplier;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<InventoryDetails> inventoryDetailsSet;
 
@@ -70,9 +74,6 @@ public class Product extends BaseEntity implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<CartDetails> cartDetailsSet;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<SupplierCosting> supplierCostingSet;
 
     @Override
     public String toString() {

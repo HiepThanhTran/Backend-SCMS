@@ -6,10 +6,7 @@ import com.fh.scms.dto.product.ProductResponseForList;
 import com.fh.scms.pojo.Product;
 import com.fh.scms.pojo.Tag;
 import com.fh.scms.repository.ProductRepository;
-import com.fh.scms.services.CategoryService;
-import com.fh.scms.services.ProductService;
-import com.fh.scms.services.TagService;
-import com.fh.scms.services.UnitService;
+import com.fh.scms.services.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +32,8 @@ public class ProductServiceImplement implements ProductService {
     private TagService tagService;
     @Autowired
     private UnitService unitService;
+    @Autowired
+    private SupplierService supplierService;
 
     @Override
     public Product findById(Long id) {
@@ -74,14 +73,13 @@ public class ProductServiceImplement implements ProductService {
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .image(product.getImage())
+                .supplier(this.supplierService.getSupplierResponse(product.getSupplier()))
                 .build();
     }
 
     @Override
-    public List<ProductResponseForList> getAllProductResponseForList(Map<String, String> params) {
-        return this.productRepository.findAllWithFilter(params)
-                .stream().map(this::getProductResponseForList)
-                .collect(Collectors.toList());
+    public List<ProductResponseForList> getAllProductResponseForList(@NotNull List<Product> products) {
+        return products.stream().map(this::getProductResponseForList).collect(Collectors.toList());
     }
 
     @Override
@@ -92,13 +90,12 @@ public class ProductServiceImplement implements ProductService {
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .image(product.getImage())
-                .expiryDate(product.getExpiryDate())
-                .unit(this.unitService.getUnitResponse(product.getUnit()))
                 .category(this.categoryService.getCategoryResponse(product.getCategory()))
+                .unit(this.unitService.getUnitResponse(product.getUnit()))
+                .supplier(this.supplierService.getSupplierResponse(product.getSupplier()))
                 .tagSet(product.getTagSet().stream()
-                        .map(tag -> this.tagService.getTagResponse(tag))
-                        .collect(Collectors.toSet())
-                )
+                        .map(this.tagService::getTagResponse)
+                        .collect(Collectors.toSet()))
                 .build();
     }
 

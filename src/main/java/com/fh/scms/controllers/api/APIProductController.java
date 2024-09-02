@@ -31,9 +31,9 @@ public class APIProductController {
 
     @GetMapping
     public ResponseEntity<?> listProducts(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
-        List<ProductResponseForList> products = this.productService.getAllProductResponseForList(params);
+        List<Product> products = this.productService.findAllWithFilter(params);
 
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(this.productService.getAllProductResponseForList(products));
     }
 
     @GetMapping("/{productId}")
@@ -41,9 +41,7 @@ public class APIProductController {
         Product product = this.productService.findById(productId);
         Optional.ofNullable(product).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy sản phẩm"));
 
-        ProductResponseForDetails productResponseForDetails = this.productService.getProductResponseForDetails(product);
-
-        return ResponseEntity.ok(productResponseForDetails);
+        return ResponseEntity.ok(this.productService.getProductResponseForDetails(product));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

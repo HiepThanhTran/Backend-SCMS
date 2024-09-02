@@ -3,6 +3,8 @@ package com.fh.scms.repository.implement;
 import com.fh.scms.enums.OrderStatus;
 import com.fh.scms.enums.OrderType;
 import com.fh.scms.pojo.Order;
+import com.fh.scms.pojo.OrderDetails;
+import com.fh.scms.pojo.Product;
 import com.fh.scms.repository.OrderRepository;
 import com.fh.scms.util.Constants;
 import com.fh.scms.util.Pagination;
@@ -14,10 +16,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.*;
 
 @Repository
@@ -141,6 +140,22 @@ public class OrderRepositoryImplement implements OrderRepository {
         criteria.select(root).where(predicates.toArray(Predicate[]::new));
         Query<Order> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Order> findAllBySupplierId(Long supplierId) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
+
+        Root<Order> root = criteria.from(Order.class);
+        Join<Order, OrderDetails> orderDetailsJoin = root.join("orderDetailsSet");
+        Join<OrderDetails, Product> productJoin = orderDetailsJoin.join("product");
+
+        criteria.select(root).where(builder.equal(productJoin.get("supplier").get("id"), supplierId)).distinct(true);
+        Query<Order> query = session.createQuery(criteria);
 
         return query.getResultList();
     }

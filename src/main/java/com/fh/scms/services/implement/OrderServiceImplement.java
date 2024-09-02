@@ -71,6 +71,11 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
+    public List<Order> findAllBySupplierId(Long supplierId) {
+        return this.orderRepository.findAllBySupplierId(supplierId);
+    }
+
+    @Override
     public OrderResponse getOrderResponse(@NotNull Order order) {
         return OrderResponse.builder()
                 .id(order.getId())
@@ -87,10 +92,8 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
-    public List<OrderResponse> getAllOrderResponse(Map<String, String> params) {
-        return this.orderRepository.findAllWithFilter(params).stream()
-                .map(this::getOrderResponse)
-                .collect(Collectors.toList());
+    public List<OrderResponse> getAllOrderResponse(@NotNull List<Order> orders) {
+        return orders.stream().map(this::getOrderResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -113,21 +116,28 @@ public class OrderServiceImplement implements OrderService {
     @Override
     public void checkout(User user, @NotNull OrderRequest orderRequest) {
         if (orderRequest.getType() == OrderType.OUTBOUND) {
-            // Tạo đơn hàng mới
-            Order order = Order.builder()
-                    .user(user)
-                    .type(orderRequest.getType())
-                    .build();
-            if (orderRequest.getStatus() != null) {
-                order.setStatus(orderRequest.getStatus());
-            }
-            this.orderRepository.save(order);
+            // Nhóm các sản phẩm theo nhà cung cấp
+            Map<Supplier, Set<OrderDetailsRequest>> groupedBySupplier = orderRequest.getOrderDetails().stream()
+                    .collect(Collectors.groupingBy(odr -> this.productService.findById(odr.getProductId()).getSupplier(), Collectors.toSet()));
 
-            // Tính toán tổng giá trị của đơn hàng
-            final BigDecimal[] totalAmount = this.getTotalAmountOfOrder(orderRequest.getOrderDetails(), order);
+            // Tạo đơn hàng cho mỗi nhà cung cấp
+            groupedBySupplier.forEach((supplier, orderDetailsList) -> {
+                // Tạo đơn hàng mới
+                Order order = Order.builder()
+                        .user(user)
+                        .type(orderRequest.getType())
+                        .build();
+                if (orderRequest.getStatus() != null) {
+                    order.setStatus(orderRequest.getStatus());
+                }
+                this.orderRepository.save(order);
 
-            // Tạo hóa đơn cho đơn hàng
-            this.createInvoice(user, order, orderRequest, totalAmount);
+                // Tính toán tổng giá trị của đơn hàng
+                final BigDecimal[] totalAmount = this.getTotalAmountOfOrder(orderDetailsList, order);
+
+                // Tạo hóa đơn cho đơn hàng
+                this.createInvoice(user, order, orderRequest, totalAmount);
+            });
         }
     }
 

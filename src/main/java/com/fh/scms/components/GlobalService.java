@@ -62,8 +62,6 @@ public class GlobalService {
     @Autowired
     private RatingRepository ratingRepository;
     @Autowired
-    private SupplierCostingRepository supplierCostingRepository;
-    @Autowired
     private OrderService orderService;
 
     private Session getCurrentSession() {
@@ -176,10 +174,9 @@ public class GlobalService {
         AtomicInteger count = new AtomicInteger(1);
         Random random = new Random();
 
-        List<Unit> units = this.unitRepository.findAllWithFilter(null);
         List<Category> categories = this.categoryRepository.findAllWithFilter(null);
+        List<Unit> units = this.unitRepository.findAllWithFilter(null);
         List<Tag> tags = this.tagRepository.findAllWithFilter(null);
-
 
         categories.forEach(category -> {
             // Tạo sản phẩm hết hạn
@@ -425,7 +422,6 @@ public class GlobalService {
 
     private @NotNull Date getRandomDateTimeInYear() {
         LocalDateTime now = LocalDateTime.now();
-        Date today = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
 
         // Ngày bắt đầu là ngày một tháng trước
         LocalDate start = LocalDate.from(now.minusMonths(1).withDayOfMonth(1));
@@ -487,18 +483,11 @@ public class GlobalService {
                         .unit(unit)
                         .description("Product " + count)
                         .expiryDate(expiryDate)
+                        .supplier(supplier)
                         .category(category)
                         .tagSet(randomTags)
                         .build();
                 this.productRepository.save(product);
-
-                SupplierCosting supplierCosting = SupplierCosting.builder()
-                        .unitPrice(price)
-                        .shippingCost(BigDecimal.valueOf(1000 + (random.nextDouble() * (5000 - 1000))))
-                        .product(product)
-                        .supplier(supplier)
-                        .build();
-                this.supplierCostingRepository.save(supplierCosting);
 
                 count.getAndIncrement();
             }

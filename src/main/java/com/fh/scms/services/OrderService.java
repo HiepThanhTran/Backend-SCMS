@@ -24,9 +24,11 @@ public interface OrderService {
 
     List<Order> findAllWithFilter(Map<String, String> params);
 
+    List<Order> findAllBySupplierId(Long supplierId);
+
     OrderResponse getOrderResponse(Order order);
 
-    List<OrderResponse> getAllOrderResponse(Map<String, String> params);
+    List<OrderResponse> getAllOrderResponse(List<Order> orders);
 
     OrderDetailsReponse getOrderDetailsReponse(OrderDetails orderDetails);
 

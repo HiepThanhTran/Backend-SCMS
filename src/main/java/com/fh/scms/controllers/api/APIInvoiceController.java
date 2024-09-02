@@ -5,6 +5,9 @@ import com.fh.scms.dto.invoice.InvoiceResponse;
 import com.fh.scms.pojo.User;
 import com.fh.scms.services.InvoiceService;
 import com.fh.scms.services.UserService;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.param.SetupIntentCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +43,33 @@ public class APIInvoiceController {
 
         return ResponseEntity.ok(invoiceList);
     }
+
+    @PostMapping("/create-payment-intent")
+    public Map<String, String> createPaymentIntent(@RequestParam String amount) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
+                    .setAmount(Long.parseLong(amount)*100)
+                    .setCurrency("vnd")
+                    .build();
+
+            PaymentIntent intent = PaymentIntent.create(params);
+            response.put("clientSecret", intent.getClientSecret());
+        } catch (Exception e) {
+            response.put("error", e.getMessage());
+        }
+        return response;
+    }
+
+//    @GetMapping("/success")
+//    public ModelAndView success() {
+//        return new ModelAndView("success"); // Trả về trang thành công
+//    }
+//
+//    @GetMapping("/cancel")
+//    public ModelAndView cancel() {
+//        return new ModelAndView("cancel"); // Trả về trang hủy
+//    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFoundException(@NotNull HttpServletRequest req, EntityNotFoundException e) {
