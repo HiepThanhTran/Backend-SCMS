@@ -248,28 +248,37 @@ public class UserServiceImplement implements UserService {
             throw new IllegalArgumentException("Tài khoản chưa được xác nhận");
         }
 
+        if (userRequestUpdate.getOldPassword() != null && !userRequestUpdate.getOldPassword().isEmpty() &&
+                userRequestUpdate.getNewPassword() != null && !userRequestUpdate.getNewPassword().isEmpty()) {
+            if (!this.passwordEncoder.matches(userRequestUpdate.getOldPassword(), user.getPassword())) {
+                throw new IllegalArgumentException("Mật khẩu cũ không đúng");
+            }
+
+            user.setPassword(this.passwordEncoder.encode(userRequestUpdate.getNewPassword()));
+        }
+
         Field[] fields = UserRequestUpdate.class.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
-            try {
-                Object value = field.get(userRequestUpdate);
+            if (!field.getName().equals("oldPassword") && !field.getName().equals("newPassword")) {
+                try {
+                    Object value = field.get(userRequestUpdate);
 
-                if (value != null && !value.toString().isEmpty()) {
-                    Field userField = User.class.getDeclaredField(field.getName());
-                    userField.setAccessible(true);
+                    if (value != null && !value.toString().isEmpty()) {
+                        Field userField = User.class.getDeclaredField(field.getName());
+                        userField.setAccessible(true);
 
-                    if (field.getName().equals("avatar")) {
-                        String avatarUrl = this.globalService.uploadImage((MultipartFile) value);
-                        userField.set(user, avatarUrl);
-                    } else if (field.getName().equals("password")) {
-                        userField.set(user, passwordEncoder.encode(value.toString()));
-                    } else {
-                        Object convertedValue = Utils.convertValue(userField.getType(), value.toString());
-                        userField.set(user, convertedValue);
+                        if (field.getName().equals("avatar")) {
+                            String avatarUrl = this.globalService.uploadImage((MultipartFile) value);
+                            userField.set(user, avatarUrl);
+                        } else {
+                            Object convertedValue = Utils.convertValue(userField.getType(), value.toString());
+                            userField.set(user, convertedValue);
+                        }
                     }
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    Logger.getLogger(UserServiceImplement.class.getName()).log(Level.SEVERE, null, e);
                 }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                Logger.getLogger(UserServiceImplement.class.getName()).log(Level.SEVERE, null, e);
             }
         }
 

@@ -87,7 +87,6 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
     @Override
     public void addFormatters(@NotNull FormatterRegistry registry) {
         registry.addConverter(new DateConverter());
-
         registry.addFormatter(new CategoryFormatter());
         registry.addFormatter(new OrderFormatter());
         registry.addFormatter(new ScheduleFormatter());

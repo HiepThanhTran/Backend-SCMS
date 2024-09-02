@@ -112,14 +112,14 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
         predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
-            Arrays.asList("inventoryId", "productId").forEach(key -> {
+            Arrays.asList("inventory", "product").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
-                        case "inventoryId":
-                            predicates.add(builder.equal(root.get("inventory").get("id"), Long.parseLong(params.get(key))));
+                        case "inventory":
+                            predicates.add(builder.equal(root.get("inventory").get("id"), Long.parseLong(params.get("inventory"))));
                             break;
-                        case "productId":
-                            predicates.add(builder.equal(root.get("product").get("id"), Long.parseLong(params.get(key))));
+                        case "product":
+                            predicates.add(builder.equal(root.get("product").get("id"), Long.parseLong(params.get("product"))));
                             break;
                     }
                 }

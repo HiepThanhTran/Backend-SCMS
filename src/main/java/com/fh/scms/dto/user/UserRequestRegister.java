@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -55,7 +56,7 @@ public class UserRequestRegister {
 
     private Boolean gender;
 
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Valid
     private Set<PaymentTermsRequest> paymentTermsSet;

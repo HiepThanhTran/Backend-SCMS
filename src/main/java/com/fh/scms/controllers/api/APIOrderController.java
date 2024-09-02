@@ -38,7 +38,7 @@ public class APIOrderController {
         User user = this.userService.findByUsername(principal.getName());
         Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
 
-        params.put("userId", user.getId().toString());
+        params.put("user", user.getId().toString());
         List<OrderResponse> orderList = this.orderService.getAllOrderResponse(params);
 
         return ResponseEntity.ok(orderList);

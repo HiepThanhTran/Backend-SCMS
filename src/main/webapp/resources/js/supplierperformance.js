@@ -109,7 +109,7 @@ const updateRatingTable = (data) => {
             rating.id,
             rating.criteria,
             `${rating.rating} sao`,
-            rating.comment,
+            rating.content,
             rating.user.username
         ]).node();
 

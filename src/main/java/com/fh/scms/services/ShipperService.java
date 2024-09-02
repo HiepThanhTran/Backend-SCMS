@@ -1,5 +1,6 @@
 package com.fh.scms.services;
 
+import com.fh.scms.dto.shipper.ShipperDTO;
 import com.fh.scms.pojo.Shipper;
 
 import java.util.List;
@@ -18,4 +19,10 @@ public interface ShipperService {
     Long count();
 
     List<Shipper> findAllWithFilter(Map<String, String> params);
+
+    ShipperDTO getShipperResponse(Shipper shipper);
+
+    Shipper getProfileShipper(String username);
+
+    ShipperDTO updateProfileShipper(String username, ShipperDTO shipperDTO);
 }

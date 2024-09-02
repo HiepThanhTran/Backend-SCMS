@@ -29,22 +29,6 @@ public class UnitRepositoryImplement implements UnitRepository {
     }
 
     @Override
-    public List<Unit> findByProductId(Long productId) {
-        Session session = this.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Unit> criteria = builder.createQuery(Unit.class);
-
-        Root<Product> root = criteria.from(Product.class);
-
-        Join<Product, Unit> unitJoin = root.join("unitSet");
-
-        criteria.select(unitJoin).where(builder.equal(root.get("id"), productId));
-        Query<Unit> query = session.createQuery(criteria);
-
-        return query.getResultList();
-    }
-
-    @Override
     public Unit findById(Long id) {
         Session session = this.getCurrentSession();
 
@@ -97,6 +81,11 @@ public class UnitRepositoryImplement implements UnitRepository {
             String name = params.get("name");
             if (name != null && !name.isEmpty()) {
                 predicates.add(builder.like(root.get("name"), String.format("%%%s%%", name)));
+            }
+
+            String abbreviation = params.get("abbreviation");
+            if (abbreviation != null && !abbreviation.isEmpty()) {
+                predicates.add(builder.like(root.get("abbreviation"), String.format("%%%s%%", abbreviation)));
             }
         }
 

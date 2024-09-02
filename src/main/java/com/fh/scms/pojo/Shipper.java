@@ -42,6 +42,7 @@ public class Shipper extends BaseEntity implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "shipper", cascade = CascadeType.ALL)
     private Set<Shipment> shipmentSet;
 

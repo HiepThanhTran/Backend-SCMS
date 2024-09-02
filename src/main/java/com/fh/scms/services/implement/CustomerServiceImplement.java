@@ -73,9 +73,9 @@ public class CustomerServiceImplement implements CustomerService {
     @Override
     public CustomerDTO getCustomerResponse(@NotNull Customer customer) {
         return CustomerDTO.builder()
-                .firstName(customer.getFirstName())
-                .middleName(customer.getMiddleName())
                 .lastName(customer.getLastName())
+                .middleName(customer.getMiddleName())
+                .firstName(customer.getFirstName())
                 .address(customer.getAddress())
                 .phone(customer.getPhone())
                 .gender(customer.getGender())
@@ -107,10 +107,11 @@ public class CustomerServiceImplement implements CustomerService {
                 Object value = field.get(customerDTO);
 
                 if (value != null && !value.toString().isEmpty()) {
-                    Field supplierField = Customer.class.getDeclaredField(field.getName());
-                    supplierField.setAccessible(true);
-                    Object convertedValue = Utils.convertValue(supplierField.getType(), value.toString());
-                    supplierField.set(customer, convertedValue);
+                    Field customerField = Customer.class.getDeclaredField(field.getName());
+                    customerField.setAccessible(true);
+
+                    Object convertedValue = Utils.convertValue(customerField.getType(), value.toString());
+                    customerField.set(customer, convertedValue);
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 Logger.getLogger(UserServiceImplement.class.getName()).log(Level.SEVERE, null, e);

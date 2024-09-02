@@ -2,13 +2,16 @@ package com.fh.scms.pojo;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Setter
@@ -50,11 +53,11 @@ public class Customer extends BaseEntity implements Serializable {
     @Column(columnDefinition = "TINYINT(1) default 1")
     private Boolean gender = true; // true (1): Nữ - false (0): Nam
 
-    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
-    @JsonFormat
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE}, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;

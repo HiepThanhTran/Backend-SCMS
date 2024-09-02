@@ -14,8 +14,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CartDetailsResponse {
 
-    private Long id;
-
     private Float quantity;
 
     private BigDecimal unitPrice;

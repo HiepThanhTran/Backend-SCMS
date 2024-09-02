@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -85,24 +86,16 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
                         case "fromDate":
-                            try {
-                                Date fromDate = Utils.parseDate(params.get(key));
-                                predicates.add(builder.greaterThanOrEqualTo(root.get("scheduledDate"), fromDate));
-                            } catch (Exception e) {
-                                LoggerFactory.getLogger(DeliveryScheduleRepositoryImplement.class).error("An error parse LocalDateTime", e);
-                            }
+                            LocalDate fromDate = LocalDate.parse(params.get("fromDate"));
+                            predicates.add(builder.greaterThanOrEqualTo(root.get("scheduledDate"), fromDate));
                             break;
                         case "toDate":
-                            try {
-                                Date toDate = Utils.parseDate(params.get(key));
-                                predicates.add(builder.lessThanOrEqualTo(root.get("scheduledDate"), toDate));
-                            } catch (Exception e) {
-                                LoggerFactory.getLogger(DeliveryScheduleRepositoryImplement.class).error("An error parse LocalDateTime", e);
-                            }
+                            LocalDate toDate = LocalDate.parse(params.get("toDate"));
+                            predicates.add(builder.lessThanOrEqualTo(root.get("scheduledDate"), toDate));
                             break;
                         case "method":
                             try {
-                                DeliveryMethodType method = DeliveryMethodType.valueOf(params.get(key).toUpperCase(Locale.getDefault()));
+                                DeliveryMethodType method = DeliveryMethodType.valueOf(params.get("method").toUpperCase(Locale.getDefault()));
                                 predicates.add(builder.equal(root.get("method"), method));
                             } catch (IllegalArgumentException e) {
                                 LoggerFactory.getLogger(DeliveryScheduleRepositoryImplement.class).error("An error parse DeliveryMethodType Enum", e);

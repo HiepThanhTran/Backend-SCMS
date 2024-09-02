@@ -78,7 +78,7 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
         predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
-            Arrays.asList("fromPrice", "toPrice", "orderId", "productId").forEach(key -> {
+            Arrays.asList("fromPrice", "toPrice", "order", "product").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
                         case "fromPrice":
@@ -89,11 +89,11 @@ public class OrderDetailsRepositoryImplement implements OrderDetailsRepository {
                             String toPrice = params.get("toPrice");
                             predicates.add(builder.lessThanOrEqualTo(root.get("unitPrice"), new BigDecimal(toPrice)));
                             break;
-                        case "orderId":
-                            predicates.add(builder.equal(root.get("order").get("id"), Long.parseLong(params.get(key))));
+                        case "order":
+                            predicates.add(builder.equal(root.get("order").get("id"), Long.parseLong(params.get("order"))));
                             break;
-                        case "productId":
-                            predicates.add(builder.equal(root.get("product").get("id"), Long.parseLong(params.get(key))));
+                        case "product":
+                            predicates.add(builder.equal(root.get("product").get("id"), Long.parseLong(params.get("product"))));
                             break;
                     }
                 }

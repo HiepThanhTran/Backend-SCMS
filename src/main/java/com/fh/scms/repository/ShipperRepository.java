@@ -1,6 +1,9 @@
 package com.fh.scms.repository;
 
 import com.fh.scms.pojo.Shipper;
+import com.fh.scms.pojo.Supplier;
+import com.fh.scms.pojo.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -8,6 +11,8 @@ import java.util.Map;
 public interface ShipperRepository {
 
     Shipper findById(Long id);
+
+    Shipper findByUser(@NotNull User user);
 
     void save(Shipper shipper);
 

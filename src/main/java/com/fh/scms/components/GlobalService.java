@@ -242,7 +242,7 @@ public class GlobalService {
 
             Rating rating = Rating.builder()
                     .rating(BigDecimal.valueOf(1 + (random.nextDouble() * (5 - 1))))
-                    .comment("Rating " + count + " for " + supplier.getName())
+                    .content("Rating " + count + " for " + supplier.getName())
                     .user(userList.get(0))
                     .supplier(supplier)
                     .criteria(criteriaTypes.get(0))

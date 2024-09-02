@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
 import java.text.Collator;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,6 +28,10 @@ public final class Utils {
             return Boolean.parseBoolean(value);
         } else if (fieldType == Date.class) {
             return parseDate(value);
+        } else if (fieldType == LocalDate.class) {
+            return LocalDate.parse(value);
+        } else if (fieldType == LocalDateTime.class) {
+            return LocalDateTime.parse(value);
         } else {
             throw new IllegalArgumentException("Không hỗ trợ kiểu dữ liệu: " + fieldType.getName());
         }

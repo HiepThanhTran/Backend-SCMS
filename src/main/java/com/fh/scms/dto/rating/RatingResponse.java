@@ -19,7 +19,7 @@ public class RatingResponse {
 
     private BigDecimal rating;
 
-    private String comment;
+    private String content;
 
     private String criteria;
 

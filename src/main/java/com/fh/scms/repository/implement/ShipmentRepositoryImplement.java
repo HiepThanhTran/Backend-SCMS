@@ -81,7 +81,7 @@ public class ShipmentRepositoryImplement implements ShipmentRepository {
         if (params != null && !params.isEmpty()) {
             String trackingNumber = params.get("trackingNumber");
             if (trackingNumber != null && !trackingNumber.isEmpty()) {
-                predicates.add(builder.like(root.get("trackingNumber"), trackingNumber));
+                predicates.add(builder.equal(root.get("trackingNumber"), trackingNumber));
             }
 
             String statusStr = params.get("status");

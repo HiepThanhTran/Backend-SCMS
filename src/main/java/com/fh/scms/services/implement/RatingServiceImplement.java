@@ -60,7 +60,7 @@ public class RatingServiceImplement implements RatingService {
         return RatingResponse.builder()
                 .id(rating.getId())
                 .rating(rating.getRating())
-                .comment(rating.getComment())
+                .content(rating.getContent())
                 .criteria(rating.getCriteria().getDisplayName())
                 .supplier(rating.getSupplier())
                 .user(rating.getUser())

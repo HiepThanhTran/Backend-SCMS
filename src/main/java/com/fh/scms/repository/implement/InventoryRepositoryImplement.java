@@ -85,7 +85,7 @@ public class InventoryRepositoryImplement implements InventoryRepository {
                 predicates.add(builder.like(root.get("name"), String.format("%%%s%%", name)));
             }
 
-            String warehouseId = params.get("warehouseId");
+            String warehouseId = params.get("warehouse");
             if (warehouseId != null && !warehouseId.isEmpty()) {
                 predicates.add(builder.equal(root.get("warehouse").get("id"), Long.parseLong(warehouseId)));
             }

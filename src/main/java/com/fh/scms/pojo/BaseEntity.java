@@ -27,7 +27,7 @@ public class BaseEntity implements Serializable {
     protected Long id;
 
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
-    protected boolean active = true;
+    protected Boolean active = true;
 
     //    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

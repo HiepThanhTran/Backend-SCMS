@@ -7,8 +7,6 @@ import java.util.Map;
 
 public interface UnitRepository {
 
-    List<Unit> findByProductId(Long productId);
-
     Unit findById(Long id);
 
     void save(Unit unit);

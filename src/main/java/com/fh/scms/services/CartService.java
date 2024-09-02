@@ -1,7 +1,6 @@
 package com.fh.scms.services;
 
 import com.fh.scms.dto.cart.CartDetailsResponse;
-import com.fh.scms.dto.cart.CartResponse;
 import com.fh.scms.dto.product.ProductRequestAddToCart;
 import com.fh.scms.pojo.Cart;
 import com.fh.scms.pojo.CartDetails;
@@ -11,7 +10,7 @@ import java.util.Map;
 
 public interface CartService {
 
-    CartResponse getCartResponse(Cart cart);
+    Map<Long, CartDetailsResponse> getCartResponse(Cart cart);
 
     CartDetailsResponse getCartDetailsResponse(CartDetails cartDetails);
 

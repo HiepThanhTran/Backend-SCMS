@@ -1,10 +1,12 @@
 package com.fh.scms.repository.implement;
 
 import com.fh.scms.pojo.Shipper;
+import com.fh.scms.pojo.User;
 import com.fh.scms.repository.ShipperRepository;
 import com.fh.scms.util.Pagination;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -35,6 +37,23 @@ public class ShipperRepositoryImplement implements ShipperRepository {
         Session session = this.getCurrentSession();
 
         return session.get(Shipper.class, id);
+    }
+
+    @Override
+    public Shipper findByUser(@NotNull User user) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Shipper> criteria = builder.createQuery(Shipper.class);
+        Root<Shipper> root = criteria.from(Shipper.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("user").get("id"), user.getId()));
+            Query<Shipper> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override

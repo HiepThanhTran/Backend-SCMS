@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fh.scms.enums.OrderStatus;
 import com.fh.scms.enums.OrderType;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,10 +40,10 @@ public class Order extends BaseEntity implements Serializable {
     @Column(name = "order_status", nullable = false)
     private OrderStatus status = OrderStatus.PENDING;
 
-    @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(name = "expected_delivery")
-    private Date expectedDelivery;
+    private LocalDate expectedDelivery;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)

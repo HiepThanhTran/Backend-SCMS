@@ -21,8 +21,10 @@ public class UserRequestUpdate {
     @Size(min = 6, max = 50, message = "{user.username.size}")
     private String username;
 
+    private String oldPassword;
+
     @Size(min = 8, max = 300, message = "{user.password.size}")
-    private String password;
+    private String newPassword;
 
     private MultipartFile avatar;
 }

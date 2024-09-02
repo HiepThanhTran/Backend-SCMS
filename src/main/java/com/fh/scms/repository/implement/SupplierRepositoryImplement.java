@@ -54,7 +54,6 @@ public class SupplierRepositoryImplement implements SupplierRepository {
 
             return query.getSingleResult();
         } catch (NoResultException e) {
-            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting supplier by user", e);
             return null;
         }
     }

@@ -1,7 +1,6 @@
 package com.fh.scms.services.implement;
 
 import com.fh.scms.dto.cart.CartDetailsResponse;
-import com.fh.scms.dto.cart.CartResponse;
 import com.fh.scms.dto.product.ProductRequestAddToCart;
 import com.fh.scms.pojo.Cart;
 import com.fh.scms.pojo.CartDetails;
@@ -37,18 +36,14 @@ public class CartServiceImplement implements CartService {
     private ProductService productService;
 
     @Override
-    public CartResponse getCartResponse(@NotNull Cart cart) {
-        return CartResponse.builder().cartDetails(Optional.ofNullable(cart.getCartDetailsSet())
-                .orElseGet(Set::of)
-                .parallelStream()
-                .map(this::getCartDetailsResponse)
-                .collect(Collectors.toSet())).build();
+    public Map<Long, CartDetailsResponse> getCartResponse(@NotNull Cart cart) {
+        return Optional.ofNullable(cart.getCartDetailsSet()).orElseGet(Set::of).parallelStream()
+                .collect(Collectors.toMap(cd -> cd.getProduct().getId(), this::getCartDetailsResponse));
     }
 
     @Override
     public CartDetailsResponse getCartDetailsResponse(@NotNull CartDetails cartDetails) {
         return CartDetailsResponse.builder()
-                .id(cartDetails.getId())
                 .quantity(cartDetails.getQuantity())
                 .unitPrice(cartDetails.getUnitPrice())
                 .product(this.productService.getProductResponseForList(cartDetails.getProduct()))

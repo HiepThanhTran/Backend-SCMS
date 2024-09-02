@@ -26,7 +26,7 @@ public class Rating extends BaseEntity implements Serializable {
     @Column(nullable = false, precision = 2, scale = 1, columnDefinition = "decimal default 5.0")
     private BigDecimal rating = BigDecimal.valueOf(5);
 
-    private String comment;
+    private String content;
 
     @Builder.Default
     @Column(nullable = false)

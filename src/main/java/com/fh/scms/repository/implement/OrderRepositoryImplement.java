@@ -108,12 +108,12 @@ public class OrderRepositoryImplement implements OrderRepository {
         predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
-            Arrays.asList("type", "status", "userId", "invoiceId").forEach(key -> {
+            Arrays.asList("type", "status", "user", "invoice").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
                         case "type":
                             try {
-                                OrderType type = OrderType.valueOf(params.get(key).toUpperCase(Locale.getDefault()));
+                                OrderType type = OrderType.valueOf(params.get("type").toUpperCase(Locale.getDefault()));
                                 predicates.add(builder.equal(root.get("type"), type));
                             } catch (IllegalArgumentException e) {
                                 LoggerFactory.getLogger(OrderRepositoryImplement.class).error("An error parse OrderType Enum", e);
@@ -121,17 +121,17 @@ public class OrderRepositoryImplement implements OrderRepository {
                             break;
                         case "status":
                             try {
-                                OrderStatus status = OrderStatus.valueOf(params.get(key).toUpperCase(Locale.getDefault()));
+                                OrderStatus status = OrderStatus.valueOf(params.get("status").toUpperCase(Locale.getDefault()));
                                 predicates.add(builder.equal(root.get("status"), status));
                             } catch (IllegalArgumentException e) {
                                 LoggerFactory.getLogger(OrderRepositoryImplement.class).error("An error parse OrderStatus Enum", e);
                             }
                             break;
-                        case "userId":
-                            predicates.add(builder.equal(root.get("user").get("id"), Long.parseLong(params.get(key))));
+                        case "user":
+                            predicates.add(builder.equal(root.get("user").get("id"), Long.parseLong(params.get("user"))));
                             break;
-                        case "invoiceId":
-                            predicates.add(builder.equal(root.get("invoice").get("id"), Long.parseLong(params.get(key))));
+                        case "invoice":
+                            predicates.add(builder.equal(root.get("invoice").get("id"), Long.parseLong(params.get("invoice"))));
                             break;
                     }
                 }

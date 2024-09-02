@@ -78,7 +78,7 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
         predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
-            Arrays.asList("fromPrice", "toPrice", "productId", "supplierId").forEach(key -> {
+            Arrays.asList("fromPrice", "toPrice", "product", "supplier").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
                         case "fromPrice":
@@ -89,11 +89,11 @@ public class SupplierCostingRepositoryImplement implements SupplierCostingReposi
                             String toPrice = params.get("toPrice");
                             predicates.add(builder.lessThanOrEqualTo(root.get("unitPrice"), new BigDecimal(toPrice)));
                             break;
-                        case "productId":
-                            predicates.add(builder.equal(root.get("product").get("id"), Long.parseLong(params.get(key))));
+                        case "product":
+                            predicates.add(builder.equal(root.get("product").get("id"), Long.parseLong(params.get("product"))));
                             break;
-                        case "supplierId":
-                            predicates.add(builder.equal(root.get("supplier").get("id"), Long.parseLong(params.get(key))));
+                        case "supplier":
+                            predicates.add(builder.equal(root.get("supplier").get("id"), Long.parseLong(params.get("supplier"))));
                             break;
                     }
                 }

@@ -101,35 +101,35 @@ public class RatingRepositoryImplement implements RatingRepository {
         predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
-            Arrays.asList("fromRating", "toRating", "criteria", "supplierId", "userId", "year").forEach(key -> {
+            Arrays.asList("fromRating", "toRating", "criteria", "supplier", "user", "year").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
                         case "fromRating":
-                            Predicate p1 = builder.greaterThanOrEqualTo(root.get("rating"), new BigDecimal(params.get(key)));
+                            Predicate p1 = builder.greaterThanOrEqualTo(root.get("rating"), new BigDecimal(params.get("fromRating")));
                             predicates.add(p1);
                             break;
                         case "toRating":
-                            Predicate p2 = builder.lessThanOrEqualTo(root.get("rating"), new BigDecimal(params.get(key)));
+                            Predicate p2 = builder.lessThanOrEqualTo(root.get("rating"), new BigDecimal(params.get("toRating")));
                             predicates.add(p2);
                             break;
                         case "year":
-                            Predicate p5 = builder.equal(builder.function("YEAR", Integer.class, root.get("createdAt")), Integer.parseInt(params.get(key)));
+                            Predicate p5 = builder.equal(builder.function("YEAR", Integer.class, root.get("createdAt")), Integer.parseInt(params.get("year")));
                             predicates.add(p5);
                             break;
                         case "criteria":
                             try {
-                                CriteriaType criteriaType = CriteriaType.valueOf(params.get(key).toUpperCase(Locale.getDefault()));
+                                CriteriaType criteriaType = CriteriaType.valueOf(params.get("criteria").toUpperCase(Locale.getDefault()));
                                 predicates.add(builder.equal(root.get("criteria"), criteriaType));
                             } catch (IllegalArgumentException e) {
                                 LoggerFactory.getLogger(RatingRepositoryImplement.class).error("An error parse CriteriaType Enum", e);
                             }
                             break;
-                        case "supplierId":
-                            Predicate p3 = builder.equal(root.get("supplier").get("id"), Long.parseLong(params.get(key)));
+                        case "supplier":
+                            Predicate p3 = builder.equal(root.get("supplier").get("id"), Long.parseLong(params.get("supplier")));
                             predicates.add(p3);
                             break;
-                        case "userId":
-                            Predicate p4 = builder.equal(root.get("user").get("id"), Long.parseLong(params.get(key)));
+                        case "user":
+                            Predicate p4 = builder.equal(root.get("user").get("id"), Long.parseLong(params.get("user")));
                             predicates.add(p4);
                             break;
                     }

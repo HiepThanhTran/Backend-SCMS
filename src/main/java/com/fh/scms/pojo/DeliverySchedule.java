@@ -3,11 +3,12 @@ package com.fh.scms.pojo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.scms.enums.DeliveryMethodType;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Setter
@@ -20,10 +21,10 @@ import java.util.Set;
 public class DeliverySchedule extends BaseEntity implements Serializable {
 
     @NotNull(message = "{deliverySchedule.scheduledDate.notNull}")
-    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "schedule_date", nullable = false)
-    private Date scheduledDate;
+    private LocalDate scheduledDate;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)

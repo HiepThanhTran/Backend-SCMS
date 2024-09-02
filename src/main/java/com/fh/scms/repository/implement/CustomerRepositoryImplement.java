@@ -6,6 +6,7 @@ import com.fh.scms.repository.CustomerRepository;
 import com.fh.scms.util.Pagination;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -38,7 +39,7 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     }
 
     @Override
-    public Customer findByUser(User user) {
+    public Customer findByUser(@NotNull User user) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Customer> criteria = builder.createQuery(Customer.class);

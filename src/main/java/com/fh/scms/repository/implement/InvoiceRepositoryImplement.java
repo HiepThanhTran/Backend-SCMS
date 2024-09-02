@@ -100,30 +100,30 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
         predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
-            Arrays.asList("userId", "isPaid", "taxId", "paymentTermsId", "fromCreatedAt", "toCreatedAt").forEach(key -> {
+            Arrays.asList("user", "isPaid", "tax", "paymentTerms", "fromCreatedAt", "toCreatedAt").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
-                        case "userId":
-                            predicates.add(builder.equal(root.get("user").get("id"), Long.parseLong(params.get(key))));
+                        case "user":
+                            predicates.add(builder.equal(root.get("user").get("id"), Long.parseLong(params.get("user"))));
                             break;
                         case "isPaid":
-                            Boolean isPaid = Utils.parseBoolean(params.get(key));
+                            Boolean isPaid = Utils.parseBoolean(params.get("isPaid"));
                             if (isPaid != null) {
                                 predicates.add(builder.equal(root.get("isPaid"), isPaid));
                             }
                             break;
-                        case "taxId":
-                            predicates.add(builder.equal(root.get("tax").get("id"), Long.parseLong(params.get(key))));
+                        case "tax":
+                            predicates.add(builder.equal(root.get("tax").get("id"), Long.parseLong(params.get("tax"))));
                             break;
-                        case "paymentTermsId":
-                            predicates.add(builder.equal(root.get("paymentTerms").get("id"), Long.parseLong(params.get(key))));
+                        case "paymentTerms":
+                            predicates.add(builder.equal(root.get("paymentTerms").get("id"), Long.parseLong(params.get("paymentTerms"))));
                             break;
                         case "fromCreatedAt":
-                            Date fromCreatedAt = Utils.parseDate(params.get(key));
+                            Date fromCreatedAt = Utils.parseDate(params.get("fromCreatedAt"));
                             predicates.add(builder.greaterThanOrEqualTo(root.get("createdAt"), fromCreatedAt));
                             break;
                         case "toCreatedAt":
-                            Date toCreatedAt = Utils.parseDate(params.get(key));
+                            Date toCreatedAt = Utils.parseDate(params.get("toCreatedAt"));
                             predicates.add(builder.lessThanOrEqualTo(root.get("createdAt"), toCreatedAt));
                             break;
                     }

@@ -1,6 +1,7 @@
 package com.fh.scms.repository.implement;
 
 import com.fh.scms.pojo.Product;
+import com.fh.scms.pojo.Tag;
 import com.fh.scms.repository.ProductRepository;
 import com.fh.scms.util.Pagination;
 import org.hibernate.Session;
@@ -10,12 +11,10 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -78,24 +77,37 @@ public class ProductRepositoryImplement implements ProductRepository {
         predicates.add(builder.equal(root.get("active"), true));
 
         if (params != null && !params.isEmpty()) {
-            Arrays.asList("name", "fromPrice", "toPrice", "categoryId").forEach(key -> {
+            Arrays.asList("name", "fromPrice", "toPrice", "category", "unit", "tags").forEach(key -> {
                 if (params.containsKey(key) && !params.get(key).isEmpty()) {
                     switch (key) {
                         case "name":
-                            Predicate p1 = builder.like(root.get("name"), String.format("%%%s%%", params.get(key)));
+                            Predicate p1 = builder.like(root.get("name"), String.format("%%%s%%", params.get("name")));
                             predicates.add(p1);
                             break;
                         case "fromPrice":
-                            Predicate p2 = builder.greaterThanOrEqualTo(root.get("price"), new BigDecimal(params.get(key)));
+                            Predicate p2 = builder.greaterThanOrEqualTo(root.get("price"), new BigDecimal(params.get("fromPrice")));
                             predicates.add(p2);
                             break;
                         case "toPrice":
-                            Predicate p3 = builder.lessThanOrEqualTo(root.get("price"), new BigDecimal(params.get(key)));
+                            Predicate p3 = builder.lessThanOrEqualTo(root.get("price"), new BigDecimal(params.get("toPrice")));
                             predicates.add(p3);
                             break;
-                        case "categoryId":
-                            Predicate p4 = builder.equal(root.get("category").get("id"), Long.parseLong(params.get(key)));
+                        case "category":
+                            Predicate p4 = builder.equal(root.get("category").get("id"), Long.parseLong(params.get("category")));
                             predicates.add(p4);
+                            break;
+                        case "unit":
+                            Predicate p5= builder.equal(root.get("unit").get("id"), Long.parseLong(params.get("unit")));
+                            predicates.add(p5);
+                            break;
+                        case "tags":
+                            List<Long> tagIdList = Arrays.stream(params.get("tags").split(","))
+                                    .map(Long::parseLong)
+                                    .collect(Collectors.toList());
+
+                            Join<Product, Tag> tagJoin = root.join("tagSet");
+                            Predicate tagPredicate = tagJoin.get("id").in(tagIdList);
+                            predicates.add(tagPredicate);
                             break;
                     }
                 }
