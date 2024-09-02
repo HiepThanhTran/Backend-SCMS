@@ -80,7 +80,7 @@ public class OrderServiceImplement implements OrderService {
                 .orderDate(order.getCreatedAt())
                 .expectedDelivery(order.getExpectedDelivery())
                 .orderDetailsSet(order.getOrderDetailsSet()
-                        .parallelStream()
+                        .stream()
                         .map(this::getOrderDetailsReponse)
                         .collect(Collectors.toSet()))
                 .build();
@@ -88,7 +88,7 @@ public class OrderServiceImplement implements OrderService {
 
     @Override
     public List<OrderResponse> getAllOrderResponse(Map<String, String> params) {
-        return this.orderRepository.findAllWithFilter(params).parallelStream()
+        return this.orderRepository.findAllWithFilter(params).stream()
                 .map(this::getOrderResponse)
                 .collect(Collectors.toList());
     }
@@ -201,7 +201,7 @@ public class OrderServiceImplement implements OrderService {
         Float totalCurrentQuantity = this.inventoryDetailsRepository.getTotalQuantityByWarehouseId(inventory.getWarehouse().getId());
 
         // Tính tổng số lượng sản phẩm trong đơn hàng
-        Float totalOrderQuantity = orderDetailsRequests.parallelStream()
+        Float totalOrderQuantity = orderDetailsRequests.stream()
                 .map(OrderDetailsRequest::getQuantity)
                 .reduce(0F, Float::sum);
 
@@ -351,7 +351,7 @@ public class OrderServiceImplement implements OrderService {
 
     @Override
     public void save(@NotNull Order order, @NotNull List<Long> productIds, @NotNull List<Float> quantities, Long inventoryId) {
-        Set<OrderDetailsRequest> orderDetailsRequests = productIds.parallelStream()
+        Set<OrderDetailsRequest> orderDetailsRequests = productIds.stream()
                 .map(this.productService::findById)
                 .filter(Objects::nonNull)
                 .map(product -> OrderDetailsRequest.builder()
@@ -380,10 +380,10 @@ public class OrderServiceImplement implements OrderService {
         List<OrderDetails> oldOrderDetailsSet = this.getOrderDetailsById(order.getId());
         Invoice oldInvoice = this.invoiceRepository.findByOrderId(order.getId());
 
-        Map<Long, OrderDetails> idOldProductMap = oldOrderDetailsSet.parallelStream()
+        Map<Long, OrderDetails> idOldProductMap = oldOrderDetailsSet.stream()
                 .collect(Collectors.toMap(od -> od.getProduct().getId(), od -> od));
 
-        Set<OrderDetailsRequest> orderDetailsRequests = productIds.parallelStream()
+        Set<OrderDetailsRequest> orderDetailsRequests = productIds.stream()
                 .map(this.productService::findById)
                 .filter(Objects::nonNull)
                 .map(product -> OrderDetailsRequest.builder()

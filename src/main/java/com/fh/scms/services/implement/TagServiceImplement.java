@@ -65,7 +65,7 @@ public class TagServiceImplement implements TagService {
 
     @Override
     public List<TagResponse> getAllTagResponse(Map<String, String> params) {
-        return this.tagRepository.findAllWithFilter(params).parallelStream()
+        return this.tagRepository.findAllWithFilter(params).stream()
                 .map(this::getTagResponse)
                 .collect(java.util.stream.Collectors.toList());
     }

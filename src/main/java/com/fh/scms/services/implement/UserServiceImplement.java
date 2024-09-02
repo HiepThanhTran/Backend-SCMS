@@ -188,7 +188,7 @@ public class UserServiceImplement implements UserService {
                 final Supplier finalSupplier = supplier;
                 Set<PaymentTerms> paymentTermsSet = Optional.ofNullable(userRequestRegister.getPaymentTermsSet())
                         .orElse(new HashSet<>())
-                        .parallelStream()
+                        .stream()
                         .map(termsRequest -> PaymentTerms.builder()
                                 .discountDays(termsRequest.getDiscountDays())
                                 .discountPercentage(termsRequest.getDiscountPercentage())

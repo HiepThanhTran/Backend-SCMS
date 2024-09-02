@@ -69,7 +69,7 @@ public class RatingServiceImplement implements RatingService {
 
     @Override
     public List<RatingResponse> getAllRatingResponse(Map<String, String> params) {
-        return this.ratingRepository.findAllWithFilter(params).parallelStream()
+        return this.ratingRepository.findAllWithFilter(params).stream()
                 .map(this::getRatingResponse)
                 .collect(Collectors.toList());
     }

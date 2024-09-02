@@ -80,7 +80,7 @@ public class ProductServiceImplement implements ProductService {
     @Override
     public List<ProductResponseForList> getAllProductResponseForList(Map<String, String> params) {
         return this.productRepository.findAllWithFilter(params)
-                .parallelStream().map(this::getProductResponseForList)
+                .stream().map(this::getProductResponseForList)
                 .collect(Collectors.toList());
     }
 
@@ -95,7 +95,7 @@ public class ProductServiceImplement implements ProductService {
                 .expiryDate(product.getExpiryDate())
                 .unit(this.unitService.getUnitResponse(product.getUnit()))
                 .category(this.categoryService.getCategoryResponse(product.getCategory()))
-                .tagSet(product.getTagSet().parallelStream()
+                .tagSet(product.getTagSet().stream()
                         .map(tag -> this.tagService.getTagResponse(tag))
                         .collect(Collectors.toSet())
                 )

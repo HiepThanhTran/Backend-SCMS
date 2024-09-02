@@ -64,7 +64,7 @@ public class UnitServiceImplement implements UnitService {
 
     @Override
     public List<UnitResponse> getAllUnitResponse(Map<String, String> params) {
-        return this.unitRepository.findAllWithFilter(params).parallelStream()
+        return this.unitRepository.findAllWithFilter(params).stream()
                 .map(this::getUnitResponse)
                 .collect(Collectors.toList());
     }

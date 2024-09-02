@@ -75,7 +75,7 @@ public class InvoiceServiceImplement implements InvoiceService {
 
     @Override
     public List<InvoiceResponse> getAllInvoiceResponse(Map<String, String> params) {
-        return this.invoiceRepository.findAllWithFilter(params).parallelStream()
+        return this.invoiceRepository.findAllWithFilter(params).stream()
                 .map(this::getInvoiceResponse)
                 .collect(Collectors.toList());
     }

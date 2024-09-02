@@ -74,7 +74,7 @@ public class TaxServiceImplement implements TaxService {
 
     @Override
     public List<TaxResponse> getAllTaxResponse(Map<String, String> params) {
-        return this.taxRepository.findAllWithFilter(params).parallelStream()
+        return this.taxRepository.findAllWithFilter(params).stream()
                 .map(this::getTaxResponse)
                 .collect(Collectors.toList());
     }

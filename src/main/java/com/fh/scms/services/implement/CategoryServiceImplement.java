@@ -74,7 +74,7 @@ public class CategoryServiceImplement implements CategoryService {
 
     @Override
     public List<CategoryResponse> getAllCategoryResponse(Map<String, String> params) {
-        return this.categoryRepository.findAllWithFilter(params).parallelStream()
+        return this.categoryRepository.findAllWithFilter(params).stream()
                 .map(this::getCategoryResponse)
                 .collect(Collectors.toList());
     }
