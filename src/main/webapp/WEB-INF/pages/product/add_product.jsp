@@ -45,6 +45,14 @@
     </div>
 
     <div class="form-group">
+        <form:label path="supplier" cssClass="form-label mt-3">Nhà cung cấp</form:label><br/>
+        <form:select path="supplier" cssClass="w-100 mt-1">
+            <form:option value="" label="Chọn nhà cung cấp"/>
+            <form:options items="${suppliers}" itemValue="id" itemLabel="name"/>
+        </form:select>
+    </div>
+
+    <div class="form-group">
         <form:label path="unit" cssClass="form-label mt-3">Đơn vị sản phẩm</form:label><br/>
         <form:select path="unit" cssClass="w-100 mb-3">
             <form:option value="" label="Chọn đơn vị sản phẩm"/>

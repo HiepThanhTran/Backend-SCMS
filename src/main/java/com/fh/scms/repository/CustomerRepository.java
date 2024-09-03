@@ -12,8 +12,6 @@ public interface CustomerRepository {
 
     Customer findByUser(User user);
 
-    Customer findByPhone(String phone);
-
     void save(Customer customer);
 
     void update(Customer customer);

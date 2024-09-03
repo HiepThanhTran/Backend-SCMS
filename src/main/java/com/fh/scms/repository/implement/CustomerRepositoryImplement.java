@@ -57,24 +57,6 @@ public class CustomerRepositoryImplement implements CustomerRepository {
     }
 
     @Override
-    public Customer findByPhone(String phone) {
-        Session session = this.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Customer> criteria = builder.createQuery(Customer.class);
-        Root<Customer> root = criteria.from(Customer.class);
-
-        try {
-            criteria.select(root).where(builder.equal(root.get("phone"), phone));
-            Query<Customer> query = session.createQuery(criteria);
-
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting user by phone", e);
-            return null;
-        }
-    }
-
-    @Override
     public void save(Customer customer) {
         Session session = this.getCurrentSession();
         session.persist(customer);

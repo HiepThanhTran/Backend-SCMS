@@ -391,6 +391,160 @@ public class GlobalService {
                                 .build()
                 ))
                 .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("supplier4@scm.com")
+                .username("supplier4")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SUPPLIER)
+                .name("SUPPLIER 4")
+                .address("TPHCM")
+                .phone("6782910498")
+                .contactInfo("6782910498")
+                .paymentTermsSet(Set.of(
+                        PaymentTermsRequest.builder()
+                                .discountDays(10)
+                                .discountPercentage(BigDecimal.valueOf(0.03))
+                                .type(PaymentTermType.COD)
+                                .build(),
+                        PaymentTermsRequest.builder()
+                                .discountDays(20)
+                                .discountPercentage(BigDecimal.valueOf(0.05))
+                                .type(PaymentTermType.PREPAID)
+                                .build()
+                ))
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("supplier5@scm.com")
+                .username("supplier5")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SUPPLIER)
+                .name("SUPPLIER 3")
+                .address("TPHCM")
+                .phone("6782910498")
+                .contactInfo("6782910498")
+                .paymentTermsSet(Set.of(
+                        PaymentTermsRequest.builder()
+                                .discountDays(10)
+                                .discountPercentage(BigDecimal.valueOf(0.03))
+                                .type(PaymentTermType.COD)
+                                .build(),
+                        PaymentTermsRequest.builder()
+                                .discountDays(20)
+                                .discountPercentage(BigDecimal.valueOf(0.05))
+                                .type(PaymentTermType.PREPAID)
+                                .build()
+                ))
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("supplier6@scm.com")
+                .username("supplier6")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SUPPLIER)
+                .name("SUPPLIER 6")
+                .address("TPHCM")
+                .phone("6782910498")
+                .contactInfo("6782910498")
+                .paymentTermsSet(Set.of(
+                        PaymentTermsRequest.builder()
+                                .discountDays(10)
+                                .discountPercentage(BigDecimal.valueOf(0.03))
+                                .type(PaymentTermType.COD)
+                                .build(),
+                        PaymentTermsRequest.builder()
+                                .discountDays(20)
+                                .discountPercentage(BigDecimal.valueOf(0.05))
+                                .type(PaymentTermType.PREPAID)
+                                .build()
+                ))
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("supplier7@scm.com")
+                .username("supplier7")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SUPPLIER)
+                .name("SUPPLIER 7")
+                .address("TPHCM")
+                .phone("6782910498")
+                .contactInfo("6782910498")
+                .paymentTermsSet(Set.of(
+                        PaymentTermsRequest.builder()
+                                .discountDays(10)
+                                .discountPercentage(BigDecimal.valueOf(0.03))
+                                .type(PaymentTermType.COD)
+                                .build(),
+                        PaymentTermsRequest.builder()
+                                .discountDays(20)
+                                .discountPercentage(BigDecimal.valueOf(0.05))
+                                .type(PaymentTermType.PREPAID)
+                                .build()
+                ))
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("supplier8@scm.com")
+                .username("supplier8")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SUPPLIER)
+                .name("SUPPLIER 8")
+                .address("TPHCM")
+                .phone("6782910498")
+                .contactInfo("6782910498")
+                .paymentTermsSet(Set.of(
+                        PaymentTermsRequest.builder()
+                                .discountDays(10)
+                                .discountPercentage(BigDecimal.valueOf(0.03))
+                                .type(PaymentTermType.COD)
+                                .build(),
+                        PaymentTermsRequest.builder()
+                                .discountDays(20)
+                                .discountPercentage(BigDecimal.valueOf(0.05))
+                                .type(PaymentTermType.PREPAID)
+                                .build()
+                ))
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("supplier9@scm.com")
+                .username("supplier9")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SUPPLIER)
+                .name("SUPPLIER 9")
+                .address("TPHCM")
+                .phone("6782910498")
+                .contactInfo("6782910498")
+                .paymentTermsSet(Set.of(
+                        PaymentTermsRequest.builder()
+                                .discountDays(10)
+                                .discountPercentage(BigDecimal.valueOf(0.03))
+                                .type(PaymentTermType.COD)
+                                .build(),
+                        PaymentTermsRequest.builder()
+                                .discountDays(20)
+                                .discountPercentage(BigDecimal.valueOf(0.05))
+                                .type(PaymentTermType.PREPAID)
+                                .build()
+                ))
+                .build());
+        this.userService.registerUser(UserRequestRegister.builder()
+                .email("supplier10@scm.com")
+                .username("supplier10")
+                .password("user@123")
+                .userRole(UserRole.ROLE_SUPPLIER)
+                .name("SUPPLIER 10")
+                .address("TPHCM")
+                .phone("6782910498")
+                .contactInfo("6782910498")
+                .paymentTermsSet(Set.of(
+                        PaymentTermsRequest.builder()
+                                .discountDays(10)
+                                .discountPercentage(BigDecimal.valueOf(0.03))
+                                .type(PaymentTermType.COD)
+                                .build(),
+                        PaymentTermsRequest.builder()
+                                .discountDays(20)
+                                .discountPercentage(BigDecimal.valueOf(0.05))
+                                .type(PaymentTermType.PREPAID)
+                                .build()
+                ))
+                .build());
     }
 
     private void createShipper() {
@@ -466,9 +620,9 @@ public class GlobalService {
 
         suppliers.forEach(supplier -> {
             for (int i = 0; i < 10; i++) {
-                BigDecimal price = BigDecimal.valueOf(50000 + (random.nextDouble() * (100000 - 50000)));
+                BigDecimal price = BigDecimal.valueOf(30000 + (random.nextDouble() * (500000 - 50000)));
 
-                Date expiryDate = Date.from(LocalDateTime.now().plusDays(daysFromNow).atZone(ZoneId.systemDefault()).toInstant());
+                LocalDate expiryDate = LocalDate.now().plusDays(daysFromNow);
 
                 Collections.shuffle(tags, random);
                 Set<Tag> randomTags = tags.parallelStream()

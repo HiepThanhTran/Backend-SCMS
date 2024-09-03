@@ -3,6 +3,7 @@ package com.fh.scms.pojo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -27,7 +29,7 @@ public class Product extends BaseEntity implements Serializable {
 
     @NotNull(message = "{product.name.notNull}")
     @NotBlank(message = "{product.name.notNull}")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     private String description;
@@ -41,22 +43,22 @@ public class Product extends BaseEntity implements Serializable {
     private String image;
 
     @NotNull(message = "{product.expiryDate.notNull}")
-    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "expiry_date", nullable = false)
-    private Date expiryDate;
+    private LocalDate expiryDate;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "unit_id", nullable = false)
     private Unit unit;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id", nullable = false)
+    private Supplier supplier;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
-    private Supplier supplier;
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<InventoryDetails> inventoryDetailsSet;

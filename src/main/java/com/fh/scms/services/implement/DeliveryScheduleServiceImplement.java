@@ -60,22 +60,19 @@ public class DeliveryScheduleServiceImplement implements DeliveryScheduleService
 
     @Override
     public void save(DeliverySchedule deliverySchedule, @NotNull List<String> orderIds) {
-        Set<Order> orders = new HashSet<>();
-        for (String orderId : orderIds) {
-            Order order = this.orderRepository.findById(Long.parseLong(orderId));
-            if (order != null) {
-                orders.add(order);
-                order.setDeliverySchedule(deliverySchedule);
-            }
-        }
-
-        deliverySchedule.setOrderSet(orders);
+        processSchedule(deliverySchedule, orderIds);
 
         this.deliveryScheduleRepository.save(deliverySchedule);
     }
 
     @Override
     public void update(DeliverySchedule deliverySchedule, @NotNull List<String> orderIds) {
+        processSchedule(deliverySchedule, orderIds);
+
+        this.deliveryScheduleRepository.update(deliverySchedule);
+    }
+
+    private void processSchedule(DeliverySchedule deliverySchedule, @NotNull List<String> orderIds) {
         Set<Order> orders = new HashSet<>();
         for (String orderId : orderIds) {
             Order order = this.orderRepository.findById(Long.parseLong(orderId));
@@ -86,7 +83,5 @@ public class DeliveryScheduleServiceImplement implements DeliveryScheduleService
         }
 
         deliverySchedule.setOrderSet(orders);
-
-        this.deliveryScheduleRepository.update(deliverySchedule);
     }
 }

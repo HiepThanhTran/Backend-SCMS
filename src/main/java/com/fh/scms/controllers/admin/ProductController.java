@@ -2,11 +2,9 @@ package com.fh.scms.controllers.admin;
 
 import com.fh.scms.dto.MessageResponse;
 import com.fh.scms.pojo.Product;
-import com.fh.scms.services.CategoryService;
-import com.fh.scms.services.ProductService;
-import com.fh.scms.services.TagService;
-import com.fh.scms.services.UnitService;
+import com.fh.scms.services.*;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -27,9 +25,11 @@ public class ProductController {
     private final CategoryService categoryService;
     private final TagService tagService;
     private final UnitService unitService;
+    private final SupplierService supplierService;
 
     @ModelAttribute
-    public void addAttributes(Model model) {
+    public void addAttributes(@NotNull Model model) {
+        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
         model.addAttribute("categories", this.categoryService.findAllWithFilter(null));
         model.addAttribute("units", this.unitService.findAllWithFilter(null));
         model.addAttribute("tags", this.tagService.findAllWithFilter(null));

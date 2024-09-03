@@ -24,7 +24,7 @@ public interface OrderService {
 
     List<Order> findAllWithFilter(Map<String, String> params);
 
-    List<Order> findAllBySupplierId(Long supplierId);
+    List<Order> findAllBySupplierId(Long supplierId, Map<String, String> params);
 
     OrderResponse getOrderResponse(Order order);
 

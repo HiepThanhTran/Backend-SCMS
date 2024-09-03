@@ -1,14 +1,3 @@
-$(document).ready(() => {
-    const inputUsername = document.querySelector('input[name="username"]');
-    const inputPassword = document.querySelector('input[name="password"]');
-
-    inputUsername.value = "adminscm";
-    inputPassword.value = "admin@123";
-
-    inputPassword.focus();
-    inputUsername.focus();
-});
-
 (function ($) {
     "use strict";
 

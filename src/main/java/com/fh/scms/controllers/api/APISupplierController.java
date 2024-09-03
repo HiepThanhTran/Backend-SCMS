@@ -80,8 +80,9 @@ public class APISupplierController {
     }
 
     @GetMapping(path = "/{supplierId}/orders")
-    public ResponseEntity<?> getOrdersOfSupplier(@PathVariable(value = "supplierId") Long supplierId) {
-        return ResponseEntity.ok(this.supplierService.getOrdersOfSupplier(supplierId));
+    public ResponseEntity<?> getOrdersOfSupplier(@PathVariable(value = "supplierId") Long supplierId,
+                                                 @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
+        return ResponseEntity.ok(this.supplierService.getOrdersOfSupplier(supplierId, params));
     }
 
     @GetMapping(path = "/{supplierId}/ratings")

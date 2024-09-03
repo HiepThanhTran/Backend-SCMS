@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class ProductRequestPublish {
     @NotNull(message = "{product.expiryDate.notNull}")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date expiryDate;
+    private LocalDate expiryDate;
 
     private Long unit;
 

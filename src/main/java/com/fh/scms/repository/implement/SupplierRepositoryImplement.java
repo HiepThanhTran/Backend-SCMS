@@ -7,7 +7,6 @@ import com.fh.scms.util.Pagination;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -54,24 +53,6 @@ public class SupplierRepositoryImplement implements SupplierRepository {
 
             return query.getSingleResult();
         } catch (NoResultException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public Supplier findByPhone(String phone) {
-        Session session = this.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Supplier> criteria = builder.createQuery(Supplier.class);
-        Root<Supplier> root = criteria.from(Supplier.class);
-
-        try {
-            criteria.select(root).where(builder.equal(root.get("phone"), phone));
-            Query<Supplier> query = session.createQuery(criteria);
-
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            LoggerFactory.getLogger(UserRepositoryImplement.class).error("An error occurred while getting supplier by phone", e);
             return null;
         }
     }

@@ -60,8 +60,8 @@ public class JWTSecurityConfigs extends WebSecurityConfigurerAdapter {
     protected void configure(@NotNull HttpSecurity http) throws Exception {
         http.cors().configurationSource(request -> {
             CorsConfiguration cors = new CorsConfiguration();
-            cors.setAllowedOrigins(List.of("http://localhost:3000"));
             cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
+            cors.setAllowedOrigins(List.of("*"));
             cors.setAllowedHeaders(List.of("*"));
             cors.setAllowCredentials(true);
             return cors;

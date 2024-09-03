@@ -12,8 +12,6 @@ public interface SupplierRepository {
 
     Supplier findByUser(User user);
 
-    Supplier findByPhone(String phone);
-
     void save(Supplier supplier);
 
     void update(Supplier supplier);

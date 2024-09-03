@@ -153,13 +153,7 @@ public class UserServiceImplement implements UserService {
                 user.setConfirm(true);
                 break;
             case ROLE_CUSTOMER:
-                Customer customer;
-                customer = this.customerRepository.findByPhone(userRequestRegister.getPhone());
-                Optional.ofNullable(customer).ifPresent(c -> {
-                    throw new IllegalArgumentException("Số điện thoại đã được liên kết đến tài khoản khác");
-                });
-
-                customer = Customer.builder()
+                Customer customer = Customer.builder()
                         .firstName(userRequestRegister.getFirstName())
                         .middleName(userRequestRegister.getMiddleName())
                         .lastName(userRequestRegister.getLastName())
@@ -172,12 +166,7 @@ public class UserServiceImplement implements UserService {
                 user.setCustomer(customer);
                 break;
             case ROLE_SUPPLIER:
-                Supplier supplier = this.supplierRepository.findByPhone(userRequestRegister.getPhone());
-                Optional.ofNullable(supplier).ifPresent(s -> {
-                    throw new IllegalArgumentException("Số điện thoại đã được liên kết đến tài khoản khác");
-                });
-
-                supplier = Supplier.builder()
+                Supplier supplier = Supplier.builder()
                         .name(userRequestRegister.getName())
                         .address(userRequestRegister.getAddress())
                         .phone(userRequestRegister.getPhone())

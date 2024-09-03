@@ -40,7 +40,7 @@ public interface SupplierService {
 
     void unpublishProduct(String username, Long productId);
 
-    List<OrderResponse> getOrdersOfSupplier(Long supplierId);
+    List<OrderResponse> getOrdersOfSupplier(Long supplierId, Map<String, String> params);
 
     List<Rating> getRatingsOfSupplier(Long supplierId);
 

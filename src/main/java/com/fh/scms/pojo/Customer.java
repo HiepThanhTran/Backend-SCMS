@@ -46,7 +46,7 @@ public class Customer extends BaseEntity implements Serializable {
     @NotNull(message = "{user.phone.notNull}")
     @NotBlank(message = "{user.phone.notNull}")
     @Pattern(regexp = "^[0-9]{10,15}$", message = "{user.phone.pattern}")
-    @Column(nullable = false, unique = true, length = 15)
+    @Column(nullable = false, length = 15)
     private String phone;
 
     @Builder.Default

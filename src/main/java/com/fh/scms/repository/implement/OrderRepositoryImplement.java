@@ -145,7 +145,7 @@ public class OrderRepositoryImplement implements OrderRepository {
     }
 
     @Override
-    public List<Order> findAllBySupplierId(Long supplierId) {
+    public List<Order> findAllBySupplierId(Long supplierId, Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
@@ -154,7 +154,42 @@ public class OrderRepositoryImplement implements OrderRepository {
         Join<Order, OrderDetails> orderDetailsJoin = root.join("orderDetailsSet");
         Join<OrderDetails, Product> productJoin = orderDetailsJoin.join("product");
 
-        criteria.select(root).where(builder.equal(productJoin.get("supplier").get("id"), supplierId)).distinct(true);
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(builder.equal(root.get("active"), true));
+        predicates.add(builder.equal(productJoin.get("supplier").get("id"), supplierId));
+
+        if (params != null && !params.isEmpty()) {
+            Arrays.asList("type", "status", "user", "invoice").forEach(key -> {
+                if (params.containsKey(key) && !params.get(key).isEmpty()) {
+                    switch (key) {
+                        case "type":
+                            try {
+                                OrderType type = OrderType.valueOf(params.get("type").toUpperCase(Locale.getDefault()));
+                                predicates.add(builder.equal(root.get("type"), type));
+                            } catch (IllegalArgumentException e) {
+                                LoggerFactory.getLogger(OrderRepositoryImplement.class).error("An error parse OrderType Enum", e);
+                            }
+                            break;
+                        case "status":
+                            try {
+                                OrderStatus status = OrderStatus.valueOf(params.get("status").toUpperCase(Locale.getDefault()));
+                                predicates.add(builder.equal(root.get("status"), status));
+                            } catch (IllegalArgumentException e) {
+                                LoggerFactory.getLogger(OrderRepositoryImplement.class).error("An error parse OrderStatus Enum", e);
+                            }
+                            break;
+                        case "user":
+                            predicates.add(builder.equal(root.get("user").get("id"), Long.parseLong(params.get("user"))));
+                            break;
+                        case "invoice":
+                            predicates.add(builder.equal(root.get("invoice").get("id"), Long.parseLong(params.get("invoice"))));
+                            break;
+                    }
+                }
+            });
+        }
+
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).distinct(true);
         Query<Order> query = session.createQuery(criteria);
 
         return query.getResultList();

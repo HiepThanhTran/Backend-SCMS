@@ -71,8 +71,8 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
-    public List<Order> findAllBySupplierId(Long supplierId) {
-        return this.orderRepository.findAllBySupplierId(supplierId);
+    public List<Order> findAllBySupplierId(Long supplierId, Map<String, String> params) {
+        return this.orderRepository.findAllBySupplierId(supplierId, params);
     }
 
     @Override

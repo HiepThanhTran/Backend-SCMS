@@ -23,5 +23,5 @@ public interface OrderRepository {
 
     List<Order> findAllWithFilter(Map<String, String> params);
 
-    List<Order> findAllBySupplierId(Long supplierId);
+    List<Order> findAllBySupplierId(Long supplierId, Map<String, String> params);
 }

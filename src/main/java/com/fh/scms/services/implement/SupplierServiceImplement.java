@@ -180,8 +180,8 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
-    public List<OrderResponse> getOrdersOfSupplier(@NotNull Long supplierId) {
-        List<Order> orders = this.orderService.findAllBySupplierId(supplierId);
+    public List<OrderResponse> getOrdersOfSupplier(@NotNull Long supplierId, Map<String, String> params) {
+        List<Order> orders = this.orderService.findAllBySupplierId(supplierId, params);
 
         return this.orderService.getAllOrderResponse(orders);
     }
