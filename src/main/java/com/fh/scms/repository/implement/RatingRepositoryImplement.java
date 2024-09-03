@@ -2,20 +2,19 @@ package com.fh.scms.repository.implement;
 
 import com.fh.scms.enums.CriteriaType;
 import com.fh.scms.pojo.Rating;
+import com.fh.scms.pojo.Supplier;
 import com.fh.scms.repository.RatingRepository;
 import com.fh.scms.util.Pagination;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -140,6 +139,33 @@ public class RatingRepositoryImplement implements RatingRepository {
         criteria.select(root).where(predicates.toArray(Predicate[]::new));
         Query<Rating> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Supplier> getRankedSuppliers(CriteriaType criteriaType, @NotNull String sortOrder) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Supplier> criteria = builder.createQuery(Supplier.class);
+
+        Root<Rating> ratingRoot = criteria.from(Rating.class);
+        Join<Rating, Supplier> supplierJoin = ratingRoot.join("supplier");
+
+        Predicate criteriaPredicate = builder.conjunction();
+
+        if (criteriaType != null) {
+            criteriaPredicate = builder.equal(ratingRoot.get("criteria"), criteriaType);
+        }
+
+        criteria.select(supplierJoin)
+                .where(criteriaPredicate)
+                .groupBy(supplierJoin)
+                .orderBy(sortOrder.equalsIgnoreCase("desc")
+                        ? builder.desc(builder.avg(ratingRoot.get("rating")))
+                        : builder.asc(builder.avg(ratingRoot.get("rating"))));
+
+        Query<Supplier> query = session.createQuery(criteria);
 
         return query.getResultList();
     }

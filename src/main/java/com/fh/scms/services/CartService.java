@@ -21,4 +21,6 @@ public interface CartService {
     void updateProductInCart(Cart cart, Long productId, Map<String, String> params);
 
     void deleteProductFromCart(Cart cart, Long productId);
+
+    void clearCart(Cart cart);
 }

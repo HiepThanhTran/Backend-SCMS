@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -35,6 +36,7 @@ public class APIOrderController {
     private final UserService userService;
 
     @GetMapping
+    @Transactional
     public ResponseEntity<?> listOrders(Principal principal, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         User user = this.userService.findByUsername(principal.getName());
         Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));

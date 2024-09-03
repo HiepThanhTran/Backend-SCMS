@@ -2,7 +2,9 @@ package com.fh.scms.services.implement;
 
 import com.fh.scms.dto.rating.RatingRequestUpdate;
 import com.fh.scms.dto.rating.RatingResponse;
+import com.fh.scms.enums.CriteriaType;
 import com.fh.scms.pojo.Rating;
+import com.fh.scms.pojo.Supplier;
 import com.fh.scms.repository.RatingRepository;
 import com.fh.scms.services.RatingService;
 import com.fh.scms.util.Utils;
@@ -96,5 +98,10 @@ public class RatingServiceImplement implements RatingService {
         this.ratingRepository.update(rating);
 
         return rating;
+    }
+
+    @Override
+    public List<Supplier> getRankedSuppliers(CriteriaType criteriaType, String sortOrder) {
+        return this.ratingRepository.getRankedSuppliers(criteriaType, sortOrder);
     }
 }

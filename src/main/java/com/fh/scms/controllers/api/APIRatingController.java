@@ -3,6 +3,7 @@ package com.fh.scms.controllers.api;
 import com.fh.scms.dto.MessageResponse;
 import com.fh.scms.dto.rating.RatingRequestUpdate;
 import com.fh.scms.dto.rating.RatingResponse;
+import com.fh.scms.enums.CriteriaType;
 import com.fh.scms.pojo.Rating;
 import com.fh.scms.pojo.User;
 import com.fh.scms.services.RatingService;
@@ -33,6 +34,12 @@ public class APIRatingController {
 
     private final RatingService ratingService;
     private final UserService userService;
+
+    @GetMapping("/ranked-suppliers")
+    public ResponseEntity<?> getRankedSuppliers(@RequestParam(name = "criteria", required = false) CriteriaType criteriaType,
+                                                @RequestParam(name = "sort", defaultValue = "desc") String sortOrder) {
+        return ResponseEntity.ok(this.ratingService.getRankedSuppliers(criteriaType, sortOrder));
+    }
 
     @GetMapping
     public ResponseEntity<?> listRatings(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {

@@ -466,7 +466,7 @@ public class GlobalService {
 
         suppliers.forEach(supplier -> {
             for (int i = 0; i < 10; i++) {
-                BigDecimal price = BigDecimal.valueOf(50000 + (random.nextDouble() * (1000000 - 50000)));
+                BigDecimal price = BigDecimal.valueOf(50000 + (random.nextDouble() * (100000 - 50000)));
 
                 Date expiryDate = Date.from(LocalDateTime.now().plusDays(daysFromNow).atZone(ZoneId.systemDefault()).toInstant());
 

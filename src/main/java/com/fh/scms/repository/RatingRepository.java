@@ -1,6 +1,8 @@
 package com.fh.scms.repository;
 
+import com.fh.scms.enums.CriteriaType;
 import com.fh.scms.pojo.Rating;
+import com.fh.scms.pojo.Supplier;
 
 import java.util.List;
 import java.util.Map;
@@ -20,4 +22,6 @@ public interface RatingRepository {
     Long count();
 
     List<Rating> findAllWithFilter(Map<String, String> params);
+
+    List<Supplier> getRankedSuppliers(CriteriaType criteriaType, String sortOrder);
 }

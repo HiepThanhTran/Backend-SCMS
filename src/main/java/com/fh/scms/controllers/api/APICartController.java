@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@Transactional
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/cart", produces = "application/json; charset=UTF-8")
 public class APICartController {
@@ -73,6 +75,16 @@ public class APICartController {
         Cart cart = this.cartService.findCartByUser(user);
 
         this.cartService.deleteProductFromCart(cart, productId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(path = "/product/clear")
+    public ResponseEntity<?> clearCart(Principal principal) {
+        User user = this.userService.findByUsername(principal.getName());
+        Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
+
+        this.cartService.clearCart(this.cartService.findCartByUser(user));
 
         return ResponseEntity.noContent().build();
     }

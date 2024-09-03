@@ -20,6 +20,6 @@ public class Cart extends BaseEntity implements Serializable {
     @OneToOne(cascade = {CascadeType.REMOVE}, optional = false, orphanRemoval = true)
     private User user;
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Set<CartDetails> cartDetailsSet;
 }
