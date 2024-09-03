@@ -337,11 +337,6 @@ public class OrderServiceImplement implements OrderService {
                         this.inventoryDetailsRepository.update(inventoryDetails);
                     });
                 }
-
-                Optional.ofNullable(this.invoiceRepository.findByOrderId(orderId)).ifPresent(invoice -> {
-                    order.setInvoice(null);
-                    this.invoiceRepository.delete(invoice.getId());
-                });
                 break;
         }
 

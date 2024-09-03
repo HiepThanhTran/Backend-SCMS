@@ -50,7 +50,7 @@ public class Order extends BaseEntity implements Serializable {
     private User user;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Invoice invoice;
 
     @JsonIgnore

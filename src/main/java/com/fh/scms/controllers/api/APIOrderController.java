@@ -2,7 +2,6 @@ package com.fh.scms.controllers.api;
 
 import com.fh.scms.dto.MessageResponse;
 import com.fh.scms.dto.order.OrderRequest;
-import com.fh.scms.dto.order.OrderResponse;
 import com.fh.scms.pojo.Order;
 import com.fh.scms.pojo.User;
 import com.fh.scms.services.CartService;
@@ -89,13 +88,6 @@ public class APIOrderController {
         LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of(new MessageResponse(e.getMessage())));
-    }
-
-    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
-    public ResponseEntity<?> handleIllegalArgumentException(@NotNull HttpServletRequest req, IllegalArgumentException e) {
-        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(List.of(new MessageResponse(e.getMessage())));
     }
 
     @ExceptionHandler(AccessDeniedException.class)

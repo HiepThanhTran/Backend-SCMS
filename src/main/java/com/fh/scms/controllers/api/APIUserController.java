@@ -10,7 +10,6 @@ import com.fh.scms.pojo.User;
 import com.fh.scms.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -102,13 +100,6 @@ public class APIUserController {
         LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of(new MessageResponse(e.getMessage())));
-    }
-
-    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
-    public ResponseEntity<?> handleIllegalArgumentException(@NotNull HttpServletRequest req, IllegalArgumentException e) {
-        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(List.of(new MessageResponse(e.getMessage())));
     }
 
     @ExceptionHandler(AccessDeniedException.class)

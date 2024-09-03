@@ -1,8 +1,6 @@
 package com.fh.scms.controllers.api;
 
 import com.fh.scms.dto.MessageResponse;
-import com.fh.scms.dto.product.ProductResponseForDetails;
-import com.fh.scms.dto.product.ProductResponseForList;
 import com.fh.scms.pojo.Product;
 import com.fh.scms.services.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -49,13 +47,6 @@ public class APIProductController {
         LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of(new MessageResponse(e.getMessage())));
-    }
-
-    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
-    public ResponseEntity<?> handleIllegalArgumentException(@NotNull HttpServletRequest req, IllegalArgumentException e) {
-        LoggerFactory.getLogger(req.getRequestURI()).error(e.getMessage(), e);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(List.of(new MessageResponse(e.getMessage())));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
