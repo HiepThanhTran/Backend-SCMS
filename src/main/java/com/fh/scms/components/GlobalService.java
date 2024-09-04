@@ -259,7 +259,7 @@ public class GlobalService {
         List<User> users = this.userService.findAllWithFilter(null);
         Random random = new Random();
 
-        users.forEach(user -> IntStream.range(0, 5).forEach(index -> {
+        users.forEach(user -> IntStream.range(0, 10).forEach(index -> {
             Collections.shuffle(inventoryDetails, random);
             List<Product> randomProducts = inventoryDetails.parallelStream()
                     .map(InventoryDetails::getProduct)

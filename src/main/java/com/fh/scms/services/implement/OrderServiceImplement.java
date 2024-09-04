@@ -194,23 +194,30 @@ public class OrderServiceImplement implements OrderService {
             Inventory inventory = this.inventoryService.findById(orderRequest.getInventoryId());
             Optional.ofNullable(inventory).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy kho hàng"));
 
-            // Tạo đơn hàng mới
-            Order order = Order.builder()
-                    .user(user)
-                    .type(orderRequest.getType())
-                    .build();
-            if (orderRequest.getStatus() != null) {
-                order.setStatus(orderRequest.getStatus());
-            }
-            this.orderRepository.save(order);
+            // Nhóm các sản phẩm theo nhà cung cấp
+            Map<Supplier, Set<OrderDetailsRequest>> groupedBySupplier = orderRequest.getOrderDetails().stream()
+                    .collect(Collectors.groupingBy(odr -> this.productService.findById(odr.getProductId()).getSupplier(), Collectors.toSet()));
 
-            this.checkCapacityOfWarehouse(inventory, orderRequest.getOrderDetails());
+            // Tạo đơn hàng cho mỗi nhà cung cấp
+            groupedBySupplier.forEach((supplier, orderDetailsList) -> {
+                // Tạo đơn hàng mới
+                Order order = Order.builder()
+                        .user(user)
+                        .type(orderRequest.getType())
+                        .build();
+                if (orderRequest.getStatus() != null) {
+                    order.setStatus(orderRequest.getStatus());
+                }
+                this.orderRepository.save(order);
 
-            // Nếu không vượt quá sức chứa thì tính toán tổng giá trị của đơn hàng
-            final BigDecimal[] totalAmount = this.getTotalAmountOfOrder(orderRequest.getOrderDetails(), inventory, order);
+                this.checkCapacityOfWarehouse(inventory, orderRequest.getOrderDetails());
 
-            // Tạo hóa đơn cho đơn hàng
-            this.createInvoice(user, order, orderRequest, totalAmount);
+                // Nếu không vượt quá sức chứa thì tính toán tổng giá trị của đơn hàng
+                final BigDecimal[] totalAmount = this.getTotalAmountOfOrder(orderRequest.getOrderDetails(), inventory, order);
+
+                // Tạo hóa đơn cho đơn hàng
+                this.createInvoice(user, order, orderRequest, totalAmount);
+            });
         }
     }
 
