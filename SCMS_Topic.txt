@@ -15,7 +15,7 @@ Phát triển một hệ thống quản lý chuỗi cung ứng, từ việc qu�
 
 4. Quản lý Vận Chuyển và Giao Hàng
 - Lên lịch giao hàng: Lên lịch và tổ chức việc giao hàng từ kho đến các địa điểm yêu cầu.
-- Theo dõi vận chuyển: Cung cấp khả năng theo dõi tình trạng và vị trí của hàng hóa trong quá trình vận chuyển.
+- Theo dõi vận chuyển: Cung cấp khả năng theo dõi tình trạng và vị trí của hàng hóa trong quá trình vận chuyển. (Done)
 - Quản lý đối tác vận chuyển: Quản lý thông tin về các đối tác vận chuyển, bao gồm việc đánh giá hiệu suất và điều kiện hợp tác. (Done)
 
 5. Quản lý Đơn Giá và Thanh Toán

@@ -87,10 +87,16 @@ public class RatingServiceImplement implements RatingService {
                 if (value != null && !value.toString().isEmpty()) {
                     Field ratingField = Rating.class.getDeclaredField(field.getName());
                     ratingField.setAccessible(true);
-                    Object convertedValue = Utils.convertValue(ratingField.getType(), value.toString());
-                    ratingField.set(rating, convertedValue);
+
+                    if (field.getName().equals("criteria")) {
+                        value = CriteriaType.valueOf(value.toString().toUpperCase());
+                        ratingField.set(rating, value);
+                    } else {
+                        Object convertedValue = Utils.convertValue(ratingField.getType(), value.toString());
+                        ratingField.set(rating, convertedValue);
+                    }
                 }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
+            } catch (Exception e) {
                 Logger.getLogger(UserServiceImplement.class.getName()).log(Level.SEVERE, null, e);
             }
         }

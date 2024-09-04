@@ -71,22 +71,23 @@ public class OrderRepositoryImplement implements OrderRepository {
         CriteriaQuery<OrderResponseForTracking> criteria = builder.createQuery(OrderResponseForTracking.class);
 
         Root<Order> root = criteria.from(Order.class);
-        Join<Order, DeliverySchedule> deliveryScheduleJoin = root.join("deliverySchedule", JoinType.LEFT);
-        Join<DeliverySchedule, Shipment> shipmentJoin = deliveryScheduleJoin.join("shipmentSet", JoinType.LEFT);
+        Join<Order, DeliverySchedule> deliveryScheduleJoin = root.join("deliverySchedule");
+        Join<DeliverySchedule, Shipment> shipmentJoin = deliveryScheduleJoin.join("shipmentSet");
 
         try {
-            criteria.multiselect(builder.construct(
+            criteria.select(builder.construct(
                     OrderResponseForTracking.class,
-                    root.get("type").alias("orderType"),
-                    root.get("status").alias("orderStatus"),
-                    root.get("createdAt").alias("orderDate"),
+                    root.get("type"),
+                    root.get("status"),
+                    root.get("createdAt"),
                     deliveryScheduleJoin.get("scheduledDate"),
-                    shipmentJoin.get("cost").alias("shippingCost"),
+                    shipmentJoin.get("cost"),
                     shipmentJoin.get("currentLocation"),
                     shipmentJoin.get("trackingNumber"),
-                    shipmentJoin.get("status").alias("shipmentStatus"),
-                    shipmentJoin.get("shipper").get("name").alias("shipperName")
+                    shipmentJoin.get("status"),
+                    shipmentJoin.get("shipper").get("name")
             )).where(builder.equal(root.get("orderNumber"), orderNumber));
+
             Query<OrderResponseForTracking> query = session.createQuery(criteria);
 
             return query.getSingleResult();
