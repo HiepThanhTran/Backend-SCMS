@@ -3,6 +3,7 @@ package com.fh.scms.services;
 import com.fh.scms.dto.order.OrderDetailsReponse;
 import com.fh.scms.dto.order.OrderRequest;
 import com.fh.scms.dto.order.OrderResponse;
+import com.fh.scms.dto.order.OrderResponseForTracking;
 import com.fh.scms.pojo.Order;
 import com.fh.scms.pojo.OrderDetails;
 import com.fh.scms.pojo.User;
@@ -14,7 +15,7 @@ public interface OrderService {
 
     Order findById(Long id);
 
-    Order findByOrderNumber(String orderNumber);
+    OrderResponseForTracking findByOrderNumber(String orderNumber);
 
     void save(Order order);
 

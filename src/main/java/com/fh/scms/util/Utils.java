@@ -3,6 +3,7 @@ package com.fh.scms.util;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.text.Collator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,7 +33,9 @@ public final class Utils {
             return LocalDate.parse(value);
         } else if (fieldType == LocalDateTime.class) {
             return LocalDateTime.parse(value);
-        } else {
+        } else if (fieldType == BigDecimal.class) {
+            return new BigDecimal(value);
+        }else {
             throw new IllegalArgumentException("Không hỗ trợ kiểu dữ liệu: " + fieldType.getName());
         }
     }

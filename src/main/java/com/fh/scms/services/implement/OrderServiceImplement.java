@@ -1,11 +1,11 @@
 package com.fh.scms.services.implement;
 
-import com.fh.scms.dto.order.OrderDetailsReponse;
-import com.fh.scms.dto.order.OrderDetailsRequest;
-import com.fh.scms.dto.order.OrderRequest;
-import com.fh.scms.dto.order.OrderResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fh.scms.dto.order.*;
 import com.fh.scms.enums.OrderStatus;
 import com.fh.scms.enums.OrderType;
+import com.fh.scms.enums.ShipmentStatus;
 import com.fh.scms.pojo.*;
 import com.fh.scms.repository.*;
 import com.fh.scms.services.InventoryService;
@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.lang.System;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,7 +48,7 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
-    public Order findByOrderNumber(String orderNumber) {
+    public OrderResponseForTracking findByOrderNumber(String orderNumber) {
         return this.orderRepository.findByOrderNumber(orderNumber);
     }
 
@@ -85,6 +87,7 @@ public class OrderServiceImplement implements OrderService {
         return OrderResponse.builder()
                 .id(order.getId())
                 .orderNumber(order.getOrderNumber())
+                .invoiceNumber(order.getInvoice() != null ? order.getInvoice().getInvoiceNumber() : null)
                 .type(order.getType())
                 .status(order.getStatus())
                 .orderDate(order.getCreatedAt())

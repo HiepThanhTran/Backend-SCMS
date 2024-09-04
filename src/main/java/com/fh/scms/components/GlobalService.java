@@ -11,6 +11,7 @@ import com.fh.scms.pojo.*;
 import com.fh.scms.pojo.System;
 import com.fh.scms.repository.*;
 import com.fh.scms.services.OrderService;
+import com.fh.scms.services.ShipperService;
 import com.fh.scms.services.UserService;
 import org.hibernate.Session;
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +64,8 @@ public class GlobalService {
     private RatingRepository ratingRepository;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private ShipperService shipperService;
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
@@ -272,7 +275,7 @@ public class GlobalService {
                     .collect(Collectors.toSet());
 
             OrderRequest orderRequest = OrderRequest.builder()
-                    .type(random.nextBoolean() ? OrderType.OUTBOUND : OrderType.INBOUND)
+                    .type(OrderType.values()[random.nextInt(OrderType.values().length)])
                     .status(OrderStatus.DELIVERED)
                     .paid(true)
                     .inventoryId(inventoryDetails.get(0).getInventory().getId())
@@ -286,6 +289,40 @@ public class GlobalService {
                 this.orderService.checkin(user, orderRequest);
             }
         }));
+    }
+
+    public void createDeliverySchedule() {
+        List<Order> orders = this.orderService.findAllWithFilter(null);
+        List<Warehouse> warehouses = this.warehouseRepository.findAllWithFilter(null);
+        List<Shipper> shippers = this.shipperService.findAllWithFilter(null);
+        Random random = new Random();
+        AtomicInteger count = new AtomicInteger(1);
+
+        orders.forEach(order -> {
+            DeliverySchedule deliverySchedule = DeliverySchedule.builder()
+                    .scheduledDate(LocalDate.now())
+                    .method(DeliveryMethodType.values()[random.nextInt(DeliveryMethodType.values().length)])
+                    .orderSet(Set.of(order))
+                    .build();
+            this.getCurrentSession().save(deliverySchedule);
+
+            Warehouse warehouse = warehouses.get(random.nextInt(warehouses.size()));
+
+            Shipment shipment = Shipment.builder()
+                    .cost(new BigDecimal(1000))
+                    .note("Shipment " + count)
+                    .currentLocation(warehouse.getLocation())
+                    .shipper(shippers.get(random.nextInt(shippers.size())))
+                    .warehouse(warehouse)
+                    .deliverySchedule(deliverySchedule)
+                    .build();
+            this.getCurrentSession().save(shipment);
+
+            order.setDeliverySchedule(deliverySchedule);
+            this.orderService.update(order);
+
+            count.getAndIncrement();
+        });
     }
 
     private void createCustomer() {

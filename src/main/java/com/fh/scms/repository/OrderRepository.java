@@ -1,5 +1,6 @@
 package com.fh.scms.repository;
 
+import com.fh.scms.dto.order.OrderResponseForTracking;
 import com.fh.scms.pojo.Order;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface OrderRepository {
 
     Order findById(Long id);
 
-    Order findByOrderNumber(String orderNumber);
+    OrderResponseForTracking findByOrderNumber(String orderNumber);
 
     void save(Order order);
 

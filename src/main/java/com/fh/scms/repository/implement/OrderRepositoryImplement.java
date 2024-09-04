@@ -1,10 +1,10 @@
 package com.fh.scms.repository.implement;
 
+import com.fh.scms.dto.order.OrderResponseForTracking;
 import com.fh.scms.enums.OrderStatus;
 import com.fh.scms.enums.OrderType;
 import com.fh.scms.pojo.Order;
-import com.fh.scms.pojo.OrderDetails;
-import com.fh.scms.pojo.Product;
+import com.fh.scms.pojo.*;
 import com.fh.scms.repository.OrderRepository;
 import com.fh.scms.util.Constants;
 import com.fh.scms.util.Pagination;
@@ -65,15 +65,29 @@ public class OrderRepositoryImplement implements OrderRepository {
     }
 
     @Override
-    public Order findByOrderNumber(String orderNumber) {
+    public OrderResponseForTracking findByOrderNumber(String orderNumber) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
+        CriteriaQuery<OrderResponseForTracking> criteria = builder.createQuery(OrderResponseForTracking.class);
+
         Root<Order> root = criteria.from(Order.class);
+        Join<Order, DeliverySchedule> deliveryScheduleJoin = root.join("deliverySchedule", JoinType.LEFT);
+        Join<DeliverySchedule, Shipment> shipmentJoin = deliveryScheduleJoin.join("shipmentSet", JoinType.LEFT);
 
         try {
-            criteria.select(root).where(builder.equal(root.get("orderNumber"), orderNumber));
-            Query<Order> query = session.createQuery(criteria);
+            criteria.multiselect(builder.construct(
+                    OrderResponseForTracking.class,
+                    root.get("type").alias("orderType"),
+                    root.get("status").alias("orderStatus"),
+                    root.get("createdAt").alias("orderDate"),
+                    deliveryScheduleJoin.get("scheduledDate"),
+                    shipmentJoin.get("cost").alias("shippingCost"),
+                    shipmentJoin.get("currentLocation"),
+                    shipmentJoin.get("trackingNumber"),
+                    shipmentJoin.get("status").alias("shipmentStatus"),
+                    shipmentJoin.get("shipper").get("name").alias("shipperName")
+            )).where(builder.equal(root.get("orderNumber"), orderNumber));
+            Query<OrderResponseForTracking> query = session.createQuery(criteria);
 
             return query.getSingleResult();
         } catch (Exception e) {

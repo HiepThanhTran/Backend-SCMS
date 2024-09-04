@@ -26,6 +26,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@Transactional
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/orders", produces = "application/json; charset=UTF-8")
 public class APIOrderController {
@@ -35,7 +36,6 @@ public class APIOrderController {
     private final UserService userService;
 
     @GetMapping
-    @Transactional
     public ResponseEntity<?> listOrders(Principal principal, @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
         User user = this.userService.findByUsername(principal.getName());
         Optional.ofNullable(user).orElseThrow(() -> new EntityNotFoundException("không tìm thấy người dùng"));
@@ -48,9 +48,7 @@ public class APIOrderController {
 
     @GetMapping(path = "/{orderNumber}")
     public ResponseEntity<?> findOrderByOrderNumber(@PathVariable String orderNumber) {
-        Order order = this.orderService.findByOrderNumber(orderNumber);
-
-        return ResponseEntity.ok(this.orderService.getOrderResponse(order));
+        return ResponseEntity.ok(this.orderService.findByOrderNumber(orderNumber));
     }
 
     @PostMapping(path = "/checkout")

@@ -3,37 +3,39 @@ package com.fh.scms.dto.order;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.scms.enums.OrderStatus;
 import com.fh.scms.enums.OrderType;
+import com.fh.scms.enums.ShipmentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderResponse {
+public class OrderResponseForTracking {
 
-    private Long id;
+    private OrderType orderType;
 
-    private String orderNumber;
-
-    private String invoiceNumber;
-
-    private OrderType type;
-
-    private OrderStatus status;
+    private OrderStatus orderStatus;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Date orderDate;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate expectedDelivery;
+    private LocalDate scheduledDate;
 
-    private Set<OrderDetailsReponse> orderDetailsSet;
+    private BigDecimal shippingCost;
+
+    private String currentLocation;
+
+    private String trackingNumber;
+
+    private ShipmentStatus shipmentStatus;
+
+    private String shipperName;
 }
