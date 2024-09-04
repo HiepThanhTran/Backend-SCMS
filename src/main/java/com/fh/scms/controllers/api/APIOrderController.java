@@ -46,6 +46,13 @@ public class APIOrderController {
         return ResponseEntity.ok(this.orderService.getAllOrderResponse(orderList));
     }
 
+    @GetMapping(path = "/{orderNumber}")
+    public ResponseEntity<?> findOrderByOrderNumber(@PathVariable String orderNumber) {
+        Order order = this.orderService.findByOrderNumber(orderNumber);
+
+        return ResponseEntity.ok(this.orderService.getOrderResponse(order));
+    }
+
     @PostMapping(path = "/checkout")
     public ResponseEntity<?> checkout(Principal principal, @RequestBody @Valid OrderRequest orderRequest) {
         User user = this.userService.findByUsername(principal.getName());

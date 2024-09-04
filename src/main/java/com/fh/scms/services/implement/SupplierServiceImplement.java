@@ -212,13 +212,13 @@ public class SupplierServiceImplement implements SupplierService {
                     .user(user)
                     .supplier(supplier)
                     .rating(ratingRequestCreate.getRating())
-                    .content(ratingRequestCreate.getComment())
+                    .content(ratingRequestCreate.getContent())
                     .criteria(ratingRequestCreate.getCriteria())
                     .build();
             this.ratingRepository.save(rating);
         } else {
             rating.setRating(ratingRequestCreate.getRating());
-            rating.setContent(ratingRequestCreate.getComment());
+            rating.setContent(ratingRequestCreate.getContent());
             rating.setCriteria(ratingRequestCreate.getCriteria());
             this.ratingRepository.update(rating);
         }

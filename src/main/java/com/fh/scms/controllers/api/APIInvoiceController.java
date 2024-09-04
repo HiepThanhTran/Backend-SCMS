@@ -48,6 +48,13 @@ public class APIInvoiceController {
         return ResponseEntity.ok(invoiceList);
     }
 
+    @GetMapping(path = "/{invoiceNumber}")
+    public ResponseEntity<?> findInvoiceByInvoiceNumber(@PathVariable String invoiceNumber) {
+        InvoiceResponse invoice = this.invoiceService.getInvoiceResponse(this.invoiceService.findByInvoiceNumber(invoiceNumber));
+
+        return ResponseEntity.ok(invoice);
+    }
+
     @PostMapping(path = "/charge")
     public ResponseEntity<?> charge(@RequestBody @Valid ChargeRequest chargeRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

@@ -40,6 +40,24 @@ public class InvoiceRepositoryImplement implements InvoiceRepository {
     }
 
     @Override
+    public Invoice findByInvoiceNumber(String invoiceNumber) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Invoice> criteria = builder.createQuery(Invoice.class);
+        Root<Invoice> root = criteria.from(Invoice.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("invoiceNumber"), invoiceNumber));
+            Query<Invoice> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            LoggerFactory.getLogger(InvoiceRepositoryImplement.class).error("An error occurred while getting invoice by invoice number", e);
+            return null;
+        }
+    }
+
+    @Override
     public Invoice findByOrderId(Long orderId) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

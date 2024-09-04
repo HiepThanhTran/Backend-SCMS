@@ -15,7 +15,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "invoice")
+@Table(name = "invoice", indexes = {
+        @Index(name = "invoice_number_index", columnList = "invoice_number", unique = true),
+})
 public class Invoice extends BaseEntity implements Serializable {
 
     @Builder.Default

@@ -33,6 +33,11 @@ public class InvoiceServiceImplement implements InvoiceService {
     }
 
     @Override
+    public Invoice findByInvoiceNumber(String invoiceNumber) {
+        return this.invoiceRepository.findByInvoiceNumber(invoiceNumber);
+    }
+
+    @Override
     public void save(Invoice invoice) {
         this.invoiceRepository.save(invoice);
     }

@@ -9,6 +9,8 @@ public interface InvoiceRepository {
 
     Invoice findById(Long id);
 
+    Invoice findByInvoiceNumber(String invoiceNumber);
+
     Invoice findByOrderId(Long orderId);
 
     void save(Invoice invoice);

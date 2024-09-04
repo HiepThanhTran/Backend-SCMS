@@ -65,6 +65,24 @@ public class OrderRepositoryImplement implements OrderRepository {
     }
 
     @Override
+    public Order findByOrderNumber(String orderNumber) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
+        Root<Order> root = criteria.from(Order.class);
+
+        try {
+            criteria.select(root).where(builder.equal(root.get("orderNumber"), orderNumber));
+            Query<Order> query = session.createQuery(criteria);
+
+            return query.getSingleResult();
+        } catch (Exception e) {
+            LoggerFactory.getLogger(OrderRepositoryImplement.class).error("An error occurred while getting order by order number", e);
+            return null;
+        }
+    }
+
+    @Override
     public void save(Order order) {
         Session session = this.getCurrentSession();
         session.persist(order);
@@ -191,6 +209,7 @@ public class OrderRepositoryImplement implements OrderRepository {
 
         criteria.select(root).where(predicates.toArray(Predicate[]::new)).distinct(true);
         Query<Order> query = session.createQuery(criteria);
+        Pagination.paginator(query, params);
 
         return query.getResultList();
     }

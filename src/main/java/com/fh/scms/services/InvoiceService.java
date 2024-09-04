@@ -10,6 +10,8 @@ public interface InvoiceService {
 
     Invoice findById(Long id);
 
+    Invoice findByInvoiceNumber(String invoiceNumber);
+
     void save(Invoice invoice);
 
     void update(Invoice invoice);

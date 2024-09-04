@@ -13,6 +13,8 @@ public interface OrderRepository {
 
     Order findById(Long id);
 
+    Order findByOrderNumber(String orderNumber);
+
     void save(Order order);
 
     void update(Order order);

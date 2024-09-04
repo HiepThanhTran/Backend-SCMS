@@ -20,7 +20,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "\"order\"")
+@Table(name = "\"order\"", indexes = {
+        @Index(name = "order_number_index", columnList = "order_number", unique = true),
+})
 public class Order extends BaseEntity implements Serializable {
 
     @Builder.Default

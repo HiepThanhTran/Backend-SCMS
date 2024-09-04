@@ -22,7 +22,7 @@ public class RatingRequestCreate {
     @DecimalMax(value = "5.00", message = "{rating.max}")
     private BigDecimal rating = BigDecimal.valueOf(5);
 
-    private String comment;
+    private String content;
 
     @NotNull(message = "{rating.criteria.notNull}")
     private CriteriaType criteria;

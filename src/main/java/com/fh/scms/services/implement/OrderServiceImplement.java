@@ -46,6 +46,11 @@ public class OrderServiceImplement implements OrderService {
     }
 
     @Override
+    public Order findByOrderNumber(String orderNumber) {
+        return this.orderRepository.findByOrderNumber(orderNumber);
+    }
+
+    @Override
     public void save(Order order) {
         this.orderRepository.save(order);
     }
