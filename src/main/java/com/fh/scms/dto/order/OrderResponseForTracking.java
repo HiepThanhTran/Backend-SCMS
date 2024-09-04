@@ -35,7 +35,5 @@ public class OrderResponseForTracking {
 
     private String trackingNumber;
 
-    private ShipmentStatus shipmentStatus;
-
     private String shipperName;
 }

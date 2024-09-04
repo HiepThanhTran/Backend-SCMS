@@ -84,7 +84,6 @@ public class OrderRepositoryImplement implements OrderRepository {
                     shipmentJoin.get("cost"),
                     shipmentJoin.get("currentLocation"),
                     shipmentJoin.get("trackingNumber"),
-                    shipmentJoin.get("status"),
                     shipmentJoin.get("shipper").get("name")
             )).where(builder.equal(root.get("orderNumber"), orderNumber));
 
