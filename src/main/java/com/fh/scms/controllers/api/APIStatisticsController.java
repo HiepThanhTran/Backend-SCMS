@@ -24,6 +24,21 @@ public class APIStatisticsController {
 
     private final StatisticsService statisticsService;
 
+    @GetMapping("/revenue/{period}")
+    public ResponseEntity<?> revenueByPeriod(@PathVariable(value = "period") String period, @RequestParam Integer year) {
+        return ResponseEntity.ok(this.statisticsService.getStatisticsRevenueByPeroid(year, period));
+    }
+
+    @GetMapping("/revenue/{period}/products")
+    public ResponseEntity<?> revenueProductsByPeriod(@PathVariable(value = "period") String period, @RequestParam Integer year) {
+        return ResponseEntity.ok(this.statisticsService.findProductsOfRevenueByPeroid(year, period));
+    }
+
+    @GetMapping("/revenue/{period}/categories")
+    public ResponseEntity<?> revenueCategoriesByPeriod(@PathVariable(value = "period") String period, @RequestParam Integer year) {
+        return ResponseEntity.ok(this.statisticsService.findCategoriesOfRevenueByPeroid(year, period));
+    }
+
     @GetMapping("/revenue/current-week")
     public ResponseEntity<?> revenueCurrentWeek() {
         return ResponseEntity.ok(this.statisticsService.getStatisticsRevenueByWeeks(Constants.CURRENT_WEEK));

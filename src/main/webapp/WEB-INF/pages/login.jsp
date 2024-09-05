@@ -11,7 +11,10 @@
     <title>Đăng nhập</title>
 
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon.ico"/>"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="<c:url value="/images/icons/apple-touch-icon.png"/>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<c:url value="/images/icons/favicon-32x32.png"/>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<c:url value="/images/icons/favicon-16x16.png"/>">
+    <link rel="manifest" href="<c:url value="/images/icons/site.webmanifest"/>">
     <!--===============================================================================================-->
     <link href="<c:url value="/vendor/bootstrap/css/bootstrap.min.css"/>" rel="stylesheet">
     <!--===============================================================================================-->

@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a class="navbar-brand navbar-custom__logo d-flex align-items-center" href="<c:url value="/" />">
-                <img src="<c:url value="/images/logo.png" />" alt="Logo" width="30" height="30" style="margin-right: 12px"
+                <img src="<c:url value="/images/logo-scms.png" />" alt="Logo" width="30" height="30" style="margin-right: 12px"
                      class="d-inline-block align-text-top">
                 HARMONY ADMIN
             </a>

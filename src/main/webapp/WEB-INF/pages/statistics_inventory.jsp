@@ -100,7 +100,7 @@
     </div>
 </div>
 
-<script src="<c:url value="/js/inventorystatus.js"/>"></script>
+<script src="<c:url value="/js/statisticsinventory.js"/>"></script>
 <script>
     const warehouseLength = ${fn:length(warehouseCapacityReport)};
 

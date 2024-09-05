@@ -1,9 +1,6 @@
 package com.fh.scms.repository.implement;
 
-import com.fh.scms.dto.statistics.InventoryStatusReportEntry;
-import com.fh.scms.dto.statistics.ProductStatusReportEntry;
-import com.fh.scms.dto.statistics.RevenueStatisticsEntry;
-import com.fh.scms.dto.statistics.WarehouseStatusReportEntry;
+import com.fh.scms.dto.statistics.*;
 import com.fh.scms.enums.OrderType;
 import com.fh.scms.enums.ProductStatus;
 import com.fh.scms.pojo.Order;
@@ -37,10 +34,103 @@ public class StatisticsRepositoryImplement implements StatisticsRepository {
     }
 
     @Override
-    public RevenueStatisticsEntry generateStatisticsRevenueByWeeks(int days) {
+    public List<Object[]> generateStatisticsRevenueByPeroid(int year, String period) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<RevenueStatisticsEntry> criteria = builder.createQuery(RevenueStatisticsEntry.class);
+        CriteriaQuery<Object[]> criteria = builder.createQuery(Object[].class);
+
+        Root<Invoice> invoiceRoot = criteria.from(Invoice.class);
+
+        // Tính tổng doanh thu theo tháng hoặc quý
+        criteria.multiselect(
+                builder.function(period, Integer.class, invoiceRoot.get("createdAt")),
+                builder.sum(invoiceRoot.get("totalAmount"))
+        );
+        criteria.where(
+                builder.equal(invoiceRoot.get("paid"), true),
+                builder.equal(invoiceRoot.get("order").get("type"), OrderType.OUTBOUND),
+                builder.equal(builder.function("YEAR", Integer.class, invoiceRoot.get("createdAt")), year)
+        );
+        criteria.groupBy(builder.function(period, Integer.class, invoiceRoot.get("createdAt")));
+
+        Query<Object[]> query = session.createQuery(criteria);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<ProductStatisticsForRevenueEntry> findProductsOfRevenueByPeroid(int year, String period) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ProductStatisticsForRevenueEntry> criteria = builder.createQuery(ProductStatisticsForRevenueEntry.class);
+
+        Root<Invoice> invoiceRoot = criteria.from(Invoice.class);
+        Join<Invoice, Order> orderJoin = invoiceRoot.join("order");
+        Join<Order, OrderDetails> orderOrderDetailsJoin = orderJoin.join("orderDetailsSet");
+
+        // Tính doanh thu của từng sản phẩm theo tháng hoặc quý
+        criteria.select(builder.construct(
+                ProductStatisticsForRevenueEntry.class,
+                orderOrderDetailsJoin.get("product").get("id"),
+                orderOrderDetailsJoin.get("product").get("name"),
+                invoiceRoot.get("createdAt"),
+                builder.sum(invoiceRoot.get("totalAmount"))
+        ));
+        criteria.where(
+                builder.equal(invoiceRoot.get("paid"), true),
+                builder.equal(invoiceRoot.get("order").get("type"), OrderType.OUTBOUND),
+                builder.equal(builder.function("YEAR", Integer.class, invoiceRoot.get("createdAt")), year)
+        );
+        criteria.groupBy(
+                orderOrderDetailsJoin.get("product").get("id"),
+                orderOrderDetailsJoin.get("product").get("name"),
+                invoiceRoot.get("createdAt"),
+                builder.function(period, Integer.class, invoiceRoot.get("createdAt"))
+        );
+
+        Query<ProductStatisticsForRevenueEntry> query = session.createQuery(criteria);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<CategoryStatisticsForeRevenueEntry> findCategoriesOfRevenueByPeroid(int year, String period) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<CategoryStatisticsForeRevenueEntry> criteria = builder.createQuery(CategoryStatisticsForeRevenueEntry.class);
+
+        Root<Invoice> invoiceRoot = criteria.from(Invoice.class);
+        Join<Invoice, Order> orderJoin = invoiceRoot.join("order");
+        Join<Order, OrderDetails> orderOrderDetailsJoin = orderJoin.join("orderDetailsSet");
+
+        // Tính doanh thu của từng danh mục theo tháng hoặc quý
+        criteria.select(builder.construct(
+                CategoryStatisticsForeRevenueEntry.class,
+                orderOrderDetailsJoin.get("product").get("category").get("name"),
+                builder.sum(invoiceRoot.get("totalAmount"))
+        ));
+        criteria.where(
+                builder.equal(invoiceRoot.get("paid"), true),
+                builder.equal(invoiceRoot.get("order").get("type"), OrderType.OUTBOUND),
+                builder.equal(builder.function("YEAR", Integer.class, invoiceRoot.get("createdAt")), year)
+        );
+        criteria.groupBy(
+                orderOrderDetailsJoin.get("product").get("category").get("id"),
+                builder.function(period, Integer.class, invoiceRoot.get("createdAt"))
+        );
+        criteria.orderBy(builder.desc(builder.sum(invoiceRoot.get("totalAmount"))));
+
+        Query<CategoryStatisticsForeRevenueEntry> query = session.createQuery(criteria);
+        query.setMaxResults(10);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public RevenueStatisticsForDashBoardEntry generateStatisticsRevenueByWeeks(int days) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<RevenueStatisticsForDashBoardEntry> criteria = builder.createQuery(RevenueStatisticsForDashBoardEntry.class);
 
         Root<Invoice> invoiceRoot = criteria.from(Invoice.class);
 
@@ -84,7 +174,7 @@ public class StatisticsRepositoryImplement implements StatisticsRepository {
         Date startDateTime = Date.from(monday.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date endDateTime = Date.from(sunday.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant());
 
-        // Chỉ lấy các hóa đơn đã thanh toán, loại hóa đơn là xuất kho và nằm trong tuần hiện tại
+        // Chỉ lấy các hóa đơn đã thanh toán, loại hóa đơn là xuất kho và nằm trong tuần đã tính toán ở trên
         criteria.where(
                 builder.equal(invoiceRoot.get("paid"), true),
                 builder.equal(invoiceRoot.get("order").get("type"), OrderType.OUTBOUND),
@@ -92,7 +182,7 @@ public class StatisticsRepositoryImplement implements StatisticsRepository {
         );
 
         // Lấy kết quả tổng quan (doanh thu, đơn hàng, sản phẩm)
-        RevenueStatisticsEntry result = session.createQuery(criteria).getSingleResult();
+        RevenueStatisticsForDashBoardEntry result = session.createQuery(criteria).getSingleResult();
 
         // Tính toán chi tiết doanh thu theo ngày trong tuần bằng cách nhóm theo DAYOFWEEK
         CriteriaQuery<Object[]> dayQuery = builder.createQuery(Object[].class);
@@ -113,7 +203,7 @@ public class StatisticsRepositoryImplement implements StatisticsRepository {
         List<Object[]> dailyResults = session.createQuery(dayQuery).getResultList();
 
         // Mapping dữ liệu kết quả vào RevenueStatisticsEntry.DailyDetail
-        List<RevenueStatisticsEntry.DailyDetail> details = new ArrayList<>();
+        List<RevenueStatisticsForDashBoardEntry.DailyDetail> details = new ArrayList<>();
         Map<Integer, BigDecimal> dayAmountMap = new HashMap<>();
         for (Object[] row : dailyResults) {
             int dayOfWeek = Integer.parseInt(String.valueOf(row[0]));
@@ -125,7 +215,7 @@ public class StatisticsRepositoryImplement implements StatisticsRepository {
         // Gán dữ liệu cho thứ 2 -> Chủ nhật
         for (int i = 2; i <= 8; i++) {
             BigDecimal amount = dayAmountMap.getOrDefault(i, BigDecimal.ZERO);
-            details.add(new RevenueStatisticsEntry.DailyDetail(i, amount));
+            details.add(new RevenueStatisticsForDashBoardEntry.DailyDetail(i, amount));
         }
 
         result.setDetails(details);
@@ -233,25 +323,22 @@ public class StatisticsRepositoryImplement implements StatisticsRepository {
         LocalDate today = LocalDate.now();
         LocalDate plusDays = today.plusDays(Constants.EXPIRING_SOON_DAYS);
 
-        Date startDateTime = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date endDateTime = Date.from(plusDays.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant());
-
         // Sản phẩm còn hạn: ExpiryDate >= Ngày hiện tại + Constants.EXPIRING_SOON_DAYS (30 ngày)
         Expression<Number> validCount = builder.sum(
                 builder.<Number>selectCase()
-                        .when(builder.greaterThanOrEqualTo(productRoot.get("expiryDate"), endDateTime), 1L).otherwise(0L)
+                        .when(builder.greaterThanOrEqualTo(productRoot.get("expiryDate"), today), 1L).otherwise(0L)
         );
 
         // Sản phẩm đã hết hạn: ExpiryDate < Ngày hiện tại
         Expression<Number> expiredCount = builder.sum(
                 builder.<Number>selectCase()
-                        .when(builder.lessThan(productRoot.get("expiryDate"), startDateTime), 1L).otherwise(0L)
+                        .when(builder.lessThan(productRoot.get("expiryDate"), today), 1L).otherwise(0L)
         );
 
         // Sản phẩm sắp hết hạn: ExpiryDate >= Ngày hiện tại và ExpiryDate <= Ngày hiện tại + Constants.EXPIRING_SOON_DAYS (30 ngày)
         Expression<Number> expiringSoonCount = builder.sum(
                 builder.<Number>selectCase()
-                        .when(builder.between(productRoot.get("expiryDate"), startDateTime, endDateTime), 1L).otherwise(0L)
+                        .when(builder.between(productRoot.get("expiryDate"), today, plusDays), 1L).otherwise(0L)
         );
 
         criteria.multiselect(validCount, expiredCount, expiringSoonCount);
@@ -290,20 +377,17 @@ public class StatisticsRepositoryImplement implements StatisticsRepository {
         LocalDate today = LocalDate.now();
         LocalDate plusDays = today.plusDays(Constants.EXPIRING_SOON_DAYS);
 
-        Date startDateTime = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date endDateTime = Date.from(plusDays.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant());
-
         switch (productStatus) {
             case EXPIRING_SOON:
                 // Lọc theo ExpiryDate >= Ngày hiện tại và ExpiryDate <= Ngày hiện tại + Constants.EXPIRING_SOON_DAYS (30 ngày)
-                criteria.where(builder.between(productRoot.get("expiryDate"), startDateTime, endDateTime),
+                criteria.where(builder.between(productRoot.get("expiryDate"), today, plusDays),
                         builder.equal(inventoryDetailsJoin.get("inventory").get("id"), inventoryId)
                 );
                 break;
             case EXPIRED:
                 // Lọc theo ExpiryDate < Ngày hiện tại
                 criteria.where(
-                        builder.lessThanOrEqualTo(productRoot.get("expiryDate"), startDateTime),
+                        builder.lessThanOrEqualTo(productRoot.get("expiryDate"), today),
                         builder.equal(inventoryDetailsJoin.get("inventory").get("id"), inventoryId)
                 );
                 break;

@@ -6,7 +6,7 @@
 <h2 class="mb-4 mt-5 text-center">Thống kê hiệu suất của nhà cung cấp</h2>
 <hr>
 <label class="text-dark h5 mb-4" for="yearpicker">Chọn năm:</label>
-<input style="padding: 4px 12px 4px 12px; border-radius: 12px; max-width: 66px;"
+<input style="border-width: 0; padding: 4px 12px 4px 12px; border-radius: 8px; max-width: 66px;"
        type="text"
        id="yearpicker"
        class="yearpicker"
@@ -18,15 +18,15 @@
         <table id="supplierPerformanceTable" class="table table-bordered table-hover display nowrap">
             <thead>
             <tr>
-                <th>Id</th>
-                <th>Tên nhà cung cấp</th>
+                <th style="padding: 12px !important;">Id</th>
+                <th style="padding: 12px !important;">Tên nhà cung cấp</th>
             </tr>
             </thead>
             <tbody>
             <c:forEach items="${suppliers}" var="supplier" varStatus="loop">
-                <tr data-index="${loop.index}" data-id="${supplier.id}">
-                    <td>${supplier.id}</td>
-                    <td>${supplier.name}</td>
+                <tr style="cursor: pointer" data-index="${loop.index}" data-id="${supplier.id}">
+                    <td style="padding: 12px !important;">${supplier.id}</td>
+                    <td style="padding: 12px !important;">${supplier.name}</td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -57,7 +57,7 @@
     </div>
 </div>
 
-<script src="<c:url value="/js/supplierperformance.js"/>"></script>
+<script src="<c:url value="/js/statisticsperformance.js"/>"></script>
 <script>
     const supplierPerformanceLength = ${fn:length(suppliers)};
 

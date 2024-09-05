@@ -88,15 +88,15 @@ const updateChart = (data) => {
         return;
     }
 
-    if (chartInstance) {
+    if (revenueChartInstance) {
         const datasetsCost = data.cost.sort((a, b) => a.month - b.month).map(item => item.averageRating)
         const datasetsQuality = data.quality.sort((a, b) => a.month - b.month).map(item => item.averageRating)
         const datasetsDelivery = data.timelyDelivery.sort((a, b) => a.month - b.month).map(item => item.averageRating)
 
-        chartInstance.data.datasets[0].data = datasetsQuality;
-        chartInstance.data.datasets[1].data = datasetsDelivery;
-        chartInstance.data.datasets[2].data = datasetsCost;
-        chartInstance.update();
+        revenueChartInstance.data.datasets[0].data = datasetsQuality;
+        revenueChartInstance.data.datasets[1].data = datasetsDelivery;
+        revenueChartInstance.data.datasets[2].data = datasetsCost;
+        revenueChartInstance.update();
     }
 }
 
@@ -121,8 +121,8 @@ const updateRatingTable = (data) => {
 }
 
 const resetChart = () => {
-    chartInstance.data.datasets[0].data = [];
-    chartInstance.data.datasets[1].data = [];
-    chartInstance.data.datasets[2].data = [];
-    chartInstance.update();
+    revenueChartInstance.data.datasets[0].data = [];
+    revenueChartInstance.data.datasets[1].data = [];
+    revenueChartInstance.data.datasets[2].data = [];
+    revenueChartInstance.update();
 };

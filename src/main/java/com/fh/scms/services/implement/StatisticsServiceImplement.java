@@ -18,8 +18,72 @@ public class StatisticsServiceImplement implements StatisticsService {
     @Autowired
     private StatisticsRepository statisticsRepository;
 
+    public Map<String, Object> getStatisticsRevenueByPeroid(int year, String period) {
+        List<Object[]> results = statisticsRepository.generateStatisticsRevenueByPeroid(year, period);
+
+        List<String> labels = initialLabels(period);
+        List<Double> data = initialData(period);
+
+        for (Object[] result : results) {
+            int key = Integer.parseInt(String.valueOf(result[0]));
+            Double value = Double.parseDouble(String.valueOf(result[1]));
+
+            data.set(key - 1, value);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("labels", labels);
+        response.put("data", data);
+
+        return response;
+    }
+
+    private List<String> initialLabels(@NotNull String period) {
+        List<String> labels = new ArrayList<>();
+        switch (period) {
+            case "month":
+                for (int i = 1; i <= 12; i++) {
+                    labels.add("Tháng " + i);
+                }
+                break;
+            case "quarter":
+                labels = Arrays.asList("Quý 1", "Quý 2", "Quý 3", "Quý 4");
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported period type: " + period);
+        }
+        return labels;
+    }
+
+    private List<Double> initialData(@NotNull String period) {
+        List<Double> data = new ArrayList<>();
+        switch (period) {
+            case "month":
+                for (int i = 1; i <= 12; i++) {
+                    data.add(0.0);
+                }
+                break;
+            case "quarter":
+                data = Arrays.asList(0.0, 0.0, 0.0, 0.0);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported period type: " + period);
+        }
+        return data;
+    }
+
     @Override
-    public RevenueStatisticsEntry getStatisticsRevenueByWeeks(int days) {
+    public List<ProductStatisticsForRevenueEntry> findProductsOfRevenueByPeroid(int year, String period) {
+        return this.statisticsRepository.findProductsOfRevenueByPeroid(year, period);
+    }
+
+    @Override
+    public List<CategoryStatisticsForeRevenueEntry> findCategoriesOfRevenueByPeroid(int year, String period) {
+        return this.statisticsRepository.findCategoriesOfRevenueByPeroid(year, period);
+    }
+
+    @Override
+    public RevenueStatisticsForDashBoardEntry getStatisticsRevenueByWeeks(int days) {
         return this.statisticsRepository.generateStatisticsRevenueByWeeks(days);
     }
 
@@ -78,7 +142,7 @@ public class StatisticsServiceImplement implements StatisticsService {
     }
 
     @Override
-    public List<ProductStatisticEntry> getStatisticsProductsStatusOfInventory(Long inventoryId) {
+    public List<ProductStatusStatisticEntry> getStatisticsProductsStatusOfInventory(Long inventoryId) {
         List<Object[]> results = this.statisticsRepository.generateStatisticsProductsStatusOfInventory(inventoryId);
         if (results.isEmpty()) {
             return Collections.emptyList();
@@ -90,9 +154,9 @@ public class StatisticsServiceImplement implements StatisticsService {
         Long expiringSoonCount = ((Number) result[2]).longValue();
 
         return Arrays.asList(
-                new ProductStatisticEntry("Sản phẩm còn hạn", validCount),
-                new ProductStatisticEntry("Sản phẩm đã hết hạn", expiredCount),
-                new ProductStatisticEntry("Sản phẩm sắp hết hạn", expiringSoonCount)
+                new ProductStatusStatisticEntry("Sản phẩm còn hạn", validCount),
+                new ProductStatusStatisticEntry("Sản phẩm đã hết hạn", expiredCount),
+                new ProductStatusStatisticEntry("Sản phẩm sắp hết hạn", expiringSoonCount)
         );
     }
 

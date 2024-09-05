@@ -38,9 +38,9 @@
     </definition>
 
     <!--Thống kê hiệu suất nhà cung cấp-->
-    <definition name="supplier_performance" extends="baseNonSidebar">
+    <definition name="statistics_performance" extends="baseNonSidebar">
         <put-attribute name="title" value="Thống kê hiệu suất nhà cung cấp"/>
-        <put-attribute name="content" value="/WEB-INF/pages/supplier_performance.jsp"/>
+        <put-attribute name="content" value="/WEB-INF/pages/statistics_performance.jsp"/>
     </definition>
 
     <!--Thống kê doanh thu-->
@@ -50,9 +50,9 @@
     </definition>
 
     <!--Báo cáo tồn kho-->
-    <definition name="inventory_status" extends="baseNonSidebar">
+    <definition name="statistics_inventory" extends="baseNonSidebar">
         <put-attribute name="title" value="Báo cáo tồn kho"/>
-        <put-attribute name="content" value="/WEB-INF/pages/inventory_status.jsp"/>
+        <put-attribute name="content" value="/WEB-INF/pages/statistics_inventory.jsp"/>
     </definition>
 
     <!--Category-->

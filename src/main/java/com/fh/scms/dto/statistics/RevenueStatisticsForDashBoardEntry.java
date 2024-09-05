@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RevenueStatisticsEntry {
+public class RevenueStatisticsForDashBoardEntry {
 
     private BigDecimal totalAmount;
 
@@ -22,7 +22,7 @@ public class RevenueStatisticsEntry {
 
     private List<DailyDetail> details;
 
-    public RevenueStatisticsEntry(BigDecimal totalAmount, Long totalOrders, Long totalProducts) {
+    public RevenueStatisticsForDashBoardEntry(BigDecimal totalAmount, Long totalOrders, Long totalProducts) {
         this.totalAmount = totalAmount;
         this.totalOrders = totalOrders;
         this.totalProducts = totalProducts;

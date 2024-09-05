@@ -6,22 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductStatusReportEntry {
+public class ProductStatisticsForRevenueEntry {
 
     private Long productId;
 
     private String productName;
 
-    private String productUnit;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date time;
 
-    private Float productQuantity;
-
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate expiryDate;
+    private BigDecimal revenue;
 }

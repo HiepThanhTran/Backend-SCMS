@@ -45,22 +45,22 @@ public class AdminController {
         return "statistics";
     }
 
-    @GetMapping(path = "/admin/statistics/supplier/performance")
-    public String supplierPerformanceReport(Model model) {
-        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
-
-        return "supplier_performance";
-    }
-
     @GetMapping(path = "/admin/statistics/revenue")
     public String statisticsRevenue() {
         return "statistics_revenue";
     }
 
-    @GetMapping(path = "/admin/report/inventory")
+    @GetMapping(path = "/admin/statistics/supplier-performance")
+    public String supplierPerformanceReport(Model model) {
+        model.addAttribute("suppliers", this.supplierService.findAllWithFilter(null));
+
+        return "statistics_performance";
+    }
+
+    @GetMapping(path = "/admin/inventory-report")
     public String inventoryStatusReport(Model model) {
         model.addAttribute("warehouseCapacityReport", this.statisticsService.getWarehouseStatusReport());
 
-        return "inventory_status";
+        return "statistics_inventory";
     }
 }

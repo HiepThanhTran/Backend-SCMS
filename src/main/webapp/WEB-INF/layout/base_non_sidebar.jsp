@@ -10,7 +10,10 @@
     <title><tiles:insertAttribute name="title"/> | Harmony</title>
 
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="<c:url value="/images/icons/favicon.ico"/>"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="<c:url value="/images/icons/apple-touch-icon.png"/>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<c:url value="/images/icons/favicon-32x32.png"/>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<c:url value="/images/icons/favicon-16x16.png"/>">
+    <link rel="manifest" href="<c:url value="/images/icons/site.webmanifest"/>">
     <!--===============================================================================================-->
     <%--Box Icons--%>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -31,6 +34,7 @@
     <!--===============================================================================================-->
     <%--ChartJS--%>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
     <!--===============================================================================================-->
     <%--Axios--%>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

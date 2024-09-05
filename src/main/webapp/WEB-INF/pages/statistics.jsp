@@ -11,7 +11,7 @@
                     Thống kê hiệu suất các nhà cung cấp
                 </h2>
                 <p>Xem thống kê về hiệu suất của nhà cung cấp dựa trên các chỉ số như chất lượng, giao hàng đúng hạn và giá cả.</p>
-                <a href="<c:url value="/admin/statistics/supplier/performance"/>" class="btn btn-outline-primary">
+                <a href="<c:url value="/admin/statistics/supplier-performance"/>" class="btn btn-outline-primary">
                     Xem chi tiết
                 </a>
             </div>
@@ -35,7 +35,7 @@
                     Báo cáo tình trạng tồn kho
                 </h2>
                 <p>Báo cáo chi tiết về tình trạng tồn kho, bao gồm mức tồn kho hiện tại, hàng hóa sắp hết hạn và hàng hóa hết hạn.</p>
-                <a href="<c:url value="/admin/report/inventory"/>" class="btn btn-outline-primary">
+                <a href="<c:url value="/admin/inventory-report"/>" class="btn btn-outline-primary">
                     Xem chi tiết
                 </a>
             </div>

@@ -1,15 +1,18 @@
 package com.fh.scms.repository;
 
-import com.fh.scms.dto.statistics.InventoryStatusReportEntry;
-import com.fh.scms.dto.statistics.ProductStatusReportEntry;
-import com.fh.scms.dto.statistics.RevenueStatisticsEntry;
-import com.fh.scms.dto.statistics.WarehouseStatusReportEntry;
+import com.fh.scms.dto.statistics.*;
 
 import java.util.List;
 
 public interface StatisticsRepository {
 
-    RevenueStatisticsEntry generateStatisticsRevenueByWeeks(int days);
+    List<Object[]> generateStatisticsRevenueByPeroid(int year, String period);
+
+    List<ProductStatisticsForRevenueEntry> findProductsOfRevenueByPeroid(int year, String period);
+
+    List<CategoryStatisticsForeRevenueEntry> findCategoriesOfRevenueByPeroid(int year, String period);
+
+    RevenueStatisticsForDashBoardEntry generateStatisticsRevenueByWeeks(int days);
 
     List<Object[]> generateSupplierPerformanceReport(Long supplierId, Integer year);
 

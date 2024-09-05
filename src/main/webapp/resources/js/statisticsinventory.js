@@ -133,12 +133,12 @@ const updateTable = async (selector, data, fields, formatQuantity = false) => {
 };
 
 const updateChartInstance = (labels, data, titleText) => {
-    if (chartInstance) {
-        chartInstance.data.labels = labels;
-        chartInstance.data.datasets[0].data = data;
-        chartInstance.options.plugins.title.text = titleText;
-        chartInstance.options.scales.r.title.text = titleText;
-        chartInstance.update();
+    if (revenueChartInstance) {
+        revenueChartInstance.data.labels = labels;
+        revenueChartInstance.data.datasets[0].data = data;
+        revenueChartInstance.options.plugins.title.text = titleText;
+        revenueChartInstance.options.scales.r.title.text = titleText;
+        revenueChartInstance.update();
     }
 };
 
@@ -147,15 +147,15 @@ const handleProductHeaderDisplay = (isVisible, warehouse, inventory) => {
     productHeader.innerHTML = `${warehouse} - ${inventory}`;
     productHeader.parentElement.style.display = isVisible ? "block" : "none";
 
-    if (!isVisible && chartInstance) {
+    if (!isVisible && revenueChartInstance) {
         resetChart();
     }
 };
 
 const resetChart = () => {
-    chartInstance.data.labels = [];
-    chartInstance.data.datasets[0].data = [];
-    chartInstance.options.plugins.title.text = 'Thống kê sản phẩm theo hạn sử dụng';
-    chartInstance.options.scales.r.title.text = 'Thống kê sản phẩm theo hạn sử dụng';
-    chartInstance.update();
+    revenueChartInstance.data.labels = [];
+    revenueChartInstance.data.datasets[0].data = [];
+    revenueChartInstance.options.plugins.title.text = 'Thống kê sản phẩm theo hạn sử dụng';
+    revenueChartInstance.options.scales.r.title.text = 'Thống kê sản phẩm theo hạn sử dụng';
+    revenueChartInstance.update();
 };
