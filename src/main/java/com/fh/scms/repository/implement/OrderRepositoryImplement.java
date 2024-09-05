@@ -221,7 +221,7 @@ public class OrderRepositoryImplement implements OrderRepository {
             });
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new)).distinct(true);
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).distinct(true).orderBy(builder.desc(root.get("id")));
         Query<Order> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

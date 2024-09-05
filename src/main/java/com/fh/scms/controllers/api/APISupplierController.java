@@ -4,7 +4,9 @@ import com.fh.scms.dto.MessageResponse;
 import com.fh.scms.dto.product.ProductRequestPublish;
 import com.fh.scms.dto.rating.RatingRequestCreate;
 import com.fh.scms.dto.supplier.SupplierDTO;
+import com.fh.scms.pojo.Product;
 import com.fh.scms.pojo.Supplier;
+import com.fh.scms.services.ProductService;
 import com.fh.scms.services.SupplierService;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +32,7 @@ import java.util.Optional;
 public class APISupplierController {
 
     private final SupplierService supplierService;
+    private final ProductService productService;
 
     @GetMapping
     public ResponseEntity<?> listSuppliers(@RequestParam(required = false, defaultValue = "") Map<String, String> params) {
@@ -59,8 +62,12 @@ public class APISupplierController {
     }
 
     @GetMapping(path = "/{supplierId}/products")
-    public ResponseEntity<?> getProductsOfSupplier(@PathVariable(value = "supplierId") Long supplierId) {
-        return ResponseEntity.ok(this.supplierService.getProductsOfSupplier(supplierId));
+    public ResponseEntity<?> getProductsOfSupplier(@PathVariable(value = "supplierId") Long supplierId,
+                                                   @RequestParam(required = false, defaultValue = "") Map<String, String> params) {
+        params.put("supplier", supplierId.toString());
+        List<Product> products = this.productService.findAllWithFilter(params);
+
+        return ResponseEntity.ok(this.productService.getAllProductResponseForList(products));
     }
 
     @PostMapping(path = "/product/publish")

@@ -106,7 +106,7 @@ public class DeliveryScheduleRepositoryImplement implements DeliveryScheduleRepo
             });
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).orderBy(builder.desc(root.get("id")));
         Query<DeliverySchedule> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

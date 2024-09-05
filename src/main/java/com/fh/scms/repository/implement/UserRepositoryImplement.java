@@ -133,7 +133,7 @@ public class UserRepositoryImplement implements UserRepository {
             }
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).orderBy(builder.desc(root.get("id")));
         Query<User> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

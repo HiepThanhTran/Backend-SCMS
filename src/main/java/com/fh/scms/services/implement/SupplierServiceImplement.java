@@ -136,14 +136,6 @@ public class SupplierServiceImplement implements SupplierService {
     }
 
     @Override
-    public List<ProductResponseForList> getProductsOfSupplier(Long supplierId) {
-        Supplier supplier = this.supplierRepository.findById(supplierId);
-        Optional.ofNullable(supplier).orElseThrow(() -> new EntityNotFoundException("Nhà cung cấp không tồn tại"));
-
-        return this.productService.getAllProductResponseForList(new ArrayList<>(supplier.getProductSet()));
-    }
-
-    @Override
     public ProductResponseForDetails publishProduct(String username, @NotNull ProductRequestPublish productRequestPublish) {
         Supplier supplier = this.getProfileSupplier(username);
         Optional.ofNullable(supplier).orElseThrow(() -> new EntityNotFoundException("Nhà cung cấp không tồn tại"));

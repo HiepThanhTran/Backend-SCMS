@@ -91,7 +91,7 @@ public class InventoryRepositoryImplement implements InventoryRepository {
             }
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).orderBy(builder.desc(root.get("id")));
         Query<Inventory> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

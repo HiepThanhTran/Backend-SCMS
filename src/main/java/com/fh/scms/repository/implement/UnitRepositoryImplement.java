@@ -89,7 +89,7 @@ public class UnitRepositoryImplement implements UnitRepository {
             }
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).orderBy(builder.desc(root.get("id")));
         Query<Unit> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

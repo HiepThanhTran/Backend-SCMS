@@ -111,7 +111,7 @@ public class CustomerRepositoryImplement implements CustomerRepository {
             }
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).orderBy(builder.desc(root.get("id")));
         Query<Customer> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

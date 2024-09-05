@@ -126,7 +126,7 @@ public class InventoryDetailsRepositoryImplement implements InventoryDetailsRepo
             });
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).orderBy(builder.desc(root.get("id")));
         Query<InventoryDetails> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

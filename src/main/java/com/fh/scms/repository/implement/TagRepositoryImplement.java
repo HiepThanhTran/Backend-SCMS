@@ -100,7 +100,7 @@ public class TagRepositoryImplement implements TagRepository {
             }
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).orderBy(builder.desc(root.get("id")));
         Query<Tag> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

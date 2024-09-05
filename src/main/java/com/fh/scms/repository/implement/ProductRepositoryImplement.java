@@ -118,7 +118,7 @@ public class ProductRepositoryImplement implements ProductRepository {
             });
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new)).distinct(true);
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).distinct(true).orderBy(builder.desc(root.get("id")));
         Query<Product> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

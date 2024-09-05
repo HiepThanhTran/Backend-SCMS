@@ -106,7 +106,7 @@ public class SupplierRepositoryImplement implements SupplierRepository {
             }
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).orderBy(builder.desc(root.get("id")));
         Query<Supplier> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

@@ -105,7 +105,7 @@ public class ShipperRepositoryImplement implements ShipperRepository {
             }
         }
 
-        criteria.select(root).where(predicates.toArray(Predicate[]::new));
+        criteria.select(root).where(predicates.toArray(Predicate[]::new)).orderBy(builder.desc(root.get("id")));
         Query<Shipper> query = session.createQuery(criteria);
         Pagination.paginator(query, params);
 

@@ -34,8 +34,6 @@ public interface SupplierService {
 
     SupplierDTO updateProfileSupplier(String username, SupplierDTO supplierDTO);
 
-    List<ProductResponseForList> getProductsOfSupplier(Long supplierId);
-
     ProductResponseForDetails publishProduct(String username, ProductRequestPublish productRequestPublish);
 
     void unpublishProduct(String username, Long productId);
