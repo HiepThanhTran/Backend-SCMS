@@ -7,8 +7,8 @@ import com.fh.scms.dto.order.OrderRequest;
 import com.fh.scms.dto.pt.PaymentTermsRequest;
 import com.fh.scms.dto.user.UserRequestRegister;
 import com.fh.scms.enums.*;
-import com.fh.scms.pojo.*;
 import com.fh.scms.pojo.System;
+import com.fh.scms.pojo.*;
 import com.fh.scms.repository.*;
 import com.fh.scms.services.OrderService;
 import com.fh.scms.services.ShipperService;
@@ -247,7 +247,7 @@ public class GlobalService {
                     .supplier(supplier)
                     .criteria(criteriaTypes.get(0))
                     .build();
-            rating.setCreatedAt(this.getRandomDateTimeInYear("rating"));
+            rating.setCreatedAt(this.getRandomDateTimeInYear());
 
             this.ratingRepository.save(rating);
             count.getAndIncrement();
@@ -612,30 +612,23 @@ public class GlobalService {
     }
 
     private @NotNull Date getRandomDateTimeInYear() {
-        LocalDateTime now = LocalDateTime.now();
+        // Lấy tháng hiện tại
+        LocalDate now = LocalDate.now();
+        int currentMonth = now.getMonthValue();
 
-        // Ngày bắt đầu là ngày một tháng trước
-        LocalDate start = LocalDate.from(now.minusMonths(1).withDayOfMonth(1));
+        // Random tháng từ 1 đến tháng hiện tại
+        int randomMonth = ThreadLocalRandom.current().nextInt(1, currentMonth + 1);
 
-        // Chuyển đổi các ngày thành số ngày từ epoch để tạo ngày ngẫu nhiên
-        long startEpochDay = start.toEpochDay();
-        long endEpochDay = now.toLocalDate().toEpochDay();
-
-        // Tạo một ngày ngẫu nhiên giữa start và end
-        long randomEpochDay = ThreadLocalRandom.current().nextLong(startEpochDay, endEpochDay + 1);
-
-        return getDate(randomEpochDay);
-    }
-
-    private @NotNull Date getRandomDateTimeInYear(String rating) {
-        int randomMonth = ThreadLocalRandom.current().nextInt(1, 13);
-
-        LocalDate start = LocalDate.of(LocalDate.now().getYear(), randomMonth, 1);
+        // Tạo ngày bắt đầu và ngày kết thúc cho tháng random
+        LocalDate start = LocalDate.of(now.getYear(), randomMonth, 1);
         LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
 
+        // Random ngày trong khoảng từ start đến end
         long randomDay = ThreadLocalRandom.current().nextLong(start.toEpochDay(), end.toEpochDay() + 1);
 
-        return getDate(randomDay);
+        // Chuyển đổi từ epoch day sang LocalDate và sau đó sang Date
+        LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
+        return Date.from(randomDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     @NotNull

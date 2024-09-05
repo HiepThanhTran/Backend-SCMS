@@ -3,7 +3,6 @@ package com.fh.scms.dto.order;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.scms.enums.OrderStatus;
 import com.fh.scms.enums.OrderType;
-import com.fh.scms.enums.ShipmentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

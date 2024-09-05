@@ -91,8 +91,10 @@ const centerTextInDoughnut = {
 const totalAmountChart = () => {
     const totalAmountCurrentWeekNum = parseFloat(totalAmountCurrentWeek);
     const totalAmountLastWeekNum = parseFloat(totalAmountLastWeek);
-    const dataTotalAmountChart = totalAmountCurrentWeekNum / totalAmountLastWeekNum * 100;
+    let dataTotalAmountChart = totalAmountCurrentWeekNum / totalAmountLastWeekNum * 100;
     const totalAmountChart = document.getElementById("totalAmountChart").getContext("2d")
+
+    dataTotalAmountChart =  isNaN(dataTotalAmountChart) ? 0 : dataTotalAmountChart;
 
     const infoPercentageRevenue = document.getElementById("info-per-revenue");
     if (dataTotalAmountChart > 100) {
@@ -107,8 +109,10 @@ const totalAmountChart = () => {
 const totalOrdersChart = () => {
     const totalOrdersCurrentWeekNum = parseFloat(totalOrdersCurrentWeek);
     const totalOrdersLastWeekNum = parseFloat(totalOrdersLastWeek);
-    const dataTotalOrdersChart = totalOrdersCurrentWeekNum / totalOrdersLastWeekNum * 100;
+    let dataTotalOrdersChart = totalOrdersCurrentWeekNum / totalOrdersLastWeekNum * 100;
     const totalOrdersChart = document.getElementById("totalOrdersChart").getContext("2d")
+
+    dataTotalOrdersChart = isNaN(dataTotalOrdersChart) ? 0 : dataTotalOrdersChart;
 
     const infoPercentageOrders = document.getElementById("info-per-orders");
     if (dataTotalOrdersChart > 100) {
@@ -123,8 +127,10 @@ const totalOrdersChart = () => {
 const totalProductsChart = () => {
     const totalProductsCurrentWeekNum = parseFloat(totalProductsCurrentWeek);
     const totalProductsLastWeekNum = parseFloat(totalProductsLastWeek);
-    const dataTotalProductsChart = totalProductsCurrentWeekNum / totalProductsLastWeekNum * 100;
+    let dataTotalProductsChart = totalProductsCurrentWeekNum / totalProductsLastWeekNum * 100;
     const totalProductsChart = document.getElementById("totalProductsChart").getContext("2d")
+
+    dataTotalProductsChart = isNaN(dataTotalProductsChart) ? 0 : dataTotalProductsChart;
 
     const infoPercentageProducts = document.getElementById("info-per-products");
     if (dataTotalProductsChart > 100) {

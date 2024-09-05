@@ -1,6 +1,5 @@
 package com.fh.scms.repository.implement;
 
-import com.fh.scms.pojo.Product;
 import com.fh.scms.pojo.Unit;
 import com.fh.scms.repository.UnitRepository;
 import com.fh.scms.util.Pagination;
@@ -11,7 +10,10 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

@@ -21,7 +21,7 @@
 
 <form:form id="editOrderForm" method="post" modelAttribute="order" action="${editOrder}">
     <form:hidden path="id"/>
-    
+
     <div class="form-group">
         <form:label path="type" cssClass="form-label mt-3">Loại đơn hàng</form:label><br/>
         <form:select path="type" cssClass="w-100 mb-3" id="typeSelect">

@@ -1,11 +1,8 @@
 package com.fh.scms.services.implement;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fh.scms.dto.order.*;
 import com.fh.scms.enums.OrderStatus;
 import com.fh.scms.enums.OrderType;
-import com.fh.scms.enums.ShipmentStatus;
 import com.fh.scms.pojo.*;
 import com.fh.scms.repository.*;
 import com.fh.scms.services.InventoryService;
@@ -17,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.lang.System;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 

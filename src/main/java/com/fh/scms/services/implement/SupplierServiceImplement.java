@@ -3,7 +3,6 @@ package com.fh.scms.services.implement;
 import com.fh.scms.dto.order.OrderResponse;
 import com.fh.scms.dto.product.ProductRequestPublish;
 import com.fh.scms.dto.product.ProductResponseForDetails;
-import com.fh.scms.dto.product.ProductResponseForList;
 import com.fh.scms.dto.rating.RatingRequestCreate;
 import com.fh.scms.dto.supplier.SupplierDTO;
 import com.fh.scms.pojo.*;

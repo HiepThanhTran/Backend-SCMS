@@ -1,7 +1,6 @@
 package com.fh.scms.repository;
 
 import com.fh.scms.pojo.Shipper;
-import com.fh.scms.pojo.Supplier;
 import com.fh.scms.pojo.User;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,7 +1,6 @@
 package com.fh.scms.controllers.admin;
 
 import com.fh.scms.dto.MessageResponse;
-import com.fh.scms.enums.CriteriaType;
 import com.fh.scms.pojo.Rating;
 import com.fh.scms.services.RatingService;
 import com.fh.scms.services.SupplierService;
@@ -16,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 @Controller

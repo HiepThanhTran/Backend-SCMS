@@ -1,9 +1,7 @@
 package com.fh.scms.services.implement;
 
 import com.fh.scms.dto.unit.UnitResponse;
-import com.fh.scms.pojo.Product;
 import com.fh.scms.pojo.Unit;
-import com.fh.scms.repository.ProductRepository;
 import com.fh.scms.repository.UnitRepository;
 import com.fh.scms.services.UnitService;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

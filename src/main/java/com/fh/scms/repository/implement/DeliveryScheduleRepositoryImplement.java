@@ -4,7 +4,6 @@ import com.fh.scms.enums.DeliveryMethodType;
 import com.fh.scms.pojo.DeliverySchedule;
 import com.fh.scms.repository.DeliveryScheduleRepository;
 import com.fh.scms.util.Pagination;
-import com.fh.scms.util.Utils;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository

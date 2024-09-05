@@ -35,7 +35,7 @@ public final class Utils {
             return LocalDateTime.parse(value);
         } else if (fieldType == BigDecimal.class) {
             return new BigDecimal(value);
-        }else {
+        } else {
             throw new IllegalArgumentException("Không hỗ trợ kiểu dữ liệu: " + fieldType.getName());
         }
     }
