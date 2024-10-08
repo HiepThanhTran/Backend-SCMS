@@ -1,4 +1,4 @@
-# Supply Chain Management System
+# HarmonyChain - Supply Chain Management
 
 ## Installation
 
