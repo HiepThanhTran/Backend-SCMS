@@ -1,4 +1,4 @@
-# HarmonyChain - Supply Chain Management
+# FlowChain - Supply Chain Management
 
 ## Installation
 
