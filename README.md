@@ -1,4 +1,4 @@
-# FlowChain - Supply Chain Management
+# FlowChain - Supply Chain Management System
 
 ## Installation
 
