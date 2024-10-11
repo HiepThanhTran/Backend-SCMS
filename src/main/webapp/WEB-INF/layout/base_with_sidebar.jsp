@@ -7,7 +7,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <title><tiles:insertAttribute name="title"/> | Harmony</title>
+    <title><tiles:insertAttribute name="title"/> | FlowChain</title>
 
     <!--===============================================================================================-->
     <link rel="apple-touch-icon" sizes="180x180" href="<c:url value="/images/icons/apple-touch-icon.png"/>">
